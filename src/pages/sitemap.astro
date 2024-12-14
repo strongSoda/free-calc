@@ -1,0 +1,169 @@
+---
+// src/pages/sitemap.astro
+import Layout from "../layouts/Layout.astro";
+import GpaLayout from "../components/GpaLayout";
+
+// Generate scale values
+const generateScaleValues = (scale: string, max: number, step: number) => {
+  const values = [];
+  for (let i = 0; i <= max * 10; i++) {
+    const value = (i / 10).toFixed(1);
+    if (parseFloat(value) <= max) {
+      values.push(value);
+    }
+  }
+  return values;
+};
+
+// Generate percentage values
+const generatePercentages = () => {
+  const values = [];
+  for (let i = 0; i <= 100; i++) {
+    values.push(i.toString());
+    if (i < 100) {
+      values.push(i.toFixed(1));
+    }
+  }
+  return values;
+};
+
+const scales = {
+  "4.0-scale": generateScaleValues("4.0", 4.0, 0.1),
+  "5.0-scale": generateScaleValues("5.0", 5.0, 0.1),
+  "10.0-scale": generateScaleValues("10.0", 10.0, 0.5)
+};
+
+const percentages = generatePercentages();
+
+console.log(percentages);
+
+
+const title = "Site Map - All Calculator Pages";
+const description = "Complete list of all calculator pages and tools available on our website.";
+const keywords = "sitemap, calculator pages, gpa calculator, percentage calculator, gpa conversion";
+---
+
+<Layout>
+  <GpaLayout {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Main Pages */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-4 text-content-light dark:text-content-dark">
+          Main Pages
+        </h2>
+        <div class="bg-surface-light dark:bg-surface-dark-hover rounded-lg p-6">
+          <ul class="space-y-2">
+            <li>
+              <a href="/" class="text-accent-primary hover:underline">RREF Calculator</a>
+            </li>
+            <li>
+              <a href="/calculators" class="text-accent-primary hover:underline">Calculator Hub</a>
+            </li>
+            <li>
+              <a href="/calculators/gpa-to-percentage" class="text-accent-primary hover:underline">GPA to Percentage Calculator</a>
+            </li>
+            <li>
+              <a href="/calculators/percentage-to-gpa" class="text-accent-primary hover:underline">Percentage to GPA Calculator</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* GPA to Percentage Conversions */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-4 text-content-light dark:text-content-dark">
+          GPA to Percentage Conversions
+        </h2>
+        <div class="grid gap-6 md:grid-cols-3">
+          {Object.entries(scales).map(([scale, values]) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-lg p-6">
+              <h3 class="text-xl font-display font-semibold mb-3 text-content-light dark:text-content-dark">
+                {scale.split('-')[0]} Scale
+              </h3>
+              <div class="">
+                <ul class="space-y-1">
+                  {values.map((value) => (
+                    <li>
+                      <a
+                        href={`/calculators/gpa-to-percentage/${scale}/${value}`}
+                        class="text-accent-primary hover:underline text-sm"
+                      >
+                        {value} GPA to Percentage
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Percentage to GPA Conversions */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-4 text-content-light dark:text-content-dark">
+          Percentage to GPA Conversions
+        </h2>
+        <div class="grid gap-6 md:grid-cols-3">
+          {Object.keys(scales).map((scale) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-lg p-6">
+              <h3 class="text-xl font-display font-semibold mb-3 text-content-light dark:text-content-dark">
+                {scale.split('-')[0]} Scale
+              </h3>
+              <div class="">
+                <ul class="space-y-1">
+                  {percentages.map((percent) => (
+                    <li>
+                      <a
+                        href={`/calculators/percentage-to-gpa/${scale}/${percent}`}
+                        class="text-accent-primary hover:underline text-sm"
+                      >
+                        {percent}% to GPA
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Language Versions */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-4 text-content-light dark:text-content-dark">
+          Language Versions
+        </h2>
+        <div class="bg-surface-light dark:bg-surface-dark-hover rounded-lg p-6">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { code: 'en', name: 'English' },
+              { code: 'es', name: 'Español' },
+              { code: 'fr', name: 'Français' },
+              { code: 'de', name: 'Deutsch' },
+              { code: 'it', name: 'Italiano' },
+              { code: 'pt', name: 'Português' },
+              { code: 'nl', name: 'Nederlands' },
+              { code: 'pl', name: 'Polski' },
+              { code: 'ru', name: 'Русский' },
+              { code: 'ja', name: '日本語' },
+              { code: 'ko', name: '한국어' },
+              { code: 'zh', name: '中文' },
+              { code: 'hi', name: 'हिन्दी' },
+              { code: 'tr', name: 'Türkçe' },
+              { code: 'vi', name: 'Tiếng Việt' },
+              { code: 'id', name: 'Indonesia' },
+            ].map(lang => (
+              <a
+                href={lang.code === 'en' ? '/' : `/${lang.code}`}
+                class="text-accent-primary hover:underline"
+              >
+                {lang.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>
