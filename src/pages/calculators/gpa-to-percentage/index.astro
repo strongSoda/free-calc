@@ -1,0 +1,176 @@
+---
+// src/pages/calculators/gpa-to-percentage/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaCalculator from "../../../components/GpaCalculator";
+import GpaLayout from "../../../components/GpaLayout";
+
+const scales = [
+  {
+    scale: "4.0",
+    commonUsage: "United States, Canada",
+    examples: [
+      { gpa: "4.0", percent: "100%" },
+      { gpa: "3.5", percent: "87.5%" },
+      { gpa: "3.0", percent: "75%" },
+    ],
+  },
+  {
+    scale: "5.0",
+    commonUsage: "Many international institutions",
+    examples: [
+      { gpa: "5.0", percent: "100%" },
+      { gpa: "4.5", percent: "90%" },
+      { gpa: "4.0", percent: "80%" },
+    ],
+  },
+  {
+    scale: "10.0",
+    commonUsage: "India, some European countries",
+    examples: [
+      { gpa: "10.0", percent: "100%" },
+      { gpa: "9.0", percent: "90%" },
+      { gpa: "8.0", percent: "80%" },
+    ],
+  },
+];
+
+const commonGPAs = {
+  "4.0-scale": ["2.0", "2.5", "3.0", "3.3", "3.5", "3.7", "4.0"],
+  "5.0-scale": ["3.0", "3.5", "4.0", "4.5", "5.0"],
+  "10.0-scale": ["6.0", "7.0", "8.0", "9.0", "10.0"],
+};
+
+const title = "GPA to Percentage Calculator";
+const description =
+  "Convert your GPA to percentage across different scales (4.0, 5.0, and 10.0). Free online calculator for academic grade conversion.";
+const keywords =
+  "gpa to percentage calculator, convert gpa to percentage, 4.0 gpa to percentage, 5.0 gpa to percentage, gpa percentage conversion";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/gpa-conversion-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert Your GPA to Percentage
+          </h2>
+          <GpaCalculator
+            client:load
+            defaultMode="gpa-to-percent"
+            defaultScale="4.0"
+          />
+        </div>
+      </div>
+
+      {/* Quick Conversion Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common GPA Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            Object.entries(commonGPAs).map(([scale, gpas]) => (
+              <div class="space-y-4">
+                <h3 class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
+                  {scale.split("-")[0]} Scale
+                </h3>
+                <div class="grid gap-2">
+                  {gpas.map((gpa) => (
+                    <a
+                      href={`/calculators/gpa-to-percentage/${scale}/${gpa}`}
+                      class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                    >
+                      {gpa} GPA to Percentage
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Scale Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">GPA Scales Explained</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            scales.map((scale) => (
+              <div class="p-6">
+                <h3 class="text-xl font-display font-bold mb-3">
+                  {scale.scale} Scale
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                  Commonly used in {scale.commonUsage}
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {scale.examples.map((ex) => (
+                    <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg text-center">
+                      <div class="text-lg font-semibold text-content-light dark:text-content-dark">
+                        {ex.gpa} GPA = {ex.percent}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "How is GPA converted to percentage?",
+                a: "The conversion formula is: Percentage = (GPA / Scale Maximum) × 100. For example, a 3.5 GPA on a 4.0 scale would be (3.5/4.0) × 100 = 87.5%",
+              },
+              {
+                q: "What is a good GPA percentage?",
+                a: "Generally, above 80% (3.2 on 4.0 scale, 4.0 on 5.0 scale, or 8.0 on 10.0 scale) is considered good in most academic institutions.",
+              },
+              {
+                q: "Why convert GPA to percentage?",
+                a: "Converting GPA to percentage helps when comparing grades across different institutions or applying to programs that use different grading systems.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

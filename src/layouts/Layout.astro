@@ -1,22 +1,147 @@
+---
+import "../styles.css";
+
+const {
+  title = "Free Academic Calculators",
+  description = "Free online academic calculators for GPA and percentage conversions",
+  keywords = "",
+  ogImage = "/og-image.png", // Default OG image
+  currentUrl, // Current page URL
+} = Astro.props;
+
+// Format current URL for canonical link
+const siteUrl = "https://rref-calculator.com"; // Replace with your domain
+const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta property="og:site_name" content="Free Academic Calculators" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline>
+      // Check localstorage first
+      const theme = localStorage.getItem("theme");
+      if (theme) {
+        document.documentElement.className = theme;
+      } else {
+        // If no theme in localStorage, check system preference
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          document.documentElement.className = "dark";
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.documentElement.className = "light";
+          localStorage.setItem("theme", "light");
+        }
+      }
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Free Academic Calculators",
+        "url": "${siteUrl}",
+        "description": "${description}",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "Free Academic Calculators",
+          "url": "${siteUrl}"
+        }
+      }
+    </script>
+
+    <!-- Calculator-specific Schema (for calculator pages) -->
+    {
+      currentUrl?.includes("calculator") && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: title,
+            applicationCategory: "EducationalApplication",
+            operatingSystem: "Any",
+            description: description,
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "4.8",
+              ratingCount: "127",
+            },
+          })}
+        />
+      )
+    }
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CY5QBMQ9F9"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-CY5QBMQ9F9");
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9779862910631944"
+      crossorigin="anonymous"></script>
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

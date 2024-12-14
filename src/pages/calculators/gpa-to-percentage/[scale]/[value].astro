@@ -1,0 +1,104 @@
+---
+// src/pages/calculators/gpa-to-percentage/[scale]/[value].astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import GpaPageContent from "../../../../components/GpaPageContent";
+
+export async function getStaticPaths() {
+  const scales = {
+    "4.0-scale": { max: 4.0, step: 0.1 },
+    "5.0-scale": { max: 5.0, step: 0.1 },
+    "10.0-scale": { max: 10.0, step: 0.5 },
+  };
+
+  const paths = [];
+
+  Object.entries(scales).forEach(([scale, { max, step }]) => {
+    // Generate an array of values from 0 to max (inclusive)
+    for (let i = 0; i <= max * 10; i++) {
+      const value = (i / 10).toFixed(1);
+      // Don't exceed the maximum value
+      if (parseFloat(value) <= max) {
+        paths.push({
+          params: {
+            scale: scale,
+            value: value.toString(),
+          },
+          props: {
+            scaleValue: scale.split("-")[0], // '4.0', '5.0', '10.0'
+            gpaValue: value,
+          },
+        });
+
+        // Also add whole number routes without decimal
+        if (i % 10 === 0) {
+          paths.push({
+            params: {
+              scale: scale,
+              value: (i / 10).toString(),
+            },
+            props: {
+              scaleValue: scale.split("-")[0],
+              gpaValue: value,
+            },
+          });
+        }
+      }
+    }
+  });
+
+  return paths;
+}
+
+const { scaleValue, gpaValue } = Astro.props;
+const percentage = (
+  (parseFloat(gpaValue) / parseFloat(scaleValue)) *
+  100
+).toFixed(1);
+
+const title = `${gpaValue} GPA to Percentage (${scaleValue} Scale)`;
+const description = `Convert ${gpaValue} GPA on a ${scaleValue} scale to percentage. ${gpaValue} GPA equals ${percentage}% on the ${scaleValue} scale.`;
+const keywords = `${gpaValue} gpa to percentage, ${scaleValue} scale gpa conversion, convert ${gpaValue} gpa to percentage, ${gpaValue} gpa equals what percentage`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `What is ${gpaValue} in Percentage on ${scaleValue} scale?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `${gpaValue} equals this GPA on the ${scaleValue} scale. See here.`,
+    },
+  },
+  about: {
+    "@type": "Thing",
+    name: "GPA Conversion",
+    description: "Academic grade point average (GPA) conversion to percentage",
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/gpa-conversion-og.png"
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <GpaPageContent
+      client:load
+      initialScale={scaleValue}
+      initialGpa={gpaValue}
+    />
+  </GpaLayout>
+</Layout>

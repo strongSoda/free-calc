@@ -1,0 +1,172 @@
+---
+// src/pages/calculators/percentage-to-gpa/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import GpaCalculator from "../../../components/GpaCalculator";
+
+const scales = [
+  {
+    scale: "4.0",
+    commonUsage: "United States, Canada",
+    examples: [
+      { percent: "90%", gpa: "3.6" },
+      { percent: "85%", gpa: "3.4" },
+      { percent: "80%", gpa: "3.2" },
+    ],
+  },
+  {
+    scale: "5.0",
+    commonUsage: "Many international institutions",
+    examples: [
+      { percent: "90%", gpa: "4.5" },
+      { percent: "85%", gpa: "4.25" },
+      { percent: "80%", gpa: "4.0" },
+    ],
+  },
+  {
+    scale: "10.0",
+    commonUsage: "India, some European countries",
+    examples: [
+      { percent: "90%", gpa: "9.0" },
+      { percent: "85%", gpa: "8.5" },
+      { percent: "80%", gpa: "8.0" },
+    ],
+  },
+];
+
+const commonPercentages = [60, 65, 70, 75, 80, 85, 90, 95, 100];
+
+const title = "Percentage to GPA Calculator";
+const description =
+  "Convert percentage grades to GPA across different scales (4.0, 5.0, and 10.0). Free online calculator for academic grade conversion.";
+const keywords =
+  "percentage to gpa calculator, convert percentage to gpa, grade conversion, academic calculator, percentage to 4.0 scale, percentage to 5.0 scale, percentage to 10.0 scale";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/percent-calculator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8 bg-yellow"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert Your Percentage to GPA
+          </h2>
+          <GpaCalculator
+            client:load
+            defaultMode="percent-to-gpa"
+            defaultScale="4.0"
+          />
+        </div>
+      </div>
+
+      {/* Quick Conversion Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Percentage Conversions
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            scales.map((scale) => (
+              <div class="space-y-4">
+                <h3 class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
+                  {scale.scale} Scale
+                </h3>
+                <div class="grid gap-2">
+                  {commonPercentages.map((percent) => (
+                    <a
+                      href={`/calculators/percentage-to-gpa/${scale.scale}-scale/${percent}`}
+                      class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                    >
+                      {percent}% to GPA
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Scale Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">GPA Scales Explained</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            scales.map((scale) => (
+              <div class="p-6">
+                <h3 class="text-xl font-display font-bold mb-3">
+                  {scale.scale} Scale
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                  Commonly used in {scale.commonUsage}
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {scale.examples.map((ex) => (
+                    <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg text-center">
+                      <div class="text-lg font-semibold text-content-light dark:text-content-dark">
+                        {ex.percent} = {ex.gpa} GPA
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "How is percentage converted to GPA?",
+                a: "The conversion formula is: GPA = (Percentage / 100) × Scale Maximum. For example, on a 4.0 scale, 85% would be (85/100) × 4.0 = 3.4 GPA.",
+              },
+              {
+                q: "Which GPA scale should I use?",
+                a: "Choose the scale that matches your institution's system. The 4.0 scale is most common in the US and Canada, while 5.0 and 10.0 scales are used in various other countries.",
+              },
+              {
+                q: "What is considered a good GPA?",
+                a: "Generally, above 3.0 on a 4.0 scale (75%), 3.75 on a 5.0 scale (75%), or 7.5 on a 10.0 scale (75%) is considered good.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

@@ -1,0 +1,93 @@
+---
+// src/pages/calculators/percentage-to-gpa/[scale]/[value].astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PercentageGpaContent from "../../../../components/PercentageGpaContent";
+
+export async function getStaticPaths() {
+  const scales = ["4.0-scale", "5.0-scale", "10.0-scale"];
+  const paths = [];
+
+  // For each percentage (0-100)
+  for (let percentage = 0; percentage <= 100; percentage++) {
+    // For each scale
+    scales.forEach((scale) => {
+      // Add path for whole number
+      paths.push({
+        params: {
+          scale,
+          value: percentage.toString(),
+        },
+        props: {
+          scale,
+          scaleValue: scale.split("-")[0],
+          percentageValue: percentage.toString(),
+        },
+      });
+
+      // Add path for decimal
+      if (percentage < 100) {
+        // Don't add 100.0
+        paths.push({
+          params: {
+            scale,
+            value: percentage.toFixed(1),
+          },
+          props: {
+            scale,
+            scaleValue: scale.split("-")[0],
+            percentageValue: percentage.toFixed(1),
+          },
+        });
+      }
+    });
+  }
+
+  return paths;
+}
+
+// Get the props from Astro
+const { scale, scaleValue, percentageValue } = Astro.props;
+
+// Prepare page metadata
+const title = `${percentageValue}% to GPA on ${scaleValue} Scale`;
+const description = `Convert ${percentageValue}% to GPA on a ${scaleValue} scale. Calculate percentage to GPA conversion for academic grades.`;
+const keywords = `${percentageValue} percentage to gpa, percentage to ${scaleValue} scale, convert ${percentageValue}% to gpa, percentage to gpa calculator`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `What is ${percentageValue}% in GPA on ${scaleValue} scale?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `${percentageValue}% equals this GPA on the ${scaleValue} scale. See Here.`,
+    },
+  },
+  about: {
+    "@type": "Thing",
+    name: "GPA Conversion",
+    description: "Academic grade point average (GPA) conversion to percentage",
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/percent-calculator-og.png"
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <PercentageGpaContent
+      client:load
+      initialScale={scaleValue}
+      initialPercentage={percentageValue}
+    />
+  </GpaLayout>
+</Layout>
