@@ -15,15 +15,15 @@ const Footer = () => {
         { name: "10.0 Scale Conversion", url: "/calculators/percentage-to-gpa/10.0-scale/85" }
       ]
     },
-    // {
-    //   title: "Resources",
-    //   links: [
-    //     { name: "Understanding GPA", url: "#" },
-    //     { name: "Grading Systems", url: "#" },
-    //     { name: "Academic Scales", url: "#" },
-    //     { name: "Grade Conversion", url: "#" }
-    //   ]
-    // },
+    {
+      title: "Resources",
+      links: [
+        { name: "Sitemap", url: "/sitemap" },
+        // { name: "Grading Systems", url: "#" },
+        // { name: "Academic Scales", url: "#" },
+        // { name: "Grade Conversion", url: "#" }
+      ]
+    },
     {
       title: "About",
       links: [

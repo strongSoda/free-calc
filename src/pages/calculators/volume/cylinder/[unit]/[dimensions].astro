@@ -1,0 +1,242 @@
+---
+// src/pages/calculators/volume/cylinder/[unit]/[dimensions].astro
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import CylinderCalculator from "../../../../../components/CylinderCalculator";
+
+export function getStaticPaths() {
+  // Common dimensions for different units and use cases
+  const commonDimensions = {
+    m: [
+      // Water Tanks
+      { r: 1, h: 2, useCase: "Small Water Tank" },
+      { r: 1.5, h: 3, useCase: "Medium Water Tank" },
+      { r: 2, h: 4, useCase: "Large Water Tank" },
+      { r: 2.5, h: 5, useCase: "Extra Large Water Tank" },
+      { r: 3, h: 6, useCase: "Industrial Water Tank" },
+      { r: 0.5, h: 1, useCase: "Mini Water Tank" },
+      { r: 4, h: 8, useCase: "Mega Water Tank" },
+      { r: 2, h: 2.5, useCase: "Standard Water Tank" },
+      { r: 1.8, h: 3.5, useCase: "Tall Water Tank" },
+      { r: 3.5, h: 7, useCase: "Huge Water Tank" },
+      // Pipes
+      { r: 0.1, h: 1, useCase: "Pipe Section" },
+      { r: 0.2, h: 2, useCase: "Medium Pipe" },
+      { r: 0.3, h: 3, useCase: "Large Pipe" },
+      { r: 0.15, h: 1.5, useCase: "Short Pipe" },
+      { r: 0.25, h: 4, useCase: "Long Pipe" },
+      { r: 0.4, h: 2, useCase: "Thick Pipe" },
+      { r: 0.35, h: 5, useCase: "Extended Pipe" },
+      { r: 0.5, h: 6, useCase: "Heavy Duty Pipe" },
+      { r: 0.75, h: 3, useCase: "Wide Pipe Section" },
+      { r: 1, h: 1, useCase: "Compact Pipe" },
+    ],
+
+    ft: [
+      // Storage Tanks
+      { r: 2, h: 4, useCase: "Small Storage Tank" },
+      { r: 3, h: 6, useCase: "Medium Storage Tank" },
+      { r: 4, h: 8, useCase: "Large Storage Tank" },
+      { r: 5, h: 10, useCase: "Industrial Storage Tank" },
+      { r: 6, h: 12, useCase: "Mega Storage Tank" },
+      { r: 2.5, h: 5, useCase: "Extra Small Storage Tank" },
+      { r: 3.5, h: 7, useCase: "Tall Storage Tank" },
+      { r: 4.5, h: 9, useCase: "XL Storage Tank" },
+      { r: 2.8, h: 6, useCase: "Custom Storage Tank" },
+      { r: 5.5, h: 11, useCase: "Huge Storage Tank" },
+      // Pipes and Tubes
+      { r: 0.5, h: 10, useCase: "Long Pipe Section" },
+      { r: 1, h: 5, useCase: "Wide Pipe Section" },
+      { r: 1.2, h: 8, useCase: "Extra Wide Pipe" },
+      { r: 0.75, h: 12, useCase: "Extended Pipe" },
+      { r: 1.5, h: 15, useCase: "Industrial Pipe" },
+      { r: 1, h: 4, useCase: "Compact Pipe Section" },
+      { r: 0.6, h: 6, useCase: "Short Pipe" },
+      { r: 0.9, h: 7, useCase: "Medium Length Pipe" },
+      { r: 0.8, h: 9, useCase: "Tall Pipe" },
+      { r: 2, h: 3, useCase: "Sturdy Pipe Section" },
+    ],
+
+    in: [
+      // Small Containers
+      { r: 3, h: 6, useCase: "Small Container" },
+      { r: 4, h: 8, useCase: "Medium Container" },
+      { r: 6, h: 12, useCase: "Large Container" },
+      { r: 5, h: 10, useCase: "Wide Container" },
+      { r: 7, h: 14, useCase: "Extra Large Container" },
+      { r: 8, h: 16, useCase: "Industrial Container" },
+      { r: 2, h: 4, useCase: "Mini Container" },
+      { r: 3.5, h: 7, useCase: "Standard Container" },
+      { r: 6.5, h: 13, useCase: "Tall Container" },
+      { r: 4.5, h: 9, useCase: "Custom Container" },
+      // Pipes
+      { r: 1, h: 12, useCase: "Pipe Section" },
+      { r: 2, h: 24, useCase: "Long Pipe" },
+      { r: 1.5, h: 18, useCase: "Medium Pipe" },
+      { r: 2.5, h: 20, useCase: "Wide Pipe" },
+      { r: 0.75, h: 6, useCase: "Short Pipe" },
+      { r: 3, h: 10, useCase: "Thick Pipe" },
+      { r: 1.2, h: 8, useCase: "Compact Pipe" },
+      { r: 1.8, h: 15, useCase: "Extended Pipe" },
+      { r: 2.8, h: 22, useCase: "Heavy Pipe" },
+      { r: 0.5, h: 5, useCase: "Mini Pipe Section" },
+    ],
+
+    cm: [
+      // Laboratory Containers
+      { r: 5, h: 10, useCase: "Test Tube" },
+      { r: 10, h: 20, useCase: "Beaker" },
+      { r: 15, h: 30, useCase: "Large Beaker" },
+      { r: 8, h: 16, useCase: "Medium Beaker" },
+      { r: 12, h: 24, useCase: "XL Beaker" },
+      { r: 6, h: 12, useCase: "Small Laboratory Flask" },
+      { r: 7, h: 14, useCase: "Medium Laboratory Flask" },
+      { r: 9, h: 18, useCase: "Large Flask" },
+      { r: 11, h: 22, useCase: "Extra Large Flask" },
+      { r: 13, h: 26, useCase: "Industrial Flask" },
+      // Small Storage
+      { r: 20, h: 40, useCase: "Storage Container" },
+      { r: 25, h: 50, useCase: "Large Storage Container" },
+      { r: 15, h: 25, useCase: "Small Storage" },
+      { r: 18, h: 36, useCase: "Medium Storage" },
+      { r: 30, h: 60, useCase: "Tall Storage Container" },
+      { r: 22, h: 45, useCase: "Heavy Storage" },
+      { r: 14, h: 28, useCase: "Compact Storage" },
+      { r: 16, h: 32, useCase: "Thick Storage" },
+      { r: 19, h: 38, useCase: "Custom Storage" },
+      { r: 17, h: 34, useCase: "Standard Storage" },
+    ],
+  };
+
+  const paths = [];
+
+  Object.entries(commonDimensions).forEach(([unit, dimensions]) => {
+    dimensions.forEach(({ r, h, useCase }) => {
+      const volume = Math.PI * r * r * h;
+      const surfaceArea = 2 * Math.PI * r * (r + h);
+
+      paths.push({
+        params: {
+          unit,
+          dimensions: `${r}-${h}`,
+        },
+        props: {
+          unit,
+          radius: r,
+          height: h,
+          volume: volume,
+          surfaceArea: surfaceArea,
+          useCase,
+          commonDimensions,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { unit, radius, height, volume, surfaceArea, useCase, commonDimensions } =
+  Astro.props;
+
+const title = `${radius}×${height} ${unit} Cylinder Volume Calculator`;
+const description = `Calculate the volume of a cylinder with radius ${radius} ${unit} and height ${height} ${unit}. Perfect for ${useCase.toLowerCase()}.`;
+const keywords = `${radius} ${unit} radius cylinder, ${height} ${unit} height cylinder, cylinder volume calculator, ${useCase.toLowerCase()} volume`;
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Result Overview */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Cylinder {radius} × {height}
+          {unit}
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Dimensions</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Radius: {radius}
+              {unit}
+              <br />
+              Height: {height}
+              {unit}
+            </p>
+          </div>
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Volume</h3>
+            <p class="text-2xl font-bold text-accent-primary">
+              {volume.toFixed(2)}
+              {unit}³
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Calculator */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">Try the Calculator</h2>
+        <CylinderCalculator
+          client:load
+          defaultRadius={radius.toString()}
+          defaultHeight={height.toString()}
+          defaultUnit={`${unit}³`}
+        />
+      </section>
+
+      {/* Formula and Calculation */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>Calculation Breakdown</h2>
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg mb-4"
+        >
+          <p>Volume = π × radius² × height</p>
+          <p>Volume = π × {radius}² × {height} = {volume.toFixed(2)} {unit}³</p>
+        </div>
+
+        <h3>Additional Measurements</h3>
+        <ul>
+          <li>Surface Area: {surfaceArea.toFixed(2)} {unit}²</li>
+          <li>Base Area: {(Math.PI * radius * radius).toFixed(2)} {unit}²</li>
+          <li>
+            Lateral Surface Area: {(2 * Math.PI * radius * height).toFixed(2)}
+            {unit}²
+          </li>
+        </ul>
+
+        <h3>Common Use Case</h3>
+        <p>This cylinder size is commonly used as a {useCase.toLowerCase()}.</p>
+      </section>
+
+      {/* Related Dimensions */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Similar Dimensions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {
+          commonDimensions[unit].splice(0, 6).map((dim) => (
+              <a
+                href={`/calculators/volume/cylinder/${unit}/${dim.r}-${dim.h}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+          transition-colors"
+              >
+                <span class="text-content-light dark:text-content-dark">
+                  Radius: {dim.r} × Height: {dim.h}
+                  {unit}
+                </span>
+              </a>
+          ))
+        }
+        </div>
+      </section>
+    </div></GpaLayout
+  >
+</Layout>

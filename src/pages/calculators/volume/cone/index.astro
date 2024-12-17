@@ -1,0 +1,117 @@
+---
+// src/pages/calculators/volume/cone/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import ConeCalculator from "../../../../components/ConeCalculator";
+
+const title = "Cone Volume Calculator";
+const description =
+  "Calculate the volume of a cone using radius and height. Free online calculator for conical tanks, funnels, and containers with instant unit conversion.";
+const keywords =
+  "cone volume calculator, conical tank volume, funnel volume calculator, cone calculator";
+
+const commonExamples = [
+  {
+    dimensions: { radius: 2, height: 4 },
+    unit: "ft",
+    name: "Storage Cone",
+    volume: (1 / 3) * Math.PI * 4 * 4,
+    useCase: "Storage container",
+  },
+  {
+    dimensions: { radius: 1.5, height: 3 },
+    unit: "m",
+    name: "Industrial Funnel",
+    volume: (1 / 3) * Math.PI * 2.25 * 3,
+    useCase: "Material handling",
+  },
+  {
+    dimensions: { radius: 4, height: 8 },
+    unit: "in",
+    name: "Large Funnel",
+    volume: (1 / 3) * Math.PI * 16 * 8,
+    useCase: "Liquid transfer",
+  },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Cone Volume Calculator
+        </h2>
+        <ConeCalculator client:load />
+      </section>
+
+      {/* Common Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            commonExamples.map((example) => (
+              <a
+                href={`/calculators/volume/cone/${example.unit}/${example.dimensions.radius}-${example.dimensions.height}`}
+                class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg hover:shadow-lg transition-all"
+              >
+                <h3 class="font-display font-semibold mb-2">{example.name}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Radius: {example.dimensions.radius} {example.unit}
+                  <br />
+                  Height: {example.dimensions.height} {example.unit}
+                </p>
+                <p class="text-accent-primary font-semibold mt-2">
+                  Volume: {example.volume.toFixed(2)} {example.unit}³
+                </p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mt-1">
+                  Used for: {example.useCase}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>How to Calculate Cone Volume</h2>
+        <p>
+          A cone is a three-dimensional geometric shape with a circular base
+          that tapers to a point. Its volume is calculated using the formula: V
+          = (1/3) × π × r² × h, where r is the radius of the base and h is the
+          height.
+        </p>
+
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg my-4"
+        >
+          <p class="font-mono">Volume = (1/3) × π × radius² × height</p>
+        </div>
+
+        <h3>Common Applications</h3>
+        <ul>
+          <li>Industrial funnels and hoppers</li>
+          <li>Storage containers and silos</li>
+          <li>Material handling equipment</li>
+          <li>Construction and architecture</li>
+          <li>Food processing equipment</li>
+        </ul>
+
+        <h3>Additional Measurements</h3>
+        <p>When calculating cone volume, other useful measurements include:</p>
+        <ul>
+          <li>
+            Slant Height: The distance from the apex to the edge of the base
+          </li>
+          <li>Surface Area: The total area of all surfaces</li>
+          <li>Base Area: The area of the circular base</li>
+          <li>Lateral Surface Area: The area of the curved surface</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

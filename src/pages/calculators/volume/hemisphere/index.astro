@@ -1,0 +1,126 @@
+---
+// src/pages/calculators/volume/hemisphere/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import HemisphereCalculator from "../../../../components/HemisphereCalculator";
+
+const title = "Hemisphere Volume Calculator";
+const description =
+  "Calculate the volume of a hemisphere using radius. Free online calculator for domes, spherical caps, and bowls with instant unit conversion.";
+const keywords =
+  "hemisphere calculator, dome volume, hemisphere volume calculator, half sphere volume";
+
+const commonExamples = [
+  {
+    dimensions: { radius: 3 },
+    unit: "ft",
+    name: "Small Dome",
+    volume: (2 / 3) * Math.PI * Math.pow(3, 3),
+    useCase: "Architectural dome",
+  },
+  {
+    dimensions: { radius: 1 },
+    unit: "m",
+    name: "Display Dome",
+    volume: (2 / 3) * Math.PI,
+    useCase: "Display cover",
+  },
+  {
+    dimensions: { radius: 6 },
+    unit: "in",
+    name: "Bowl",
+    volume: (2 / 3) * Math.PI * Math.pow(6, 3),
+    useCase: "Container design",
+  },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Hemisphere Calculator
+        </h2>
+        <div class="mb-4">
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            Calculate the volume and surface area of a hemisphere by entering
+            its radius.
+          </p>
+        </div>
+        <HemisphereCalculator client:load />
+      </section>
+
+      {/* Common Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            commonExamples.map((example) => (
+              <a
+                href={`/calculators/volume/hemisphere/${example.unit}/${example.dimensions.radius}`}
+                class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg hover:shadow-lg transition-all"
+              >
+                <h3 class="font-display font-semibold mb-2">{example.name}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Radius: {example.dimensions.radius} {example.unit}
+                </p>
+                <p class="text-accent-primary font-semibold mt-2">
+                  Volume: {example.volume.toFixed(2)} {example.unit}³
+                </p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mt-1">
+                  Used for: {example.useCase}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>How to Calculate Hemisphere Volume</h2>
+        <p>
+          A hemisphere is half of a sphere, created by cutting a sphere in half
+          along a plane through its center. Its volume is half that of a sphere,
+          calculated using the formula: V = (2/3)πr³
+        </p>
+
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg my-4"
+        >
+          <p class="font-mono">Volume = (2/3) × π × radius³</p>
+        </div>
+
+        <h3>Important Measurements</h3>
+        <ul>
+          <li>Curved Surface Area = 2πr²</li>
+          <li>Flat Surface Area (base) = πr²</li>
+          <li>Total Surface Area = 3πr²</li>
+          <li>Base Circumference = 2πr</li>
+          <li>Height (from base to top) = r</li>
+        </ul>
+
+        <h3>Applications</h3>
+        <ul>
+          <li>Architectural domes and structures</li>
+          <li>Container and bowl design</li>
+          <li>Display covers and enclosures</li>
+          <li>Storage tank design</li>
+          <li>Decorative elements</li>
+        </ul>
+
+        <h3>Tips for Accurate Measurement</h3>
+        <ul>
+          <li>Measure radius from center of base to edge</li>
+          <li>Verify height equals radius for perfect hemisphere</li>
+          <li>Check base is perfectly circular</li>
+          <li>Use consistent units throughout</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

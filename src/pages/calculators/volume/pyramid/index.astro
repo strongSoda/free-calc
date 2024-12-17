@@ -1,0 +1,127 @@
+---
+// src/pages/calculators/volume/pyramid/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PyramidCalculator from "../../../../components/PyramidCalculator";
+
+const title = "Square Pyramid Volume Calculator";
+const description =
+  "Calculate the volume of a square pyramid using base length and height. Free online calculator with instant conversion between metric and imperial units.";
+const keywords =
+  "pyramid volume calculator, square pyramid calculator, pyramid base and height calculator, square based pyramid volume";
+
+const commonExamples = [
+  {
+    dimensions: { baseLength: 4, height: 6 },
+    unit: "ft",
+    name: "Small Pyramid",
+    volume: (1 / 3) * 16 * 6,
+    useCase: "Model pyramid",
+  },
+  {
+    dimensions: { baseLength: 6, height: 8 },
+    unit: "ft",
+    name: "Medium Pyramid",
+    volume: (1 / 3) * 36 * 8,
+    useCase: "Architectural model",
+  },
+  {
+    dimensions: { baseLength: 2, height: 3 },
+    unit: "m",
+    name: "Display Pyramid",
+    volume: (1 / 3) * 4 * 3,
+    useCase: "Display structure",
+  },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Square Pyramid Calculator
+        </h2>
+        <PyramidCalculator client:load />
+      </section>
+
+      {/* Common Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            commonExamples.map((example) => (
+              <a
+                href={`/calculators/volume/pyramid/${example.unit}/${example.dimensions.baseLength}-${example.dimensions.height}`}
+                class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg hover:shadow-lg transition-all"
+              >
+                <h3 class="font-display font-semibold mb-2">{example.name}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Base Length: {example.dimensions.baseLength} {example.unit}
+                  <br />
+                  Height: {example.dimensions.height} {example.unit}
+                </p>
+                <p class="text-accent-primary font-semibold mt-2">
+                  Volume: {example.volume.toFixed(2)} {example.unit}³
+                </p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mt-1">
+                  Used for: {example.useCase}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>How to Calculate Pyramid Volume</h2>
+        <p>
+          A square pyramid is a three-dimensional shape with a square base and
+          triangular faces that meet at a point (apex). Its volume is calculated
+          using the formula: V = (1/3) × base area × height.
+        </p>
+
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg my-4"
+        >
+          <p class="font-mono">Volume = (1/3) × base length² × height</p>
+        </div>
+
+        <h3>Important Measurements</h3>
+        <ul>
+          <li>Base Length: The length of one side of the square base</li>
+          <li>Height: The perpendicular distance from the base to the apex</li>
+          <li>
+            Slant Height: The distance from the apex to the middle of any base
+            edge
+          </li>
+          <li>Base Area: The area of the square base</li>
+          <li>
+            Lateral Surface Area: The total area of the four triangular faces
+          </li>
+        </ul>
+
+        <h3>Applications</h3>
+        <ul>
+          <li>Architectural models and designs</li>
+          <li>Construction and engineering</li>
+          <li>Educational models</li>
+          <li>Display structures</li>
+          <li>Storage containers with pyramid tops</li>
+        </ul>
+
+        <h3>Tips for Accurate Measurement</h3>
+        <ul>
+          <li>Ensure the base is perfectly square</li>
+          <li>Measure height perpendicular to the base</li>
+          <li>Double-check all measurements</li>
+          <li>Use consistent units throughout</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

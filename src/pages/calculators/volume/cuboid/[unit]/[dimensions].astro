@@ -1,0 +1,200 @@
+---
+// src/pages/calculators/volume/cuboid/[unit]/[dimensions].astro
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import CuboidCalculator from "../../../../../components/CuboidCalculator";
+
+export function getStaticPaths() {
+  // Common dimensions for different units
+  const commonDimensions = {
+    m: [
+      { l: 2, w: 1.5, h: 1 },
+      { l: 3, w: 2, h: 2.5 },
+      { l: 4, w: 3, h: 2 },
+      { l: 5, w: 4, h: 3 },
+      ...Array.from({ length: 100 }, (_, i) => ({
+        l: (i + 1) * 1.5,
+        w: (i + 1) * 1.2,
+        h: (i + 1) * 0.8,
+      })),
+    ],
+
+    ft: [
+      { l: 7, w: 4, h: 3 },
+      { l: 10, w: 8, h: 9 },
+      { l: 12, w: 10, h: 8 },
+      { l: 15, w: 12, h: 10 },
+      { l: 6, w: 4, h: 3 },
+      { l: 8, w: 6, h: 4 },
+      ...Array.from({ length: 100 }, (_, i) => ({
+        l: 5 + i * 0.5,
+        w: 3 + i * 0.4,
+        h: 2 + i * 0.3,
+      })),
+    ],
+
+    in: [
+      { l: 12, w: 8, h: 6 },
+      { l: 20, w: 8.5, h: 11 },
+      { l: 24, w: 18, h: 12 },
+      { l: 6, w: 4, h: 3 },
+      ...Array.from({ length: 100 }, (_, i) => ({
+        l: 10 + i * 1.2,
+        w: 5 + i * 0.8,
+        h: 4 + i * 0.6,
+      })),
+    ],
+
+    cm: [
+      { l: 100, w: 50, h: 30 },
+      { l: 200, w: 100, h: 50 },
+      { l: 50, w: 30, h: 20 },
+      ...Array.from({ length: 100 }, (_, i) => ({
+        l: 50 + i * 2.5,
+        w: 30 + i * 1.8,
+        h: 20 + i * 1.2,
+      })),
+    ],
+
+    mm: [
+      ...Array.from({ length: 100 }, (_, i) => ({
+        l: 500 + i * 50,
+        w: 300 + i * 30,
+        h: 200 + i * 20,
+      })),
+    ],
+  };
+
+  const paths = [];
+
+  Object.entries(commonDimensions).forEach(([unit, dimensions]) => {
+    dimensions.forEach(({ l, w, h }) => {
+      paths.push({
+        params: {
+          unit,
+          dimensions: `${l}-${w}-${h}`,
+        },
+        props: {
+          unit,
+          length: l,
+          width: w,
+          height: h,
+          volume: l * w * h,
+          commonDimensions,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { unit, length, width, height, volume, commonDimensions } = Astro.props;
+const formatNumber = (num) => parseFloat(num.toFixed(3));
+
+const title = `${length}×${width}×${height} ${unit} Cuboid Volume Calculator`;
+const description = `Calculate the volume of a ${length}×${width}×${height} ${unit} rectangular cuboid. Find volume in cubic meters, cubic feet, and other units.`;
+const keywords = `${length}×${width}×${height} ${unit} cuboid, box volume calculator, rectangular prism ${length}×${width}×${height}, volume calculation`;
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Result Overview */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {length} × {width} × {height}
+          {unit} Cuboid
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Dimensions</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Length: {length}
+              {unit}
+              <br />
+              Width: {width}
+              {unit}
+              <br />
+              Height: {height}
+              {unit}
+            </p>
+          </div>
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Volume</h3>
+            <p class="text-2xl font-bold text-accent-primary">
+              {volume}
+              {unit}³
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Calculator */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">Try the Calculator</h2>
+        <CuboidCalculator
+          client:load
+          defaultLength={length.toString()}
+          defaultWidth={width.toString()}
+          defaultHeight={height.toString()}
+          defaultUnit={`${unit}³`}
+        />
+      </section>
+
+      {/* Formula and Calculation */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>Calculation Breakdown</h2>
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg mb-4"
+        >
+          <p>Volume = length × width × height</p>
+          <p>Volume = {length} × {width} × {height} = {volume} {unit}³</p>
+        </div>
+
+        <h3>Additional Measurements</h3>
+        <ul>
+          <li>
+            Surface Area: {
+              2 * (length * width + length * height + width * height)
+            }
+            {unit}²
+          </li>
+          <li>Total Edge Length: {4 * (length + width + height)} {unit}</li>
+        </ul>
+      </section>
+      {/* Related Dimensions */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Similar Dimensions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            commonDimensions[unit]
+              .splice(0, 4)
+              .filter(
+                (dim) => dim.l !== length || dim.w !== width || dim.h !== height
+              )
+              .map((dim) => (
+                <a
+                  href={`/calculators/volume/cuboid/${unit}/${dim.l}-${dim.w}-${dim.h}`}
+                  class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
+                >
+                  <span class="text-content-light dark:text-content-dark">
+                    {formatNumber(dim.l)} × {formatNumber(dim.w)} ×{" "}
+                    {formatNumber(dim.h)} {unit}
+                  </span>
+                </a>
+              ))
+          }
+        </div>
+      </section>
+    </div></GpaLayout
+  ></Layout
+>

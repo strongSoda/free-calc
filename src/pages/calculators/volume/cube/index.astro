@@ -1,0 +1,165 @@
+---
+// src/pages/calculators/volume/cube/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import VolumeCalculator from "../../../../components/VolumeCalculator";
+
+const title = "Cube Volume Calculator";
+const description =
+  "Calculate the volume of a cube. Free online calculator for finding cubic volume using side length. Convert between cubic meters, cubic feet, and other units.";
+const keywords =
+  "cube volume calculator, cubic volume, cube calculator, volume of cube, cubic feet calculator, cubic meters calculator";
+
+// Common real-world examples
+const examples = [
+  {
+    name: "Storage Box",
+    dimension: "1 foot",
+    volume: "1 cubic foot (ft³)",
+    realWorld: "Typical storage container",
+  },
+  {
+    name: "Moving Box",
+    dimension: "1.5 feet",
+    volume: "3.375 cubic feet (ft³)",
+    realWorld: "Standard small moving box",
+  },
+  {
+    name: "Room",
+    dimension: "10 feet",
+    volume: "1000 cubic feet (ft³)",
+    realWorld: "Small bedroom",
+  },
+];
+
+// Educational examples
+const educationalExamples = [
+  {
+    dimension: "2 units",
+    volume: "8 cubic units",
+    explanation: "2 × 2 × 2 = 8",
+  },
+  {
+    dimension: "3 units",
+    volume: "27 cubic units",
+    explanation: "3 × 3 × 3 = 27",
+  },
+  {
+    dimension: "4 units",
+    volume: "64 cubic units",
+    explanation: "4 × 4 × 4 = 64",
+  },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <VolumeCalculator client:load shape="cube" />
+      </section>
+
+      {/* Quick Reference */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Cube Volume Formula
+        </h2>
+        <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg">
+          <p class="text-xl font-mono text-center">V = s³</p>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mt-2"
+          >
+            where s = length of side
+          </p>
+        </div>
+      </section>
+
+      {/* Real-world Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Real-world Examples
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            examples.map((example) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
+                <h3 class="font-display font-semibold mb-2">{example.name}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Side: {example.dimension}
+                </p>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Volume: {example.volume}
+                </p>
+                <p class="text-sm mt-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {example.realWorld}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* Educational Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Understanding Cubic Volume
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            educationalExamples.map((example) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
+                <p class="font-mono mb-2">Side length: {example.dimension}</p>
+                <p class="font-mono">Volume: {example.volume}</p>
+                <p class="text-sm mt-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {example.explanation}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>How to Calculate Cube Volume</h2>
+        <p>
+          To calculate the volume of a cube, multiply the length of one side by
+          itself three times (cube it). Since a cube has equal sides, if you
+          know the length of one side, you can easily find its volume using the
+          formula V = s³.
+        </p>
+
+        <h3>Step-by-Step Guide</h3>
+        <ol>
+          <li>Measure the length of one side of the cube</li>
+          <li>Multiply this length by itself (square it)</li>
+          <li>Multiply the result by the length again (cube it)</li>
+          <li>The result is the volume in cubic units</li>
+        </ol>
+
+        <h3>Common Applications</h3>
+        <ul>
+          <li>Calculating storage space in boxes and containers</li>
+          <li>Determining room volumes for heating and cooling</li>
+          <li>Measuring material volumes in construction</li>
+          <li>Computing shipping volumes for logistics</li>
+        </ul>
+
+        <h3>Tips for Accurate Measurement</h3>
+        <ul>
+          <li>Ensure all measurements are in the same unit</li>
+          <li>Measure to the nearest practical decimal place</li>
+          <li>Double-check measurements for accuracy</li>
+          <li>Consider using metric units for easier calculation</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

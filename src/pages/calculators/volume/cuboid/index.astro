@@ -1,0 +1,98 @@
+---
+// src/pages/calculators/volume/cuboid/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import CuboidCalculator from "../../../../components/CuboidCalculator";
+
+const title = "Rectangular Cuboid Volume Calculator";
+const description =
+  "Calculate the volume of a rectangular cuboid (box) using length, width, and height. Free online calculator with instant conversion between metric and imperial units.";
+const keywords =
+  "cuboid volume calculator, rectangular box calculator, box volume, length width height calculator, room volume calculator";
+
+const commonExamples = [
+  {
+    dimensions: { length: 10, width: 8, height: 9 },
+    unit: "ft",
+    name: "Small Room",
+    volume: 720,
+  },
+  {
+    dimensions: { length: 6, width: 4, height: 3 },
+    unit: "ft",
+    name: "Storage Box",
+    volume: 72,
+  },
+  {
+    dimensions: { length: 20, width: 8.5, height: 11 },
+    unit: "in",
+    name: "Paper Box",
+    volume: 1870,
+  },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Cuboid Volume Calculator
+        </h2>
+        <CuboidCalculator client:load />
+      </section>
+
+      {/* Common Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            commonExamples.map((example) => (
+              <a
+                href={`/calculators/volume/cuboid/${example.unit}/${example.dimensions.length}-${example.dimensions.width}-${example.dimensions.height}`}
+                class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg hover:shadow-lg transition-all"
+              >
+                <h3 class="font-display font-semibold mb-2">{example.name}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {example.dimensions.length} × {example.dimensions.width} ×{" "}
+                  {example.dimensions.height} {example.unit}
+                </p>
+                <p class="text-accent-primary font-semibold mt-2">
+                  Volume: {example.volume} {example.unit}³
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>How to Calculate Cuboid Volume</h2>
+        <p>
+          A rectangular cuboid (also known as a rectangular prism or box) is a
+          three-dimensional shape with six rectangular faces. To find its
+          volume, multiply the length, width, and height:
+        </p>
+
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg my-4"
+        >
+          <p class="font-mono">Volume = length × width × height</p>
+        </div>
+
+        <h3>Common Applications</h3>
+        <ul>
+          <li>Room volumes for heating and cooling calculations</li>
+          <li>Shipping box and container volumes</li>
+          <li>Storage space planning</li>
+          <li>Construction and building materials</li>
+          <li>Packaging design</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

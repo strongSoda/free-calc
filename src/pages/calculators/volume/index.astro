@@ -1,0 +1,274 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import { ArrowRightIcon, Box, Circle, Cuboid, Cylinder } from "lucide-react";
+
+const volumeCalculators = [
+  {
+    title: "Cube Volume Calculator",
+    description:
+      "Calculate the volume of a cube using side length. Perfect for boxes, rooms, and containers.",
+    url: "/calculators/volume/cube",
+    Icon: Box,
+    examples: ["1m cube = 1m³", "2ft cube = 8ft³"],
+    gradient: "from-accent-primary to-accent-secondary",
+    category: "basic",
+  },
+  {
+    title: "Rectangular Cuboid Calculator",
+    description:
+      "Find volume of rectangular spaces like rooms, boxes, and shipping containers using length, width, and height.",
+    url: "/calculators/volume/cuboid",
+    Icon: Cuboid,
+    examples: ["Room: 12×10×8ft = 960ft³", "Box: 30×20×15cm = 9000cm³"],
+    gradient: "from-accent-secondary to-accent-success",
+    category: "basic",
+  },
+  {
+    title: "Cylinder Volume Calculator",
+    description:
+      "Calculate volumes of cylindrical objects like tanks, pipes, and containers using radius and height.",
+    url: "/calculators/volume/cylinder",
+    Icon: Cylinder,
+    examples: ["Water tank: π×2²×5m = 62.8m³", "Pipe: π×0.5²×10m = 7.85m³"],
+    gradient: "from-accent-primary to-accent-success",
+    category: "basic",
+  },
+  {
+    title: "Sphere Volume Calculator",
+    description:
+      "Compute volumes of spherical objects like balls, tanks, and domes using radius.",
+    url: "/calculators/volume/sphere",
+    Icon: Circle,
+    examples: ["Ball: (4/3)π×1³m = 4.19m³", "Tank: (4/3)π×2³m = 33.51m³"],
+    gradient: "from-accent-success to-accent-secondary",
+    category: "basic",
+  },
+];
+
+const extraCalculators = [
+  "Cone",
+  "Pyramid",
+  "Prism",
+  "Hemisphere",
+].map((name) => ({
+  name,
+  url: `/calculators/volume/${name.toLowerCase().replace(/\s+/g, "-")}`,
+}));
+
+const unitCategories = [
+  {
+    name: "Metric",
+    units: [
+      "cubic meters (m³)",
+      "cubic centimeters (cm³)",
+      "cubic millimeters (mm³)",
+      "liters (L)",
+      "milliliters (mL)",
+    ],
+  },
+  {
+    name: "Imperial",
+    units: [
+      "cubic feet (ft³)",
+      "cubic inches (in³)",
+      "cubic yards (yd³)",
+      "gallons (gal)",
+      "fluid ounces (fl oz)",
+    ],
+  },
+];
+
+const commonApplications = [
+  "Room Volumes",
+  "Storage Containers",
+  "Swimming Pools",
+  "Water Tanks",
+  "Shipping Boxes",
+  "Construction Materials",
+  "Liquid Storage",
+  "Industrial Tanks",
+];
+---
+
+<Layout>
+  <GpaLayout
+    client:load
+    title="3D Volume Calculator - Calculate Volume of Any Shape"
+    description="Free online volume calculator for all 3D shapes. Calculate volumes of cubes, cylinders, spheres, and more. Convert between metric and imperial units instantly."
+    keywords="volume calculator, cube volume, cylinder volume, sphere volume, volume conversion, cubic meters, cubic feet, room volume calculator"
+  >
+    <div class="space-y-12">
+      {/* Featured Calculators */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Volume Calculators
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            volumeCalculators.map((calc, index) => (
+              <a
+                href={calc.url}
+                class="group block p-8 bg-surface-light dark:bg-surface-dark-hover rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 dark:hover:border-accent-primary/20"
+              >
+                <div class="text-4xl mb-6 bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  {index === 0 && (
+                    <Box
+                      client:load
+                      className="w-8 h-8 text-accent-primary"
+                    />
+                  )}
+                  {index === 1 && (
+                    <Cuboid
+                      client:load
+                      className="w-8 h-8 text-accent-primary"
+                    />
+                  )}
+                  {index === 2 && (
+                    <Cylinder
+                      client:load
+                      className="w-8 h-8 text-accent-primary"
+                    />
+                  )}
+                  {index === 3 && (
+                    <Circle
+                      client:load
+                      className="w-8 h-8 text-accent-primary"
+                    />
+                  )}                  
+                </div>
+                <h3
+                  class={`font-display text-xl font-bold mb-3 bg-gradient-to-r ${calc.gradient} bg-clip-text text-transparent`}
+                >
+                  {calc.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                  {calc.description}
+                </p>
+                <div class="bg-surface-light-hover dark:bg-surface-dark rounded-lg p-4 mb-4">
+                  <p class="text-sm font-medium mb-2">Example Calculations:</p>
+                  {calc.examples.map((example) => (
+                    <code class="block text-sm text-accent-primary">
+                      {example}
+                    </code>
+                  ))}
+                </div>
+                <div class="mt-4 inline-flex items-center text-accent-primary dark:text-accent-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Try Calculator{" "}
+                  <ArrowRightIcon client:load className="w-4 h-4 ml-2" />
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* More Calculators Grid */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          More Volume Calculators
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            extraCalculators.map((calc) => (
+              <a
+                href={calc.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors duration-200"
+              >
+                <span class="text-content-light dark:text-content-dark">
+                  {calc.name}
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* Unit Conversion Section */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Supported Units</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            unitCategories.map((category) => (
+              <div>
+                <h3 class="font-display text-lg font-semibold mb-4">
+                  {category.name} Units
+                </h3>
+                <ul class="space-y-2">
+                  {category.units.map((unit) => (
+                    <li class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {unit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* Common Applications */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Applications
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            commonApplications.map((app) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <span class="text-content-light dark:text-content-dark">
+                  {app}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>About Our Volume Calculators</h2>
+        <p>
+          Our comprehensive suite of volume calculators helps you calculate the
+          three-dimensional space occupied by any shape. Whether you're working
+          on home improvement, construction, engineering projects, or
+          educational exercises, our calculators provide accurate results with
+          instant unit conversion.
+        </p>
+
+        <h3>Key Features</h3>
+        <ul>
+          <li>Calculate volumes for any 3D shape</li>
+          <li>Instant conversion between metric and imperial units</li>
+          <li>Step-by-step calculation explanations</li>
+          <li>Practical examples and applications</li>
+          <li>Mobile-friendly design</li>
+        </ul>
+
+        <h3>Applications</h3>
+        <p>
+          Our volume calculators are used by professionals and students in
+          various fields:
+        </p>
+        <ul>
+          <li>
+            Construction and Architecture: Calculate room volumes, material
+            quantities
+          </li>
+          <li>Engineering: Design tanks, containers, and storage solutions</li>
+          <li>Education: Learn geometry and mathematical concepts</li>
+          <li>
+            Shipping and Logistics: Calculate cargo volumes and container space
+          </li>
+          <li>Home Improvement: Plan room layouts and storage solutions</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

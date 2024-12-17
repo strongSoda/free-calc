@@ -1,0 +1,223 @@
+---
+// src/pages/calculators/volume/hemisphere/[unit]/[radius].astro
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import HemisphereCalculator from "../../../../../components/HemisphereCalculator";
+
+export function getStaticPaths() {
+  // Common dimensions for different units and use cases
+  const commonDimensions = {
+    m: [
+      { r: 0.5, useCase: "Small Display Cover" },
+      { r: 1, useCase: "Medium Display Dome" },
+      { r: 1.5, useCase: "Large Display Dome" },
+      { r: 2, useCase: "Storage Dome" },
+      { r: 2.5, useCase: "Architectural Feature" },
+      { r: 3, useCase: "Large Structure" },
+    ],
+    ft: [
+      { r: 1, useCase: "Small Dome" },
+      { r: 2, useCase: "Medium Dome" },
+      { r: 3, useCase: "Large Dome" },
+      { r: 4, useCase: "Storage Structure" },
+      { r: 5, useCase: "Architectural Dome" },
+      { r: 6, useCase: "Large Architecture" },
+    ],
+    in: [
+      { r: 3, useCase: "Small Bowl" },
+      { r: 4, useCase: "Medium Bowl" },
+      { r: 6, useCase: "Large Bowl" },
+      { r: 8, useCase: "Display Cover" },
+      { r: 10, useCase: "Dome Cover" },
+      { r: 12, useCase: "Large Cover" },
+    ],
+    cm: [
+      { r: 5, useCase: "Small Container" },
+      { r: 10, useCase: "Medium Container" },
+      { r: 15, useCase: "Large Container" },
+      { r: 20, useCase: "Display Dome" },
+      { r: 25, useCase: "Large Dome" },
+      { r: 30, useCase: "Extra Large Dome" },
+    ],
+  };
+
+  const paths = [];
+
+  Object.entries(commonDimensions).forEach(([unit, dimensions]) => {
+    dimensions.forEach(({ r, useCase }) => {
+      const volume = (2 / 3) * Math.PI * Math.pow(r, 3);
+      const curvedSurfaceArea = 2 * Math.PI * Math.pow(r, 2);
+      const flatSurfaceArea = Math.PI * Math.pow(r, 2);
+      const totalSurfaceArea = curvedSurfaceArea + flatSurfaceArea;
+      const circumference = 2 * Math.PI * r;
+
+      paths.push({
+        params: {
+          unit,
+          radius: r.toString(),
+        },
+        props: {
+          unit,
+          radius: r,
+          volume,
+          curvedSurfaceArea,
+          flatSurfaceArea,
+          totalSurfaceArea,
+          circumference,
+          useCase,
+          commonDimensions,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const {
+  unit,
+  radius,
+  volume,
+  curvedSurfaceArea,
+  flatSurfaceArea,
+  totalSurfaceArea,
+  circumference,
+  useCase,
+  commonDimensions,
+} = Astro.props;
+
+const title = `${radius} ${unit} Hemisphere Calculator`;
+const description = `Calculate the volume of a hemisphere with radius ${radius} ${unit}. Perfect for ${useCase.toLowerCase()}.`;
+const keywords = `${radius} ${unit} hemisphere, dome calculator, hemisphere volume, ${useCase.toLowerCase()} volume`;
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Result Overview */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {radius}
+          {unit} Radius Hemisphere
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Dimensions</h3>
+            <ul
+              class="space-y-1 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Radius: {radius} {unit}</li>
+              <li>Height: {radius} {unit}</li>
+              <li>Base Circumference: {circumference.toFixed(2)} {unit}</li>
+            </ul>
+          </div>
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Volume</h3>
+            <p class="text-2xl font-bold text-accent-primary">
+              {volume.toFixed(2)}
+              {unit}³
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Calculator */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">Try the Calculator</h2>
+        <HemisphereCalculator
+          client:load
+          defaultRadius={radius.toString()}
+          defaultUnit={`${unit}³`}
+        />
+      </section>
+
+      {/* Measurements and Calculations */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Detailed Measurements
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-display font-semibold mb-3">
+              Surface Areas
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>
+                Curved Surface Area: {curvedSurfaceArea.toFixed(2)}
+                {unit}²
+              </li>
+              <li>
+                Flat Surface Area (Base): {flatSurfaceArea.toFixed(2)}
+                {unit}²
+              </li>
+              <li>Total Surface Area: {totalSurfaceArea.toFixed(2)} {unit}²</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-display font-semibold mb-3">
+              Base Measurements
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Base Diameter: {(radius * 2).toFixed(2)} {unit}</li>
+              <li>Base Circumference: {circumference.toFixed(2)} {unit}</li>
+              <li>Base Area: {flatSurfaceArea.toFixed(2)} {unit}²</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Formula and Calculation */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>Calculation Breakdown</h2>
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg mb-4"
+        >
+          <p>Volume = (2/3) × π × radius³</p>
+          <p>Volume = (2/3) × π × {radius}³ = {volume.toFixed(2)} {unit}³</p>
+        </div>
+
+        <h3>Common Use Case</h3>
+        <p>
+          A hemisphere of this size is typically used as a {
+            useCase.toLowerCase()
+          }.
+        </p>
+      </section>
+
+      {/* Related Dimensions */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Similar Sizes</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            commonDimensions[unit].slice(0, 3).map((dim) => (
+              <a
+                href={`/calculators/volume/hemisphere/${unit}/${dim.r}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+            transition-colors"
+              >
+                <span class="text-content-light dark:text-content-dark">
+                  {dim.useCase}: {parseFloat(dim.r.toFixed(1))}
+                  {unit} radius
+                </span>
+              </a>
+            ))
+          }          
+        </div>
+      </section>
+    </div></GpaLayout
+  >
+</Layout>

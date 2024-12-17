@@ -1,7 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import GpaLayout from "../../components/GpaLayout";
-import { ArrowLeftRightIcon, BarChart2, CalculatorIcon, Check } from "lucide-react";
+import {
+  ArrowLeftRightIcon,
+  BarChart2,
+  CalculatorIcon,
+  Check,
+  Cone,
+} from "lucide-react";
 
 const calculators = [
   {
@@ -21,7 +27,14 @@ const calculators = [
     description: "Calculate Row Reduced Echelon Form (RREF) of matrices",
     url: "/",
     gradient: "from-accent-primary to-accent-secondary",
-  }
+  },
+  {
+    title: "Volume Calculator",
+    description:
+      "Calculate Volume of Any ShapeCalculate volumes of cubes, cylinders, spheres, and more",
+    url: "/calculators/volume",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 ---
 
@@ -58,6 +71,12 @@ const calculators = [
                   className="w-8 h-8 text-accent-primary"
                 />
               )}
+              {index === 3 && (
+                <Cone
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
             </div>
             <h2
               class={`font-display text-xl font-bold mb-3 bg-gradient-to-r ${calc.gradient} bg-clip-text text-transparent`}
@@ -75,11 +94,17 @@ const calculators = [
       }
     </div>
 
-    <div class="mt-12 bg-surface-light dark:bg-surface-dark-hover rounded-xl p-8 border border-gray-200/10 dark:border-gray-800/10">
-      <h2 class="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent">
+    <div
+      class="mt-12 bg-surface-light dark:bg-surface-dark-hover rounded-xl p-8 border border-gray-200/10 dark:border-gray-800/10"
+    >
+      <h2
+        class="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent"
+      >
         Why Use Our Calculators?
       </h2>
-      <ul class="space-y-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+      <ul
+        class="space-y-4 text-content-light-dimmed dark:text-content-dark-dimmed"
+      >
         {
           [
             "Accurate conversions and calculations for academic needs",

@@ -1,0 +1,221 @@
+---
+// src/pages/calculators/volume/pyramid/[unit]/[dimensions].astro
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import PyramidCalculator from "../../../../../components/PyramidCalculator";
+
+export function getStaticPaths() {
+  // Common dimensions for different units and use cases
+  const commonDimensions = {
+    m: [
+      { base: 1, h: 2, useCase: "Small Display Model" },
+      { base: 2, h: 3, useCase: "Medium Display Pyramid" },
+      { base: 3, h: 4, useCase: "Large Display Structure" },
+      { base: 1.5, h: 2.5, useCase: "Educational Model" },
+      { base: 4, h: 6, useCase: "Architectural Model" },
+    ],
+    ft: [
+      { base: 2, h: 3, useCase: "Small Model" },
+      { base: 4, h: 6, useCase: "Medium Model" },
+      { base: 6, h: 8, useCase: "Large Model" },
+      { base: 3, h: 5, useCase: "Display Model" },
+      { base: 8, h: 10, useCase: "Large Structure" },
+    ],
+    in: [
+      { base: 6, h: 8, useCase: "Desktop Model" },
+      { base: 8, h: 12, useCase: "Small Display" },
+      { base: 12, h: 18, useCase: "Medium Display" },
+      { base: 18, h: 24, useCase: "Large Display" },
+      { base: 24, h: 36, useCase: "Extra Large Model" },
+    ],
+    cm: [
+      { base: 10, h: 15, useCase: "Small Model" },
+      { base: 20, h: 30, useCase: "Medium Model" },
+      { base: 30, h: 45, useCase: "Large Model" },
+      { base: 40, h: 60, useCase: "Display Model" },
+      { base: 50, h: 75, useCase: "Extra Large Model" },
+    ],
+  };
+
+  const paths = [];
+
+  Object.entries(commonDimensions).forEach(([unit, dimensions]) => {
+    dimensions.forEach(({ base, h, useCase }) => {
+      const volume = (1 / 3) * Math.pow(base, 2) * h;
+      const slantHeight = Math.sqrt(Math.pow(h, 2) + Math.pow(base / 2, 2));
+      const baseArea = Math.pow(base, 2);
+      const basePerimeter = 4 * base;
+      const lateralArea = 2 * base * slantHeight;
+      const totalArea = baseArea + lateralArea;
+
+      paths.push({
+        params: {
+          unit,
+          dimensions: `${base}-${h}`,
+        },
+        props: {
+          unit,
+          baseLength: base,
+          height: h,
+          volume,
+          slantHeight,
+          baseArea,
+          basePerimeter,
+          lateralArea,
+          totalArea,
+          useCase,
+          commonDimensions,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const {
+  unit,
+  baseLength,
+  height,
+  volume,
+  slantHeight,
+  baseArea,
+  basePerimeter,
+  lateralArea,
+  totalArea,
+  useCase,
+  commonDimensions,
+} = Astro.props;
+
+const title = `${baseLength}×${height} ${unit} Square Pyramid Calculator`;
+const description = `Calculate the volume of a square pyramid with base length ${baseLength} ${unit} and height ${height} ${unit}. Perfect for ${useCase.toLowerCase()}.`;
+const keywords = `${baseLength} ${unit} pyramid, ${height} ${unit} pyramid height, square pyramid calculator, ${useCase.toLowerCase()} volume`;
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Result Overview */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {baseLength} × {height}
+          {unit} Square Pyramid
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Dimensions</h3>
+            <ul
+              class="space-y-1 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Base Length: {baseLength} {unit}</li>
+              <li>Height: {height} {unit}</li>
+              <li>Slant Height: {slantHeight.toFixed(2)} {unit}</li>
+            </ul>
+          </div>
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Volume</h3>
+            <p class="text-2xl font-bold text-accent-primary">
+              {volume.toFixed(2)}
+              {unit}³
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Calculator */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">Try the Calculator</h2>
+        <PyramidCalculator
+          client:load
+          defaultBaseLength={baseLength.toString()}
+          defaultHeight={height.toString()}
+          defaultUnit={`${unit}³`}
+        />
+      </section>
+
+      {/* Measurements and Calculations */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Detailed Measurements
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-display font-semibold mb-3">Areas</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Base Area: {baseArea.toFixed(2)} {unit}²</li>
+              <li>Lateral Surface Area: {lateralArea.toFixed(2)} {unit}²</li>
+              <li>Total Surface Area: {totalArea.toFixed(2)} {unit}²</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-display font-semibold mb-3">
+              Other Measurements
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Base Perimeter: {basePerimeter.toFixed(2)} {unit}</li>
+              <li>
+                Base Diagonal: {(Math.sqrt(2) * baseLength).toFixed(2)}
+                {unit}
+              </li>
+              <li>Slant Height: {slantHeight.toFixed(2)} {unit}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Formula and Calculation */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>Calculation Breakdown</h2>
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg mb-4"
+        >
+          <p>Volume = (1/3) × base length² × height</p>
+          <p>
+            Volume = (1/3) × {baseLength}² × {height} = {volume.toFixed(2)}
+            {unit}³
+          </p>
+        </div>
+
+        <h3>Common Use Case</h3>
+        <p>
+          A pyramid of this size is typically used as a {useCase.toLowerCase()}.
+        </p>
+      </section>
+
+      {/* Related Dimensions */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Similar Dimensions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            commonDimensions[unit].slice(0, 3).map((dim) => (
+              <a
+                href={`/calculators/volume/pyramid/${unit}/${dim.base}-${dim.h}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+            transition-colors"
+              >
+                <span class="text-content-light dark:text-content-dark">
+                  Wider Base: {parseFloat(dim.base.toFixed(1))} × {dim.h}
+                  {unit}
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+    </div></GpaLayout
+  >
+</Layout>

@@ -1,0 +1,135 @@
+---
+// src/pages/calculators/volume/prism/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PrismCalculator from "../../../../components/PrismCalculator";
+
+const title = "Triangular Prism Volume Calculator";
+const description =
+  "Calculate the volume of a triangular prism using base, height, and length. Free online calculator with instant unit conversion.";
+const keywords =
+  "triangular prism calculator, triangular prism volume, prism volume calculator, triangular volume calculator";
+
+const commonExamples = [
+  {
+    dimensions: { base: 3, height: 4, length: 6 },
+    unit: "ft",
+    name: "Small Prism",
+    volume: (1 / 2) * 3 * 4 * 6,
+    useCase: "Structural beam",
+  },
+  {
+    dimensions: { base: 1.5, height: 2, length: 2.5 },
+    unit: "m",
+    name: "Display Model",
+    volume: (1 / 2) * 1.5 * 2 * 2.5,
+    useCase: "Educational model",
+  },
+  {
+    dimensions: { base: 6, height: 8, length: 12 },
+    unit: "in",
+    name: "Large Prism",
+    volume: (1 / 2) * 6 * 8 * 12,
+    useCase: "Construction model",
+  },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Triangular Prism Calculator
+        </h2>
+        <div class="mb-4">
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            Calculate the volume of a triangular prism by entering the base and
+            height of the triangular face, and the length of the prism.
+          </p>
+        </div>
+        <PrismCalculator client:load />
+      </section>
+
+      {/* Common Examples */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            commonExamples.map((example) => (
+              <a
+                href={`/calculators/volume/prism/${example.unit}/${example.dimensions.base}-${example.dimensions.height}-${example.dimensions.length}`}
+                class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg hover:shadow-lg transition-all"
+              >
+                <h3 class="font-display font-semibold mb-2">{example.name}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Base: {example.dimensions.base} {example.unit}
+                  <br />
+                  Height: {example.dimensions.height} {example.unit}
+                  <br />
+                  Length: {example.dimensions.length} {example.unit}
+                </p>
+                <p class="text-accent-primary font-semibold mt-2">
+                  Volume: {example.volume.toFixed(2)} {example.unit}³
+                </p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mt-1">
+                  Used for: {example.useCase}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* SEO Content */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>How to Calculate Triangular Prism Volume</h2>
+        <p>
+          A triangular prism is a three-dimensional shape with triangular bases
+          and rectangular faces. Its volume is calculated by multiplying the
+          area of the triangular base by the length of the prism.
+        </p>
+
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg my-4"
+        >
+          <p class="font-mono">Volume = (1/2 × base × height) × length</p>
+          <p class="text-sm mt-2">Where:</p>
+          <ul class="text-sm">
+            <li>base = width of the triangular face</li>
+            <li>height = height of the triangular face</li>
+            <li>length = length of the prism</li>
+          </ul>
+        </div>
+
+        <h3>Important Measurements</h3>
+        <ul>
+          <li>Base Area = ½ × base × height</li>
+          <li>Lateral Surface Area = perimeter of triangle × length</li>
+          <li>Total Surface Area = 2 × base area + lateral surface area</li>
+          <li>Triangle Perimeter = base + 2 × hypotenuse</li>
+        </ul>
+
+        <h3>Applications</h3>
+        <ul>
+          <li>Structural beams and supports</li>
+          <li>Architectural elements</li>
+          <li>Educational models</li>
+          <li>Manufacturing and design</li>
+          <li>Engineering calculations</li>
+        </ul>
+
+        <h3>Tips for Accurate Measurement</h3>
+        <ul>
+          <li>Measure the triangular base carefully</li>
+          <li>Ensure height is perpendicular to base</li>
+          <li>Measure length parallel to triangular faces</li>
+          <li>Use consistent units for all measurements</li>
+        </ul>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>

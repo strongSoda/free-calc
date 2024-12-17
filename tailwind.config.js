@@ -58,6 +58,36 @@ module.exports = {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Space Grotesk', 'system-ui', 'sans-serif'],
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.content.light'),
+            'h1, h2, h3, h4': {
+              color: theme('colors.content.light'),
+            },
+            'ul > li': {
+              color: theme('colors.content.light'),
+            },
+            'a': {
+              color: theme('colors.accent.primary'),
+            },
+          },
+        },
+        invert: {
+          css: {
+            color: theme('colors.content.dark'),
+            'h1, h2, h3, h4': {
+              color: theme('colors.content.dark'),
+            },
+            'ul > li': {
+              color: theme('colors.content.dark'),
+            },
+            'a': {
+              color: theme('colors.accent.primary'),
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [

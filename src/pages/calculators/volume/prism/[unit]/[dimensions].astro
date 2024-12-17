@@ -1,0 +1,249 @@
+---
+// src/pages/calculators/volume/prism/[unit]/[dimensions].astro
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import PrismCalculator from "../../../../../components/PrismCalculator";
+
+export function getStaticPaths() {
+  // Common dimensions for different units and use cases
+  const commonDimensions = {
+    m: [
+      { base: 1, h: 1.5, l: 2, useCase: "Small Display" },
+      { base: 2, h: 2.5, l: 3, useCase: "Medium Display" },
+      { base: 3, h: 3.5, l: 4, useCase: "Large Display" },
+      { base: 1.5, h: 2, l: 2.5, useCase: "Educational Model" },
+      { base: 2.5, h: 3, l: 3.5, useCase: "Design Model" },
+    ],
+    ft: [
+      { base: 2, h: 3, l: 4, useCase: "Small Beam" },
+      { base: 3, h: 4, l: 6, useCase: "Medium Beam" },
+      { base: 4, h: 5, l: 8, useCase: "Large Beam" },
+      { base: 2.5, h: 3.5, l: 5, useCase: "Support Structure" },
+      { base: 3.5, h: 4.5, l: 7, useCase: "Construction Element" },
+    ],
+    in: [
+      { base: 6, h: 8, l: 12, useCase: "Desktop Model" },
+      { base: 8, h: 10, l: 15, useCase: "Small Display" },
+      { base: 10, h: 12, l: 18, useCase: "Medium Display" },
+      { base: 12, h: 15, l: 24, useCase: "Large Display" },
+      { base: 15, h: 18, l: 30, useCase: "Exhibition Model" },
+    ],
+    cm: [
+      { base: 10, h: 15, l: 20, useCase: "Small Model" },
+      { base: 15, h: 20, l: 30, useCase: "Medium Model" },
+      { base: 20, h: 25, l: 40, useCase: "Large Model" },
+      { base: 25, h: 30, l: 50, useCase: "Display Model" },
+      { base: 30, h: 35, l: 60, useCase: "Exhibition Piece" },
+    ],
+  };
+
+  const paths = [];
+
+  Object.entries(commonDimensions).forEach(([unit, dimensions]) => {
+    dimensions.forEach(({ base, h, l, useCase }) => {
+      const triangleArea = (base * h) / 2;
+      const volume = triangleArea * l;
+      const hypotenuse = Math.sqrt(Math.pow(base / 2, 2) + Math.pow(h, 2));
+      const trianglePerimeter = base + 2 * hypotenuse;
+      const triangularFacesArea = 2 * triangleArea;
+      const rectangularFacesArea = trianglePerimeter * l;
+      const totalSurfaceArea = triangularFacesArea + rectangularFacesArea;
+
+      paths.push({
+        params: {
+          unit,
+          dimensions: `${base}-${h}-${l}`,
+        },
+        props: {
+          unit,
+          base,
+          height: h,
+          length: l,
+          volume,
+          triangleArea,
+          hypotenuse,
+          trianglePerimeter,
+          triangularFacesArea,
+          rectangularFacesArea,
+          totalSurfaceArea,
+          useCase,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const {
+  unit,
+  base,
+  height,
+  length,
+  volume,
+  triangleArea,
+  hypotenuse,
+  trianglePerimeter,
+  triangularFacesArea,
+  rectangularFacesArea,
+  totalSurfaceArea,
+  useCase,
+} = Astro.props;
+
+const title = `${base}×${height}×${length} ${unit} Triangular Prism Calculator`;
+const description = `Calculate the volume of a triangular prism with base ${base} ${unit}, height ${height} ${unit}, and length ${length} ${unit}. Perfect for ${useCase.toLowerCase()}.`;
+const keywords = `${base}×${height}×${length} ${unit} prism, triangular prism calculator, prism volume, ${useCase.toLowerCase()} volume`;
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Result Overview */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {base} × {height} × {length}
+          {unit} Triangular Prism
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Dimensions</h3>
+            <ul
+              class="space-y-1 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Triangle Base: {base} {unit}</li>
+              <li>Triangle Height: {height} {unit}</li>
+              <li>Prism Length: {length} {unit}</li>
+            </ul>
+          </div>
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg"
+          >
+            <h3 class="font-display font-semibold mb-2">Volume</h3>
+            <p class="text-2xl font-bold text-accent-primary">
+              {volume.toFixed(2)}
+              {unit}³
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Calculator */}
+      <section>
+        <h2 class="text-2xl font-display font-bold mb-6">Try the Calculator</h2>
+        <PrismCalculator
+          client:load
+          defaultBase={base.toString()}
+          defaultHeight={height.toString()}
+          defaultLength={length.toString()}
+          defaultUnit={`${unit}³`}
+        />
+      </section>
+
+      {/* Measurements and Calculations */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Detailed Measurements
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-display font-semibold mb-3">Areas</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Triangle Area: {triangleArea.toFixed(2)} {unit}²</li>
+              <li>
+                Triangular Faces Area: {triangularFacesArea.toFixed(2)}
+                {unit}²
+              </li>
+              <li>
+                Rectangular Faces Area: {rectangularFacesArea.toFixed(2)}
+                {unit}²
+              </li>
+              <li>Total Surface Area: {totalSurfaceArea.toFixed(2)} {unit}²</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-display font-semibold mb-3">
+              Other Measurements
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Triangle Perimeter: {trianglePerimeter.toFixed(2)} {unit}</li>
+              <li>Triangle Hypotenuse: {hypotenuse.toFixed(2)} {unit}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Formula and Calculation */}
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>Calculation Breakdown</h2>
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg mb-4"
+        >
+          <p>Volume = (1/2 × base × height) × length</p>
+          <p>
+            Volume = (1/2 × {base} × {height}) × {length} = {volume.toFixed(2)}
+            {unit}³
+          </p>
+        </div>
+
+        <h3>Common Use Case</h3>
+        <p>
+          A triangular prism of this size is typically used as a {
+            useCase.toLowerCase()
+          }.
+        </p>
+      </section>
+
+      {/* Related Dimensions */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Similar Dimensions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Wider base */}
+          <a
+          href={
+            `/calculators/volume/prism/${unit}/${(base * 1.5).toFixed(1)}-${height}-${length}`
+          }
+          class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+          transition-colors" >
+          <span class="text-content-light dark:text-content-dark">
+            Wider Base: {(base * 1.5).toFixed(1)} × {height} × {length}
+            {unit}
+          </span>
+        </div>
+        {/* Taller height */}
+      <a
+        href={
+          `/calculators/volume/prism/${unit}/${base}-${(height * 1.5).toFixed(1)}-${length}`
+        }
+        class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+        transition-colors" >
+        <span class="text-content-light dark:text-content-dark">
+          Taller: {base} × {(height * 1.5).toFixed(1)} × {length}
+          {unit}
+        </span>
+      </section>
+      {/* Longer length */}
+    <a
+      href={
+        `/calculators/volume/prism/${unit}/${base}-${height}-${(length * 1.5).toFixed(1)}`
+      }
+      class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+      transition-colors" >
+      <span class="text-content-light dark:text-content-dark">
+        Longer: {base} × {height} × {(length * 1.5).toFixed(1)}
+        {unit}
+      </span>
+    </div>
+  </GpaLayout>
+</Layout>
