@@ -8,6 +8,7 @@ import {
   Check,
   Cone,
 } from "lucide-react";
+import AdUnit from "../../components/AdUnit";
 
 const calculators = [
   {
@@ -36,14 +37,25 @@ const calculators = [
     gradient: "from-accent-primary to-accent-secondary",
   },
 ];
+
+const title = "Academic Calculators";
+const description =
+  "Free online calculators for all your academic conversion needs";
+const keywords =
+  "gpa calculator, percentage calculator, rref calculator, row reduced echelon form calculator, academic calculator, grade conversion";
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout
     client:load
-    title="Academic Calculators"
-    description="Free online calculators for all your academic conversion needs"
-    keywords="gpa calculator, percentage calculator, rref calculator, row reduced echelon form calculator, academic calculator, grade conversion"
+    title={title}
+    description={description}
+    keywords={keywords}
   >
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {
@@ -72,10 +84,7 @@ const calculators = [
                 />
               )}
               {index === 3 && (
-                <Cone
-                  client:load
-                  className="w-8 h-8 text-accent-primary"
-                />
+                <Cone client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2
@@ -92,6 +101,9 @@ const calculators = [
           </a>
         ))
       }
+
+      {/* Square ad within content */}
+      <AdUnit type="square" client:load />
     </div>
 
     <div

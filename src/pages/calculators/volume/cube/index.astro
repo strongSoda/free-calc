@@ -52,7 +52,12 @@ const educationalExamples = [
 ];
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Calculator Section */}

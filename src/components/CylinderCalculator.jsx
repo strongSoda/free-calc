@@ -1,5 +1,6 @@
 // src/components/CylinderCalculator.jsx
 import React, { useState, useEffect } from 'react';
+import AffiliateSection from './AffiliateSection';
 
 const units = {
   metric: [
@@ -175,6 +176,11 @@ const CylinderCalculator = ({
           </div>
         )}
       </div>
+
+            {/* Add Affiliate Section before Continue Learning */}
+            <div class="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+              <AffiliateSection client:load />
+            </div>
     </div>
   );
 };

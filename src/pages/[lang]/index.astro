@@ -34,7 +34,13 @@ const schemaData = {
 };
 ---
 
-<Layout>
+<Layout
+  title={t.title}
+  description={t.description}
+  keywords={t.keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/hero.png"
+>
   <GpaLayout
     client:load
     title={t.title}

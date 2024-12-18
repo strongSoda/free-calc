@@ -99,7 +99,13 @@ const metaTags = [
 ];
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/hero.png"
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Calculator Section */}

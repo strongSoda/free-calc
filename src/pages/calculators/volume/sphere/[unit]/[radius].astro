@@ -87,7 +87,12 @@ const description = `Calculate the volume of a sphere with radius ${radius} ${un
 const keywords = `${radius} ${unit} sphere, ${radius} ${unit} ball volume, sphere calculator, ${useCase.toLowerCase()} volume`;
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Result Overview */}

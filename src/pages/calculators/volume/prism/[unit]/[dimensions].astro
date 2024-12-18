@@ -95,7 +95,12 @@ const description = `Calculate the volume of a triangular prism with base ${base
 const keywords = `${base}×${height}×${length} ${unit} prism, triangular prism calculator, prism volume, ${useCase.toLowerCase()} volume`;
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Result Overview */}
@@ -211,39 +216,39 @@ const keywords = `${base}×${height}×${length} ${unit} prism, triangular prism 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
           {/* Wider base */}
           <a
-          href={
-            `/calculators/volume/prism/${unit}/${(base * 1.5).toFixed(1)}-${height}-${length}`
-          }
-          class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
-          transition-colors" >
-          <span class="text-content-light dark:text-content-dark">
-            Wider Base: {(base * 1.5).toFixed(1)} × {height} × {length}
-            {unit}
-          </span>
+            href={`/calculators/volume/prism/${unit}/${(base * 1.5).toFixed(1)}-${height}-${length}`}
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+          transition-colors"
+          >
+            <span class="text-content-light dark:text-content-dark">
+              Wider Base: {(base * 1.5).toFixed(1)} × {height} × {length}
+              {unit}
+            </span>
+          </a>
+          {/* Taller height */}
+          <a
+            href={`/calculators/volume/prism/${unit}/${base}-${(height * 1.5).toFixed(1)}-${length}`}
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+        transition-colors"
+          >
+            <span class="text-content-light dark:text-content-dark">
+              Taller: {base} × {(height * 1.5).toFixed(1)} × {length}
+              {unit}
+            </span>
+          </a>
+          {/* Longer length */}
+          <a
+            href={`/calculators/volume/prism/${unit}/${base}-${height}-${(length * 1.5).toFixed(1)}`}
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+      transition-colors"
+          >
+            <span class="text-content-light dark:text-content-dark">
+              Longer: {base} × {height} × {(length * 1.5).toFixed(1)}
+              {unit}
+            </span>
+          </a>
         </div>
-        {/* Taller height */}
-      <a
-        href={
-          `/calculators/volume/prism/${unit}/${base}-${(height * 1.5).toFixed(1)}-${length}`
-        }
-        class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
-        transition-colors" >
-        <span class="text-content-light dark:text-content-dark">
-          Taller: {base} × {(height * 1.5).toFixed(1)} × {length}
-          {unit}
-        </span>
       </section>
-      {/* Longer length */}
-    <a
-      href={
-        `/calculators/volume/prism/${unit}/${base}-${height}-${(length * 1.5).toFixed(1)}`
-      }
-      class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
-      transition-colors" >
-      <span class="text-content-light dark:text-content-dark">
-        Longer: {base} × {height} × {(length * 1.5).toFixed(1)}
-        {unit}
-      </span>
-    </div>
-  </GpaLayout>
-</Layout>
+    </div></GpaLayout
+  ></Layout
+>

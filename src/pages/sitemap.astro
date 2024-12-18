@@ -44,7 +44,12 @@ const keywords =
   "sitemap, calculator pages, gpa calculator, percentage calculator, gpa conversion";
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Main Pages */}

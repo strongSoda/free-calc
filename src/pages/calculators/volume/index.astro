@@ -46,15 +46,12 @@ const volumeCalculators = [
   },
 ];
 
-const extraCalculators = [
-  "Cone",
-  "Pyramid",
-  "Prism",
-  "Hemisphere",
-].map((name) => ({
-  name,
-  url: `/calculators/volume/${name.toLowerCase().replace(/\s+/g, "-")}`,
-}));
+const extraCalculators = ["Cone", "Pyramid", "Prism", "Hemisphere"].map(
+  (name) => ({
+    name,
+    url: `/calculators/volume/${name.toLowerCase().replace(/\s+/g, "-")}`,
+  })
+);
 
 const unitCategories = [
   {
@@ -89,14 +86,25 @@ const commonApplications = [
   "Liquid Storage",
   "Industrial Tanks",
 ];
+
+const title = "3D Volume Calculator - Calculate Volume of Any Shape";
+const description =
+  "Free online volume calculator for all 3D shapes. Calculate volumes of cubes, cylinders, spheres, and more. Convert between metric and imperial units instantly.";
+const keywords =
+  "volume calculator, cube volume, cylinder volume, sphere volume, volume conversion, cubic meters, cubic feet, room volume calculator";
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout
     client:load
-    title="3D Volume Calculator - Calculate Volume of Any Shape"
-    description="Free online volume calculator for all 3D shapes. Calculate volumes of cubes, cylinders, spheres, and more. Convert between metric and imperial units instantly."
-    keywords="volume calculator, cube volume, cylinder volume, sphere volume, volume conversion, cubic meters, cubic feet, room volume calculator"
+    title={title}
+    description={description}
+    keywords={keywords}
   >
     <div class="space-y-12">
       {/* Featured Calculators */}
@@ -113,10 +121,7 @@ const commonApplications = [
               >
                 <div class="text-4xl mb-6 bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   {index === 0 && (
-                    <Box
-                      client:load
-                      className="w-8 h-8 text-accent-primary"
-                    />
+                    <Box client:load className="w-8 h-8 text-accent-primary" />
                   )}
                   {index === 1 && (
                     <Cuboid
@@ -135,7 +140,7 @@ const commonApplications = [
                       client:load
                       className="w-8 h-8 text-accent-primary"
                     />
-                  )}                  
+                  )}
                 </div>
                 <h3
                   class={`font-display text-xl font-bold mb-3 bg-gradient-to-r ${calc.gradient} bg-clip-text text-transparent`}

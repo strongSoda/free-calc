@@ -12,8 +12,23 @@ const affiliateProducts = [
     image: "https://www.keychron.com/cdn/shop/products/Keychron-V1-Custom-Mechanical-Keyboard-frosted-black-knob-K-Pro-red.jpg?v=1657878904",
     link: "https://www.keychron.com/products/keychron-v1-qmk-via-custom-mechanical-keyboard?ref=imtaewse&variant=40026442367065",
     tags: ["Mechanical", "Wireless", "RGB"]
+  },
+  {
+    id: 2,
+    name: "Screen Studio",
+    description: "Beautiful Screen Recordings in Minutes. Screen Recorder producing high-impact videos automatically. Designed for macOS.",
+    price: 229,
+    originalPrice: 279,
+    discount: 18,
+    image: "https://screen.studio/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-transparent.681d19be.png&w=256&q=75",
+    link: "https://screen.studio/@Xenr1",
+    tags: ["macOS", "Recording", "Video"]
   }
 ];
+
+// select 1 affiliate product at random
+const randomIndex = Math.floor(Math.random() * affiliateProducts.length);
+const randomProduct = affiliateProducts[randomIndex];
 
 export default function AffiliateSection() {
   return (
@@ -21,10 +36,8 @@ export default function AffiliateSection() {
       <h2 className="font-display text-2xl font-semibold text-surface-900 dark:text-surface-50 mb-8">
         Recommended Gear
       </h2>
-      <div className="space-y-6">
-        {affiliateProducts.map(product => (
-          <AffiliateProduct key={product.id} product={product} />
-        ))}
+      <div className="space-y-6">        
+          <AffiliateProduct key={randomProduct.id} product={randomProduct} />
       </div>
     </div>
   );

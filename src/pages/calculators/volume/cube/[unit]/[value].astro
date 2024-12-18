@@ -94,7 +94,12 @@ const description = `Calculate the volume of a cube with ${value} ${unitLabel} s
 const keywords = `${value} ${unit} cube side, ${value} ${unitLabel} cube calculator, cube with ${value} ${unit} sides, cube calculator`;
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Result Overview */}

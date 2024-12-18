@@ -89,7 +89,12 @@ const description = `Calculate the volume of a cone with radius ${radius} ${unit
 const keywords = `${radius} ${unit} cone, ${height} ${unit} cone height, cone volume calculator, ${useCase.toLowerCase()} volume`;
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Result Overview */}
@@ -198,7 +203,7 @@ const keywords = `${radius} ${unit} cone, ${height} ${unit} cone height, cone vo
         <h2 class="text-2xl font-display font-bold mb-6">Similar Dimensions</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
           {
-            commonDimensions[unit].slice(0,3).map((dim) => (
+            commonDimensions[unit].slice(0, 3).map((dim) => (
               <a
                 href={`/calculators/volume/cone/${unit}/${dim.r}-${dim.h}`}
                 class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5

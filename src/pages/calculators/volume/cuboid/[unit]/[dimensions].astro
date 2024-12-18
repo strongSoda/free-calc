@@ -97,7 +97,12 @@ const description = `Calculate the volume of a ${length}×${width}×${height} ${
 const keywords = `${length}×${width}×${height} ${unit} cuboid, box volume calculator, rectangular prism ${length}×${width}×${height}, volume calculation`;
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Result Overview */}
