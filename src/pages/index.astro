@@ -1,0 +1,256 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+import GpaLayout from "../components/GpaLayout";
+import RREFCalculator from "../components/RREFCalculator";
+import { languages } from "../config/translations";
+
+const t = languages.en.translations;
+
+const title = "RREF Calculator - Calculate Reduced Row Echelon Form";
+const description =
+  "Calculate the Reduced Row Echelon Form (RREF) of a matrix with our easy-to-use online calculator. Step-by-step explanations included.";
+const keywords =
+  "RREF, Reduced Row Echelon Form, matrix calculator, linear algebra";
+
+// Schema.org data
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "RREF Calculator",
+  applicationCategory: "EducationalApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+  },
+  description:
+    "Our RREF Calculator is a free online tool that computes the Reduced Row Echelon Form of any matrix. It provides step-by-step solutions, making it ideal for students, educators, and professionals working with linear algebra.",
+  featureList: [
+    "Calculate RREF for matrices of any size",
+    "Step-by-step solution display",
+    "Educational explanations for each step",
+    "User-friendly interface",
+    "Supports fractions and decimal inputs",
+  ],
+  screenshot: "https://rref-calculator.com/hero.png",
+  softwareVersion: "1.0",
+};
+
+// FAQ Schema data
+const faqData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is RREF (Reduced Row Echelon Form)?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RREF is a standardized form of a matrix where: 1) The first non-zero element in each row (leading coefficient) is 1, 2) Each column containing a leading 1 has zeros in all other entries, 3) Any rows of all zeros appear at the bottom, 4) Each leading 1 is to the right of all leading 1's in rows above it.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Why is RREF important in linear algebra?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RREF is crucial in linear algebra for several reasons: It simplifies solving systems of linear equations, helps in determining matrix rank, aids in finding null space and column space, and assists in matrix inversion and determinant computation.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How is RREF different from REF?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "While both are reduced forms, RREF is more standardized. In REF, leading non-zero entries can be any number, while in RREF they must be 1. RREF requires zeros above and below leading 1s, while REF only requires zeros below. RREF gives a unique form for each matrix, while REF may have multiple forms.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can RREF be used to solve systems of equations?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, RREF is particularly useful for solving systems of linear equations. The augmented matrix is converted to RREF, making it easy to read off the solution. Variables corresponding to columns without leading 1s are free variables.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What are the steps to calculate RREF?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The steps are: 1) Find the leftmost non-zero column for a pivot, 2) Make the topmost non-zero entry 1 by dividing its row, 3) Make all other entries in that column 0 using row operations, 4) Repeat for the next column to the right, working only with rows below the current pivot row.",
+      },
+    },
+  ],
+};
+
+// Meta tags
+const metaTags = [
+  { property: "og:title", content: title },
+  { property: "og:description", content: description },
+  { property: "og:type", content: "website" },
+  { property: "og:url", content: "https://rref-calculator.com" },
+  { property: "og:image", content: "https://rref-calculator.com/hero.png" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: title },
+  { name: "twitter:description", content: description },
+  { name: "twitter:image", content: "https://rref-calculator.com/hero.png" },
+];
+---
+
+<Layout>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h1 class="text-3xl font-display font-bold mb-4">RREF Calculator</h1>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-8">
+          Enter your matrix below to calculate its Reduced Row Echelon Form
+          (RREF).
+        </p>
+        <RREFCalculator
+          client:load
+          labels={{
+            rows: t.calculator.rows,
+            columns: t.calculator.columns,
+            createMatrix: t.calculator.createMatrix,
+            calculate: t.calculator.calculate,
+            sizeWarning: t.calculator.sizeWarning,
+            result: t.calculator.result,
+            stepByStep: t.calculator.stepByStep,
+            finalMatrix: t.calculator.finalMatrix,
+          }}
+        />
+      </section>
+
+      {/* About Section */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          About RREF Calculator
+        </h2>
+        <div class="prose dark:prose-invert max-w-none">
+          <p>
+            Welcome to our RREF (Reduced Row Echelon Form) Calculator, a
+            powerful tool designed to simplify complex matrix operations. This
+            calculator helps students, educators, and professionals quickly
+            compute the Reduced Row Echelon Form of any matrix, providing
+            step-by-step solutions for better understanding.
+          </p>
+
+          <h3>What You Can Do with Our RREF Calculator?</h3>
+          <ul>
+            <li>Input matrices of various sizes (no fixed upper limit)</li>
+            <li>Calculate the RREF of your input matrix</li>
+            <li>View detailed, step-by-step solutions</li>
+            <li>Understand the process of reaching RREF</li>
+            <li>Verify your manual calculations</li>
+            <li>Learn about matrix operations and linear algebra concepts</li>
+          </ul>
+
+          <h3>How the RREF Calculator Works?</h3>
+          <ol>
+            <li>
+              <strong>Input Your Matrix:</strong> Enter the dimensions and values
+              of your matrix using the provided interface.
+            </li>
+            <li>
+              <strong>Initiate Calculation:</strong> Click the "Calculate RREF" button
+              to start the process.
+            </li>
+            <li>
+              <strong>Algorithm Execution:</strong> Our calculator applies Gaussian
+              elimination with back-substitution to transform the matrix.
+            </li>
+            <li>
+              <strong>Step-by-Step Display:</strong> Each operation is shown with
+              a clear explanation and the resulting matrix.
+            </li>
+            <li>
+              <strong>Final Result:</strong> The RREF of your input matrix is displayed,
+              along with all intermediate steps.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      {/* Applications Section */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Applications of RREF
+        </h2>
+        <div class="prose dark:prose-invert max-w-none">
+          <p>
+            The Reduced Row Echelon Form (RREF) is a powerful tool in linear
+            algebra with numerous practical applications across various fields.
+          </p>
+
+          <h3>Common Applications</h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-display font-semibold text-lg mb-2">
+                Solving Systems of Linear Equations
+              </h4>
+              <p>
+                Convert the augmented matrix to RREF to find solutions
+                efficiently.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-lg mb-2">
+                Determining Matrix Rank
+              </h4>
+              <p>Count non-zero rows in RREF to find matrix rank.</p>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-lg mb-2">
+                Finding Matrix Inverses
+              </h4>
+              <p>Use RREF with augmented identity matrix to find inverses.</p>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-lg mb-2">
+                Computing Null Space
+              </h4>
+              <p>Find solutions to homogeneous systems using RREF.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section with complete questions */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          {
+            faqData.mainEntity.map((faq) => (
+              <details class="group">
+                <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer bg-surface-light-hover dark:bg-surface-dark">
+                  <span class="font-display font-medium">{faq.name}</span>
+                  <span class="transition-transform group-open:rotate-180">
+                    ↓
+                  </span>
+                </summary>
+                <div class="p-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.acceptedAnswer.text}
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </GpaLayout>
+</Layout>
+
+{/* Schema.org JSON-LD */}
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqData)} />

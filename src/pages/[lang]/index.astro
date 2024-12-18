@@ -1,0 +1,99 @@
+---
+// src/pages/[lang]/index.astro
+import Layout from "../../layouts/Layout.astro";
+import GpaLayout from "../../components/GpaLayout";
+import RREFCalculator from "../../components/RREFCalculator";
+import { languages } from "../../config/translations";
+
+export function getStaticPaths() {
+  return Object.entries(languages).map(([code, langData]) => ({
+    params: { lang: code },
+    props: { langData },
+  }));
+}
+
+const { lang } = Astro.params;
+
+const { langData } = Astro.props;
+const t = langData.translations;
+
+// Schema.org data with translations
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: t.title,
+  applicationCategory: "EducationalApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+  },
+  description: t.description,
+  screenshot: "https://rref-calculator.com/hero.png",
+  softwareVersion: "1.0",
+};
+---
+
+<Layout>
+  <GpaLayout
+    client:load
+    title={t.title}
+    description={t.description}
+    keywords={t.keywords}
+  >
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <section>
+        <h1 class="text-3xl font-display font-bold mb-4">
+          {t.calculator.title}
+        </h1>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-8">
+          {t.calculator.intro}
+        </p>
+        <RREFCalculator
+          client:load
+          labels={{
+            rows: t.calculator.rows,
+            columns: t.calculator.columns,
+            createMatrix: t.calculator.createMatrix,
+            calculate: t.calculator.calculate,
+            sizeWarning: t.calculator.sizeWarning,
+            result: t.calculator.result,
+            stepByStep: t.calculator.stepByStep,
+            finalMatrix: t.calculator.finalMatrix,
+          }}
+        />
+      </section>
+    </div>
+
+    <div set:html={t.about} />
+    <div set:html={t.applications} />
+    <div set:html={t.faqs} />
+
+    {/* Language Selector */}
+    <div
+      class="mt-12 p-4 bg-surface-light dark:bg-surface-dark-hover rounded-lg"
+    >
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {
+          Object.entries(languages).map(([code, data]) => (
+            <a
+              href={code === "en" ? "/" : `/${code}`}
+              class={`px-3 py-2 rounded-lg text-center transition-colors
+              ${
+                lang === code
+                  ? "bg-accent-primary text-white"
+                  : "hover:bg-surface-light-hover dark:hover:bg-surface-dark"
+              }`}
+            >
+              {data.localName}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+<script type="application/ld+json" set:html={JSON.stringify(t.faqData)} />
