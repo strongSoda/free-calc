@@ -1,9 +1,11 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  integrations: [react(), tailwind()],
+  site: 'https://rref-calculator.com',
+  integrations: [react(), tailwind(), sitemap()],
   // base: '/calculators', // This makes all assets load from /calculators path
   // outDir: './dist/calculators', // Output to a calculators subdirectory
   build: {

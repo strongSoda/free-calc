@@ -10,31 +10,48 @@ const Footer = () => {
       links: [
         { name: "GPA to Percentage", url: "/calculators/gpa-to-percentage" },
         { name: "Percentage to GPA", url: "/calculators/percentage-to-gpa" },
-        { name: "4.0 Scale Conversion", url: "/calculators/percentage-to-gpa/4.0-scale/85" },
-        { name: "5.0 Scale Conversion", url: "/calculators/percentage-to-gpa/5.0-scale/85" },
-        { name: "10.0 Scale Conversion", url: "/calculators/percentage-to-gpa/10.0-scale/85" }
+        { name: "Matrix RREF", url: "/" },
+        { name: "Shape Volume", url: "/calculators/volume" },
+        // { name: "4.0 Scale Conversion", url: "/calculators/percentage-to-gpa/4.0-scale/85" },
+        // { name: "5.0 Scale Conversion", url: "/calculators/percentage-to-gpa/5.0-scale/85" },
+        // { name: "10.0 Scale Conversion", url: "/calculators/percentage-to-gpa/10.0-scale/85" }
+      ]
+    },
+    // {
+    //   title: "Resources",
+    //   links: [
+    //     { name: "Sitemap", url: "/sitemap" },
+    //     // { name: "Grading Systems", url: "#" },
+    //     // { name: "Academic Scales", url: "#" },
+    //     // { name: "Grade Conversion", url: "#" }
+    //   ]
+    // },
+    {
+      title: "About",
+      links: [
+        { name: "About Us", url: "/calculators" },
+        { name: "Sitemap", url: "/sitemap" },
+        { name: "Contact", url: "mailto:contact@rref-calculator.com" },
       ]
     },
     {
-      title: "Resources",
+      title: "Cool Websites",
+      external: true,
       links: [
-        { name: "Sitemap", url: "/sitemap" },
+        { name: "Anime Wallpapers", url: "https://anime-pfp.com" },
+        { name: "Link In Bio", url: "https://worldclass.domains" },
+        { name: "AI Shorts", url: "https://aivideo.to" },
+        { name: "Coding Tutorials", url: "https://jutsupoint.com" },
+        { name: "AI Directory", url: "https://spiff.store" },
         // { name: "Grading Systems", url: "#" },
         // { name: "Academic Scales", url: "#" },
         // { name: "Grade Conversion", url: "#" }
       ]
     },
-    {
-      title: "About",
-      links: [
-        { name: "About Us", url: "/calculators" },
-        { name: "Contact", url: "mailto:contact@rref-calculator.com" },
-      ]
-    }
   ];
 
   return (
-    <footer className="mt-24 border-t border-gray-200/10 dark:border-gray-800/10 bg-surface-light dark:bg-surface-dark">
+    <footer className="mt-24 border-t border-gray-100 dark:border-gray-700 bg-surface-light-hover dark:bg-surface-dark-hover">
       <div className="max-w-7xl mx-auto">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-6 py-12">
@@ -81,6 +98,7 @@ const Footer = () => {
                     <a
                       href={link.url}
                       className="text-content-light-dimmed hover:text-accent-primary dark:text-content-dark-dimmed dark:hover:text-accent-primary transition-colors"
+                      {...(section.external ? { target: "_blank" } : {})}
                     >
                       {link.name}
                     </a>
