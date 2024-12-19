@@ -10,7 +10,7 @@ const GpaLayout = ({ children, title, description, keywords }) => {
       <div className="pt-16">
         <div className="max-w-7xl mx-auto px-4 py-8">
 
-          <div className="flex justify-center gap-8">
+          <div className="relative flex justify-center gap-8">
             
             {/* Left ad - only visible on large screens */}
             {/* <div className="hidden xl:block w-[160px] h-fit sticky top-24 flex-shrink-0">
@@ -62,7 +62,7 @@ const GpaLayout = ({ children, title, description, keywords }) => {
 
             {/* Left ad */}
             <aside 
-              className="hidden xl:block w-[160px] sticky top-24 order-1" 
+              className="hidden xl:block w-[160px] h-[600px] sticky top-24 self-start flex-shrink-0" 
               aria-label="Advertisement" 
               data-nosnippet
               role="complementary"
@@ -72,7 +72,7 @@ const GpaLayout = ({ children, title, description, keywords }) => {
 
             {/* Right ad */}
             <aside 
-              className="hidden xl:block w-[160px] sticky top-24 order-3" 
+              className="hidden xl:block w-[160px] h-[600px] sticky top-24 self-start flex-shrink-0 order-3" 
               aria-label="Advertisement"
               data-nosnippet
               role="complementary"

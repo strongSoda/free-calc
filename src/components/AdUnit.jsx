@@ -133,22 +133,25 @@ const AdUnit = ({ type = 'square' }) => {
   }
 
   return (
-    <AdContainer>
-      <ins
-        className="adsbygoogle w-full"
-        style={{
-          display: 'block',
-          aspectRatio: config.aspectRatio,
-          maxWidth: '100%'
-        }}
-        data-ad-client="ca-pub-9779862910631944"
-        data-ad-slot={config.slot}
-        data-ad-format={config.format}
-        {...(config.layoutKey && { 'data-ad-layout-key': config.layoutKey })}
-        {...(config.layout && { 'data-ad-layout': config.layout })}
-        data-full-width-responsive="true"
-      />
-    </AdContainer>
+<AdContainer>
+    <ins
+      className="adsbygoogle w-full h-full"
+      style={{
+        display: 'block',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%'
+      }}
+      data-ad-client="ca-pub-9779862910631944"
+      data-ad-slot={config.slot}
+      data-ad-format={config.format}
+      {...(config.layoutKey && { 'data-ad-layout-key': config.layoutKey })}
+      {...(config.layout && { 'data-ad-layout': config.layout })}
+      data-full-width-responsive="true"
+    />
+  </AdContainer>
   );
 };
 
