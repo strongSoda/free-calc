@@ -22,6 +22,7 @@ const Navbar = () => {
     { name: 'GPA to %', href: '/calculators/gpa-to-percentage' },
     { name: '% to GPA', href: '/calculators/percentage-to-gpa' },
     { name: 'Volume', href: '/calculators/volume' },
+    { name: "Subnet ipv4/6", href: "/calculators/subnet" },
     { name: 'RREF', href: '/' },
   ];
 

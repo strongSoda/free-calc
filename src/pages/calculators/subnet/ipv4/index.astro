@@ -1,0 +1,174 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import SubnetCalculator from "../../../../components/SubnetCalculator";
+
+const title = "IPv4 Subnet Calculator";
+const description =
+  "Free online IPv4 subnet calculator. Calculate network address, broadcast address, usable host range, and subnet mask for any IPv4 network.";
+const keywords =
+  "IPv4 subnet calculator, subnet mask calculator, network calculator, CIDR calculator, IPv4 calculator, network address calculator";
+
+const commonSubnets = [
+  {
+    network: "192.168.1.0",
+    cidr: "24",
+    description: "Common home/small office network",
+    usableHosts: "254",
+  },
+  {
+    network: "10.0.0.0",
+    cidr: "16",
+    description: "Large private network",
+    usableHosts: "65,534",
+  },
+  {
+    network: "172.16.2.0",
+    cidr: "16",
+    description: "Medium enterprise network",
+    usableHosts: "1,048,574",
+  },
+];
+
+const privateRanges = [
+  {
+    range: "10.0.0.0 - 10.255.255.255",
+    cidr: "/8",
+    class: "Class A",
+  },
+  {
+    range: "172.16.0.0 - 172.31.255.255",
+    cidr: "/12",
+    class: "Class B",
+  },
+  {
+    range: "192.168.0.0 - 192.168.255.255",
+    cidr: "/16",
+    class: "Class C",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/subnet-calculator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            IPv4 Subnet Calculator
+          </h2>
+          <SubnetCalculator client:load ipVersion="ipv4" />
+        </div>
+      </div>
+
+      {/* Common Subnets Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common IPv4 Subnets
+        </h2>
+        <div class="grid gap-4">
+          {
+            commonSubnets.map((subnet) => (
+              <a
+                href={`/calculators/subnet/ipv4/${subnet.network.replace(/\./g, "-")}/${subnet.cidr}`}
+                class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div class="flex justify-between items-center">
+                  <div>
+                    <h3 class="font-display font-semibold text-lg">
+                      {subnet.network}/{subnet.cidr}
+                    </h3>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {subnet.description}
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      Usable Hosts:
+                    </p>
+                    <p class="font-mono">{subnet.usableHosts}</p>
+                  </div>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Private Ranges Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          IPv4 Private Address Ranges
+        </h2>
+        <div class="grid gap-4">
+          {
+            privateRanges.map((range) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-display font-semibold text-lg">
+                  {range.class}
+                </h3>
+                <p class="font-mono text-sm">{range.range}</p>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  CIDR: {range.cidr}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Quick Reference Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          IPv4 Subnet Quick Reference
+        </h2>
+        <div class="grid gap-6">
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-2">
+              Common CIDR Notations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded"
+              >
+                <p class="font-mono">/24 = 255.255.255.0</p>
+                <p
+                  class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  254 usable hosts
+                </p>
+              </div>
+              <div
+                class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded"
+              >
+                <p class="font-mono">/16 = 255.255.0.0</p>
+                <p
+                  class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  65,534 usable hosts
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

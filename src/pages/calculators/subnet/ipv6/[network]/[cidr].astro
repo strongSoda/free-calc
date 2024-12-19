@@ -1,0 +1,234 @@
+---
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import SubnetCalculator from "../../../../../components/SubnetCalculator";
+import {
+  ipv6Networks,
+  getRelatedIPv6Networks,
+  commonPrefixLengths,
+} from "../../../../../data/ipv6-networks";
+import SubnetBestPractices from "../../../../../components/SubnetBestPractices";
+
+export async function getStaticPaths() {
+  // These are the specific paths we want to generate for quick links
+  const quickLinkPaths = [
+    { network: "2001:db8::", cidr: 48 },
+    { network: "fc00::", cidr: 7 },
+    { network: "fe80::", cidr: 10 },
+  ];
+
+  let paths = [];
+
+  // Add quick link paths
+  quickLinkPaths.forEach(({ network, cidr }) => {
+    paths.push({
+      params: {
+        network: network.replace(/:/g, "-"),
+        cidr: cidr.toString(),
+      },
+      props: {
+        ipAddress: network,
+        cidrValue: cidr,
+        originalNetwork: network,
+      },
+    });
+  });
+
+  // Add common prefix lengths for each network in our data
+  ipv6Networks.forEach(({ network, maxCidr }) => {
+    commonPrefixLengths.forEach(({ length }) => {
+      if (length <= maxCidr) {
+        paths.push({
+          params: {
+            network: network.replace(/:/g, "-"),
+            cidr: length.toString(),
+          },
+          props: {
+            ipAddress: network,
+            cidrValue: length,
+            originalNetwork: network,
+          },
+        });
+      }
+    });
+  });
+
+  return paths;
+}
+
+const { ipAddress, cidrValue, originalNetwork } = Astro.props;
+const relatedNetworks = getRelatedIPv6Networks(originalNetwork);
+const currentNetwork = ipv6Networks.find((n) => n.network === originalNetwork);
+
+const title = `IPv6 Subnet Calculator for ${ipAddress}/${cidrValue}`;
+const description = `Calculate subnet details for IPv6 network ${ipAddress} with prefix length /${cidrValue}. Find network prefix, interface identifier, and address range.`;
+const keywords = `${ipAddress} subnet, /${cidrValue} prefix, IPv6 subnet calculator, IPv6 calculator, ${ipAddress} network, IPv6 prefix calculator`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/subnet-calculator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-8">
+      <SubnetCalculator
+        client:load
+        defaultIp={ipAddress}
+        defaultCidr={cidrValue}
+        ipVersion="ipv6"
+      />
+
+      {/* Related Networks Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">
+          Related {currentNetwork?.category} Networks
+        </h2>
+        <div class="grid gap-4">
+          {
+            relatedNetworks.map((net) => (
+              <a
+                href={`/calculators/subnet/ipv6/${net.network.replace(/:/g, "-")}/${cidrValue}`}
+                class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <h3 class="font-mono text-lg">
+                  {net.network}/{cidrValue}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {net.description}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Other Prefix Lengths */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">
+          Other Prefix Lengths for {ipAddress}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            commonPrefixLengths
+              .filter(({ length }) => length !== cidrValue)
+              .map(({ length, description }) => (
+                <a
+                  href={`/calculators/subnet/ipv6/${originalNetwork.replace(/:/g, "-")}/${length}`}
+                  class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+                >
+                  <h3 class="font-mono text-lg">/{length}</h3>
+                  <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                    {description}
+                  </p>
+                </a>
+              ))
+          }
+        </div>
+      </div>
+
+      {/* Network Information */}
+      <div class="prose dark:prose-invert max-w-none">
+        <h2>About this Network</h2>
+        <p>
+          This calculator provides subnet details for the IPv6 network {
+            ipAddress
+          }
+          with prefix length /{cidrValue}. This network is part of the {
+            currentNetwork?.category
+          }
+          address space and is typically used for {currentNetwork?.description}.
+        </p>
+
+        <h3>Prefix Length Details</h3>
+        <p>
+          A /{cidrValue} prefix length means: - Network portion: First {
+            cidrValue
+          } bits - Host portion: Remaining {128 - cidrValue} bits - Total possible
+          addresses: 2^{128 - cidrValue}
+        </p>
+
+        <h3>Common Uses</h3>
+        <p>
+          {
+            cidrValue === 48 &&
+              "A /48 prefix is commonly allocated to end sites, providing 65,536 /64 networks."
+          }
+          {
+            cidrValue === 56 &&
+              "A /56 prefix is often used for smaller end sites, providing 256 /64 networks."
+          }
+          {
+            cidrValue === 64 &&
+              "A /64 prefix is the standard subnet size, allowing for stateless address autoconfiguration (SLAAC)."
+          }
+          {
+            cidrValue === 96 &&
+              "A /96 prefix is sometimes used for IPv4/IPv6 translation scenarios."
+          }
+          {
+            cidrValue === 128 &&
+              "A /128 prefix represents a single IPv6 address."
+          }
+        </p>
+
+        {
+          currentNetwork?.category === "Global Unicast" && (
+            <div>
+              <h3>Global Unicast Address Space</h3>
+              <p>
+                Global Unicast addresses are the IPv6 equivalent of public IPv4
+                addresses. They are globally routable and reachable on the IPv6
+                Internet. The address space begins with binary 001 (2000::/3).
+              </p>
+            </div>
+          )
+        }
+
+        {
+          currentNetwork?.category === "Unique Local" && (
+            <div>
+              <h3>Unique Local Address Space</h3>
+              <p>
+                Unique Local Addresses (ULA) are similar to private IPv4
+                addresses. They are not routable on the public Internet and are
+                used for local communications. The address space uses the
+                fc00::/7 prefix.
+              </p>
+            </div>
+          )
+        }
+
+        {
+          currentNetwork?.category === "Link Local" && (
+            <div>
+              <h3>Link Local Address Space</h3>
+              <p>
+                Link Local addresses are used for communication on a single
+                network segment. They are automatically configured and begin
+                with fe80::. These addresses are never routed between networks.
+              </p>
+            </div>
+          )
+        }
+
+        <h3>Technical Specifications</h3>
+        <ul>
+          <li>Address Type: {currentNetwork?.category}</li>
+          <li>Primary Use Case: {currentNetwork?.description}</li>
+          <li>Prefix Length: /{cidrValue}</li>
+          <li>Interface ID Bits: {128 - cidrValue}</li>
+        </ul>
+      </div>
+
+      {/* Best Practices */}
+      <SubnetBestPractices client:load cidrValue={cidrValue} />
+    </div>
+  </GpaLayout>
+</Layout>

@@ -1,0 +1,191 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import SubnetCalculator from "../../../../components/SubnetCalculator";
+import { ipv6Networks } from "../../../../data/networks";
+
+const title = "IPv6 Subnet Calculator";
+const description =
+  "Free online IPv6 subnet calculator. Calculate network prefix, interface identifier, address range, and more for any IPv6 network.";
+const keywords =
+  "IPv6 subnet calculator, IPv6 prefix calculator, IPv6 network calculator, IPv6 CIDR calculator, IPv6 address calculator";
+
+const commonPrefixes = [
+  { prefix: "48", description: "Typical end-site assignment" },
+  { prefix: "56", description: "Small end-site assignment" },
+  { prefix: "64", description: "Standard subnet size" },
+  { prefix: "96", description: "IPv4/IPv6 translation" },
+  { prefix: "128", description: "Single address" },
+];
+
+const networkCategories = [
+  {
+    title: "Global Unicast",
+    networks: ipv6Networks.filter((n) => n.network.startsWith("2")),
+  },
+  {
+    title: "Unique Local",
+    networks: ipv6Networks.filter((n) => n.network.startsWith("f")),
+  },
+  {
+    title: "Special Purpose",
+    networks: ipv6Networks.filter(
+      (n) => !n.network.startsWith("f")
+    ),
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/subnet-calculator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Version Navigation */}
+      <div class="flex gap-4 justify-center">
+        <a
+          href="/calculators/subnet/ipv4"
+          class="px-6 py-2 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10"
+        >
+          Switch to IPv4
+        </a>
+        <span
+          class="px-6 py-2 rounded-lg bg-accent-primary text-white font-semibold"
+        >
+          IPv6 Calculator
+        </span>
+      </div>
+
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            IPv6 Subnet Calculator
+          </h2>
+          <SubnetCalculator client:load ipVersion="ipv6" />
+        </div>
+      </div>
+
+      {/* Common Prefix Lengths */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common IPv6 Prefix Lengths
+        </h2>
+        <div class="grid gap-4">
+          {
+            commonPrefixes.map((prefix) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-display font-semibold">/{prefix.prefix}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {prefix.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Network Categories */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common IPv6 Networks
+        </h2>
+        <div class="space-y-8">
+          {
+            networkCategories.map((category) => (
+              <div>
+                <h3 class="font-display text-xl font-semibold mb-4">
+                  {category.title}
+                </h3>
+                <div class="grid gap-4">
+                  {category.networks.map((net) => (
+                    <a
+                      href={`/calculators/subnet/ipv6/${net.network.replace(/:/g, "-")}/64`}
+                      class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <div class="font-mono">{net.network}/64</div>
+                      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                        {net.description}
+                      </p>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Reference Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          IPv6 Quick Reference
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-2">
+              Address Format
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              IPv6 addresses are 128 bits long, written as eight groups of four
+              hexadecimal digits separated by colons. Leading zeros in a group
+              can be omitted, and one or more consecutive groups of zeros can be
+              replaced with a double colon (::).
+            </p>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-2">
+              Special Addresses
+            </h3>
+            <div class="grid gap-2">
+              <div
+                class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded"
+              >
+                <code>::1</code>
+                <p
+                  class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  Loopback address
+                </p>
+              </div>
+              <div
+                class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded"
+              >
+                <code>::</code>
+                <p
+                  class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  Unspecified address
+                </p>
+              </div>
+              <div
+                class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded"
+              >
+                <code>fe80::/10</code>
+                <p
+                  class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  Link-local addresses
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

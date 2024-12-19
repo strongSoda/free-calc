@@ -1,0 +1,85 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import SubnetQuickLinks from "../../../components/SubnetQuickLinks";
+
+const title = "IP Subnet Calculator - IPv4 & IPv6";
+const description =
+  "Free online subnet calculator for both IPv4 and IPv6 networks. Calculate network addresses, ranges, masks, and more.";
+const keywords =
+  "subnet calculator, IP calculator, IPv4 calculator, IPv6 calculator, CIDR calculator, network calculator";
+
+const features = [
+  {
+    title: "IPv4 Subnet Calculator",
+    description:
+      "Calculate network address, broadcast address, usable host range, and subnet mask for IPv4 networks.",
+    link: "/calculators/subnet/ipv4",
+    icon: "🌐",
+    features: [
+      "Network & broadcast addresses",
+      "Usable host ranges",
+      "Subnet masks",
+      "CIDR notation",
+      "Binary & hexadecimal conversion",
+    ],
+  },
+  {
+    title: "IPv6 Subnet Calculator",
+    description:
+      "Calculate network prefix, interface identifier, and address ranges for IPv6 networks.",
+    link: "/calculators/subnet/ipv6",
+    icon: "🔢",
+    features: [
+      "Network prefixes",
+      "Address ranges",
+      "Prefix lengths",
+      "Interface identifiers",
+      "Address compression",
+    ],
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/subnet-calculator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Version Selection Cards */}
+      <div class="grid md:grid-cols-2 gap-8">
+        {
+          features.map((feature) => (
+            <a
+              href={feature.link}
+              class="block bg-surface-light dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10 hover:shadow-lg transition-shadow"
+            >
+              <div class="text-4xl mb-4">{feature.icon}</div>
+              <h2 class="text-2xl font-display font-bold mb-2">
+                {feature.title}
+              </h2>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                {feature.description}
+              </p>
+              <ul class="space-y-2">
+                {feature.features.map((item) => (
+                  <li class="flex items-center space-x-2">
+                    <span class="text-accent-primary">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </a>
+          ))
+        }
+      </div>
+
+      {/* Quick Links */}
+      <SubnetQuickLinks client:load />
+    </div>
+  </GpaLayout>
+</Layout>

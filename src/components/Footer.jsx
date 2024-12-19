@@ -12,6 +12,7 @@ const Footer = () => {
         { name: "Percentage to GPA", url: "/calculators/percentage-to-gpa" },
         { name: "Matrix RREF", url: "/" },
         { name: "Shape Volume", url: "/calculators/volume" },
+        { name: "Subnet ipv4/6", url: "/calculators/subnet" },
         // { name: "4.0 Scale Conversion", url: "/calculators/percentage-to-gpa/4.0-scale/85" },
         // { name: "5.0 Scale Conversion", url: "/calculators/percentage-to-gpa/5.0-scale/85" },
         // { name: "10.0 Scale Conversion", url: "/calculators/percentage-to-gpa/10.0-scale/85" }

@@ -1,0 +1,147 @@
+---
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import SubnetCalculator from "../../../../../components/SubnetCalculator";
+import { ipv4Networks, getRelatedNetworks } from "../../../../../data/networks";
+
+export async function getStaticPaths() {
+  // These are the specific paths we want to generate for quick links
+  const quickLinkPaths = [
+    { network: "192.168.1.0", cidr: 24 },
+    { network: "10.0.0.0", cidr: 8 },
+    { network: "172.16.0.0", cidr: 16 },
+  ];
+
+  let paths = [];
+
+  // Add quick link paths
+  quickLinkPaths.forEach(({ network, cidr }) => {
+    paths.push({
+      params: {
+        network: network.replace(/\./g, "-"),
+        cidr: cidr.toString(),
+      },
+      props: {
+        ipAddress: network,
+        cidrValue: cidr,
+        originalNetwork: network,
+      },
+    });
+  });
+
+  // Add common CIDR ranges for each network in our data
+  ipv4Networks.forEach(({ network, maxCidr }) => {
+    [8, 16, 24, 32].forEach((cidr) => {
+      if (cidr <= maxCidr) {
+        paths.push({
+          params: {
+            network: network.replace(/\./g, "-"),
+            cidr: cidr.toString(),
+          },
+          props: {
+            ipAddress: network,
+            cidrValue: cidr,
+            originalNetwork: network,
+          },
+        });
+      }
+    });
+  });
+
+  return paths;
+}
+
+const { ipAddress, cidrValue, originalNetwork } = Astro.props;
+const relatedNetworks = getRelatedNetworks(originalNetwork);
+
+const title = `Subnet Calculator for ${ipAddress}/${cidrValue} - IPv4 Network`;
+const description = `Calculate subnet details for IPv4 network ${ipAddress} with CIDR /${cidrValue}. Find network address, broadcast address, usable hosts, and subnet mask.`;
+const keywords = `${ipAddress} subnet, /${cidrValue} CIDR, IPv4 subnet calculator, network calculator, ${ipAddress} network, subnet mask calculator`;
+
+// Schema for rich results
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  description: description,
+  applicationCategory: "NetworkingApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-8">
+      <SubnetCalculator
+        client:load
+        defaultIp={ipAddress}
+        defaultCidr={cidrValue}
+        ipVersion="ipv4"
+      />
+
+      {/* Related Networks Section */}
+      <div
+        class="mt-8 bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Related Networks</h2>
+        <div class="grid gap-4">
+          {
+            relatedNetworks.map((net) => (
+              <a
+                href={`/calculators/subnet/ipv4/${net.network.replace(/\./g, "-")}/${cidrValue}`}
+                class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <h3 class="font-display font-semibold">
+                  {net.network}/{cidrValue}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {net.description}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="mt-8 prose dark:prose-invert max-w-none">
+        <h2>About this Network</h2>
+        <p>
+          This calculator provides subnet details for the IPv4 network {
+            ipAddress
+          }/{cidrValue}. This network configuration is commonly used in {
+            cidrValue < 24
+              ? "large enterprise networks"
+              : "small to medium networks"
+          }.
+        </p>
+
+        <h3>Common Uses</h3>
+        <p>
+          {
+            cidrValue === "24" &&
+              "A /24 network is one of the most common subnet sizes for local networks, providing 254 usable host addresses."
+          }
+          {
+            cidrValue === "16" &&
+              "A /16 network is often used in larger organizations, providing 65,534 usable host addresses."
+          }
+          {
+            cidrValue === "8" &&
+              "A /8 network is very large, typically used by internet service providers or very large organizations."
+          }
+        </p>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
