@@ -38,7 +38,11 @@ export default function AffiliateSection() {
   }, []); // Empty dependency array means this runs once after mount
 
   return (
-    <div className="my-16">
+    <div className="my-16" 
+      aria-label="Affiliate"
+      data-nosnippet
+      role="complementary"
+    >
       <h2 className="font-display text-2xl font-semibold text-surface-900 dark:text-surface-50 mb-8">
         Recommended Gear
       </h2>
