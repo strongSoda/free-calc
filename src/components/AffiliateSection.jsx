@@ -1,6 +1,7 @@
 // src/components/AffiliateSection.jsx
 import { useState, useEffect } from 'react';
 import AffiliateProduct from './AffiliateProduct';
+import AdUnit from './AdUnit';
 
 const affiliateProducts = [
   {
@@ -44,6 +45,16 @@ export default function AffiliateSection() {
       <div className="space-y-6">        
         <AffiliateProduct key={randomProduct.id} product={randomProduct} />
       </div>
+
+      {/* Square ad for mobile - before calculator */}
+      <aside 
+        className="xl:hidden my-8" 
+        aria-label="Advertisement"
+        data-nosnippet
+        role="complementary"
+      >
+        <AdUnit type="horizontal" client:load />
+      </aside>
     </div>
   );
 }

@@ -66,7 +66,7 @@ const AdUnit = ({ type = 'square' }) => {
   };
 
   const config = adConfigs[type];
-  const isDevelopment = false;
+  const isDevelopment = true;
 
   // Set isClient on mount
   useEffect(() => {
