@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 
 const AdUnit = ({ type = 'square' }) => {
   const containerRef = useRef(null);
-  const [adLoaded, setAdLoaded] = useState(false);
-  const [attemptedLoad, setAttemptedLoad] = useState(false);
-  
+  // const [adLoaded, setAdLoaded] = useState(false);
+  // const [attemptedLoad, setAttemptedLoad] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
   const adConfigs = {
     square: {
       slot: '6825010839',
@@ -67,50 +68,21 @@ const AdUnit = ({ type = 'square' }) => {
   const config = adConfigs[type];
   const isDevelopment = false;
 
+  // Set isClient on mount
   useEffect(() => {
-    if (!isDevelopment && containerRef.current) {
-      // Create a new observer for ad load detection
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.target.classList.contains('adsbygoogle')) {
-            // Check if the ad iframe was injected
-            const hasAdIframe = mutation.target.querySelector('iframe');
-            if (hasAdIframe) {
-              setAdLoaded(true);
-            }
-          }
-        });
-      });
-
-      // Start observing
-      observer.observe(containerRef.current, {
-        childList: true,
-        subtree: true
-      });
-
-      try {
-        const adsbygoogle = window.adsbygoogle || [];
-        adsbygoogle.push({});
-        setAttemptedLoad(true);
-
-        // Set a timeout to check if ad loaded
-        setTimeout(() => {
-          setAttemptedLoad(true);
-        }, 2000); // 2 second timeout
-      } catch (err) {
-        console.error('Error loading ad:', err);
-        setAttemptedLoad(true);
-      }
-
-      // Cleanup observer
-      return () => observer.disconnect();
-    }
+    setIsClient(true);
   }, []);
 
-  // Don't render anything if ad failed to load and we're not in development
-  if (!isDevelopment && attemptedLoad && !adLoaded) {
-    return null;
-  }
+ // Initialize ad after component is hydrated
+  useEffect(() => {
+    if (isClient && !isDevelopment && containerRef.current) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (err) {
+        console.error('Error loading ad:', err);
+      }
+    }
+  }, [isClient]);
 
   if (!config) return null;
 
@@ -142,6 +114,20 @@ const AdUnit = ({ type = 'square' }) => {
             <div>{config.maxWidth}x{config.height}</div>
           </div>
         </div>
+      </AdContainer>
+    );
+  }
+
+    // Only render ad markup after hydration
+  if (!isClient) {
+    return (
+      <AdContainer>
+        <div
+          style={{
+            aspectRatio: config.aspectRatio,
+            maxWidth: '100%'
+          }}
+        />
       </AdContainer>
     );
   }

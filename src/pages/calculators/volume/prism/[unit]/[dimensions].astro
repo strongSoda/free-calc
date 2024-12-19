@@ -12,6 +12,7 @@ export function getStaticPaths() {
       { base: 2, h: 2.5, l: 3, useCase: "Medium Display" },
       { base: 3, h: 3.5, l: 4, useCase: "Large Display" },
       { base: 1.5, h: 2, l: 2.5, useCase: "Educational Model" },
+      { base: 1.5, h: 2, l: 3.8, useCase: "Educational Model" },
       { base: 2.5, h: 3, l: 3.5, useCase: "Design Model" },
     ],
     ft: [
@@ -67,6 +68,7 @@ export function getStaticPaths() {
           rectangularFacesArea,
           totalSurfaceArea,
           useCase,
+          commonDimensions,
         },
       });
     });
@@ -88,6 +90,7 @@ const {
   rectangularFacesArea,
   totalSurfaceArea,
   useCase,
+  commonDimensions,
 } = Astro.props;
 
 const title = `${base}×${height}×${length} ${unit} Triangular Prism Calculator`;
@@ -214,39 +217,21 @@ const keywords = `${base}×${height}×${length} ${unit} prism, triangular prism 
       >
         <h2 class="text-2xl font-display font-bold mb-6">Similar Dimensions</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {/* Wider base */}
-          <a
-            href={`/calculators/volume/prism/${unit}/${(base * 1.5).toFixed(1)}-${height}-${length}`}
-            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
-          transition-colors"
-          >
-            <span class="text-content-light dark:text-content-dark">
-              Wider Base: {(base * 1.5).toFixed(1)} × {height} × {length}
-              {unit}
-            </span>
-          </a>
-          {/* Taller height */}
-          <a
-            href={`/calculators/volume/prism/${unit}/${base}-${(height * 1.5).toFixed(1)}-${length}`}
-            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
-        transition-colors"
-          >
-            <span class="text-content-light dark:text-content-dark">
-              Taller: {base} × {(height * 1.5).toFixed(1)} × {length}
-              {unit}
-            </span>
-          </a>
-          {/* Longer length */}
-          <a
-            href={`/calculators/volume/prism/${unit}/${base}-${height}-${(length * 1.5).toFixed(1)}`}
-            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
-      transition-colors"
-          >
-            <span class="text-content-light dark:text-content-dark">
-              Longer: {base} × {height} × {(length * 1.5).toFixed(1)}
-              {unit}
-            </span>
-          </a>
+          {
+            commonDimensions[unit].slice(0, 3).map((dim) => (
+              <a
+                href={`/calculators/volume/prism/${unit}/${dim.base}-${dim.h}-${dim.l}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5
+            transition-colors"
+              >
+                <span class="text-content-light dark:text-content-dark">
+                  {dim.base} × {dim.h} × {dim.l}
+                  {unit}
+                </span>
+              </a>
+            ))
+          }
+          
         </div>
       </section>
     </div></GpaLayout

@@ -3,6 +3,7 @@
 import Layout from "../../../../../layouts/Layout.astro";
 import GpaLayout from "../../../../../components/GpaLayout";
 import CuboidCalculator from "../../../../../components/CuboidCalculator";
+import { formatNumber } from "../../../../../functions";
 
 export function getStaticPaths() {
   // Common dimensions for different units
@@ -72,7 +73,7 @@ export function getStaticPaths() {
       paths.push({
         params: {
           unit,
-          dimensions: `${l}-${w}-${h}`,
+          dimensions: `${formatNumber(l)}-${formatNumber(w)}-${formatNumber(h)}`,
         },
         props: {
           unit,
@@ -90,9 +91,8 @@ export function getStaticPaths() {
 }
 
 const { unit, length, width, height, volume, commonDimensions } = Astro.props;
-const formatNumber = (num) => parseFloat(num.toFixed(3));
 
-const title = `${length}×${width}×${height} ${unit} Cuboid Volume Calculator`;
+const title = `${formatNumber(length)}×${formatNumber(width)}×${formatNumber(height)} ${unit} Cuboid Volume Calculator`;
 const description = `Calculate the volume of a ${length}×${width}×${height} ${unit} rectangular cuboid. Find volume in cubic meters, cubic feet, and other units.`;
 const keywords = `${length}×${width}×${height} ${unit} cuboid, box volume calculator, rectangular prism ${length}×${width}×${height}, volume calculation`;
 ---
@@ -110,7 +110,9 @@ const keywords = `${length}×${width}×${height} ${unit} cuboid, box volume calc
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
       >
         <h2 class="text-2xl font-display font-bold mb-6">
-          {length} × {width} × {height}
+          {formatNumber(length)} × {formatNumber(width)} × {
+            formatNumber(height)
+          }
           {unit} Cuboid
         </h2>
         <div class="grid md:grid-cols-2 gap-6">
@@ -188,7 +190,7 @@ const keywords = `${length}×${width}×${height} ${unit} cuboid, box volume calc
               )
               .map((dim) => (
                 <a
-                  href={`/calculators/volume/cuboid/${unit}/${dim.l}-${dim.w}-${dim.h}`}
+                  href={`/calculators/volume/cuboid/${unit}/${formatNumber(dim.l)}-${formatNumber(dim.w)}-${formatNumber(dim.h)}`}
                   class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
                 >
                   <span class="text-content-light dark:text-content-dark">

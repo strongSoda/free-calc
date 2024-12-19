@@ -1,4 +1,5 @@
 // src/components/AffiliateSection.jsx
+import { useState, useEffect } from 'react';
 import AffiliateProduct from './AffiliateProduct';
 
 const affiliateProducts = [
@@ -26,18 +27,22 @@ const affiliateProducts = [
   }
 ];
 
-// select 1 affiliate product at random
-const randomIndex = Math.floor(Math.random() * affiliateProducts.length);
-const randomProduct = affiliateProducts[randomIndex];
-
 export default function AffiliateSection() {
+  const [randomProduct, setRandomProduct] = useState(affiliateProducts[0]); // Start with first product
+
+  useEffect(() => {
+    // Generate random product after component mounts
+    const randomIndex = Math.floor(Math.random() * affiliateProducts.length);
+    setRandomProduct(affiliateProducts[randomIndex]);
+  }, []); // Empty dependency array means this runs once after mount
+
   return (
     <div className="my-16">
       <h2 className="font-display text-2xl font-semibold text-surface-900 dark:text-surface-50 mb-8">
         Recommended Gear
       </h2>
       <div className="space-y-6">        
-          <AffiliateProduct key={randomProduct.id} product={randomProduct} />
+        <AffiliateProduct key={randomProduct.id} product={randomProduct} />
       </div>
     </div>
   );
