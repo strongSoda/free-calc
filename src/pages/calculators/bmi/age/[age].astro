@@ -1,0 +1,193 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import BMICalculator from "../../../../components/BMICalculator";
+import BMIResults from "../../../../components/BMIResults";
+
+{
+  /* Helper functions for content generation */
+}
+function getAgeCategoryDescription(category) {
+  const descriptions = {
+    "Young Adult":
+      "Your metabolism is typically at its peak during these years. Focus on establishing healthy habits.",
+    Adult:
+      "Maintaining an active lifestyle becomes increasingly important as natural metabolism begins to slow.",
+    "Middle Age":
+      "Regular exercise and proper nutrition are crucial as body composition naturally changes.",
+    Senior:
+      "Focus on maintaining muscle mass and bone density through appropriate exercise and diet.",
+  };
+  return descriptions[category];
+}
+
+function getHealthTips(category) {
+  const tips = {
+    "Young Adult": [
+      {
+        title: "Exercise Focus",
+        content:
+          "Combine strength training with cardio for optimal results. Build healthy habits now.",
+      },
+      {
+        title: "Nutrition Needs",
+        content:
+          "Focus on nutrient-dense foods to support an active lifestyle and maintain healthy weight.",
+      },
+    ],
+    Adult: [
+      {
+        title: "Lifestyle Balance",
+        content:
+          "Balance work stress with regular exercise. Watch portion sizes as metabolism changes.",
+      },
+      {
+        title: "Preventive Health",
+        content:
+          "Regular health check-ups become more important. Monitor BMI and other health markers.",
+      },
+    ],
+    "Middle Age": [
+      {
+        title: "Maintaining Muscle",
+        content:
+          "Resistance training becomes crucial to maintain muscle mass and metabolic health.",
+      },
+      {
+        title: "Dietary Adjustments",
+        content:
+          "Adjust caloric intake as needed while ensuring adequate protein and nutrient intake.",
+      },
+    ],
+    Senior: [
+      {
+        title: "Stay Active",
+        content:
+          "Focus on low-impact exercises and activities that maintain balance and strength.",
+      },
+      {
+        title: "Nutrition Focus",
+        content:
+          "Ensure adequate protein intake and consider supplements as recommended by healthcare providers.",
+      },
+    ],
+  };
+  return tips[category];
+}
+
+export async function getStaticPaths() {
+  // Generate pages for ages 18-80
+  const ages = Array.from({ length: 63 }, (_, i) => i + 18);
+
+  return ages.map((age) => ({
+    params: { age: age.toString() },
+    props: { age },
+  }));
+}
+
+const { age } = Astro.props;
+
+const getAgeCategory = (age) => {
+  if (age < 25) return "Young Adult";
+  if (age < 45) return "Adult";
+  if (age < 65) return "Middle Age";
+  return "Senior";
+};
+
+const getHealthyBMIRange = (age) => {
+  if (age < 25) return "19-24";
+  if (age < 35) return "20-25";
+  if (age < 45) return "21-26";
+  if (age < 55) return "22-27";
+  if (age < 65) return "23-28";
+  return "24-29";
+};
+
+const ageCategory = getAgeCategory(age);
+const healthyRange = getHealthyBMIRange(age);
+
+const title = `BMI Calculator for ${age} Years Old | Age-Specific BMI`;
+const description = `Calculate BMI for ${age} year olds. Learn about healthy weight ranges and BMI considerations specific to your age group (${ageCategory}).`;
+const keywords = `bmi calculator ${age} years old, bmi calculator by age, healthy bmi at ${age}, ${ageCategory.toLowerCase()} bmi calculator`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            BMI Calculator for Age {age}
+          </h2>
+          <BMICalculator client:load defaultAge={age.toString()} />
+        </div>
+      </div>
+
+      {/* Age-Specific Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">
+          BMI Considerations at Age {age}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-display font-semibold text-lg mb-2">
+              Age Category
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              You are in the {ageCategory} category. {
+                getAgeCategoryDescription(ageCategory)
+              }
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-display font-semibold text-lg mb-2">
+              Healthy BMI Range
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              At age {age}, a healthy BMI typically falls between {
+                healthyRange
+              }.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Health Tips */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Health Tips for Age {age}
+        </h2>
+        <div class="space-y-4">
+          {
+            getHealthTips(ageCategory).map((tip) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-semibold mb-2">{tip.title}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {tip.content}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

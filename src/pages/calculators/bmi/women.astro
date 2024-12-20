@@ -1,0 +1,147 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BMICalculator from "../../../components/BMICalculator";
+
+const title = "BMI Calculator for Women | Female Body Mass Index";
+const description =
+  "Calculate your BMI as a woman. Our female-specific BMI calculator considers factors relevant to women's health and body composition.";
+const keywords =
+  "bmi calculator women, female bmi calculator, bmi calculator female, women's bmi chart, healthy bmi for women";
+
+const womenSpecificInfo = [
+  {
+    title: "Pregnancy",
+    content:
+      "BMI calculations may not be accurate during pregnancy. Consult with your healthcare provider for appropriate weight gain guidelines.",
+  },
+  {
+    title: "Menopause",
+    content:
+      "Changes in hormones during menopause can affect body composition. BMI ranges remain the same, but weight management strategies may need adjustment.",
+  },
+  {
+    title: "Body Composition",
+    content:
+      "Women naturally have a higher percentage of essential fat compared to men. This doesn't affect BMI calculations but is important for overall health assessment.",
+  },
+];
+
+const healthyRanges = [
+  { age: "19-24", range: "19-24" },
+  { age: "25-34", range: "20-25" },
+  { age: "35-44", range: "21-26" },
+  { age: "45-54", range: "22-27" },
+  { age: "55-64", range: "23-28" },
+  { age: "65+", range: "24-29" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Women's BMI Calculator
+          </h2>
+          <BMICalculator client:load defaultGender={'female'} />
+
+        </div>
+      </div>
+
+      {/* Women-Specific Considerations */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Women's Health Considerations
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            womenSpecificInfo.map((info) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">
+                  {info.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {info.content}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Age-Specific BMI Ranges */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Healthy BMI Ranges by Age
+          </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+          {
+            healthyRanges.map((range) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-lg font-semibold mb-1">Age {range.age}</div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  BMI Range: {range.range}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Additional Health Tips */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Women's Health Tips
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-3">
+              Exercise Recommendations
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>• 150 minutes of moderate aerobic activity weekly</li>
+              <li>• Strength training 2-3 times per week</li>
+              <li>• Regular flexibility and balance exercises</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-3">
+              Nutrition Guidelines
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>• Adequate calcium and vitamin D intake</li>
+              <li>• Iron-rich foods, especially during menstruation</li>
+              <li>• Balanced protein and healthy fats</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

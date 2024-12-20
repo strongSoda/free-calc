@@ -1,0 +1,224 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BMICalculator from "../../../components/BMICalculator";
+
+const title = "BMI Calculator for Men | Male Body Mass Index";
+const description =
+  "Calculate your BMI as a man. Our male-specific BMI calculator considers factors relevant to men's body composition and health needs.";
+const keywords =
+  "bmi calculator men, male bmi calculator, bmi calculator male, men's bmi chart, healthy bmi for men";
+
+const menSpecificInfo = [
+  {
+    title: "Muscle Mass",
+    content:
+      "Men typically have higher muscle mass, which can result in a higher BMI even with healthy body composition. Consider body fat percentage for a more accurate assessment.",
+  },
+  {
+    title: "Body Shape",
+    content:
+      "Men tend to store fat around the abdomen. Waist circumference combined with BMI provides better insight into health risks.",
+  },
+  {
+    title: "Age-Related Changes",
+    content:
+      "Muscle mass and metabolism changes with age affect body composition. Regular strength training helps maintain healthy weight.",
+  },
+];
+
+const healthyRanges = [
+  { age: "19-24", range: "19-24" },
+  { age: "25-34", range: "20-25" },
+  { age: "35-44", range: "21-26" },
+  { age: "45-54", range: "22-27" },
+  { age: "55-64", range: "23-28" },
+  { age: "65+", range: "24-29" },
+];
+
+const waistRiskLevels = [
+  { level: "Low Risk", range: "< 37 inches (94 cm)" },
+  { level: "Moderate Risk", range: "37-40 inches (94-102 cm)" },
+  { level: "High Risk", range: "> 40 inches (102 cm)" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Men's BMI Calculator
+          </h2>
+          <BMICalculator client:load defaultGender={"male"} />
+        </div>
+      </div>
+
+      {/* Men-Specific Considerations */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Men's Health Considerations
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            menSpecificInfo.map((info) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">
+                  {info.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {info.content}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Age-Specific BMI Ranges */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Healthy BMI Ranges by Age
+          </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+          {
+            healthyRanges.map((range) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-lg font-semibold mb-1">Age {range.age}</div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  BMI Range: {range.range}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Waist Circumference Risk Levels */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Waist Circumference Risk Levels
+          </h2>
+          <p
+            class="mt-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            Waist circumference is an important indicator of health risk for
+            men, particularly when combined with BMI.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
+          {
+            waistRiskLevels.map((level) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-lg font-semibold mb-1">{level.level}</div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {level.range}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Health Tips for Men */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Men's Health Tips</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-3">
+              Exercise Recommendations
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>• Combine strength training with cardio</li>
+              <li>• Focus on compound exercises</li>
+              <li>• Include high-intensity interval training (HIIT)</li>
+              <li>• Maintain flexibility through stretching</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-3">
+              Nutrition Guidelines
+            </h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>• Adequate protein intake for muscle maintenance</li>
+              <li>• Heart-healthy fats and whole grains</li>
+              <li>• Limit processed foods and added sugars</li>
+              <li>• Stay hydrated throughout the day</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Additional Resources */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Beyond BMI</h2>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+          While BMI is a useful screening tool, it's just one part of assessing
+          overall health. Consider these additional measurements:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Body Fat Percentage</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              More accurate measure of body composition
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Muscle Mass</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Important for metabolism and overall health
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Blood Pressure</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Key indicator of cardiovascular health
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

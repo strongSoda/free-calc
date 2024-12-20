@@ -1,0 +1,257 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BMICalculator from "../../../components/BmiCalculator";
+
+const title = "BMI Calculator | Calculate Body Mass Index";
+const description =
+  "Free online BMI (Body Mass Index) calculator. Calculate your BMI instantly and understand what it means for your health. Available in metric and imperial units.";
+const keywords =
+  "bmi calculator, body mass index calculator, calculate bmi, bmi calculator online, bmi formula, body mass index formula, bmi chart";
+
+const commonBMIs = [
+  { weight: "70", height: "170", unit: "metric" },
+  { weight: "154", height: "67", unit: "imperial" },
+  // Add more common combinations
+];
+
+const healthCategories = [
+  {
+    category: "Underweight",
+    range: "Below 18.5",
+    description:
+      "May indicate nutritional deficiency or other health issues. Consult with healthcare provider.",
+  },
+  {
+    category: "Normal Weight",
+    range: "18.5 to 24.9",
+    description: "Generally indicates a healthy weight for most adults.",
+  },
+  {
+    category: "Overweight",
+    range: "25.0 to 29.9",
+    description:
+      "May increase risk of health issues. Consider lifestyle modifications.",
+  },
+  {
+    category: "Obese",
+    range: "30.0 or higher",
+    description:
+      "Increased risk of several health conditions. Consult healthcare provider.",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Calculate Your BMI
+          </h2>
+          <BMICalculator client:load defaultAge="25" />
+        </div>
+      </div>
+
+      {/* Formula Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">BMI Formula</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-4">
+              Metric Formula
+            </h3>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <p class="font-mono">BMI = weight(kg) / height(m)²</p>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-4">
+              Imperial Formula
+            </h3>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <p class="font-mono">BMI = 703 × weight(lb) / height(in)²</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BMI Categories */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">BMI Categories</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            healthCategories.map((cat) => (
+              <div class="p-6">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {cat.category}
+                </h3>
+                <div class="text-lg font-semibold text-accent-primary mb-2">
+                  BMI: {cat.range}
+                </div>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {cat.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "What is BMI?",
+                a: "Body Mass Index (BMI) is a simple measurement using your weight and height to work out if your weight is healthy.",
+              },
+              {
+                q: "How accurate is BMI?",
+                a: "BMI is a useful indicator of healthy weight for most adults, but it doesn't account for factors like muscle mass, bone density, age, and sex.",
+              },
+              {
+                q: "How often should I check my BMI?",
+                a: "It's recommended to check your BMI when there are significant changes in your weight or every 6-12 months as part of regular health monitoring.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Quick Links Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">BMI Calculators</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Gender-Specific Calculators */}
+          <div class="space-y-4">
+            <h3
+              class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+            >
+              By Gender
+            </h3>
+            <div class="grid gap-2">
+              <a
+                href="/calculators/bmi/women"
+                class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+              >
+                BMI Calculator for Women
+              </a>
+              <a
+                href="/calculators/bmi/men"
+                class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+              >
+                BMI Calculator for Men
+              </a>
+            </div>
+          </div>
+
+          {/* Age-Specific Calculators */}
+          <div class="space-y-4">
+            <h3
+              class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+            >
+              By Age Group
+            </h3>
+            <div class="grid gap-2">
+              {
+                [25, 35, 45, 55, 65].map((age) => (
+                  <a
+                    href={`/calculators/bmi/age/${age}`}
+                    class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                  >
+                    BMI Calculator for Age {age}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+
+          {/* Common BMI Calculations */}
+          <div class="space-y-4">
+            <h3
+              class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+            >
+              Common Examples
+            </h3>
+            <div class="grid gap-2">
+              {
+                [
+                  {
+                    weight: 70,
+                    height: 170,
+                    unit: "metric",
+                    label: "70kg, 170cm BMI",
+                  },
+                  {
+                    weight: 154,
+                    height: 67,
+                    unit: "imperial",
+                    label: "154lb, 5'7\" BMI",
+                  },
+                  {
+                    weight: 80,
+                    height: 180,
+                    unit: "metric",
+                    label: "80kg, 180cm BMI",
+                  },
+                  {
+                    weight: 154,
+                    height: 67,
+                    unit: "imperial",
+                    label: "154lb, 5'58\" BMI",
+                  },
+                ].map((calc) => (
+                  <a
+                    href={`/calculators/bmi/${calc.unit}/${calc.weight}/${calc.height}`}
+                    class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                  >
+                    {calc.label}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

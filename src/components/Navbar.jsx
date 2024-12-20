@@ -24,6 +24,7 @@ const Navbar = () => {
     { name: 'Volume', href: '/calculators/volume' },
     { name: "Subnet ipv4/6", href: "/calculators/subnet" },
     { name: 'RREF', href: '/' },
+    { name: "BMI", href: "/calculators/bmi" },
   ];
 
   return (
