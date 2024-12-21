@@ -27,6 +27,12 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
 
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Calculators" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />

@@ -1,6 +1,7 @@
 // src/components/Navbar.jsx
 import { MoonIcon, SunIcon, MenuIcon, XIcon } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+import InstallButton from './InstallButton';
 
 const Navbar = () => {
   const [theme, setTheme] = useState('light');
@@ -37,6 +38,7 @@ const Navbar = () => {
               Free Calculators
             </a>
           </div>
+
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
@@ -56,6 +58,9 @@ const Navbar = () => {
             >
               {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
             </button>
+
+            <InstallButton />
+
           </div>
 
           {/* Mobile Menu Button */}
@@ -89,6 +94,7 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
+            <InstallButton />
         </div>
       </div>
     </nav>
