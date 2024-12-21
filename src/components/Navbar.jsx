@@ -20,11 +20,11 @@ const Navbar = () => {
   const navLinks = [
     { name: 'All Calculators', href: '/calculators' },
     { name: 'GPA to %', href: '/calculators/gpa-to-percentage' },
-    { name: '% to GPA', href: '/calculators/percentage-to-gpa' },
-    { name: 'Volume', href: '/calculators/volume' },
-    { name: "Subnet ipv4/6", href: "/calculators/subnet" },
     { name: 'RREF', href: '/' },
+    { name: 'Volume', href: '/calculators/volume' },
+    { name: "Subnet", href: "/calculators/subnet" },
     { name: "BMI", href: "/calculators/bmi" },
+    { name: 'Tip', href: '/calculators/tip-calculator' },
   ];
 
   return (

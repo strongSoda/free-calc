@@ -6,17 +6,20 @@ const Footer = () => {
 
   const sections = [
     {
-      title: "Calculators",
+      title: "Math Calculators",
       links: [
         { name: "GPA to Percentage", url: "/calculators/gpa-to-percentage" },
         { name: "Percentage to GPA", url: "/calculators/percentage-to-gpa" },
         { name: "Matrix RREF", url: "/" },
-        { name: "Shape Volume", url: "/calculators/volume" },
+        { name: "Shape Volume", url: "/calculators/volume" },        
+      ]
+    },
+    {
+      title: "Utility Calculators",
+      links: [
         { name: "Subnet ipv4/6", url: "/calculators/subnet" },
         { name: "BMI", url: "/calculators/bmi" },
-        // { name: "4.0 Scale Conversion", url: "/calculators/percentage-to-gpa/4.0-scale/85" },
-        // { name: "5.0 Scale Conversion", url: "/calculators/percentage-to-gpa/5.0-scale/85" },
-        // { name: "10.0 Scale Conversion", url: "/calculators/percentage-to-gpa/10.0-scale/85" }
+        { name: "Tip & Bill Split", url: "/calculators/tip-calculator" },        
       ]
     },
     // {

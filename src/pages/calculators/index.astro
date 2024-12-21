@@ -6,11 +6,12 @@ import {
   BarChart2,
   CalculatorIcon,
   Check,
+  CoinsIcon,
   Cone,
+  DollarSign,
   Network,
   PersonStanding,
 } from "lucide-react";
-import AdUnit from "../../components/AdUnit";
 
 const calculators = [
   {
@@ -51,6 +52,13 @@ const calculators = [
       "Calculate Body Mass Index (BMI) to check if your weight is healthy. Supports metric and imperial units.",
     url: "/calculators/bmi",
     gradient: "from-accent-primary to-accent-secondary",
+  },
+  {
+    title: "Tip Calculator",
+    description:
+      "Free tip calculator to instantly determine gratuity amounts and split bills between multiple people. Support for custom percentages and per-person calculations.",
+    url: "/calculators/tip-calculator",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
 ];
 
@@ -106,7 +114,16 @@ const keywords =
                 <Network client:load className="w-8 h-8 text-accent-primary" />
               )}
               {index === 5 && (
-                <PersonStanding client:load className="w-8 h-8 text-accent-primary" />
+                <PersonStanding
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
+              {index === 6 && (
+                <DollarSign
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
               )}
             </div>
             <h2

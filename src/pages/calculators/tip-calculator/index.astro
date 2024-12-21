@@ -1,0 +1,174 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import TipCalculator from "../../../components/TipCalculator";
+
+const title = "Tip Calculator - Calculate Tips and Split Bills";
+const description =
+  "Free online tip calculator. Calculate tips, split bills, and determine per-person amounts for restaurant bills and services. Supports custom tip percentages and multiple splits.";
+const keywords =
+  "tip calculator, bill splitter, restaurant tip calculator, calculate tip, split bill calculator, gratuity calculator, dining calculator";
+
+const commonScenarios = [
+  { bill: "50", tip: "15", title: "$50 bill with 15% tip" },
+  { bill: "100", tip: "20", title: "$100 bill with 20% tip" },
+  { bill: "75", tip: "18", title: "$75 bill with 18% tip" },
+  { bill: "200", tip: "15", title: "$200 bill with 15% tip" },
+  { bill: "150", tip: "20", title: "$150 bill with 20% tip" },
+];
+
+const tipPercentages = [15, 18, 20, 25];
+const billAmounts = [25, 50, 75, 100, 150, 200];
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  description: description,
+  applicationCategory: "CalculatorApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  featureList: [
+    "Calculate tips for any bill amount",
+    "Multiple tip percentage options",
+    "Split bills between multiple people",
+    "Custom tip percentages",
+    "Per-person amount calculation",
+  ],
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Calculate Your Tip
+          </h2>
+          <TipCalculator client:load />
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Tip Calculations
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {
+            commonScenarios.map((scenario) => (
+              <a
+                href={`/calculators/tip-calculator/${scenario.bill}/${scenario.tip}`}
+                class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+              >
+                <h3 class="font-display font-semibold">{scenario.title}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  $
+                  {(
+                    parseFloat(scenario.bill) *
+                    (1 + parseFloat(scenario.tip) / 100)
+                  ).toFixed(2)}{" "}
+                  total with tip
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Tip Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Tip Percentages
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="font-display text-xl font-semibold mb-4">
+              Standard Tipping Guide
+            </h3>
+            <div class="space-y-3">
+              <p>• 15% - Standard service at restaurants</p>
+              <p>• 18% - Good service at restaurants</p>
+              <p>• 20% - Excellent service or upscale dining</p>
+              <p>• 25% - Exceptional service or special occasions</p>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-semibold mb-4">
+              When to Adjust Tips
+            </h3>
+            <div class="space-y-3">
+              <p>• Large groups (check if gratuity is included)</p>
+              <p>• Complex or special orders</p>
+              <p>• Holiday or peak hours service</p>
+              <p>• Extra attention or assistance</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Tools */}
+      <!-- <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Calculators
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href="/calculators/shared-bill-calculator"
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+          >
+            <h3 class="font-display font-semibold">Shared Bill Calculator</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Split bills with different items per person
+            </p>
+          </a>
+          <a
+            href="/calculators/percentage-calculator"
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+          >
+            <h3 class="font-display font-semibold">Percentage Calculator</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Calculate percentages and percentage changes
+            </p>
+          </a>
+          <a
+            href="/calculators/sales-tax-calculator"
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+          >
+            <h3 class="font-display font-semibold">Sales Tax Calculator</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Calculate total costs with sales tax
+            </p>
+          </a>
+        </div>
+      </div> -->
+    </div>
+  </GpaLayout>
+</Layout>

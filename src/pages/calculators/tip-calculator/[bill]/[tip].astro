@@ -1,0 +1,260 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import TipCalculator from "../../../../components/TipCalculator";
+
+export async function getStaticPaths() {
+  // Common bill amounts ($25 to $300)
+  const bills = Array.from({ length: 12 }, (_, i) => (i + 1) * 25);
+
+  // Common tip percentages
+  const tips = [10, 15, 18, 20, 25, 30, 35, 40, 45, 50, 100, 150, 200];
+
+  return bills.flatMap((bill) =>
+    tips.map((tip) => ({
+      params: { bill: bill.toString(), tip: tip.toString() },
+    }))
+  );
+}
+
+const { bill, tip } = Astro.params;
+const billAmount = parseFloat(bill);
+const tipPercentage = parseFloat(tip);
+
+const tipAmount = ((billAmount * tipPercentage) / 100).toFixed(2);
+const totalAmount = (billAmount * (1 + tipPercentage / 100)).toFixed(2);
+
+const title = `${tipPercentage}% Tip on $${billAmount} Bill Calculator`;
+const description = `Calculate a ${tipPercentage}% tip on a $${billAmount} bill. The tip amount is $${tipAmount}, making the total $${totalAmount}. Use our calculator for easy tip calculations.`;
+const keywords = `${tipPercentage}% tip calculator, ${tipPercentage}% tip on $${billAmount}, tip calculation, restaurant tip, gratuity calculator`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `What is a ${tipPercentage}% tip on $${billAmount}?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `A ${tipPercentage}% tip on a $${billAmount} bill is $${tipAmount}, making the total $${totalAmount}.`,
+    },
+  },
+};
+
+// Common alternative tip percentages (excluding current)
+const otherTips = [10, 15, 18, 20, 25].filter((t) => t !== tipPercentage);
+
+// Common alternative bill amounts (excluding current)
+const nearestBills = [
+  Math.max(25, billAmount - 25),
+  Math.max(25, billAmount - 10),
+  billAmount + 10,
+  billAmount + 25,
+].filter((b) => b !== billAmount);
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <div class="space-y-12">
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <TipCalculator
+            client:load
+            defaultBill={billAmount}
+            defaultTip={tipPercentage}
+          />
+        </div>
+      </div>
+
+      {/* Quick Results Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Quick Breakdown for ${billAmount} Bill with {tipPercentage}% Tip
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark"
+          >
+            <h3 class="font-display font-semibold mb-2">Bill Amount</h3>
+            <p class="text-2xl font-bold text-accent-primary">
+              ${billAmount.toFixed(2)}
+            </p>
+          </div>
+          <div
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark"
+          >
+            <h3 class="font-display font-semibold mb-2">
+              Tip ({tipPercentage}%)
+            </h3>
+            <p class="text-2xl font-bold text-accent-primary">${tipAmount}</p>
+          </div>
+          <div
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark"
+          >
+            <h3 class="font-display font-semibold mb-2">Total</h3>
+            <p class="text-2xl font-bold text-accent-primary">${totalAmount}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Other Tip Percentages */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Other Tip Options for ${billAmount} Bill
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {
+            otherTips.map((otherTip) => {
+              const altTipAmount = ((billAmount * otherTip) / 100).toFixed(2);
+              const altTotalAmount = (
+                billAmount *
+                (1 + otherTip / 100)
+              ).toFixed(2);
+              return (
+                <a
+                  href={`/calculators/tip-calculator/${billAmount}/${otherTip}`}
+                  class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+                >
+                  <h3 class="font-display font-semibold mb-2">
+                    {otherTip}% Tip
+                  </h3>
+                  <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                    Tip: ${altTipAmount}
+                    <br />
+                    Total: ${altTotalAmount}
+                  </p>
+                </a>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      {/* Similar Bill Amounts */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {tipPercentage}% Tip for Similar Bills
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {
+            nearestBills.map((nearBill) => {
+              const nearTipAmount = ((nearBill * tipPercentage) / 100).toFixed(
+                2
+              );
+              const nearTotalAmount = (
+                nearBill *
+                (1 + tipPercentage / 100)
+              ).toFixed(2);
+              return (
+                <a
+                  href={`/calculators/tip-calculator/${nearBill}/${tipPercentage}`}
+                  class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+                >
+                  <h3 class="font-display font-semibold mb-2">
+                    ${nearBill} Bill
+                  </h3>
+                  <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                    Tip: ${nearTipAmount}
+                    <br />
+                    Total: ${nearTotalAmount}
+                  </p>
+                </a>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      {/* Formula Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How It's Calculated
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="font-display font-semibold mb-2">Tip Amount</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              ${billAmount} × ${tipPercentage}% = ${tipAmount}
+              <br />
+              <span class="text-sm"
+                >Formula: Bill Amount × (Tip Percentage ÷ 100)</span
+              >
+            </p>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold mb-2">Total Amount</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              ${billAmount} + ${tipAmount} = ${totalAmount}
+              <br />
+              <span class="text-sm">Formula: Bill Amount + Tip Amount</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Links */}
+      <!-- <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Calculators
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href="/calculators/shared-bill-calculator"
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+          >
+            <h3 class="font-display font-semibold">Shared Bill Calculator</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Split bills between multiple people
+            </p>
+          </a>
+          <a
+            href="/calculators/tip-calculator"
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+          >
+            <h3 class="font-display font-semibold">Tip Calculator</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Calculate tips for any amount
+            </p>
+          </a>
+          <a
+            href="/calculators/percentage-calculator"
+            class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors"
+          >
+            <h3 class="font-display font-semibold">Percentage Calculator</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Calculate any percentage
+            </p>
+          </a>
+        </div>
+      </div> -->
+    </div>
+  </GpaLayout>
+</Layout>
