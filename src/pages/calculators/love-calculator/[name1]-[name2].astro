@@ -1,0 +1,295 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import LoveCalculator from "../../../components/LoveCalculator";
+
+export async function getStaticPaths() {
+  // Popular name combinations for SEO
+  const popularNames = [
+    ["Brad", "Angelina"],
+    ["Tom", "Zendaya"],
+    ["Justin", "Hailey"],
+    ["Emma", "Liam"],
+    ["Olivia", "Noah"],
+    ["Ava", "Oliver"],
+    ["Leo", "Libra"],
+    ["Aries", "Sagittarius"],
+    ["Taurus", "Cancer"],
+    ["Sophia", "Jackson"],
+    ["Mia", "Elijah"],
+    ["Isabella", "Aiden"],
+    ["Charlotte", "Lucas"],
+    ["Amelia", "Mason"],
+    ["Evelyn", "Ethan"],
+    ["Harper", "James"],
+    ["Abigail", "Logan"],
+    ["Emily", "Benjamin"],
+    ["Scarlett", "Henry"],
+    ["Elizabeth", "Alexander"],
+    ["Sofia", "Michael"],
+    ["Ella", "Daniel"],
+    ["Avery", "William"],
+    ["Madison", "Matthew"],
+    ["Lily", "David"],
+    ["Grace", "Joseph"],
+    ["Chloe", "Samuel"],
+    ["Victoria", "Andrew"],
+    ["Penelope", "Christopher"],
+    ["Riley", "Joshua"],
+    ["Layla", "Ryan"],
+    ["Aria", "John"],
+    ["Zoe", "Nathan"],
+    ["Nora", "Thomas"],
+    ["Luna", "Sebastian"],
+    ["Hazel", "Caleb"],
+    ["Ellie", "Hunter"],
+    ["Audrey", "Christian"],
+    ["Brooklyn", "Jonathan"],
+    ["Savannah", "Landon"],
+    ["Paisley", "Dylan"],
+    ["Hannah", "Isaiah"],
+    ["Aurora", "Anthony"],
+    ["Stella", "Leo"],
+    ["Maya", "Adam"],
+    ["Genesis", "Connor"],
+    ["Aubrey", "Adrian"],
+    ["Leah", "Wyatt"],
+    ["Willow", "Asher"],
+    ["Lucy", "Nathaniel"],
+    ["Sarah", "Gabriel"],
+    ["Sadie", "Charles"],
+    ["Lila", "Eli"],
+    ["Eva", "Isaac"],
+    ["Violet", "Aaron"],
+    ["Anna", "Ezekiel"],
+    ["Caroline", "Josiah"],
+    ["Autumn", "Cameron"],
+    ["Kennedy", "Miles"],
+    ["Skylar", "Robert"],
+    ["Claire", "Andrew"],
+    ["Madeline", "Jaxon"],
+    ["Peyton", "Cooper"],
+    ["Rylee", "Parker"],
+    ["Elena", "Roman"],
+    ["Delilah", "Evan"],
+    ["Ruby", "Angel"],
+    ["Isla", "Nicholas"],
+    ["Naomi", "Dominic"],
+    ["Aaliyah", "Austin"],
+    ["Everly", "Greyson"],
+    ["Lydia", "Ian"],
+    ["Ivy", "Carlos"],
+    ["Emilia", "Luis"],
+    ["Vivian", "Diego"],
+    ["Cora", "Kai"],
+    ["Alice", "Xavier"],
+    ["Eliza", "Zachary"],
+    ["Jade", "Micah"],
+    ["Julia", "Brandon"],
+    ["Eva", "Hudson"],
+    ["Trinity", "Silas"],
+    ["Faith", "Brody"],
+    ["Lillian", "Easton"],
+    ["Nova", "Cole"],
+    ["Kaylee", "Declan"],
+    ["Mackenzie", "Gavin"],
+    ["Clara", "Lincoln"],
+    ["Sienna", "Harrison"],
+    ["Allison", "Carter"],
+    ["Valentina", "Jayden"],
+    ["Arianna", "Jason"],
+    ["Melody", "Maxwell"],
+    ["Camila", "Elliot"],
+    ["Georgia", "Leonardo"],
+    ["Daisy", "Julian"],
+    ["Adeline", "Theo"],
+    ["Arabella", "Rowan"],
+    ["Brielle", "Grayson"],
+    ["Piper", "Ezra"],
+    ["Serenity", "Finn"],
+    ["Harmony", "Ryder"],
+    ["Blake", "Zane"],
+  ];
+
+  return popularNames.map(([name1, name2]) => ({
+    params: {
+      name1: name1.toLowerCase(),
+      name2: name2.toLowerCase(),
+    },
+    props: { name1, name2 },
+  }));
+}
+
+const { name1, name2 } = Astro.props;
+
+const title = `Love Calculator: ${name1} and ${name2} Compatibility`;
+const description = `Calculate the love compatibility between ${name1} and ${name2}. See your love match percentage and compatibility reading. Remember, it's just for fun!`;
+const keywords = `${name1} and ${name2} compatibility, ${name1} ${name2} love match, love calculator ${name1} ${name2}, relationship compatibility calculator`;
+
+const relatedPairs = [
+  { name1: "Emma", name2: "Liam" },
+  { name1: "Olivia", name2: "Noah" },
+  { name1: "Ava", name2: "Oliver" },
+]
+  .filter((pair) => pair.name1 !== name1 && pair.name2 !== name2)
+  .slice(0, 3);
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `What is the love compatibility between ${name1} and ${name2}?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `Calculate ${name1} and ${name2}'s love compatibility with our fun love calculator.`,
+    },
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="bg-gradient-to-r from-pink-500/10 to-rose-500/10 p-8">
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            {name1} & {name2}'s Love Compatibility
+          </h2>
+          <LoveCalculator
+            client:load
+            defaultName1={name1}
+            defaultName2={name2}
+          />
+        </div>
+      </div>
+
+      {/* Related Combinations */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Try Other Love Matches
+        </h2>
+        <div class="grid gap-4">
+          {
+            relatedPairs.map((pair) => (
+              <a
+                href={`/calculators/love-calculator/${pair.name1.toLowerCase()}-${pair.name2.toLowerCase()}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-pink-50 dark:hover:bg-pink-900/10 transition-colors"
+              >
+                <div class="font-medium">
+                  {pair.name1} & {pair.name2}
+                </div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Test their compatibility →
+                </div>
+              </a>
+            ))
+          }
+          <a
+            href="/calculators/love-calculator"
+            class="p-4 bg-gradient-to-r from-pink-500/10 to-rose-500/10 rounded-lg hover:opacity-90 transition-opacity text-center"
+          >
+            <div class="font-medium">Try Your Own Names</div>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Calculate any love match →
+            </div>
+          </a>
+        </div>
+      </div>
+
+      {/* Love Compatibility Tips */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Love Compatibility Tips
+        </h2>
+        <div class="grid gap-6">
+          {
+            [
+              {
+                title: "Communication is Key",
+                description:
+                  "Open and honest communication builds trust and understanding between partners.",
+              },
+              {
+                title: "Respect Individual Differences",
+                description:
+                  "Great relationships embrace and celebrate each person's unique qualities.",
+              },
+              {
+                title: "Grow Together",
+                description:
+                  "Support each other's goals and dreams while maintaining your own identity.",
+              },
+            ].map((tip) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-display font-semibold text-lg mb-2">
+                  {tip.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {tip.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Fun Facts */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Fun Love Facts</h2>
+        <div class="grid gap-4">
+          {
+            [
+              "The heart shape symbolism dates back to the 13th century.",
+              "Love can literally make your heart skip a beat due to adrenaline.",
+              "Looking into someone's eyes for 4 minutes can increase attraction.",
+            ].map((fact) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {fact}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Reminder Note */}
+      <div
+        class="text-center text-content-light-dimmed dark:text-content-dark-dimmed"
+      >
+        <p class="italic">
+          Remember: True love is about more than just names! This calculator is
+          for entertainment only.
+        </p>
+        <p class="mt-2">
+          <a
+            href="/calculators/love-calculator"
+            class="text-pink-500 hover:text-pink-600 dark:hover:text-pink-400"
+          >
+            Try another combination →
+          </a>
+        </p>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

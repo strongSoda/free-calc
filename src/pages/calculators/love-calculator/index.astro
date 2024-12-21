@@ -1,0 +1,161 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import LoveCalculator from "../../../components/LoveCalculator";
+
+const title = "Love Calculator - Test Your Love Compatibility";
+const description =
+  "Calculate love compatibility and see your love match percentage. A fun way to test relationship compatibility between two names. Remember, it's just for entertainment!";
+const keywords =
+  "love calculator, love compatibility test, relationship compatibility calculator, name compatibility, love match calculator";
+
+const popularMatches = [
+  {
+    category: "Celebrity Couples",
+    pairs: [
+      { name1: "Brad", name2: "Angelina" },
+      { name1: "Tom", name2: "Zendaya" },
+      { name1: "Justin", name2: "Hailey" },
+    ],
+  },
+  {
+    category: "Zodiac Signs",
+    pairs: [
+      { name1: "Leo", name2: "Libra" },
+      { name1: "Aries", name2: "Sagittarius" },
+      { name1: "Taurus", name2: "Cancer" },
+    ],
+  },
+  {
+    category: "Popular Names",
+    pairs: [
+      { name1: "Emma", name2: "Liam" },
+      { name1: "Olivia", name2: "Noah" },
+      { name1: "Ava", name2: "Oliver" },
+    ],
+  },
+];
+
+const loveFactors = [
+  { factor: "Communication", importance: "35%" },
+  { factor: "Trust", importance: "30%" },
+  { factor: "Compatibility", importance: "20%" },
+  { factor: "Chemistry", importance: "15%" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="bg-gradient-to-r from-pink-500/10 to-rose-500/10 p-8">
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Test Your Love Compatibility
+          </h2>
+          <LoveCalculator client:load />
+        </div>
+      </div>
+
+      {/* Popular Matches Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Popular Love Matches
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            popularMatches.map((category) => (
+              <div class="space-y-4">
+                <h3 class="font-display font-semibold text-lg bg-gradient-to-r from-pink-500 to-rose-500 text-transparent bg-clip-text">
+                  {category.category}
+                </h3>
+                <div class="grid gap-2">
+                  {category.pairs.map((pair) => (
+                    <a
+                      href={`/calculators/love-calculator/${pair.name1.toLowerCase()}-${pair.name2.toLowerCase()}`}
+                      class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-pink-500 dark:hover:text-pink-400 transition-colors"
+                    >
+                      {pair.name1} & {pair.name2}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Love Factors Chart */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Love Compatibility Factors
+        </h2>
+        <div class="grid gap-4">
+          {
+            loveFactors.map((factor) => (
+              <div class="flex items-center gap-4">
+                <div class="w-32 font-medium">{factor.factor}</div>
+                <div class="flex-1 h-4 bg-surface-light-hover dark:bg-surface-dark rounded-full overflow-hidden">
+                  <div
+                    class="h-full bg-gradient-to-r from-pink-500 to-rose-500"
+                    style={`width: ${factor.importance}`}
+                  />
+                </div>
+                <div class="w-16 text-right text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {factor.importance}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "How does the love calculator work?",
+                a: "Our love calculator uses a special algorithm that analyzes the letters in both names to generate a compatibility percentage. Remember, it's just for fun!",
+              },
+              {
+                q: "Is the love calculator accurate?",
+                a: "The love calculator is meant for entertainment purposes only. Real relationships are built on trust, communication, and mutual understanding.",
+              },
+              {
+                q: "Can I test multiple names?",
+                a: "Yes! You can test as many name combinations as you'd like. Try different spellings or nicknames for variety.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
