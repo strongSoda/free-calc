@@ -21,7 +21,8 @@ const Footer = () => {
         { name: "Subnet ipv4/6", url: "/calculators/subnet" },
         { name: "BMI", url: "/calculators/bmi" },
         { name: "Tip & Bill Split", url: "/calculators/tip-calculator" },  
-        { name: "Love Percentage", url: "/calculators/love-calculator" },        
+        { name: "Love Percentage", url: "/calculators/love-calculator" }, 
+        { name: "Pregnancy Due Date", url: "/calculators/pregnancy" },        
       ]
     },
     // {

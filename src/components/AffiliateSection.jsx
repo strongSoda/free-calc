@@ -43,9 +43,6 @@ export default function AffiliateSection() {
       data-nosnippet
       role="complementary"
     >
-      <h2 className="font-display text-2xl font-semibold text-surface-900 dark:text-surface-50 mb-8">
-        Recommended Gear
-      </h2>
       <div className="space-y-6">        
         <AffiliateProduct key={randomProduct.id} product={randomProduct} />
       </div>

@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import GpaLayout from "../../components/GpaLayout";
 import {
   ArrowLeftRightIcon,
+  Baby,
   BarChart,
   BarChart2,
   CalculatorIcon,
@@ -76,6 +77,13 @@ const calculators = [
     url: "/calculators/standard-deviation",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Pregnancy Due Date Calculator",
+    description:
+      "Calculate pregnancy due date, weekly milestones, and track your journey based on last period, conception, IVF, or ultrasound dates.",
+    url: "/calculators/pregnancy",
+    gradient: "from-rose-500/90 to-purple-500/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -147,6 +155,9 @@ const keywords =
               )}
               {index === 8 && (
                 <Table client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 9 && (
+                <Baby client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2

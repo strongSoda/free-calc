@@ -1,0 +1,165 @@
+---
+// src/pages/calculators/pregnancy/due-date/[date].astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PregnancyCalculator from "../../../../components/PregnancyCalculator";
+
+export async function getStaticPaths() {
+  const paths = [];
+  const startDate = new Date("2024-01-01");
+  const endDate = new Date("2024-12-31");
+
+  for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().split("T")[0];
+    const dueDate = new Date(d);
+    dueDate.setDate(dueDate.getDate() + 280); // Add 40 weeks
+
+    paths.push({
+      params: {
+        date: dateStr,
+      },
+      props: {
+        inputDate: dateStr,
+        dueDateStr: dueDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      },
+    });
+  }
+
+  return paths;
+}
+
+const { date } = Astro.params;
+const { inputDate, dueDateStr } = Astro.props;
+
+const title = `Due Date Calculator for ${date}`;
+const description = `Calculate your pregnancy due date if your last period was on ${date}. Your estimated due date would be ${dueDateStr}. Get a complete pregnancy timeline and weekly milestones.`;
+const keywords = `pregnancy due date ${date}, due date calculator ${date}, pregnancy calculator ${date}, pregnancy timeline ${date}, pregnancy week calculator ${date}`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <PregnancyCalculator
+      client:load
+      defaultMethod="last_period"
+      defaultDate={inputDate}
+    />
+
+    <div
+      class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 space-y-4"
+    >
+      <h2 class="text-2xl font-display font-bold">
+        How is Due Date Calculated?
+      </h2>
+
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Naegele's Rule</h3>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+          The most common method for calculating your due date is Naegele's
+          Rule, which adds 280 days (40 weeks) to the first day of your last
+          menstrual period (LMP). This method assumes:
+        </p>
+        <ul
+          class="list-disc pl-6 space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          <li>Regular 28-day menstrual cycles</li>
+          <li>Ovulation occurs on day 14</li>
+          <li>Conception occurs within 24 hours of ovulation</li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Alternative Methods</h3>
+        <ul
+          class="list-disc pl-6 space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          <li>
+            <strong>Conception Date:</strong> Add 266 days to the conception date
+          </li>
+          <li>
+            <strong>IVF Transfer:</strong> Add 266 days to the embryo transfer date
+          </li>
+          <li>
+            <strong>Ultrasound Dating:</strong> Based on fetal measurements and gestational
+            age
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mt-5">
+      <div>
+        <h3 class="font-semibold text-lg mb-3">Calculate By Method</h3>
+        <ul class="space-y-2">
+          <li>
+            <a
+              href="/calculators/pregnancy/"
+              class="text-accent-primary hover:underline"
+              >Standard Due Date Calculator</a
+            >
+          </li>
+          <li>
+            <a
+              href="/calculators/pregnancy/conception"
+              class="text-accent-primary hover:underline"
+              >Conception Date Calculator</a
+            >
+          </li>
+          <li>
+            <a
+              href="/calculators/pregnancy/ivf"
+              class="text-accent-primary hover:underline"
+              >IVF Due Date Calculator</a
+            >
+          </li>
+          <li>
+            <a
+              href="/calculators/pregnancy/ultrasound"
+              class="text-accent-primary hover:underline"
+              >Ultrasound Due Date Calculator</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-lg mb-3">Popular Pregnancy Weeks</h3>
+        <ul class="space-y-2">
+          <li>
+            <a
+              href="/calculators/pregnancy/week/12"
+              class="text-accent-primary hover:underline">12 Weeks Pregnant</a
+            >
+          </li>
+          <li>
+            <a
+              href="/calculators/pregnancy/week/20"
+              class="text-accent-primary hover:underline"
+              >20 Weeks Pregnant (Halfway)</a
+            >
+          </li>
+          <li>
+            <a
+              href="/calculators/pregnancy/week/28"
+              class="text-accent-primary hover:underline">28 Weeks Pregnant</a
+            >
+          </li>
+          <li>
+            <a
+              href="/calculators/pregnancy/week/40"
+              class="text-accent-primary hover:underline">40 Weeks Pregnant</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

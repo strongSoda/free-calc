@@ -42,7 +42,7 @@ const Navbar = () => {
 
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => (
               <a 
                 key={link.name}
@@ -65,7 +65,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center space-x-4">
+          <div className="flex lg:hidden items-center space-x-4">
             <button 
               type="button"
               onClick={toggleTheme}
@@ -84,7 +84,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
+      <div className={`lg:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-surface-light dark:bg-surface-dark border-t border-gray-200/50 dark:border-gray-800/50">
           {navLinks.map((link) => (
             <a 
