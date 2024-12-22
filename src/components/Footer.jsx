@@ -91,6 +91,8 @@ const Footer = () => {
   </svg>
 </a>
             </div>
+
+            <a href="https://www.buymeacoffee.com/h2G9AoyC6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style={{height: "auto", width: "150px"}} className="mt-5" /></a>
           </div>
 
           {/* Links Sections */}
