@@ -1,0 +1,235 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import StandardDeviationCalculator from "../../../components/StandardDeviationCalculator";
+
+const title = "Standard Deviation Calculator";
+const description =
+  "Calculate standard deviation, variance, mean, and z-scores with our free online standard deviation calculator. Includes visual distribution charts and detailed statistical analysis.";
+const keywords =
+  "standard deviation calculator, calculate standard deviation, standard dev calculator, standard deviation formula, stdev calculator, compute standard deviation, determining standard deviation";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/standard-deviation-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Calculator Component */}
+      <StandardDeviationCalculator client:load />
+
+      {/* Educational Content */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Understanding Standard Deviation
+        </h2>
+        <div class="prose dark:prose-invert max-w-none">
+          <p>
+            Standard deviation is a statistical measure that quantifies the
+            amount of variation or dispersion in a dataset. A low standard
+            deviation indicates that the values tend to be close to the mean,
+            while a high standard deviation indicates that the values are spread
+            out over a wider range.
+          </p>
+
+          <h3 class="text-xl font-display font-semibold mt-6 mb-4">
+            Key Concepts
+          </h3>
+          <ul class="space-y-2">
+            <li>
+              <strong>Mean (μ):</strong> The average of all values in the dataset.
+            </li>
+            <li>
+              <strong>Variance (σ²):</strong> The average of the squared differences
+              from the mean.
+            </li>
+            <li>
+              <strong>Standard Deviation (σ):</strong> The square root of the variance.
+            </li>
+            <li>
+              <strong>Z-Score:</strong> The number of standard deviations a value
+              is from the mean.
+            </li>
+          </ul>
+
+          <h3 class="text-xl font-display font-semibold mt-6 mb-4">
+            Common Applications
+          </h3>
+          <ul class="space-y-2">
+            <li>Analyzing test scores and academic performance</li>
+            <li>Quality control in manufacturing</li>
+            <li>Financial market volatility analysis</li>
+            <li>Scientific research and data analysis</li>
+            <li>Population studies and demographics</li>
+          </ul>
+
+          <h3 class="text-xl font-display font-semibold mt-6 mb-4">
+            Interpreting Results
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full mt-4">
+              <thead>
+                <tr>
+                  <th
+                    class="px-4 py-2 bg-surface-light-hover dark:bg-surface-dark text-left"
+                    >Standard Deviations</th
+                  >
+                  <th
+                    class="px-4 py-2 bg-surface-light-hover dark:bg-surface-dark text-left"
+                    >Data Distribution</th
+                  >
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    class="px-4 py-2 border-t border-gray-200/10 dark:border-gray-800/10"
+                    >±1σ</td
+                  >
+                  <td
+                    class="px-4 py-2 border-t border-gray-200/10 dark:border-gray-800/10"
+                    >Contains about 68% of the data</td
+                  >
+                </tr>
+                <tr>
+                  <td
+                    class="px-4 py-2 border-t border-gray-200/10 dark:border-gray-800/10"
+                    >±2σ</td
+                  >
+                  <td
+                    class="px-4 py-2 border-t border-gray-200/10 dark:border-gray-800/10"
+                    >Contains about 95% of the data</td
+                  >
+                </tr>
+                <tr>
+                  <td
+                    class="px-4 py-2 border-t border-gray-200/10 dark:border-gray-800/10"
+                    >±3σ</td
+                  >
+                  <td
+                    class="px-4 py-2 border-t border-gray-200/10 dark:border-gray-800/10"
+                    >Contains about 99.7% of the data</td
+                  >
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "What's the difference between population and sample standard deviation?",
+                a: "Population standard deviation uses N (total population) in the denominator, while sample standard deviation uses (n-1) in the denominator. This adjustment in sample standard deviation helps account for the fact that we're working with a sample rather than the entire population.",
+              },
+              {
+                q: "When should I use standard deviation?",
+                a: "Use standard deviation when you need to understand how spread out your data is from the mean. It's particularly useful in statistical analysis, quality control, scientific research, and financial analysis to measure variability and identify outliers.",
+              },
+              {
+                q: "What's a good standard deviation?",
+                a: "There's no universal 'good' standard deviation - it depends entirely on your context and data. A large standard deviation isn't necessarily bad; it simply indicates more variability in your data. The interpretation depends on your specific needs and field of study.",
+              },
+              {
+                q: "What's the relationship between variance and standard deviation?",
+                a: "Standard deviation is the square root of variance. While both measure variability, standard deviation is often preferred because it's in the same units as your original data, making it more interpretable.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Examples Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Practical Examples</h2>
+        <div class="grid gap-6 md:grid-cols-2">
+          {
+            [
+              {
+                title: "Test Scores Analysis",
+                data: "65, 70, 75, 80, 85",
+                description:
+                  "For a class of students, these scores have a standard deviation of 7.91, indicating moderate spread around the mean of 75.",
+              },
+              {
+                title: "Height Measurements",
+                data: "170, 168, 175, 172, 169",
+                description:
+                  "Heights (in cm) with a standard deviation of 2.74, showing relatively consistent measurements around the mean of 170.8.",
+              },
+            ].map((example) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
+                <h3 class="font-display font-semibold text-lg mb-2">
+                  {example.title}
+                </h3>
+                <div class="font-mono text-sm mb-2 text-accent-primary">
+                  {example.data}
+                </div>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">
+                  {example.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Tips Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Tips for Calculating Standard Deviation
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="space-y-2">
+            <h3 class="font-display font-semibold text-lg">Data Preparation</h3>
+            <ul
+              class="list-disc list-inside text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <li>Clean your data of any outliers that might skew results</li>
+              <li>Ensure all values are numeric and in the same unit</li>
+              <li>Remove any missing or invalid values</li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-display font-semibold text-lg">Interpretation</h3>
+            <ul
+              class="list-disc list-inside text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <li>Consider the context when interpreting results</li>
+              <li>Look for patterns in the distribution</li>
+              <li>Compare with similar datasets in your field</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

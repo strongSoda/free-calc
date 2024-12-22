@@ -26,6 +26,7 @@ const Navbar = () => {
     { name: "Subnet", href: "/calculators/subnet" },
     { name: "BMI", href: "/calculators/bmi" },
     { name: 'Tip', href: '/calculators/tip-calculator' },
+    { name: 'Love', href: '/calculators/love-calculator' },
   ];
 
   return (

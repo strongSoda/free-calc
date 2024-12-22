@@ -12,6 +12,7 @@ const Footer = () => {
         { name: "Percentage to GPA", url: "/calculators/percentage-to-gpa" },
         { name: "Matrix RREF", url: "/" },
         { name: "Shape Volume", url: "/calculators/volume" },        
+        { name: "Standard Deviation", url: "/calculators/standard-deviation" },        
       ]
     },
     {
@@ -19,7 +20,8 @@ const Footer = () => {
       links: [
         { name: "Subnet ipv4/6", url: "/calculators/subnet" },
         { name: "BMI", url: "/calculators/bmi" },
-        { name: "Tip & Bill Split", url: "/calculators/tip-calculator" },        
+        { name: "Tip & Bill Split", url: "/calculators/tip-calculator" },  
+        { name: "Love Percentage", url: "/calculators/love-calculator" },        
       ]
     },
     // {

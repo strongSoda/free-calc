@@ -3,14 +3,17 @@ import Layout from "../../layouts/Layout.astro";
 import GpaLayout from "../../components/GpaLayout";
 import {
   ArrowLeftRightIcon,
+  BarChart,
   BarChart2,
   CalculatorIcon,
   Check,
   CoinsIcon,
   Cone,
   DollarSign,
+  Heart,
   Network,
   PersonStanding,
+  Table,
 } from "lucide-react";
 
 const calculators = [
@@ -56,8 +59,21 @@ const calculators = [
   {
     title: "Tip Calculator",
     description:
-      "Free tip calculator to instantly determine gratuity amounts and split bills between multiple people. Support for custom percentages and per-person calculations.",
+      "Free tip calculator to instantly determine gratuity amounts and split bills between multiple people.",
     url: "/calculators/tip-calculator",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
+  {
+    title: "Love Calculator",
+    description:
+      "Calculate love compatibility and see your love match percentage.",
+    url: "/calculators/love-calculator",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
+  {
+    title: "Standard Deviation Calculator",
+    description: "Calculate standard deviation, variance, mean, and z-scores.",
+    url: "/calculators/standard-deviation",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
 ];
@@ -124,6 +140,13 @@ const keywords =
                   client:load
                   className="w-8 h-8 text-accent-primary"
                 />
+              )}
+
+              {index === 7 && (
+                <Heart client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 8 && (
+                <Table client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2
