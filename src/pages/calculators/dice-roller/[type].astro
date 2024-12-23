@@ -1,0 +1,165 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import DiceRoller from "../../../components/DiceRoller";
+
+export function getStaticPaths() {
+  return [
+    {params: {type: 'single'}, props: {count: 1}},
+    {params: {type: 'two'}, props: {count: 2}},
+    {params: {type: 'three'}, props: {count: 3}},
+    {params: {type: 'four'}, props: {count: 4}},
+    {params: {type: 'five'}, props: {count: 5}},
+    {params: {type: 'six'}, props: {count: 6}}
+  ];
+}
+
+const { count } = Astro.props;
+const { type } = Astro.params;
+
+const numberWords = ['Single', 'Two', 'Three', 'Four', 'Five', 'Six'];
+const numberWord = numberWords[count - 1];
+
+const title = `${numberWord} Dice Roller Calculator`;
+const description = `Free online ${type} dice roller calculator. Roll ${count === 1 ? 'a single die' : count + ' dice'} virtually with our easy-to-use tool.`;
+const keywords = `${type} dice roller, ${count} dice calculator, online ${type} dice, virtual ${type} dice, random ${count} dice`;
+
+const relatedPages = [
+  {params: {type: 'single'}, count: 1},
+  {params: {type: 'two'}, count: 2},
+  {params: {type: 'three'}, count: 3},
+  {params: {type: 'four'}, count: 4},
+  {params: {type: 'five'}, count: 5},
+  {params: {type: 'six'}, count: 6}
+].filter(page => page.count !== count).slice(0, 3);
+
+const diceSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": title,
+  "applicationCategory": "CalculatorApplication",
+  "description": description,
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+};
+---
+
+<Layout 
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={diceSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden">
+        <div class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8">
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Roll {count === 1 ? 'a' : count} {count === 1 ? 'Die' : 'Dice'}
+          </h2>
+          <DiceRoller client:load numberOfDice={count} />
+        </div>
+      </div>
+
+      {/* Related Calculators */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Try Other Dice Rolls
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {relatedPages.map(page => (
+            <a
+              href={`/calculators/dice-roller/${page.params.type}`}
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/10 transition-colors"
+            >
+              <span class="font-display font-medium">
+                {numberWords[page.count - 1]} Dice Roller
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Information Section */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden">
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">About {numberWord} Dice Rolling</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {/* Probability Section */}
+          <div class="p-6">
+            <h3 class="text-xl font-display font-bold mb-3">Probability Info</h3>
+            <ul class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+              <li>• Possible outcomes: {Math.pow(6, count)}</li>
+              <li>• Minimum roll: {count}</li>
+              <li>• Maximum roll: {count * 6}</li>
+              {count === 2 && (
+                <li>• Most common sum: 7 (occurs 6 times)</li>
+              )}
+              {count === 3 && (
+                <li>• Most common sum: 10-11 (occurs 27 times)</li>
+              )}
+            </ul>
+          </div>
+
+          {/* Use Cases */}
+          <div class="p-6">
+            <h3 class="text-xl font-display font-bold mb-3">Common Uses</h3>
+            <ul class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+              {count === 1 && (
+                <>
+                  <li>• Basic board games</li>
+                  <li>• Simple decision making</li>
+                  <li>• Learning probability</li>
+                </>
+              )}
+              {count === 2 && (
+                <>
+                  <li>• Monopoly and similar games</li>
+                  <li>• Craps and gambling games</li>
+                  <li>• Statistical demonstrations</li>
+                </>
+              )}
+              {count > 2 && (
+                <>
+                  <li>• Role-playing games</li>
+                  <li>• Complex board games</li>
+                  <li>• Probability experiments</li>
+                </>
+              )}
+              <li>• Random number generation</li>
+              <li>• Educational activities</li>
+            </ul>
+          </div>
+
+          {/* Tips Section */}
+          <div class="p-6">
+            <h3 class="text-xl font-display font-bold mb-3">Tips</h3>
+            <ul class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+              <li>• Each die is truly random and independent</li>
+              <li>• Results are generated using secure random number generation</li>
+              <li>• Use the history feature to track your rolls</li>
+              <li>• Perfect for online gaming sessions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Back to Main Calculator */}
+      <div class="text-center">
+        <a
+          href="/calculators/dice-roller"
+          class="inline-block text-accent-primary hover:text-accent-secondary transition-colors"
+        >
+          ← Back to Main Dice Roller
+        </a>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

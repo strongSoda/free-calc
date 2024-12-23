@@ -10,6 +10,7 @@ import {
   Check,
   CoinsIcon,
   Cone,
+  Dice6,
   DollarSign,
   Heart,
   Network,
@@ -92,6 +93,13 @@ const calculators = [
     url: "/calculators/period",
     gradient: "from-rose-500/90 to-purple-500/90",
   },
+  {
+    title: "Dice Roller",
+    description:
+      "Free online dice roller with multiple dice options. Roll single die, two dice, or multiple dice with our easy-to-use calculator.",
+    url: "/calculators/period",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -168,7 +176,16 @@ const keywords =
                 <Baby client:load className="w-8 h-8 text-accent-primary" />
               )}
               {index === 10 && (
-                <VenetianMask client:load className="w-8 h-8 text-accent-primary" />
+                <VenetianMask
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
+              {index === 11 && (
+                <Dice6
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
               )}
             </div>
             <h2

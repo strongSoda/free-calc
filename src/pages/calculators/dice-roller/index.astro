@@ -1,0 +1,114 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import DiceRoller from "../../../components/DiceRoller";
+
+const title = "Online Dice Roller Calculator";
+const description =
+  "Free online dice roller with multiple dice options. Roll single die, two dice, or multiple dice with our easy-to-use calculator.";
+const keywords =
+  "dice roller, online dice, random dice, dice calculator, virtual dice, multiple dice roller";
+
+const commonRolls = [
+  { name: "Single Die", href: "/calculators/dice-roller/single" },
+  { name: "Two Dice", href: "/calculators/dice-roller/two" },
+  { name: "Three Dice", href: "/calculators/dice-roller/three" },
+  { name: "Four Dice", href: "/calculators/dice-roller/four" },
+  { name: "Five Dice", href: "/calculators/dice-roller/five" },
+  { name: "Six Dice", href: "/calculators/dice-roller/six" },
+];
+
+const diceSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Online Dice Roller",
+  applicationCategory: "CalculatorApplication",
+  description: description,
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={diceSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Roll the Dice
+          </h2>
+          <DiceRoller client:load numberOfDice={2} />
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Dice Rolls</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            commonRolls.map((roll) => (
+              <a
+                href={roll.href}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/10 transition-colors"
+              >
+                <span class="font-display font-medium">{roll.name}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Information Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">About Our Dice Roller</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          <div class="p-6">
+            <h3 class="text-xl font-display font-bold mb-3">Features</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>• Roll up to 6 dice simultaneously</li>
+              <li>• View roll history</li>
+              <li>• Automatic sum calculation</li>
+              <li>• Visual dice representation</li>
+              <li>• Mobile-friendly interface</li>
+            </ul>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-display font-bold mb-3">Common Uses</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>• Board games and tabletop gaming</li>
+              <li>• Educational activities</li>
+              <li>• Random number generation</li>
+              <li>• Decision making</li>
+              <li>• Probability demonstrations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

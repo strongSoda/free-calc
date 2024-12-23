@@ -24,6 +24,7 @@ const Footer = () => {
         { name: "Love Percentage", url: "/calculators/love-calculator" }, 
         { name: "Pregnancy Due Date", url: "/calculators/pregnancy" },        
         { name: "Period", url: "/calculators/period" },        
+        { name: "Dice Roller", url: "/calculators/dice-roller" },        
       ]
     },
     // {
