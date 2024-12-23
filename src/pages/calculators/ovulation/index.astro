@@ -1,0 +1,239 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import PeriodCalculator from "../../../components/PeriodCalculator";
+
+const title = "Ovulation Calculator | Find Your Most Fertile Days";
+const description =
+  "Track your ovulation and fertile window with our free ovulation calculator. Perfect for family planning and understanding your cycle.";
+const keywords =
+  "ovulation calculator, fertile days calculator, fertility window calculator, ovulation tracker, when am I ovulating";
+
+// Common conception-related information
+const fertilityInfo = [
+  {
+    title: "Peak Fertility",
+    description:
+      "The day of ovulation and the day before have the highest chances of conception.",
+    days: "Days 13-14 of a 28-day cycle",
+  },
+  {
+    title: "Fertile Window",
+    description:
+      "The period when pregnancy is possible, including 5 days before ovulation.",
+    days: "Days 10-15 of a 28-day cycle",
+  },
+  {
+    title: "Egg Viability",
+    description: "Once released, an egg remains viable for about 24 hours.",
+    days: "~24 hours after ovulation",
+  },
+  {
+    title: "Sperm Survival",
+    description:
+      "Sperm can survive in fertile cervical mucus for up to 5 days.",
+    days: "3-5 days in optimal conditions",
+  },
+];
+
+const ovulationSigns = {
+  physical: [
+    "Change in cervical mucus",
+    "Slight increase in basal body temperature",
+    "Mild pelvic or abdominal pain",
+    "Light spotting",
+    "Breast tenderness",
+  ],
+  hormonal: [
+    "Increased sex drive",
+    "Heightened sense of smell",
+    "Changes in mood",
+    "Increased energy levels",
+    "Water retention",
+  ],
+  other: [
+    "Changes in cervical position",
+    "Positive ovulation test",
+    "Increased appetite",
+    "Acne breakouts",
+    "Changes in sleep patterns",
+  ],
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-6 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Find Your Most Fertile Days
+          </h2>
+          <PeriodCalculator client:load />
+        </div>
+      </div>
+
+      {/* Fertility Information Grid */}
+      <div class="grid md:grid-cols-2 gap-6">
+        {
+          fertilityInfo.map((info) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+              <h3 class="text-xl font-display font-bold mb-2">{info.title}</h3>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                {info.description}
+              </p>
+              <div class="p-3 bg-accent-primary/10 rounded-lg text-accent-primary font-medium">
+                {info.days}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Ovulation Signs and Symptoms */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Signs of Ovulation</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="space-y-2">
+            <h3 class="font-semibold">Physical Signs</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              {
+                ovulationSigns.physical.map((sign) => (
+                  <li class="flex items-center gap-2">
+                    <div class="w-1.5 h-1.5 rounded-full bg-accent-primary" />
+                    {sign}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-semibold">Hormonal Changes</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              {
+                ovulationSigns.hormonal.map((sign) => (
+                  <li class="flex items-center gap-2">
+                    <div class="w-1.5 h-1.5 rounded-full bg-accent-secondary" />
+                    {sign}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-semibold">Other Indicators</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              {
+                ovulationSigns.other.map((sign) => (
+                  <li class="flex items-center gap-2">
+                    <div class="w-1.5 h-1.5 rounded-full bg-accent-success" />
+                    {sign}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Tracking Methods */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Ways to Track Ovulation
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Calendar Method</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Track your menstrual cycle to predict ovulation based on typical
+              cycle patterns.
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">BBT Charting</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Monitor your basal body temperature for the slight increase that
+              occurs after ovulation.
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Ovulation Tests</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Use home test kits to detect the surge in luteinizing hormone that
+              triggers ovulation.
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Cervical Mucus</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Observe changes in cervical mucus consistency throughout your
+              cycle.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Tools */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Related Tools</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <a
+            href="/calculators/period"
+            class="text-accent-primary hover:underline"
+          >
+            Period Calculator
+          </a>
+          <a
+            href="/calculators/pregnancy"
+            class="text-accent-primary hover:underline"
+          >
+            Pregnancy Calculator
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

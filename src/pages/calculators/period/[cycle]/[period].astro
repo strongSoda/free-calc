@@ -1,0 +1,144 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PeriodCalculator from "../../../../components/PeriodCalculator";
+
+export async function getStaticPaths() {
+  const cycles = [28, 29, 30, 31, 32];
+  const periods = [3, 4, 5, 6, 7];
+
+  const paths = [];
+
+  cycles.forEach((cycle) => {
+    periods.forEach((period) => {
+      paths.push({
+        params: {
+          cycle: cycle.toString(),
+          period: period.toString(),
+        },
+        props: {
+          cycleLength: cycle,
+          periodLength: period,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { cycleLength, periodLength } = Astro.props;
+
+const title = `Period Calculator (${cycleLength}-Day Cycle, ${periodLength}-Day Period)`;
+const description = `Calculate your next period and ovulation dates with a ${cycleLength}-day cycle length and ${periodLength}-day period duration. Free online menstrual cycle calculator.`;
+const keywords = `period calculator, ${cycleLength} day cycle calculator, ${periodLength} day period, menstrual cycle calculator, ovulation calculator`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "WebApplication",
+    name: "Period Calculator",
+    applicationCategory: "HealthApplication",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <div class="space-y-8">
+      <PeriodCalculator
+        client:load
+        defaultCycleLength={cycleLength}
+        defaultPeriodLength={periodLength}
+      />
+
+      {/* SEO Content */}
+      <div class="mt-12 space-y-6">
+        <h2 class="text-2xl font-display font-bold">
+          Understanding Your {cycleLength}-Day Cycle
+        </h2>
+        <p>
+          A {cycleLength}-day menstrual cycle with a {periodLength}-day period
+          duration is {
+            cycleLength === 28
+              ? "considered average"
+              : cycleLength < 28
+                ? "shorter than average"
+                : "longer than average"
+          }. Understanding your cycle can help with family planning and tracking
+          your reproductive health.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark rounded-lg p-6"
+          >
+            <h3 class="text-lg font-semibold mb-3">Cycle Phases</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Menstrual Phase: {periodLength} days</li>
+              <li>Follicular Phase: ~13 days</li>
+              <li>Ovulation Phase: ~24-36 hours</li>
+              <li>Luteal Phase: ~14 days</li>
+            </ul>
+          </div>
+
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark rounded-lg p-6"
+          >
+            <h3 class="text-lg font-semibold mb-3">Key Days in Your Cycle</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Period Start: Day 1</li>
+              <li>
+                Fertile Window: Days {cycleLength - 18}-{cycleLength - 13}
+              </li>
+              <li>Ovulation: Day {cycleLength - 14}</li>
+              <li>Next Period: Day {cycleLength}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Internal Links */}
+      <div class="mt-8">
+        <h3 class="text-xl font-display font-bold mb-4">Related Calculators</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <a
+            href="/calculators/ovulation"
+            class="text-accent-primary hover:underline"
+          >
+            Ovulation Calculator
+          </a>
+          <a
+            href="/calculators/pregnancy"
+            class="text-accent-primary hover:underline"
+          >
+            Pregnancy Calculator
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

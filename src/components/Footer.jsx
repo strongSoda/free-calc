@@ -23,6 +23,7 @@ const Footer = () => {
         { name: "Tip & Bill Split", url: "/calculators/tip-calculator" },  
         { name: "Love Percentage", url: "/calculators/love-calculator" }, 
         { name: "Pregnancy Due Date", url: "/calculators/pregnancy" },        
+        { name: "Period", url: "/calculators/period" },        
       ]
     },
     // {

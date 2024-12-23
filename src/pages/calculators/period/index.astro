@@ -1,0 +1,255 @@
+---
+import GpaLayout from "../../../components/GpaLayout";
+import PeriodCalculator from "../../../components/PeriodCalculator";
+import Layout from "../../../layouts/Layout.astro";
+
+const commonCycles = [
+  {
+    days: 28,
+    description: "Most common cycle length",
+    variations: [
+      { period: 3, url: "/calculators/period/28/3" },
+      { period: 5, url: "/calculators/period/28/5" },
+      { period: 7, url: "/calculators/period/28/7" },
+    ],
+  },
+  {
+    days: 30,
+    description: "Longer regular cycle",
+    variations: [
+      { period: 3, url: "/calculators/period/30/3" },
+      { period: 5, url: "/calculators/period/30/5" },
+      { period: 7, url: "/calculators/period/30/7" },
+    ],
+  },
+  {
+    days: 32,
+    description: "Extended cycle length",
+    variations: [
+      { period: 3, url: "/calculators/period/32/3" },
+      { period: 5, url: "/calculators/period/32/5" },
+      { period: 7, url: "/calculators/period/32/7" },
+    ],
+  },
+];
+
+const title = "Period Calculator | Track Menstrual Cycle and Ovulation";
+const description =
+  "Calculate your next period, ovulation dates, and fertile windows with our free period calculator. Plan ahead with accurate cycle predictions.";
+const keywords =
+  "period calculator, menstrual cycle calculator, ovulation calculator, period tracker, menstrual tracking, fertility calculator";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-6 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Calculate Your Next Period & Ovulation Days
+          </h2>
+          <PeriodCalculator client:load />
+        </div>
+      </div>
+
+      {/* Common Cycle Variations */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Cycle Calculations
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            commonCycles.map((cycle) => (
+              <div class="space-y-4">
+                <h3 class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
+                  {cycle.days}-Day Cycle
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">
+                  {cycle.description}
+                </p>
+                <div class="grid gap-2">
+                  {cycle.variations.map((cvar) => (
+                    <a
+                      href={cvar.url}
+                      class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                    >
+                      {cycle.days}-day cycle with {cvar.period}-day period
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Information Sections */}
+      <div class="grid md:grid-cols-2 gap-6">
+        <div
+          class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h2 class="text-xl font-display font-bold mb-4">
+            Understanding Your Cycle
+          </h2>
+          <div
+            class="space-y-4 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-accent-primary/10 flex items-center justify-center flex-shrink-0"
+              >
+                <span class="text-accent-primary font-bold">1</span>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-1">Menstrual Phase</h3>
+                <p class="text-sm">
+                  The first phase of your cycle when bleeding occurs, typically
+                  lasting 3-7 days.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-accent-primary/10 flex items-center justify-center flex-shrink-0"
+              >
+                <span class="text-accent-primary font-bold">2</span>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-1">Follicular Phase</h3>
+                <p class="text-sm">
+                  Starts on day 1 of menstruation and continues until ovulation.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-accent-primary/10 flex items-center justify-center flex-shrink-0"
+              >
+                <span class="text-accent-primary font-bold">3</span>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-1">Ovulation Phase</h3>
+                <p class="text-sm">
+                  Usually occurs around day 14 in a 28-day cycle, lasting 24-36
+                  hours.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-accent-primary/10 flex items-center justify-center flex-shrink-0"
+              >
+                <span class="text-accent-primary font-bold">4</span>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-1">Luteal Phase</h3>
+                <p class="text-sm">
+                  The final phase after ovulation until your next period,
+                  typically 14 days.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h2 class="text-xl font-display font-bold mb-4">Tracking Benefits</h2>
+          <div class="space-y-4">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-semibold mb-2">Family Planning</h3>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Track your fertile window for pregnancy planning or prevention.
+              </p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-semibold mb-2">Health Monitoring</h3>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Identify irregular cycles that might indicate health issues.
+              </p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-semibold mb-2">Lifestyle Planning</h3>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Plan activities and events around your cycle phases.
+              </p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-semibold mb-2">Symptom Management</h3>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Prepare for and manage cycle-related symptoms effectively.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Calculators */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Calculators
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <a
+            href="/calculators/ovulation"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:ring-2 hover:ring-accent-primary/50 transition-all"
+          >
+            <h3 class="font-semibold mb-2">Ovulation Calculator</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Track your most fertile days
+            </p>
+          </a>
+          <a
+            href="/calculators/pregnancy"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:ring-2 hover:ring-accent-primary/50 transition-all"
+          >
+            <h3 class="font-semibold mb-2">Pregnancy Calculator</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Track pregnancy progress
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
