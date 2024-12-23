@@ -1,0 +1,101 @@
+---
+import GpaLayout from "../../../../components/GpaLayout";
+import RomanCalculator from "../../../../components/RomanCalculator";
+import RomanHelper from "../../../../components/RomanHelper";
+import Layout from "../../../../layouts/Layout.astro";
+
+
+const title = "Number to Roman Numeral Converter";
+const description =
+  "Convert numbers to Roman numerals with this free online calculator. Instantly convert any number between 1 and 3999 to Roman numerals with step-by-step explanation.";
+const keywords =
+  "number to roman numerals, convert numbers to roman numerals, arabic to roman numerals, roman numeral converter";
+
+const commonNumbers = [
+  { number: 1, description: "Basic unit" },
+  { number: 5, description: "First milestone" },
+  { number: 10, description: "Base decimal" },
+  { number: 50, description: "Half century" },
+  { number: 100, description: "Century" },
+  { number: 500, description: "Half millennium" },
+  { number: 1000, description: "Millennium" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert Numbers to Roman Numerals
+          </h2>
+          <RomanCalculator client:load mode="toRoman" />
+        </div>
+      </div>
+
+      {/* Common Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Number Conversions
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            commonNumbers.map(({ number, description }) => (
+              <a
+                href={`/calculators/roman-numerals/number-to-roman/${number}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div class="text-2xl font-mono font-bold mb-1">{number}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {description}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Help Section */}
+      <RomanHelper client:load />
+
+      {/* Additional Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          About Number to Roman Numeral Conversion
+        </h2>
+        <div class="prose dark:prose-invert max-w-none">
+          <p>
+            Converting numbers to Roman numerals involves breaking down the
+            number into its place values and using the appropriate Roman numeral
+            symbols. The system uses seven basic symbols: I (1), V (5), X (10),
+            L (50), C (100), D (500), and M (1000).
+          </p>
+          <h3>Key Points to Remember:</h3>
+          <ul>
+            <li>Roman numerals can represent numbers from 1 to 3999</li>
+            <li>
+              Larger numbers required special notation not commonly used today
+            </li>
+            <li>The system doesn't have a zero</li>
+            <li>Numbers are written from left to right, largest to smallest</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

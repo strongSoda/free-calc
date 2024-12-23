@@ -1,0 +1,227 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import RomanCalculator from "../../../../components/RomanCalculator";
+
+export async function getStaticPaths() {
+  // Common Roman numerals to generate pages for
+  const commonRomans = [
+    "I",
+    "II",
+    "III",
+    "IV",
+    "V",
+    "VI",
+    "VII",
+    "VIII",
+    "IX",
+    "X",
+    "XI",
+    "XV",
+    "XX",
+    "XL",
+    "L",
+    "XC",
+    "C",
+    "CD",
+    "D",
+    "CM",
+    "M",
+    "MCMXCIX",
+    "MM",
+    "MMM",
+  ];
+
+  return commonRomans.map((roman) => ({
+    params: { value: roman },
+    props: { roman },
+  }));
+}
+
+const { roman } = Astro.props;
+
+const romanNumeralMap = [
+  { value: 1000, numeral: "M" },
+  { value: 900, numeral: "CM" },
+  { value: 500, numeral: "D" },
+  { value: 400, numeral: "CD" },
+  { value: 100, numeral: "C" },
+  { value: 90, numeral: "XC" },
+  { value: 50, numeral: "L" },
+  { value: 40, numeral: "XL" },
+  { value: 10, numeral: "X" },
+  { value: 9, numeral: "IX" },
+  { value: 5, numeral: "V" },
+  { value: 4, numeral: "IV" },
+  { value: 1, numeral: "I" },
+];
+
+function fromRoman(str) {
+  let result = 0;
+  let i = 0;
+
+  while (i < str.length) {
+    const current = romanNumeralMap.find((r) => str.startsWith(r.numeral, i));
+    if (!current) return 0;
+    result += current.value;
+    i += current.numeral.length;
+  }
+
+  return result;
+}
+
+const number = fromRoman(roman);
+const title = `Convert Roman Numeral ${roman} to Number | Roman Numerals Calculator`;
+const description = `Convert Roman numeral ${roman} to number. ${roman} = ${number} in decimal numbers. Free online Roman numeral converter with explanation.`;
+const keywords = `${roman} in numbers, convert ${roman} to number, ${roman} roman numeral value, what is ${roman} in numbers`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Quick Result Section */}
+      <div
+        class="text-center p-8 bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 rounded-xl"
+      >
+        <h2 class="text-4xl font-display font-bold mb-4">
+          {roman} = {number}
+        </h2>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          in decimal numbers
+        </p>
+      </div>
+
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Try Other Conversions
+        </h2>
+        <RomanCalculator client:load mode="fromRoman" defaultValue={roman} />
+      </div>
+
+      {/* Step by Step Explanation */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How to Convert {roman} to Number
+        </h2>
+        <div class="space-y-4">
+          {
+            (() => {
+              let steps = [];
+              let remaining = roman;
+              let value = 0;
+              let i = 0;
+
+              while (i < roman.length) {
+                const current = romanNumeralMap.find((r) =>
+                  remaining.startsWith(r.numeral, i)
+                );
+                if (current) {
+                  value += current.value;
+                  steps.push({
+                    numeral: current.numeral,
+                    value: current.value,
+                    runningTotal: value,
+                    remaining: remaining.slice(i + current.numeral.length),
+                  });
+                  i += current.numeral.length;
+                } else {
+                  i++;
+                }
+              }
+
+              return steps.map((step, index) => (
+                <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                  <p class="mb-2">
+                    Step {index + 1}: {step.numeral} = {step.value}
+                  </p>
+                  <p class="font-mono">Running total: {step.runningTotal}</p>
+                  {step.remaining && (
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      Remaining: {step.remaining}
+                    </p>
+                  )}
+                </div>
+              ));
+            })()
+          }
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Roman Numerals
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            ["I", "V", "X", "L", "C", "D", "M"].map(
+              (r) =>
+                r !== roman && (
+                  <a
+                    href={`/calculators/roman-numerals/roman-to-number/${r}`}
+                    class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center hover:shadow-md transition-shadow"
+                  >
+                    <div class="font-mono font-medium">{r}</div>
+                    <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {fromRoman(r)}
+                    </div>
+                  </a>
+                )
+            )
+          }
+        </div>
+      </div>
+
+      {/* Rules Reference */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Roman Numeral Rules
+        </h2>
+        <div class="grid gap-4">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Basic Symbols</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              I (1), V (5), X (10), L (50), C (100), D (500), M (1000)
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Subtractive Notation</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              When a smaller numeral appears before a larger one, subtract the
+              smaller value (e.g., IV = 4, IX = 9, XL = 40)
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-semibold mb-2">Repetition Rules</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Symbols I, X, C, and M can be repeated up to three times. V, L,
+              and D cannot be repeated.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

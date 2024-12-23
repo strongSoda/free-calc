@@ -1,0 +1,212 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import RomanCalculator from "../../../../components/RomanCalculator";
+
+export async function getStaticPaths() {
+  // Generate paths for common numbers and important values
+  const numbers = [];
+
+  // Generate 1-100
+  for (let i = 1; i <= 100; i++) {
+    numbers.push(i);
+  }
+
+  // Add some larger common numbers
+  const largerNumbers = [500, 1000, 1500, 2000, 2500, 3000, 3500, 3999];
+  numbers.push(...largerNumbers);
+
+  return numbers.map((number) => ({
+    params: { value: number.toString() },
+    props: { number, numbers: largerNumbers },
+  }));
+}
+
+const { number, numbers } = Astro.props;
+
+const romanNumerals = [
+  { value: 1000, numeral: "M" },
+  { value: 900, numeral: "CM" },
+  { value: 500, numeral: "D" },
+  { value: 400, numeral: "CD" },
+  { value: 100, numeral: "C" },
+  { value: 90, numeral: "XC" },
+  { value: 50, numeral: "L" },
+  { value: 40, numeral: "XL" },
+  { value: 10, numeral: "X" },
+  { value: 9, numeral: "IX" },
+  { value: 5, numeral: "V" },
+  { value: 4, numeral: "IV" },
+  { value: 1, numeral: "I" },
+];
+
+function toRoman(num) {
+  let result = "";
+  let remaining = num;
+
+  for (const { value, numeral } of romanNumerals) {
+    while (remaining >= value) {
+      result += numeral;
+      remaining -= value;
+    }
+  }
+
+  return result;
+}
+
+const roman = toRoman(number);
+const title = `${number} in Roman Numerals | Convert ${number} to Roman Number`;
+const description = `Convert ${number} to Roman numerals. ${number} = ${roman} in Roman numerals. Free online converter with step-by-step explanation.`;
+const keywords = `${number} in roman numerals, convert ${number} to roman numerals, ${number} roman numeral conversion, what is ${number} in roman numerals`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Quick Result Section */}
+      <div
+        class="text-center p-8 bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 rounded-xl"
+      >
+        <h2 class="text-4xl font-display font-bold mb-4">
+          {number} = {roman}
+        </h2>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          in Roman numerals
+        </p>
+      </div>
+
+      {/* Step by Step Explanation */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How to Write {number} in Roman Numerals
+        </h2>
+        <div class="space-y-4">
+          {
+            () => {
+              let steps = [];
+              let remaining = number;
+              let result = "";
+
+              for (const { value, numeral } of romanNumerals) {
+                while (remaining >= value) {
+                  result += numeral;
+                  steps.push({
+                    remaining: remaining,
+                    value: value,
+                    numeral: numeral,
+                    result: result,
+                  });
+                  remaining -= value;
+                }
+              }
+
+              return steps.map((step, index) => (
+                <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                  <p class="mb-2">
+                    Step {index + 1}: Take {step.remaining} and subtract{" "}
+                    {step.value} ({step.numeral})
+                  </p>
+                  <p class="font-mono">Current result: {step.result}</p>
+                </div>
+              ));
+            }
+          }
+        </div>
+      </div>
+
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Try Other Conversions
+        </h2>
+        <RomanCalculator
+          client:load
+          mode="toRoman"
+          defaultValue={number.toString()}
+        />
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            numbers.map((n) => (
+              <a
+                href={`/calculators/roman-numerals/number-to-roman/${n}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center hover:shadow-md transition-shadow"
+              >
+                <div class="font-mono font-medium">{n}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {toRoman(n)}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Common Combinations Table */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Roman Numeral Reference
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <th class="text-left py-2">Number</th>
+                <th class="text-left py-2">Roman Numeral</th>
+                <th class="text-left py-2">Composition</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+              {
+                [
+                  { num: "1", roman: "I", composition: "Single I" },
+                  { num: "4", roman: "IV", composition: "I before V" },
+                  { num: "5", roman: "V", composition: "Single V" },
+                  { num: "9", roman: "IX", composition: "I before X" },
+                  { num: "10", roman: "X", composition: "Single X" },
+                  { num: "40", roman: "XL", composition: "X before L" },
+                  { num: "50", roman: "L", composition: "Single L" },
+                  { num: "90", roman: "XC", composition: "X before C" },
+                  { num: "100", roman: "C", composition: "Single C" },
+                  { num: "400", roman: "CD", composition: "C before D" },
+                  { num: "500", roman: "D", composition: "Single D" },
+                  { num: "900", roman: "CM", composition: "C before M" },
+                  { num: "1000", roman: "M", composition: "Single M" },
+                ].map((row) => (
+                  <tr>
+                    <td class="py-2">{row.num}</td>
+                    <td class="py-2 font-mono">{row.roman}</td>
+                    <td class="py-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {row.composition}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

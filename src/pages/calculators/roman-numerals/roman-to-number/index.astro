@@ -1,0 +1,149 @@
+---
+import GpaLayout from "../../../../components/GpaLayout";
+import RomanCalculator from "../../../../components/RomanCalculator";
+import RomanHelper from "../../../../components/RomanHelper";
+import Layout from "../../../../layouts/Layout.astro";
+
+const title = "Roman Numeral to Number Converter";
+const description =
+  "Convert Roman numerals to numbers with this free online calculator. Instantly convert any Roman numeral to its decimal value with step-by-step explanation.";
+const keywords =
+  "roman numerals to numbers, convert roman numerals to numbers, roman numeral converter, roman numeral calculator";
+
+const commonNumerals = [
+  { numeral: "I", description: "Basic unit" },
+  { numeral: "V", description: "Five" },
+  { numeral: "X", description: "Ten" },
+  { numeral: "L", description: "Fifty" },
+  { numeral: "C", description: "Hundred" },
+  { numeral: "D", description: "Five hundred" },
+  { numeral: "M", description: "Thousand" },
+];
+
+const specialCombinations = [
+  { numeral: "IV", value: 4, description: "Four" },
+  { numeral: "IX", value: 9, description: "Nine" },
+  { numeral: "XL", value: 40, description: "Forty" },
+  { numeral: "XC", value: 90, description: "Ninety" },
+  { numeral: "CD", value: 400, description: "Four hundred" },
+  { numeral: "CM", value: 900, description: "Nine hundred" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert Roman Numerals to Numbers
+          </h2>
+          <RomanCalculator client:load mode="fromRoman" />
+        </div>
+      </div>
+
+      {/* Common Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Basic Roman Numerals
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            commonNumerals.map(({ numeral, description }) => (
+              <a
+                href={`/calculators/roman-numerals/roman-to-number/${numeral}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div class="text-2xl font-mono font-bold mb-1">{numeral}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {description}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Special Combinations */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Special Combinations
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            specialCombinations.map(({ numeral, value, description }) => (
+              <a
+                href={`/calculators/roman-numerals/roman-to-number/${numeral}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div class="flex justify-between items-baseline mb-1">
+                  <span class="text-2xl font-mono font-bold">{numeral}</span>
+                  <span class="text-lg text-content-light-dimmed dark:text-content-dark-dimmed">
+                    = {value}
+                  </span>
+                </div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {description}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Help Section */}
+      <RomanHelper client:load />
+
+      {/* Reading Guide */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How to Read Roman Numerals
+        </h2>
+        <div class="prose dark:prose-invert max-w-none">
+          <p>
+            Reading Roman numerals follows a simple set of rules. Generally, you
+            read from left to right, adding the values unless a smaller numeral
+            comes before a larger one.
+          </p>
+          <h3>Basic Rules:</h3>
+          <ol>
+            <li>
+              When a smaller numeral appears before a larger one, subtract the
+              smaller value
+            </li>
+            <li>
+              When a smaller numeral appears after a larger one, add the values
+            </li>
+            <li>
+              The same symbol cannot be repeated more than three times in a row
+            </li>
+            <li>Only I, X, and C can be used as subtractive numerals</li>
+          </ol>
+          <p>For example, in "XIV" (14):</p>
+          <ul>
+            <li>X = 10</li>
+            <li>I before V means subtract 1</li>
+            <li>V = 5</li>
+            <li>Therefore: X + (V - I) = 10 + (5 - 1) = 14</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

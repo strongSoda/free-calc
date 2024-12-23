@@ -1,0 +1,187 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import RomanCalculator from "../../../components/RomanCalculator";
+
+const title = "Roman Numeral Calculator | Number to Roman Numeral Converter";
+const description =
+  "Free online Roman numeral calculator. Convert numbers to Roman numerals and Roman numerals to numbers. Easy to use converter with instant results.";
+const keywords =
+  "roman numeral calculator, number to roman numerals, roman numeral converter, roman to number converter, roman numerals converter";
+
+const commonConversions = {
+  numbers: [
+    { number: "90", roman: "XC" },
+    { number: "100", roman: "C" },
+    { number: "500", roman: "D" },
+    { number: "1000", roman: "M" },
+    { number: "50", roman: "L" },
+    { number: "10", roman: "X" },
+    { number: "5", roman: "V" },
+    { number: "1", roman: "I" },
+  ],
+  numerals: [
+    { roman: "XX", number: "20" },
+    { roman: "XL", number: "40" },
+    { roman: "IV", number: "4" },
+    { roman: "IX", number: "9" },
+    { roman: "XC", number: "90" },
+    { roman: "CD", number: "400" },
+    { roman: "CM", number: "900" },
+  ],
+};
+
+const romanRules = [
+  {
+    rule: "Repetition",
+    description:
+      "A numeral cannot be repeated more than three times consecutively",
+    example: "III is valid, IIII is not",
+  },
+  {
+    rule: "Subtraction",
+    description: "Only I, X, and C can be used as subtractive numerals",
+    example: "IV (4), IX (9), XL (40), XC (90), CD (400), CM (900)",
+  },
+  {
+    rule: "Value Order",
+    description:
+      "Numerals must be arranged in descending order, except for subtractive pairs",
+    example: "XVII (17) is valid, IXX is not",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert Numbers to Roman Numerals
+          </h2>
+          <RomanCalculator client:load mode="both" />
+        </div>
+      </div>
+
+      {/* Quick Conversion Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Roman Numeral Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <h3
+              class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+            >
+              Numbers to Roman Numerals
+            </h3>
+            <div class="grid gap-2">
+              {
+                commonConversions.numbers.map(({ number, roman }) => (
+                  <a
+                    href={`/calculators/roman-numerals/number-to-roman/${number}`}
+                    class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                  >
+                    {number} = {roman}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+          <div class="space-y-4">
+            <h3
+              class="font-display font-semibold text-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+            >
+              Roman Numerals to Numbers
+            </h3>
+            <div class="grid gap-2">
+              {
+                commonConversions.numerals.map(({ roman, number }) => (
+                  <a
+                    href={`/calculators/roman-numerals/roman-to-number/${roman}`}
+                    class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary dark:hover:text-accent-primary transition-colors"
+                  >
+                    {roman} = {number}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Roman Numeral Rules */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Roman Numeral Rules</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            romanRules.map((rule) => (
+              <div class="p-6">
+                <h3 class="text-xl font-display font-bold mb-2">{rule.rule}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+                  {rule.description}
+                </p>
+                <div class="bg-surface-light-hover dark:bg-surface-dark p-3 rounded-lg text-sm">
+                  Example: {rule.example}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "What is the largest number that can be written in Roman numerals?",
+                a: "Traditional Roman numerals can represent numbers up to 3,999 (MMMCMXCIX). Numbers larger than this require special notation.",
+              },
+              {
+                q: "Why can't some numbers be written in Roman numerals?",
+                a: "Roman numerals follow specific rules about character repetition and order. Some numbers require notation that would break these rules.",
+              },
+              {
+                q: "Are Roman numerals still used today?",
+                a: "Yes, Roman numerals are still used in various contexts including book chapters, clock faces, movie sequel titles, and formal documents.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

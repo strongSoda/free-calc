@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import GpaLayout from "../../components/GpaLayout";
 import {
+  ArrowDown01,
   ArrowLeftRightIcon,
   Baby,
   BarChart,
@@ -100,6 +101,13 @@ const calculators = [
     url: "/calculators/period",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Number to Roman",
+    description:
+      "Convert numbers to Roman numerals and Roman numerals to numbers.",
+    url: "/calculators/roman-numerals",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -182,8 +190,10 @@ const keywords =
                 />
               )}
               {index === 11 && (
-                <Dice6
-                  client:load
+                <Dice6 client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 12 && (
+                <ArrowDown01 client:load
                   className="w-8 h-8 text-accent-primary"
                 />
               )}

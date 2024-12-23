@@ -13,6 +13,7 @@ const Footer = () => {
         { name: "Matrix RREF", url: "/" },
         { name: "Shape Volume", url: "/calculators/volume" },        
         { name: "Standard Deviation", url: "/calculators/standard-deviation" },        
+        { name: "Number to Roman", url: "/calculators/roman-numerals" },        
       ]
     },
     {
