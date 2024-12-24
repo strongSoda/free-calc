@@ -14,6 +14,7 @@ const Footer = () => {
         { name: "Shape Volume", url: "/calculators/volume" },        
         { name: "Standard Deviation", url: "/calculators/standard-deviation" },        
         { name: "Number to Roman", url: "/calculators/roman-numerals" },        
+        { name: "Fraction to Decimal", url: "/calculators/fractions" },        
       ]
     },
     {

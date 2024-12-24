@@ -1,0 +1,354 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import FractionCalculator from "../../../../components/FractionCalculator";
+
+export async function getStaticPaths() {
+  // Common decimal values for SEO optimization
+  const commonDecimals = [
+    "0.1",
+    "0.2",
+    "0.25",
+    "0.3",
+    "0.333",
+    "0.4",
+    "0.5",
+    "0.6",
+    "0.667",
+    "0.7",
+    "0.75",
+    "0.8",
+    "0.9",
+    "1.1",
+    "1.2",
+    "1.25",
+    "1.3",
+    "1.333",
+    "1.4",
+    "1.5",
+    "1.6",
+    "1.667",
+    "1.7",
+    "1.75",
+    "1.8",
+    "1.9",
+    "2.1",
+    "2.2",
+    "2.25",
+    "2.3",
+    "2.333",
+    "2.4",
+    "2.5",
+    "2.6",
+    "2.667",
+    "2.7",
+    "2.75",
+    "2.8",
+    "2.9",
+    "3.1",
+    "3.2",
+    "3.25",
+    "3.3",
+    "3.333",
+    "3.4",
+    "3.5",
+    "3.6",
+    "3.667",
+    "3.7",
+    "3.75",
+    "3.8",
+    "3.9",
+    "4.1",
+    "4.2",
+    "4.25",
+    "4.3",
+    "4.333",
+    "4.4",
+    "4.5",
+    "4.6",
+    "4.667",
+    "4.7",
+    "4.75",
+    "4.8",
+    "4.9",
+    "5.1",
+    "5.2",
+    "5.25",
+    "5.3",
+    "5.333",
+    "5.4",
+    "5.5",
+    "5.6",
+    "5.667",
+    "5.7",
+    "5.75",
+    "5.8",
+    "5.9",
+    "6.1",
+    "6.2",
+    "6.25",
+    "6.3",
+    "6.333",
+    "6.4",
+    "6.5",
+    "6.6",
+    "6.667",
+    "6.7",
+    "6.75",
+    "6.8",
+    "6.9",
+    "7.1",
+    "7.2",
+    "7.25",
+    "7.3",
+    "7.333",
+    "7.4",
+    "7.5",
+    "7.6",
+    "7.667",
+    "7.7",
+    "7.75",
+    "7.8",
+    "7.9",
+  ];
+
+  return commonDecimals.map((decimal) => ({
+    params: { decimal },
+    props: { decimalValue: decimal, commonDecimals },
+  }));
+}
+
+const { decimalValue, commonDecimals } = Astro.props;
+
+// Helper function to convert decimal to fraction
+function getSimplifiedFraction(decimal) {
+  const precision = 1000000;
+  let numerator = Math.round(parseFloat(decimal) * precision);
+  let denominator = precision;
+
+  // Find GCD
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  const divisor = gcd(numerator, denominator);
+
+  numerator = numerator / divisor;
+  denominator = denominator / divisor;
+
+  return `${numerator}/${denominator}`;
+}
+
+const fraction = getSimplifiedFraction(decimalValue);
+const title = `${decimalValue} as a Fraction | Convert ${decimalValue} to Fraction`;
+const description = `Convert ${decimalValue} to a fraction. ${decimalValue} equals ${fraction} in simplified fraction form. Free online decimal to fraction converter with step-by-step explanation.`;
+const keywords = `${decimalValue} as a fraction, ${decimalValue} to fraction, convert ${decimalValue} to fraction, decimal ${decimalValue} to fraction, what is ${decimalValue} as a fraction`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `What is ${decimalValue} as a fraction?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `${decimalValue} equals ${fraction} when converted to a simplified fraction.`,
+    },
+  },
+};
+
+// Generate related conversions
+const generateRelatedDecimals = (decimal) => {
+  const value = parseFloat(decimal);
+  const related = new Set();
+
+  // Add common fractions near the decimal value
+  for (let i = -2; i <= 2; i++) {
+    const newValue = value + 0.25 * i;
+    if (newValue > 0 && newValue < 10) {
+      related.add(newValue.toFixed(2));
+    }
+  }
+
+  return Array.from(related).slice(0, 4);
+};
+
+const relatedDecimals = commonDecimals.slice(0, 4);
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Quick Result Section */}
+      <div
+        class="text-center p-8 bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 rounded-xl"
+      >
+        <h2
+          class="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+        >
+          {decimalValue} = {fraction}
+        </h2>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          in simplified fraction form
+        </p>
+      </div>
+
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Try Other Conversions:
+        </h2>
+        <FractionCalculator
+          client:load
+          mode="decimal-to-fraction"
+          defaultDecimal={decimalValue}
+        />
+      </div>
+
+      {/* Step by Step Explanation */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            How to Convert {decimalValue} to a Fraction
+          </h2>
+        </div>
+        <div class="p-6 space-y-4">
+          <ol class="list-decimal list-inside space-y-4">
+            <li>
+              <strong>Move the decimal point:</strong>
+              <div
+                class="ml-6 mt-2 p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                {decimalValue} × 1,000,000 = {
+                  parseFloat(decimalValue) * 1000000
+                }
+              </div>
+            </li>
+            <li>
+              <strong>Write as a fraction:</strong>
+              <div
+                class="ml-6 mt-2 p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                {parseFloat(decimalValue) * 1000000}/1,000,000
+              </div>
+            </li>
+            <li>
+              <strong>Simplify the fraction:</strong>
+              <div
+                class="ml-6 mt-2 p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                = {fraction}
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      {/* Similar Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Similar Conversions
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            relatedDecimals.map((dec) => (
+              <a
+                href={`/calculators/fractions/decimal-to-fraction/${dec}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div class="text-lg font-semibold">{dec}</div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  = {getSimplifiedFraction(dec)}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Additional Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Related Information</h2>
+        </div>
+        <div class="p-6 grid gap-6">
+          <div>
+            <h3 class="text-xl font-display font-bold mb-3">
+              As a Mixed Number
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {
+                parseFloat(decimalValue) >= 1
+                  ? `${decimalValue} can also be written as a mixed number: ${Math.floor(parseFloat(decimalValue))} ${getSimplifiedFraction(parseFloat(decimalValue) % 1)}`
+                  : `${decimalValue} is less than 1, so it's already in its simplest fraction form.`
+              }
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl font-display font-bold mb-3">As a Percentage</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {decimalValue} = {(parseFloat(decimalValue) * 100).toFixed(2)}%
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl font-display font-bold mb-3">Common Uses</h3>
+            <ul
+              class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Mathematics and calculations</li>
+              <li>Scientific measurements and conversions</li>
+              <li>Engineering calculations and ratios</li>
+              <li>Financial computations and percentages</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Further Learning */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Further Learning</h2>
+        <div class="grid gap-4">
+          <a
+            href="/calculators/fractions"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-display font-semibold text-lg mb-2">
+              Main Fraction Calculator
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Convert any decimal to fraction or fraction to decimal
+            </p>
+          </a>
+          <a
+            href="/calculators/fractions/fraction-to-decimal/1/2"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-display font-semibold text-lg mb-2">
+              Fraction to Decimal Converter
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Convert fractions back to decimal form
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

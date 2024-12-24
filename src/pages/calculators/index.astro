@@ -12,6 +12,7 @@ import {
   CoinsIcon,
   Cone,
   Dice6,
+  Divide,
   DollarSign,
   Heart,
   Network,
@@ -108,6 +109,12 @@ const calculators = [
     url: "/calculators/roman-numerals",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Fractions Calculator",
+    description: "Convert Between Decimals and Fractions.",
+    url: "/calculators/fractions",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -193,7 +200,14 @@ const keywords =
                 <Dice6 client:load className="w-8 h-8 text-accent-primary" />
               )}
               {index === 12 && (
-                <ArrowDown01 client:load
+                <ArrowDown01
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
+              {index === 13 && (
+                <Divide
+                  client:load
                   className="w-8 h-8 text-accent-primary"
                 />
               )}

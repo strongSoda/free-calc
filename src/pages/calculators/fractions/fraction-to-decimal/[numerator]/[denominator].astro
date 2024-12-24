@@ -1,0 +1,297 @@
+---
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import FractionCalculator from "../../../../../components/FractionCalculator";
+
+export async function getStaticPaths() {
+  // Common fractions for SEO optimization
+  const commonFractions = [
+    { num: 1, den: 2 },
+    { num: 1, den: 3 },
+    { num: 2, den: 3 },
+    { num: 1, den: 4 },
+    { num: 3, den: 4 },
+    { num: 1, den: 5 },
+    { num: 2, den: 5 },
+    { num: 3, den: 5 },
+    { num: 4, den: 5 },
+    { num: 1, den: 6 },
+    { num: 5, den: 6 },
+    { num: 1, den: 8 },
+    { num: 3, den: 8 },
+    { num: 5, den: 8 },
+    { num: 7, den: 8 },
+    { num: 1, den: 7 },
+    { num: 2, den: 7 },
+    { num: 3, den: 7 },
+    { num: 4, den: 7 },
+    { num: 5, den: 7 },
+    { num: 6, den: 7 },
+    { num: 1, den: 9 },
+    { num: 2, den: 9 },
+    { num: 4, den: 9 },
+    { num: 5, den: 9 },
+    { num: 7, den: 9 },
+    { num: 8, den: 9 },
+    { num: 1, den: 10 },
+    { num: 3, den: 10 },
+    { num: 7, den: 10 },
+    { num: 9, den: 10 },
+    { num: 1, den: 11 },
+    { num: 2, den: 11 },
+    { num: 3, den: 11 },
+    { num: 4, den: 11 },
+    { num: 5, den: 11 },
+    { num: 6, den: 11 },
+    { num: 7, den: 11 },
+    { num: 8, den: 11 },
+    { num: 9, den: 11 },
+    { num: 10, den: 11 },
+    { num: 1, den: 12 },
+    { num: 5, den: 12 },
+    { num: 7, den: 12 },
+    { num: 11, den: 12 },
+    { num: 1, den: 13 },
+    { num: 2, den: 13 },
+    { num: 3, den: 13 },
+    { num: 4, den: 13 },
+    { num: 5, den: 13 },
+    { num: 6, den: 13 },
+    { num: 7, den: 13 },
+    { num: 8, den: 13 },
+    { num: 9, den: 13 },
+    { num: 10, den: 13 },
+    { num: 11, den: 13 },
+    { num: 12, den: 13 },
+    { num: 1, den: 14 },
+    { num: 3, den: 14 },
+    { num: 5, den: 14 },
+    { num: 9, den: 14 },
+    { num: 11, den: 14 },
+    { num: 13, den: 14 },
+    { num: 1, den: 15 },
+    { num: 2, den: 15 },
+    { num: 4, den: 15 },
+    { num: 7, den: 15 },
+    { num: 8, den: 15 },
+    { num: 11, den: 15 },
+    { num: 13, den: 15 },
+    { num: 14, den: 15 },
+    { num: 1, den: 16 },
+    { num: 3, den: 16 },
+    { num: 5, den: 16 },
+    { num: 7, den: 16 },
+    { num: 9, den: 16 },
+    { num: 11, den: 16 },
+    { num: 13, den: 16 },
+    { num: 15, den: 16 },
+    { num: 1, den: 17 },
+    { num: 2, den: 17 },
+    { num: 3, den: 17 },
+    { num: 4, den: 17 },
+    { num: 5, den: 17 },
+    { num: 6, den: 17 },
+    { num: 7, den: 17 },
+    { num: 8, den: 17 },
+    { num: 9, den: 17 },
+    { num: 10, den: 17 },
+    { num: 11, den: 17 },
+    { num: 12, den: 17 },
+    { num: 13, den: 17 },
+    { num: 14, den: 17 },
+    { num: 15, den: 17 },
+    { num: 16, den: 17 },
+    { num: 1, den: 18 },
+    { num: 5, den: 18 },
+    { num: 7, den: 18 },
+    { num: 11, den: 18 },
+    { num: 13, den: 18 },
+    { num: 17, den: 18 },
+  ];
+
+  return commonFractions.map(({ num, den }) => ({
+    params: {
+      numerator: num.toString(),
+      denominator: den.toString(),
+    },
+    props: {
+      numerator: num,
+      denominator: den,
+    },
+  }));
+}
+
+const { numerator, denominator } = Astro.props;
+
+const decimal = (numerator / denominator).toFixed(6);
+const percentage = ((numerator / denominator) * 100).toFixed(2);
+
+const title = `${numerator}/${denominator} as a Decimal | Convert ${numerator}/${denominator} to Decimal`;
+const description = `Convert ${numerator}/${denominator} to a decimal. ${numerator}/${denominator} equals ${decimal} in decimal form. Free online fraction to decimal converter with step-by-step explanation.`;
+const keywords = `${numerator}/${denominator} as a decimal, ${numerator}/${denominator} to decimal, convert ${numerator}/${denominator} to decimal, fraction ${numerator}/${denominator} to decimal`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `What is ${numerator}/${denominator} as a decimal?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `${numerator}/${denominator} equals ${decimal} when converted to a decimal.`,
+    },
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Quick Result Section */}
+      <div
+        class="text-center p-8 bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 rounded-xl"
+      >
+        <h2
+          class="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+        >
+          {numerator}/{denominator} = {decimal}
+        </h2>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          = {percentage}%
+        </p>
+      </div>
+
+      {/* Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Try Other Conversions:
+        </h2>
+        <FractionCalculator
+          client:load
+          mode="fraction-to-decimal"
+          defaultNumerator={numerator.toString()}
+          defaultDenominator={denominator.toString()}
+        />
+      </div>
+
+      {/* Step by Step Explanation */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            How to Convert {numerator}/{denominator} to a Decimal
+          </h2>
+        </div>
+        <div class="p-6 space-y-4">
+          <ol class="list-decimal list-inside space-y-4">
+            <li>
+              <strong>Divide the numerator by the denominator:</strong>
+              <div
+                class="ml-6 mt-2 p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                {numerator} ÷ {denominator} = {decimal}
+              </div>
+            </li>
+            <li>
+              <strong>Convert to percentage (multiply by 100):</strong>
+              <div
+                class="ml-6 mt-2 p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                {decimal} × 100 = {percentage}%
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      {/* Similar Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Similar Conversions
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {
+            [
+              { num: 1, den: 2 },
+              { num: 1, den: 4 },
+              { num: 3, den: 4 },
+              { num: 1, den: 3 },
+            ].map(({ num, den }) => (
+              <a
+                href={`/calculators/fractions/fraction-to-decimal/${num}/${den}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div class="text-lg font-semibold">
+                  {num}/{den}
+                </div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  = {(num / den).toFixed(3)}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Additional Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Related Information</h2>
+        </div>
+        <div class="p-6 grid gap-6">
+          <div>
+            <h3 class="text-xl font-display font-bold mb-3">
+              Decimal Classification
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {
+                decimal.includes(".") && decimal.split(".")[1].length > 6
+                  ? "This is a recurring decimal."
+                  : "This is a terminating decimal."
+              }
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl font-display font-bold mb-3">As a Ratio</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {numerator}:{denominator}
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl font-display font-bold mb-3">
+              Common Applications
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              This fraction and its decimal equivalent are commonly used in:
+            </p>
+            <ul
+              class="list-disc list-inside mt-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Mathematical calculations</li>
+              <li>Probability and statistics</li>
+              <li>Engineering measurements</li>
+              <li>Financial calculations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
