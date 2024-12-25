@@ -1,0 +1,144 @@
+---
+import Layout from "../../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../../components/GpaLayout";
+import QuadraticCalculator from "../../../../../components/QuadraticCalculator";
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  // Generate common combinations
+  const values = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+
+  for (let a of values) {
+    for (let b of values) {
+      for (let c of values) {
+        paths.push({
+          params: { a: a.toString(), b: b.toString(), c: c.toString() },
+          props: { a, b, c },
+        });
+      }
+    }
+  }
+
+  return paths;
+}
+
+const { a, b, c } = Astro.props;
+
+// Create equation string
+const equation = `${a}x² ${b >= 0 ? "+ " + b : "- " + Math.abs(b)}x ${c >= 0 ? "+ " + c : "- " + Math.abs(c)} = 0`;
+
+const title = `Solve ${equation} | Quadratic Equation Calculator`;
+const description = `Calculate the roots, discriminant, and vertex of the quadratic equation ${equation}. Step-by-step solution with detailed explanation.`;
+const keywords = `solve ${equation}, quadratic equation calculator, quadratic formula calculator, ${a}x² ${b}x ${c}, quadratic solver`;
+
+// Schema for Rich Results
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Question",
+    name: `How to solve ${equation}?`,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `Use our quadratic equation calculator to solve ${equation} step by step.`,
+    },
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords={keywords}
+  >
+    <div class="space-y-12">
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Solve: {equation}
+          </h2>
+          <QuadraticCalculator
+            client:load
+            defaultA={a.toString()}
+            defaultB={b.toString()}
+            defaultC={c.toString()}
+          />
+
+          {/* Steps Section */}
+          <div
+            class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+          >
+            <h2 class="text-2xl font-display font-bold mb-6">
+              How to Solve This Equation
+            </h2>
+            <div class="space-y-4">
+              <div
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                <h3 class="font-medium mb-2">Step 1: Identify Components</h3>
+                <ul
+                  class="space-y-1 text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  <li>a = {a}</li>
+                  <li>b = {b}</li>
+                  <li>c = {c}</li>
+                </ul>
+              </div>
+              <div
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+              >
+                <h3 class="font-medium mb-2">
+                  Step 2: Apply Quadratic Formula
+                </h3>
+                <div class="font-mono">
+                  x = (-({b}) ± √({b}² - 4({a})({c}))) / (2({a}))
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Equations */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Similar Equations</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {
+            [
+              { a: a, b: b + 1, c: c },
+              { a: a, b: b - 1, c: c },
+              { a: a, b: b, c: c + 1 },
+            ].map((eq) => (
+              <a
+                href={`/calculators/quadratic-equation/${eq.a}/${eq.b}/${eq.c}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-lg transition-all"
+              >
+                <div class="font-mono">
+                  {eq.a}x² {eq.b >= 0 ? "+ " + eq.b : "- " + Math.abs(eq.b)}x{" "}
+                  {eq.c >= 0 ? "+ " + eq.c : "- " + Math.abs(eq.c)} = 0
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

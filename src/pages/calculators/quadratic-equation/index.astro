@@ -1,0 +1,199 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import QuadraticCalculator from "../../../components/QuadraticCalculator";
+
+const title = "Quadratic Equation Calculator | Free Online Solver";
+const description =
+  "Free online quadratic equation calculator. Solve quadratic equations, find roots, vertex, and discriminant. Step-by-step solutions with detailed explanations.";
+const keywords =
+  "quadratic equation calculator, quadratic equation solver, quadratic formula calculator, quadratic solver, quadratic calculator, solving quadratic equations calculator";
+
+const commonEquations = [
+  { a: 1, b: 2, c: 1, desc: "x² + 2x + 1 = 0" },
+  { a: 1, b: -5, c: 6, desc: "x² - 5x + 6 = 0" },
+  { a: 2, b: -7, c: 3, desc: "2x² - 7x + 3 = 0" },
+  { a: 1, b: 4, c: 4, desc: "x² + 4x + 4 = 0" },
+  { a: 3, b: -1, c: -2, desc: "3x² - x - 2 = 0" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Solve Quadratic Equations
+          </h2>
+          <QuadraticCalculator client:load />
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Quadratic Equations
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            commonEquations.map((eq) => (
+              <a
+                href={`/calculators/quadratic-equation/${eq.a}/${eq.b}/${eq.c}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-lg transition-all"
+              >
+                <div class="font-mono text-lg mb-2">{eq.desc}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Click to solve
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Formula and Theory Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Understanding Quadratic Equations
+          </h2>
+        </div>
+
+        <div class="p-6 space-y-6">
+          <div
+            class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg"
+          >
+            <h3 class="text-xl font-display font-bold mb-4">
+              The Quadratic Formula
+            </h3>
+            <div class="font-mono text-lg mb-4">
+              x = (-b ± √(b² - 4ac)) / (2a)
+            </div>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Where ax² + bx + c = 0 is the standard form of a quadratic
+              equation
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div
+              class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg"
+            >
+              <h3 class="text-lg font-display font-bold mb-3">
+                Key Components
+              </h3>
+              <ul
+                class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                <li>• Discriminant (b² - 4ac)</li>
+                <li>• Coefficient of x² (a)</li>
+                <li>• Coefficient of x (b)</li>
+                <li>• Constant term (c)</li>
+              </ul>
+            </div>
+
+            <div
+              class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg"
+            >
+              <h3 class="text-lg font-display font-bold mb-3">
+                Types of Roots
+              </h3>
+              <ul
+                class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                <li>{`• Real and Distinct (discriminant > 0) `}</li>
+                <li>{`• Real and Equal (discriminant = 0)`}</li>
+                <li>{`• Complex (discriminant < 0)`}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Applications Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Real-world Applications
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            [
+              {
+                title: "Physics",
+                desc: "Projectile motion, gravitational fields, and wave equations",
+              },
+              {
+                title: "Engineering",
+                desc: "Structural analysis, electrical circuits, and fluid dynamics",
+              },
+              {
+                title: "Economics",
+                desc: "Supply and demand curves, profit optimization",
+              },
+            ].map((app) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg">
+                <h3 class="font-display font-bold text-lg mb-2">{app.title}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {app.desc}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "What is a quadratic equation?",
+                a: "A quadratic equation is a second-degree polynomial equation in the form ax² + bx + c = 0, where a ≠ 0.",
+              },
+              {
+                q: "How do you solve a quadratic equation?",
+                a: "Quadratic equations can be solved using the quadratic formula, factoring, or completing the square. Our calculator uses the quadratic formula for precise results.",
+              },
+              {
+                q: "What does the discriminant tell us?",
+                a: "The discriminant (b² - 4ac) determines the nature of roots. Positive means two real roots, zero means one real root, negative means complex roots.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

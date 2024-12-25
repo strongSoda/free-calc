@@ -8,6 +8,7 @@ import {
   BarChart,
   BarChart2,
   CalculatorIcon,
+  ChartSpline,
   Check,
   CoinsIcon,
   Cone,
@@ -115,6 +116,13 @@ const calculators = [
     url: "/calculators/fractions",
     gradient: "from-accent-primary to-accent-secondary",
   },
+  {
+    title: "Quadratic Equation Calculator",
+    description:
+      "Solve quadratic equations, find roots, vertex, and discriminant.",
+    url: "/calculators/quadratic-equation",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -206,10 +214,10 @@ const keywords =
                 />
               )}
               {index === 13 && (
-                <Divide
-                  client:load
-                  className="w-8 h-8 text-accent-primary"
-                />
+                <Divide client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 14 && (
+                <ChartSpline client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2

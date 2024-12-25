@@ -14,7 +14,6 @@ const Footer = () => {
         { name: "Shape Volume", url: "/calculators/volume" },        
         { name: "Standard Deviation", url: "/calculators/standard-deviation" },        
         { name: "Number to Roman", url: "/calculators/roman-numerals" },        
-        { name: "Fraction to Decimal", url: "/calculators/fractions" },        
       ]
     },
     {
@@ -27,6 +26,13 @@ const Footer = () => {
         { name: "Pregnancy Due Date", url: "/calculators/pregnancy" },        
         { name: "Period", url: "/calculators/period" },        
         { name: "Dice Roller", url: "/calculators/dice-roller" },        
+      ]
+    },
+    {
+      title: "Algebra Calculators",
+      links: [
+        { name: "Quadratic Equation", url: "/calculators/quadratic-equation" },        
+        { name: "Fraction to Decimal", url: "/calculators/fractions" },        
       ]
     },
     // {
@@ -66,7 +72,7 @@ const Footer = () => {
     <footer className="mt-24 border-t border-gray-100 dark:border-gray-700 bg-surface-light-hover dark:bg-surface-dark-hover">
       <div className="max-w-7xl mx-auto">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 px-6 py-12">
           {/* Brand Section */}
           <div className="space-y-4">
             <h2 className="font-display text-xl font-bold bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
