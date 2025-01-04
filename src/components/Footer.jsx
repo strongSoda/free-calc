@@ -26,6 +26,7 @@ const Footer = () => {
         { name: "Pregnancy Due Date", url: "/calculators/pregnancy" },        
         { name: "Period", url: "/calculators/period" },        
         { name: "Dice Roller", url: "/calculators/dice-roller" },        
+        { name: "Body Fat", url: "/calculators/body-fat" },        
       ]
     },
     {

@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import GpaLayout from "../../components/GpaLayout";
 import {
+  Anvil,
   ArrowDown01,
   ArrowLeftRightIcon,
   Baby,
@@ -123,6 +124,13 @@ const calculators = [
     url: "/calculators/quadratic-equation",
     gradient: "from-accent-primary to-accent-secondary",
   },
+  {
+    title: "Body Fat Calculator",
+    description:
+      "Calculate your body fat percentage based on measurements like neck, waist, and hip circumference.",
+    url: "/calculators/body-fat",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -217,7 +225,16 @@ const keywords =
                 <Divide client:load className="w-8 h-8 text-accent-primary" />
               )}
               {index === 14 && (
-                <ChartSpline client:load className="w-8 h-8 text-accent-primary" />
+                <ChartSpline
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
+              {index === 15 && (
+                <Anvil
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
               )}
             </div>
             <h2

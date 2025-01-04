@@ -1,0 +1,262 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BodyFatCalculator from "../../../components/BodyFatCalculator";
+
+const title = "Body Fat Calculator | Calculate Your Body Fat Percentage";
+const description =
+  "Free online body fat calculator using the U.S. Navy formula. Calculate your body fat percentage based on measurements like neck, waist, and hip circumference.";
+const keywords =
+  "body fat calculator, body fat percentage calculator, body fat measurement, U.S. Navy formula, body fat calculation, fitness calculator";
+
+const idealBodyFat = {
+  male: [
+    { age: 20, fat: "8.5%" },
+    { age: 25, fat: "10.5%" },
+    { age: 30, fat: "12.7%" },
+    { age: 35, fat: "13.7%" },
+    { age: 40, fat: "15.3%" },
+    { age: 45, fat: "16.4%" },
+    { age: 50, fat: "18.9%" },
+    { age: 55, fat: "20.9%" },
+  ],
+  female: [
+    { age: 20, fat: "17.7%" },
+    { age: 25, fat: "18.4%" },
+    { age: 30, fat: "19.3%" },
+    { age: 35, fat: "21.5%" },
+    { age: 40, fat: "22.2%" },
+    { age: 45, fat: "22.9%" },
+    { age: 50, fat: "25.2%" },
+    { age: 55, fat: "26.3%" },
+  ],
+};
+
+const categories = {
+  male: [
+    {
+      category: "Essential Fat",
+      range: "2-5%",
+      description:
+        "Minimum needed for basic physical and physiological health.",
+    },
+    {
+      category: "Athletes",
+      range: "6-13%",
+      description: "Typical for competitive athletes and fitness enthusiasts.",
+    },
+    {
+      category: "Fitness",
+      range: "14-17%",
+      description: "Lean and fit, showing muscle definition.",
+    },
+    {
+      category: "Average",
+      range: "18-24%",
+      description: "Generally healthy range for most men.",
+    },
+    {
+      category: "Obese",
+      range: "25+%",
+      description: "Increased health risks, may need lifestyle changes.",
+    },
+  ],
+  female: [
+    {
+      category: "Essential Fat",
+      range: "10-13%",
+      description:
+        "Minimum needed for basic physical and physiological health.",
+    },
+    {
+      category: "Athletes",
+      range: "14-20%",
+      description: "Typical for competitive athletes and fitness enthusiasts.",
+    },
+    {
+      category: "Fitness",
+      range: "21-24%",
+      description: "Lean and fit, showing muscle definition.",
+    },
+    {
+      category: "Average",
+      range: "25-31%",
+      description: "Generally healthy range for most women.",
+    },
+    {
+      category: "Obese",
+      range: "32+%",
+      description: "Increased health risks, may need lifestyle changes.",
+    },
+  ],
+};
+
+const quickLinks = [
+  {
+    gender: "male",
+    age: 30,
+    measurements: { metric: { height: 180, weight: 80, neck: 38, waist: 85 } },
+  },
+  {
+    gender: "female",
+    age: 30,
+    measurements: {
+      metric: { height: 165, weight: 60, neck: 32, waist: 70, hip: 90 },
+    },
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Calculate Your Body Fat Percentage
+          </h2>
+          <BodyFatCalculator client:load />
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Body Fat Calculations
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {
+            [30, 40, 50].map((age) => (
+              <div class="space-y-4">
+                <h3 class="font-display text-lg font-semibold">
+                  {age} Years Old
+                </h3>
+                <div class="grid gap-2">
+                  <a
+                    href={`/calculators/body-fat/male/${age}`}
+                    class="text-content-light-dimmed hover:text-accent-primary transition-colors"
+                  >
+                    Male, {age} years
+                  </a>
+                  <a
+                    href={`/calculators/body-fat/female/${age}`}
+                    class="text-content-light-dimmed hover:text-accent-primary transition-colors"
+                  >
+                    Female, {age} years
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Categories Tables */}
+      <div class="grid md:grid-cols-2 gap-6">
+        {
+          Object.entries(categories).map(([gender, cats]) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden border border-gray-200/10 dark:border-gray-800/10">
+              <div class="p-4 border-b border-gray-200/10 dark:border-gray-800/10">
+                <h3 class="text-xl font-display font-bold capitalize">
+                  {gender} Categories
+                </h3>
+              </div>
+              <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+                {cats.map((cat) => (
+                  <div class="p-4">
+                    <div class="font-medium">{cat.category}</div>
+                    <div class="text-sm text-content-light-dimmed">
+                      {cat.range} - {cat.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Ideal Body Fat Tables */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Ideal Body Fat Percentages by Age
+          </h2>
+        </div>
+        <div
+          class="grid md:grid-cols-2 divide-x divide-gray-200/10 dark:divide-gray-800/10"
+        >
+          {
+            Object.entries(idealBodyFat).map(([gender, data]) => (
+              <div>
+                <div class="p-4 border-b border-gray-200/10 dark:border-gray-800/10">
+                  <h3 class="font-display text-lg font-semibold capitalize">
+                    {gender}
+                  </h3>
+                </div>
+                <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+                  {data.map((item) => (
+                    <div class="p-4 flex justify-between">
+                      <span>{item.age} years</span>
+                      <span class="font-medium">{item.fat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "How accurate is the U.S. Navy body fat formula?",
+                a: "The U.S. Navy formula is considered accurate within 3-4% of body fat measured by more sophisticated methods like hydrostatic weighing. It's widely used for its convenience and reliability.",
+              },
+              {
+                q: "What is a healthy body fat percentage?",
+                a: "Healthy body fat percentages vary by gender and age. For men, 14-17% is considered fit, while 18-24% is average. For women, 21-24% is considered fit, while 25-31% is average.",
+              },
+              {
+                q: "How often should I measure my body fat?",
+                a: "Monthly measurements are typically sufficient to track changes. Body fat percentage changes gradually, and more frequent measurements might not show meaningful differences.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

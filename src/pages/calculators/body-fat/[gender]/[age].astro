@@ -1,0 +1,285 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import BodyFatCalculator from "../../../../components/BodyFatCalculator";
+
+export async function getStaticPaths() {
+  const genders = ["male", "female"];
+  const ages = Array.from({ length: 63 }, (_, i) => i + 18); // Ages 18-80
+
+  return genders.flatMap((gender) =>
+    ages.map((age) => ({
+      params: { gender, age: age.toString() },
+      props: { gender, age },
+    }))
+  );
+}
+
+const { gender, age } = Astro.props;
+
+// Reference data for ideal body fat by age
+const idealBodyFat = {
+  male: [
+    { ageRange: "20-24", ideal: "8.5%", range: "7-12%" },
+    { ageRange: "25-29", ideal: "10.5%", range: "8-14%" },
+    { ageRange: "30-34", ideal: "12.7%", range: "10-17%" },
+    { ageRange: "35-39", ideal: "13.7%", range: "11-18%" },
+    { ageRange: "40-44", ideal: "15.3%", range: "13-20%" },
+    { ageRange: "45-49", ideal: "16.4%", range: "14-21%" },
+    { ageRange: "50-54", ideal: "18.9%", range: "16-23%" },
+    { ageRange: "55+", ideal: "20.9%", range: "17-25%" },
+  ],
+  female: [
+    { ageRange: "20-24", ideal: "17.7%", range: "16-22%" },
+    { ageRange: "25-29", ideal: "18.4%", range: "17-23%" },
+    { ageRange: "30-34", ideal: "19.3%", range: "18-24%" },
+    { ageRange: "35-39", ideal: "21.5%", range: "19-26%" },
+    { ageRange: "40-44", ideal: "22.2%", range: "20-27%" },
+    { ageRange: "45-49", ideal: "22.9%", range: "21-28%" },
+    { ageRange: "50-54", ideal: "25.2%", range: "23-30%" },
+    { ageRange: "55+", ideal: "26.3%", range: "24-31%" },
+  ],
+};
+
+// Find the relevant age range data
+const getAgeRangeData = (age) => {
+  const ranges = idealBodyFat[gender];
+  return ranges.find((r) => {
+    const [min, max] = r.ageRange.replace("+", "-100").split("-").map(Number);
+    return age >= min && age <= max;
+  });
+};
+
+const ageData = getAgeRangeData(parseInt(age));
+
+const title = `${gender === "male" ? "Male" : "Female"} Body Fat Calculator - Age ${age}`;
+const description = `Calculate body fat percentage for ${gender === "male" ? "men" : "women"} at age ${age}. Learn ideal body fat ranges and get personalized recommendations based on your measurements.`;
+const keywords = `${gender} body fat calculator, age ${age} body fat, body fat percentage ${gender}, ${gender} body fat measurement, fitness calculator age ${age}`;
+
+// Related ages for navigation
+const prevAge = parseInt(age) > 18 ? parseInt(age) - 1 : null;
+const nextAge = parseInt(age) < 80 ? parseInt(age) + 1 : null;
+
+// Example measurements for this age/gender
+const exampleMeasurements = {
+  metric: {
+    male: [
+      {
+        weight: "75",
+        height: "175",
+        neck: "35",
+        waist: "85",
+        label: "Athletic Build",
+      },
+      {
+        weight: "82",
+        height: "180",
+        neck: "37",
+        waist: "95",
+        label: "Average Build",
+      },
+    ],
+    female: [
+      {
+        weight: "60",
+        height: "165",
+        neck: "30",
+        waist: "70",
+        hip: "90",
+        label: "Athletic Build",
+      },
+      {
+        weight: "65",
+        height: "170",
+        neck: "32",
+        waist: "75",
+        hip: "95",
+        label: "Average Build",
+      },
+    ],
+  },
+  imperial: {
+    male: [
+      {
+        weight: "165",
+        height: "69",
+        neck: "14",
+        waist: "33",
+        label: "Athletic Build",
+      },
+      {
+        weight: "180",
+        height: "71",
+        neck: "15",
+        waist: "37",
+        label: "Average Build",
+      },
+    ],
+    female: [
+      {
+        weight: "132",
+        height: "65",
+        neck: "12",
+        waist: "28",
+        hip: "35",
+        label: "Athletic Build",
+      },
+      {
+        weight: "145",
+        height: "67",
+        neck: "13",
+        waist: "30",
+        hip: "37",
+        label: "Average Build",
+      },
+    ],
+  },
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "HowTo",
+    name: `Calculate Body Fat for ${age} Year Old ${gender === "male" ? "Male" : "Female"}`,
+    step: [
+      {
+        "@type": "HowToStep",
+        text: "Enter your measurements (neck, waist, and height)",
+      },
+      {
+        "@type": "HowToStep",
+        text: "The calculator will compute your body fat percentage",
+      },
+      {
+        "@type": "HowToStep",
+        text: "Compare your result to the ideal range for your age and gender",
+      },
+    ],
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={schema}
+>
+  <GpaLayout title={title} description={description} keywords={keywords}>
+    <div class="space-y-12">
+      {/* Quick Result Section */}
+      <div
+        class="text-center mb-12 p-6 bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 rounded-xl"
+      >
+        <h2 class="text-4xl font-display font-bold mb-4">
+          Ideal Body Fat for Age {age}: {ageData.ideal}
+        </h2>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          Healthy Range: {ageData.range}
+        </p>
+      </div>
+
+      {/* Calculator Section */}
+      <div class="mb-12">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Calculate Your Body Fat:
+        </h2>
+        <BodyFatCalculator
+          client:load
+          defaultGender={gender}
+          defaultAge={age}
+        />
+      </div>
+
+      {/* Example Calculations */}
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          ["metric", "imperial"].map((unit) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+              <h3 class="text-xl font-display font-bold mb-4">
+                {unit === "metric" ? "Metric" : "Imperial"} Examples
+              </h3>
+              <div class="space-y-4">
+                {exampleMeasurements[unit][gender].map((ex) => (
+                  <a
+                    href={`/calculators/body-fat/${unit}/${gender}/${age}-${ex.weight}-${ex.height}-${ex.neck}-${ex.waist}${ex.hip ? `-${ex.hip}` : ""}`}
+                    class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-lg transition-shadow"
+                  >
+                    <div class="font-semibold mb-1">{ex.label}</div>
+                    <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      Height: {ex.height} {unit === "metric" ? "cm" : "in"},
+                      Weight: {ex.weight} {unit === "metric" ? "kg" : "lbs"}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Age Navigation */}
+      <div class="flex justify-between items-center">
+        {
+          prevAge && (
+            <a
+              href={`/calculators/body-fat/${gender}/${prevAge}`}
+              class="text-accent-primary hover:text-accent-secondary transition-colors"
+            >
+              ← Age {prevAge}
+            </a>
+          )
+        }
+        <a
+          href={`/calculators/body-fat/${gender === "male" ? "female" : "male"}/${age}`}
+          class="text-accent-primary hover:text-accent-secondary transition-colors"
+        >
+          Switch to {gender === "male" ? "Female" : "Male"} →
+        </a>
+        {
+          nextAge && (
+            <a
+              href={`/calculators/body-fat/${gender}/${nextAge}`}
+              class="text-accent-primary hover:text-accent-secondary transition-colors"
+            >
+              Age {nextAge} →
+            </a>
+          )
+        }
+      </div>
+
+      {/* Information Section */}
+      <div class="prose dark:prose-invert max-w-none">
+        <h2>Body Fat Percentage at Age {age}</h2>
+        <p>
+          {gender === "male" ? "Men" : "Women"} at age {age} typically have different
+          body fat requirements and ranges compared to other age groups. The ideal
+          body fat percentage of {ageData.ideal} takes into account natural age-related
+          changes in body composition.
+        </p>
+
+        <h3>Factors Affecting Body Fat at Age {age}</h3>
+        <ul>
+          <li>Metabolic changes</li>
+          <li>Hormonal adjustments</li>
+          <li>Activity level variations</li>
+          <li>Muscle mass differences</li>
+        </ul>
+
+        <h3>Measurement Tips</h3>
+        <ul>
+          <li>Take measurements in the morning before eating</li>
+          <li>Measure at the same time each day</li>
+          <li>Use a flexible but non-elastic measuring tape</li>
+          <li>Take each measurement 2-3 times and average the results</li>
+        </ul>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
