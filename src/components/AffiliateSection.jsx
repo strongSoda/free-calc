@@ -54,7 +54,7 @@ export default function AffiliateSection() {
         data-nosnippet
         role="complementary"
       >
-        <AdUnit type="horizontal" client:load />
+        <AdUnit type="square" client:load />
       </aside>
     </div>
   );
