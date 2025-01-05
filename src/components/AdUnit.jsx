@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 
 const AdUnit = ({ type = 'square' }) => {
   const containerRef = useRef(null);
-  // const [adLoaded, setAdLoaded] = useState(false);
-  // const [attemptedLoad, setAttemptedLoad] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   const adConfigs = {
@@ -68,12 +66,10 @@ const AdUnit = ({ type = 'square' }) => {
   const config = adConfigs[type];
   const isDevelopment = false;
 
-  // Set isClient on mount
   useEffect(() => {
     setIsClient(true);
   }, []);
 
- // Initialize ad after component is hydrated
   useEffect(() => {
     if (isClient && !isDevelopment && containerRef.current) {
       try {
@@ -89,10 +85,12 @@ const AdUnit = ({ type = 'square' }) => {
   const AdContainer = ({ children }) => (
     <div 
       ref={containerRef}
-      className={`${config.className} max-w-full overflow-hidden`}
+      className={`${config.className} max-w-full overflow-hidden relative`}
       style={{
         maxWidth: config.maxWidth,
-        margin: '0 auto'
+        margin: '0 auto',
+        minHeight: type === 'vertical' ? '600px' : 'auto',
+        aspectRatio: config.aspectRatio
       }}
     >
       {children}
@@ -103,7 +101,7 @@ const AdUnit = ({ type = 'square' }) => {
     return (
       <AdContainer>
         <div
-          className="bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center w-full"
+          className="bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center w-full h-full"
           style={{
             aspectRatio: config.aspectRatio,
             maxWidth: '100%'
@@ -118,7 +116,6 @@ const AdUnit = ({ type = 'square' }) => {
     );
   }
 
-    // Only render ad markup after hydration
   if (!isClient) {
     return (
       <AdContainer>
@@ -133,25 +130,25 @@ const AdUnit = ({ type = 'square' }) => {
   }
 
   return (
-<AdContainer>
-    <ins
-      className="adsbygoogle w-full h-full"
-      style={{
-        display: 'block',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%'
-      }}
-      data-ad-client="ca-pub-9779862910631944"
-      data-ad-slot={config.slot}
-      data-ad-format={config.format}
-      {...(config.layoutKey && { 'data-ad-layout-key': config.layoutKey })}
-      {...(config.layout && { 'data-ad-layout': config.layout })}
-      data-full-width-responsive="true"
-    />
-  </AdContainer>
+    <AdContainer>
+      <div className="relative w-full h-full">
+        <ins
+          className="adsbygoogle w-full h-full"
+          style={{
+            display: 'block',
+            position: type === 'vertical' ? 'absolute' : 'relative',
+            top: type === 'vertical' ? 0 : 'auto',
+            left: type === 'vertical' ? 0 : 'auto'
+          }}
+          data-ad-client="ca-pub-9779862910631944"
+          data-ad-slot={config.slot}
+          data-ad-format={config.format}
+          {...(config.layoutKey && { 'data-ad-layout-key': config.layoutKey })}
+          {...(config.layout && { 'data-ad-layout': config.layout })}
+          data-full-width-responsive="true"
+        />
+      </div>
+    </AdContainer>
   );
 };
 
