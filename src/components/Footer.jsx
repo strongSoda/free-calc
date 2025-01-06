@@ -40,6 +40,7 @@ const Footer = () => {
       title: "Chemistry Calculators",
       links: [
         { name: "Half Life", url: "/calculators/half-life" },
+        { name: "Power Converter", url: "/calculators/power" },
       ]
     },
     // {

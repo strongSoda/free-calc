@@ -1,0 +1,242 @@
+---
+// src/pages/calculators/power/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import PowerCalculator from "../../../components/PowerCalculator";
+import GpaLayout from "../../../components/GpaLayout";
+
+const commonConversions = [
+  { from: "W", to: "kW", value: "1000" },
+  { from: "kW", to: "hp", value: "100" },
+  { from: "hp", to: "BTUh", value: "1" },
+  { from: "W", to: "BTUh", value: "500" },
+  { from: "kW", to: "PS", value: "75" },
+];
+
+const title = "Power Converter & Calculator";
+const description =
+  "Convert between watts (W), kilowatts (kW), horsepower (hp), BTU/h, and other power units. Free online power conversion calculator with formulas and tables.";
+const keywords =
+  "power converter, watts to kilowatts, horsepower converter, BTU calculator, power unit conversion, watts to hp, kW to horsepower";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Power Unit Converter
+          </h2>
+          <PowerCalculator client:load />
+        </div>
+      </div>
+
+      {/* Quick Conversion Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Power Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            commonConversions.map((conv) => (
+              <a
+                href={`/calculators/power/${conv.from}-to-${conv.to}/${conv.value}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-medium text-lg">
+                  {conv.value} {conv.from} to {conv.to}
+                </div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">
+                  Quick conversion calculator
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Conversion Tables */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Power Conversion Table
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <th class="py-2 px-4 text-left">Unit</th>
+                <th class="py-2 px-4 text-right">Watts (W)</th>
+                <th class="py-2 px-4 text-right">Kilowatts (kW)</th>
+                <th class="py-2 px-4 text-right">Horsepower (hp)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <td class="py-2 px-4">1 Watt</td>
+                <td class="py-2 px-4 text-right">1</td>
+                <td class="py-2 px-4 text-right">0.001</td>
+                <td class="py-2 px-4 text-right">0.00134</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <td class="py-2 px-4">1 Kilowatt</td>
+                <td class="py-2 px-4 text-right">1000</td>
+                <td class="py-2 px-4 text-right">1</td>
+                <td class="py-2 px-4 text-right">1.341</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <td class="py-2 px-4">1 Horsepower</td>
+                <td class="py-2 px-4 text-right">745.7</td>
+                <td class="py-2 px-4 text-right">0.7457</td>
+                <td class="py-2 px-4 text-right">1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Popular Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Popular Power Unit Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-4">
+              Standard Units
+            </h3>
+            <div class="space-y-2">
+              <a
+                href="/calculators/power/W-to-kW/1000"
+                class="block text-content-light-dimmed hover:text-accent-primary"
+                >Watts to Kilowatts</a
+              >
+              <a
+                href="/calculators/power/kW-to-MW/1"
+                class="block text-content-light-dimmed hover:text-accent-primary"
+                >Kilowatts to Megawatts</a
+              >
+              <a
+                href="/calculators/power/MW-to-GW/1"
+                class="block text-content-light-dimmed hover:text-accent-primary"
+                >Megawatts to Gigawatts</a
+              >
+            </div>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-4">
+              Mechanical Power
+            </h3>
+            <div class="space-y-2">
+              <a
+                href="/calculators/power/hp-to-kW/1"
+                class="block text-content-light-dimmed hover:text-accent-primary"
+                >Horsepower to Kilowatts</a
+              >
+              <a
+                href="/calculators/power/W-to-hp/745.7"
+                class="block text-content-light-dimmed hover:text-accent-primary"
+                >Watts to Horsepower</a
+              >
+              <a
+                href="/calculators/power/PS-to-hp/1"
+                class="block text-content-light-dimmed hover:text-accent-primary"
+                >Metric Horsepower to HP</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Formulas Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Power Conversion Formulas
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-medium mb-2">Watts to Kilowatts</h3>
+              <p class="font-mono text-sm">kW = W ÷ 1000</p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-medium mb-2">Watts to Horsepower</h3>
+              <p class="font-mono text-sm">hp = W ÷ 745.7</p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-medium mb-2">Kilowatts to Horsepower</h3>
+              <p class="font-mono text-sm">hp = kW × 1.341</p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h3 class="font-medium mb-2">Watts to BTU/hour</h3>
+              <p class="font-mono text-sm">BTU/h = W × 3.412142</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "What is the difference between watts and kilowatts?",
+                a: "A kilowatt (kW) is equal to 1000 watts (W). This is similar to how a kilometer is 1000 meters. Kilowatts are commonly used for expressing larger amounts of power.",
+              },
+              {
+                q: "How do I convert horsepower to watts?",
+                a: "To convert horsepower to watts, multiply the horsepower value by 745.7. For example, 1 horsepower = 745.7 watts.",
+              },
+              {
+                q: "What's the difference between mechanical and metric horsepower?",
+                a: "Mechanical horsepower (hp) equals 745.7 watts, while metric horsepower (PS) equals 735.49875 watts. The difference is small but can be significant in precise calculations.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

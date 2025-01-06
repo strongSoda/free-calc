@@ -1,0 +1,259 @@
+---
+// src/pages/calculators/power/[from]-to-[to]/[value].astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PowerCalculator from "../../../../components/PowerCalculator";
+
+export async function getStaticPaths() {
+  const units = ["W", "kW", "MW", "GW", "hp", "PS", "BTUh"];
+  const commonValues = ["1", "10", "100", "1000", "75", "500", "5000", "10000"];
+
+  const paths = [];
+
+  // Generate combinations of units and values
+  units.forEach((fromUnit) => {
+    units.forEach((toUnit) => {
+      if (fromUnit !== toUnit) {
+        commonValues.forEach((value) => {
+          paths.push({
+            params: {
+              from: fromUnit,
+              to: toUnit,
+              value: value,
+            },
+            props: {
+              fromUnit,
+              toUnit,
+              value,
+            },
+          });
+        });
+      }
+    });
+  });
+
+  return paths;
+}
+
+const { fromUnit, toUnit, value } = Astro.props;
+
+const unitLabels = {
+  W: "Watts",
+  kW: "Kilowatts",
+  MW: "Megawatts",
+  GW: "Gigawatts",
+  hp: "Horsepower",
+  PS: "Metric Horsepower",
+  "BTUh": "BTU per hour",
+};
+
+const title = `Convert ${value} ${unitLabels[fromUnit]} to ${unitLabels[toUnit]} (${fromUnit} to ${toUnit})`;
+const description = `Convert ${value} ${unitLabels[fromUnit]} (${fromUnit}) to ${unitLabels[toUnit]} (${toUnit}). Free online power converter and calculator with formulas and examples.`;
+const keywords = `${fromUnit} to ${toUnit}, convert ${unitLabels[fromUnit]} to ${unitLabels[toUnit]}, ${value} ${fromUnit} in ${toUnit}, power conversion`;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  applicationCategory: "CalculatorApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={calculatorSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert {value}
+            {unitLabels[fromUnit]} to {unitLabels[toUnit]}
+          </h2>
+          <PowerCalculator
+            client:load
+            defaultValue={value}
+            defaultFromUnit={fromUnit}
+            defaultToUnit={toUnit}
+          />
+        </div>
+      </div>
+
+      {/* Conversion Formula */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How to Convert {unitLabels[fromUnit]} to {unitLabels[toUnit]}
+        </h2>
+        <div class="space-y-4">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Formula</h3>
+            <p class="font-mono text-sm">
+              {
+                fromUnit === "W" && toUnit === "kW"
+                  ? "Kilowatts = Watts ÷ 1000"
+                  : fromUnit === "kW" && toUnit === "W"
+                    ? "Watts = Kilowatts × 1000"
+                    : fromUnit === "W" && toUnit === "hp"
+                      ? "Horsepower = Watts ÷ 745.7"
+                      : fromUnit === "hp" && toUnit === "W"
+                        ? "Watts = Horsepower × 745.7"
+                        : `Use the calculator above for ${fromUnit} to ${toUnit} conversion`
+              }
+            </p>
+          </div>
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            To convert from {unitLabels[fromUnit]} to {unitLabels[toUnit]}, you
+            can use our calculator above or apply the conversion formula
+            directly. Enter your value and get instant results.
+          </p>
+        </div>
+      </div>
+
+      {/* Common Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common {fromUnit} to {toUnit} Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {
+            [1, 10, 100, 1000, 5000, 10000].map((val) => (
+              <a
+                href={`/calculators/power/${fromUnit}-to-${toUnit}/${val}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-medium">
+                  {val} {fromUnit}
+                </div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">
+                  Convert {val} {unitLabels[fromUnit]} to {unitLabels[toUnit]}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Power Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-4">
+              Convert from {unitLabels[fromUnit]}
+            </h3>
+            <div class="space-y-2">
+              {
+                Object.entries(unitLabels)
+                  .filter(([unit]) => unit !== fromUnit && unit !== toUnit)
+                  .map(([unit, label]) => (
+                    <a
+                      href={`/calculators/power/${fromUnit}-to-${unit}/${value}`}
+                      class="block text-content-light-dimmed hover:text-accent-primary"
+                    >
+                      {unitLabels[fromUnit]} to {label}
+                    </a>
+                  ))
+              }
+            </div>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-4">
+              Convert to {unitLabels[toUnit]}
+            </h3>
+            <div class="space-y-2">
+              {
+                Object.entries(unitLabels)
+                  .filter(([unit]) => unit !== fromUnit && unit !== toUnit)
+                  .map(([unit, label]) => (
+                    <a
+                      href={`/calculators/power/${unit}-to-${toUnit}/${value}`}
+                      class="block text-content-light-dimmed hover:text-accent-primary"
+                    >
+                      {label} to {unitLabels[toUnit]}
+                    </a>
+                  ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Examples Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Example Calculations
+        </h2>
+        <div class="space-y-4">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">
+              Example 1: Converting {value}
+              {fromUnit} to {toUnit}
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Use the formula above and enter {value}
+              {fromUnit} to get the equivalent value in {toUnit}. The calculator
+              will show you the step-by-step conversion process.
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Common Applications</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              This conversion is commonly used in {
+                (fromUnit === "W" || fromUnit === "kW") &&
+                (toUnit === "hp" || toUnit === "PS")
+                  ? "engine power ratings and mechanical engineering"
+                  : (fromUnit === "W" || fromUnit === "kW") &&
+                      toUnit === "BTU/h"
+                    ? "HVAC systems and thermal calculations"
+                    : "power and energy calculations"
+              }.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Back to Main Calculator */}
+      <div class="text-center">
+        <a
+          href="/calculators/power"
+          class="inline-block bg-accent-primary/10 text-accent-primary px-6 py-3 rounded-lg hover:bg-accent-primary/20 transition-colors"
+        >
+          Back to Power Calculator
+        </a>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

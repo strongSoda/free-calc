@@ -1,0 +1,307 @@
+---
+// src/pages/calculators/power/[from]-to-[to]/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import PowerCalculator from "../../../../components/PowerCalculator";
+
+export async function getStaticPaths() {
+  const units = ["W", "kW", "MW", "GW", "hp", "PS", "BTUh"];
+  const paths = [];
+
+  // Generate combinations of units
+  units.forEach((fromUnit) => {
+    units.forEach((toUnit) => {
+      if (fromUnit !== toUnit) {
+        paths.push({
+          params: {
+            from: fromUnit,
+            to: toUnit,
+          },
+          props: {
+            fromUnit,
+            toUnit,
+          },
+        });
+      }
+    });
+  });
+
+  return paths;
+}
+
+const { fromUnit, toUnit } = Astro.props;
+
+const unitLabels = {
+  W: "Watts",
+  kW: "Kilowatts",
+  MW: "Megawatts",
+  GW: "Gigawatts",
+  hp: "Horsepower",
+  PS: "Metric Horsepower",
+  "BTUh": "BTU per hour",
+};
+
+const unitDescriptions = {
+  W: "The watt (W) is the SI unit of power, equivalent to one joule per second.",
+  kW: "A kilowatt (kW) equals 1000 watts, commonly used for measuring electrical power.",
+  MW: "A megawatt (MW) equals 1,000,000 watts, used for large-scale power generation.",
+  GW: "A gigawatt (GW) equals 1,000,000,000 watts, used for massive power installations.",
+  hp: "Horsepower (hp) is a unit of power equal to 745.7 watts, traditionally used for engines.",
+  PS: "Metric horsepower (PS) equals 735.49875 watts, commonly used in European vehicle specifications.",
+  "BTU/h":
+    "BTU per hour measures thermal power, with 1 BTU/h equal to approximately 0.293071 watts.",
+};
+
+const title = `${unitLabels[fromUnit]} to ${unitLabels[toUnit]} Converter (${fromUnit} to ${toUnit})`;
+const description = `Convert between ${unitLabels[fromUnit]} (${fromUnit}) and ${unitLabels[toUnit]} (${toUnit}). Free online power converter with formulas and conversion tables.`;
+const keywords = `${fromUnit} to ${toUnit}, convert ${unitLabels[fromUnit]} to ${unitLabels[toUnit]}, power conversion, ${fromUnit} ${toUnit} calculator`;
+
+// Example values for the current conversion
+const exampleValues = [1, 10, 100, 1000, 5000, 10000];
+
+const conversionFormulas = {
+  "W-kW": "Kilowatts = Watts ÷ 1000",
+  "kW-W": "Watts = Kilowatts × 1000",
+  "W-hp": "Horsepower = Watts ÷ 745.7",
+  "hp-W": "Watts = Horsepower × 745.7",
+  "kW-hp": "Horsepower = Kilowatts × 1.341",
+  "hp-kW": "Kilowatts = Horsepower × 0.7457",
+  "BTU/h-W": "Watts = BTU/h × 0.29307107",
+  "W-BTU/h": "BTU/h = Watts × 3.41214163",
+};
+
+const formula =
+  conversionFormulas[`${fromUnit}-${toUnit}`] ||
+  `Use the conversion calculator above for ${fromUnit} to ${toUnit} conversion`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Calculator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Convert {unitLabels[fromUnit]} to {unitLabels[toUnit]}
+          </h2>
+          <PowerCalculator
+            client:load
+            defaultFromUnit={fromUnit}
+            defaultToUnit={toUnit}
+          />
+        </div>
+      </div>
+
+      {/* Unit Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          About {unitLabels[fromUnit]} and {unitLabels[toUnit]}
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <h3 class="font-display text-lg font-semibold">
+              {unitLabels[fromUnit]} ({fromUnit})
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {unitDescriptions[fromUnit]}
+            </p>
+          </div>
+          <div class="space-y-4">
+            <h3 class="font-display text-lg font-semibold">
+              {unitLabels[toUnit]} ({toUnit})
+            </h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {unitDescriptions[toUnit]}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Conversion Formula */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How to Convert {unitLabels[fromUnit]} to {unitLabels[toUnit]}
+        </h2>
+        <div class="space-y-4">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Formula</h3>
+            <p class="font-mono text-sm">{formula}</p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Steps</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>
+                Enter your {unitLabels[fromUnit]} value in the calculator above
+              </li>
+              <li>
+                The calculator will automatically convert to {
+                  unitLabels[toUnit]
+                }
+              </li>
+              <li>
+                View the result and other equivalent units below the calculator
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      {/* Common Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common {fromUnit} to {toUnit} Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {
+            exampleValues.map((val) => (
+              <a
+                href={`/calculators/power/${fromUnit}-to-${toUnit}/${val}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-medium">
+                  {val} {fromUnit}
+                </div>
+                <div class="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">
+                  Convert {val} {unitLabels[fromUnit]} to {unitLabels[toUnit]}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Applications */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Applications and Uses
+        </h2>
+        <div class="space-y-4">
+          {/* Dynamic applications based on units */}
+          {
+            (fromUnit === "W" || fromUnit === "kW") &&
+              (toUnit === "hp" || toUnit === "PS") && (
+                <>
+                  <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                    <h3 class="font-medium mb-2">Automotive and Engineering</h3>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      Converting between watts and horsepower is common in
+                      automotive engineering for comparing engine power outputs.
+                    </p>
+                  </div>
+                  <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                    <h3 class="font-medium mb-2">Industrial Equipment</h3>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      Many industrial machines specify power in both electrical
+                      (watts) and mechanical (horsepower) units.
+                    </p>
+                  </div>
+                </>
+              )
+          }
+          {
+            (fromUnit === "W" || fromUnit === "kW") && toUnit === "BTU/h" && (
+              <>
+                <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                  <h3 class="font-medium mb-2">HVAC Systems</h3>
+                  <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                    Converting between watts and BTU/h is essential for HVAC
+                    system calculations and specifications.
+                  </p>
+                </div>
+                <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                  <h3 class="font-medium mb-2">Thermal Engineering</h3>
+                  <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                    These conversions are used in thermal calculations for
+                    heating and cooling systems.
+                  </p>
+                </div>
+              </>
+            )
+          }
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Power Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-4">
+              Other {unitLabels[fromUnit]} Conversions
+            </h3>
+            <div class="space-y-2">
+              {
+                Object.entries(unitLabels)
+                  .filter(([unit]) => unit !== fromUnit && unit !== toUnit)
+                  .map(([unit, label]) => (
+                    <a
+                      href={`/calculators/power/${fromUnit}-to-${unit}`}
+                      class="block text-content-light-dimmed hover:text-accent-primary"
+                    >
+                      {unitLabels[fromUnit]} to {label}
+                    </a>
+                  ))
+              }
+            </div>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold mb-4">
+              Other {unitLabels[toUnit]} Conversions
+            </h3>
+            <div class="space-y-2">
+              {
+                Object.entries(unitLabels)
+                  .filter(([unit]) => unit !== fromUnit && unit !== toUnit)
+                  .map(([unit, label]) => (
+                    <a
+                      href={`/calculators/power/${unit}-to-${toUnit}`}
+                      class="block text-content-light-dimmed hover:text-accent-primary"
+                    >
+                      {label} to {unitLabels[toUnit]}
+                    </a>
+                  ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Back to Main Calculator */}
+      <div class="text-center">
+        <a
+          href="/calculators/power"
+          class="inline-block bg-accent-primary/10 text-accent-primary px-6 py-3 rounded-lg hover:bg-accent-primary/20 transition-colors"
+        >
+          Back to Power Calculator
+        </a>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

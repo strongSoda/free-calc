@@ -20,6 +20,7 @@ import {
   Heart,
   Network,
   PersonStanding,
+  Power,
   Table,
   VenetianMask,
 } from "lucide-react";
@@ -139,6 +140,13 @@ const calculators = [
     url: "/calculators/half-life",
     gradient: "from-accent-primary to-accent-secondary",
   },
+  {
+    title: "Power Converter",
+    description:
+      "Convert between watts (W), kilowatts (kW), horsepower (hp), BTU/h, and other power units.",
+    url: "/calculators/power",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -243,6 +251,9 @@ const keywords =
               )}
               {index === 16 && (
                 <Atom client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 17 && (
+                <Power client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2
