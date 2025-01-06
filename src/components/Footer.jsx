@@ -36,6 +36,12 @@ const Footer = () => {
         { name: "Fraction to Decimal", url: "/calculators/fractions" },        
       ]
     },
+    {
+      title: "Chemistry Calculators",
+      links: [
+        { name: "Half Life", url: "/calculators/half-life" },
+      ]
+    },
     // {
     //   title: "Resources",
     //   links: [

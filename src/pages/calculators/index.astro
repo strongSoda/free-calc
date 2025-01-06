@@ -5,6 +5,7 @@ import {
   Anvil,
   ArrowDown01,
   ArrowLeftRightIcon,
+  Atom,
   Baby,
   BarChart,
   BarChart2,
@@ -131,6 +132,13 @@ const calculators = [
     url: "/calculators/body-fat",
     gradient: "from-accent-primary to-accent-secondary",
   },
+  {
+    title: "Half-Life Calculator",
+    description:
+      "Calculate half-life, decay constants, and mean lifetime for radioactive materials.",
+    url: "/calculators/half-life",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -231,10 +239,10 @@ const keywords =
                 />
               )}
               {index === 15 && (
-                <Anvil
-                  client:load
-                  className="w-8 h-8 text-accent-primary"
-                />
+                <Anvil client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 16 && (
+                <Atom client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2

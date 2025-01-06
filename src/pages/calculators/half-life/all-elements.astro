@@ -1,0 +1,193 @@
+---
+// src/pages/calculators/half-life/all-elements.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+
+// Extended list of radioactive elements
+const allElements = [
+  {
+    element: "Carbon-14",
+    halfLife: "5730 years",
+    decayConstant: "1.21 × 10⁻⁴",
+    use: "Carbon dating of organic materials",
+    category: "Dating",
+  },
+  {
+    element: "Uranium-238",
+    halfLife: "4.47 billion years",
+    decayConstant: "1.55 × 10⁻¹⁰",
+    use: "Radiometric dating of rocks",
+    category: "Dating",
+  },
+  {
+    element: "Potassium-40",
+    halfLife: "1.25 billion years",
+    decayConstant: "5.54 × 10⁻¹⁰",
+    use: "K-Ar dating method",
+    category: "Dating",
+  },
+  {
+    element: "Iodine-131",
+    halfLife: "8.02 days",
+    decayConstant: "0.086",
+    use: "Medical treatment and diagnostics",
+    category: "Medical",
+  },
+  {
+    element: "Technetium-99m",
+    halfLife: "6.01 hours",
+    decayConstant: "0.115",
+    use: "Medical imaging",
+    category: "Medical",
+  },
+  {
+    element: "Plutonium-239",
+    halfLife: "24,100 years",
+    decayConstant: "2.88 × 10⁻⁵",
+    use: "Nuclear power and weapons",
+    category: "Nuclear",
+  },
+  {
+    element: "Thorium-232",
+    halfLife: "14.05 billion years",
+    decayConstant: "4.93 × 10⁻¹¹",
+    use: "Nuclear fuel",
+    category: "Nuclear",
+  },
+  {
+    element: "Cesium-137",
+    halfLife: "30.17 years",
+    decayConstant: "0.023",
+    use: "Industrial gauges",
+    category: "Industrial",
+  },
+];
+
+const categories = [...new Set(allElements.map((el) => el.category))];
+
+const title = "Radioactive Elements List | Half-Life Calculator";
+const description =
+  "Comprehensive list of radioactive elements with their half-lives, decay constants, and applications. Free calculator for nuclear decay calculations.";
+const keywords =
+  "radioactive elements, half-life list, decay constants, nuclear decay calculator";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h1 class="text-3xl font-display font-bold mb-4">
+          Radioactive Elements Database
+        </h1>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+          Explore our comprehensive database of radioactive elements and
+          calculate their decay rates.
+        </p>
+      </div>
+
+      {/* Categories */}
+      {
+        categories.map((category) => (
+          <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+            <h2 class="text-2xl font-display font-bold mb-6">
+              {category} Elements
+            </h2>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="border-b border-gray-200/10 dark:border-gray-800/10">
+                  <tr>
+                    <th class="text-left py-3 px-4">Element</th>
+                    <th class="text-left py-3 px-4">Half-Life</th>
+                    <th class="text-left py-3 px-4">Decay Constant</th>
+                    <th class="text-left py-3 px-4">Application</th>
+                    <th class="text-left py-3 px-4">Calculate</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+                  {allElements
+                    .filter((el) => el.category === category)
+                    .map((element) => {
+                      const slug = element.element
+                        .toLowerCase()
+                        .replace(/-/g, "")
+                        .replace(/ /g, "-");
+                      return (
+                        <tr class="hover:bg-surface-light-hover dark:hover:bg-surface-dark transition-colors">
+                          <td class="py-3 px-4">
+                            <a
+                              href={`/calculators/half-life/${slug}`}
+                              class="text-accent-primary hover:text-accent-secondary transition-colors"
+                            >
+                              {element.element}
+                            </a>
+                          </td>
+                          <td class="py-3 px-4">{element.halfLife}</td>
+                          <td class="py-3 px-4">{element.decayConstant}</td>
+                          <td class="py-3 px-4">{element.use}</td>
+                          <td class="py-3 px-4">
+                            <a
+                              href={`/calculators/half-life/${slug}/calculator`}
+                              class="inline-flex items-center gap-1 text-sm text-accent-primary hover:text-accent-secondary transition-colors"
+                            >
+                              Calculate
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-4 w-4"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))
+      }
+
+      {/* Additional Information */}
+      <div class="grid md:grid-cols-2 gap-6">
+        <div
+          class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h2 class="text-xl font-display font-bold mb-4">
+            Understanding Half-Life
+          </h2>
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            Half-life is the time required for a quantity to reduce to half of
+            its initial value. For radioactive decay, it represents the time
+            taken for half of the unstable nuclei in a sample to undergo
+            radioactive decay.
+          </p>
+        </div>
+        <div
+          class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h2 class="text-xl font-display font-bold mb-4">Decay Constants</h2>
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            The decay constant (λ) represents the probability per unit time that
+            a radioactive nucleus will decay. It's related to half-life by the
+            equation: λ = ln(2)/t₁/₂
+          </p>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

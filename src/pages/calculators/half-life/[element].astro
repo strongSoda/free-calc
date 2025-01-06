@@ -1,0 +1,380 @@
+---
+// src/pages/calculators/half-life/[element].astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import HalfLifeCalculator from "../../../components/HalfLifeCalculator";
+
+export async function getStaticPaths() {
+  const elements = [
+    {
+      slug: "carbon14",
+      name: "Carbon-14",
+      symbol: "¹⁴C",
+      halfLife: 5730,
+      units: "years",
+      description:
+        "Most widely used radioisotope for dating organic materials. Essential in archaeology and paleontology.",
+      applications: [
+        "Archaeological dating",
+        "Analysis of ancient artifacts",
+        "Environmental studies",
+        "Climate research",
+      ],
+      category: "Dating",
+    },
+    {
+      slug: "potassium40",
+      name: "Potassium-40",
+      symbol: "⁴⁰K",
+      halfLife: 1.25e9,
+      units: "years",
+      description:
+        "Naturally occurring radioisotope used in K-Ar dating method for geological samples.",
+      applications: [
+        "Geological dating",
+        "Age determination of rocks",
+        "Archaeological dating",
+        "Soil analysis",
+      ],
+      category: "Dating",
+    },
+    {
+      slug: "uranium238",
+      name: "Uranium-238",
+      symbol: "²³⁸U",
+      halfLife: 4.47e9,
+      units: "years",
+      description:
+        "Primary isotope of uranium found in nature, used in uranium-lead dating.",
+      applications: [
+        "Geological dating",
+        "Nuclear fuel",
+        "Military applications",
+        "Age determination of Earth",
+      ],
+      category: "Dating",
+    },
+    {
+      slug: "iodine131",
+      name: "Iodine-131",
+      symbol: "¹³¹I",
+      halfLife: 8.02,
+      units: "days",
+      description:
+        "Common medical isotope used in thyroid treatments and diagnostics.",
+      applications: [
+        "Thyroid cancer treatment",
+        "Medical imaging",
+        "Diagnostic procedures",
+        "Radiation therapy",
+      ],
+      category: "Medical",
+    },
+    {
+      slug: "technetium99m",
+      name: "Technetium-99m",
+      symbol: "⁹⁹ᵐTc",
+      halfLife: 6.01,
+      units: "hours",
+      description:
+        "Most widely used radioisotope in nuclear medicine for diagnostic procedures.",
+      applications: [
+        "Medical imaging",
+        "Cancer diagnosis",
+        "Brain scanning",
+        "Heart function studies",
+      ],
+      category: "Medical",
+    },
+    {
+      slug: "cobalt60",
+      name: "Cobalt-60",
+      symbol: "⁶⁰Co",
+      halfLife: 5.27,
+      units: "years",
+      description:
+        "Commonly used in radiation therapy and industrial radiography.",
+      applications: [
+        "Cancer treatment",
+        "Sterilization of medical equipment",
+        "Food irradiation",
+        "Industrial radiography",
+      ],
+      category: "Medical",
+    },
+    {
+      slug: "plutonium239",
+      name: "Plutonium-239",
+      symbol: "²³⁹Pu",
+      halfLife: 24100,
+      units: "years",
+      description:
+        "Key fissile isotope used in nuclear weapons and power generation.",
+      applications: [
+        "Nuclear weapons",
+        "Nuclear power",
+        "Research reactors",
+        "Space power systems",
+      ],
+      category: "Nuclear",
+    },
+    {
+      slug: "cesium137",
+      name: "Cesium-137",
+      symbol: "¹³⁷Cs",
+      halfLife: 30.17,
+      units: "years",
+      description:
+        "Common radioisotope used in industrial applications and medical devices.",
+      applications: [
+        "Industrial gauging",
+        "Flow measurement",
+        "Radiation therapy",
+        "Calibration sources",
+      ],
+      category: "Industrial",
+    },
+    {
+      slug: "thorium232",
+      name: "Thorium-232",
+      symbol: "²³²Th",
+      halfLife: 1.405e10,
+      units: "years",
+      description:
+        "Naturally occurring radioactive element with potential as nuclear fuel.",
+      applications: [
+        "Nuclear fuel research",
+        "Gas mantles",
+        "Ceramic glazes",
+        "High-temperature applications",
+      ],
+      category: "Nuclear",
+    },
+    {
+      slug: "radium226",
+      name: "Radium-226",
+      symbol: "²²⁶Ra",
+      halfLife: 1600,
+      units: "years",
+      description:
+        "Historically significant radioactive element, now used in research and industrial applications.",
+      applications: [
+        "Industrial radiography",
+        "Lightning rod manufacturing",
+        "Research purposes",
+        "Historical medical treatments",
+      ],
+      category: "Industrial",
+    },
+    {
+      slug: "tritium",
+      name: "Tritium",
+      symbol: "³H",
+      halfLife: 12.32,
+      units: "years",
+      description:
+        "Radioactive isotope of hydrogen used in various applications.",
+      applications: [
+        "Self-powered lighting",
+        "Nuclear weapons",
+        "Fusion research",
+        "Biological tracer studies",
+      ],
+      category: "Industrial",
+    },
+    {
+      slug: "americium241",
+      name: "Americium-241",
+      symbol: "²⁴¹Am",
+      halfLife: 432.2,
+      units: "years",
+      description:
+        "Commonly used in smoke detectors and industrial gauging devices.",
+      applications: [
+        "Smoke detectors",
+        "Industrial gauging",
+        "Oil well logging",
+        "Medical source preparation",
+      ],
+      category: "Industrial",
+    },
+  ];
+
+  return elements.map((element) => ({
+    params: { element: element.slug },
+    props: { element },
+  }));
+}
+
+const { element } = Astro.props;
+
+const title = `${element.name} Half-Life Calculator | Nuclear Decay Calculator`;
+const description = `Calculate the decay rate and remaining quantity of ${element.name} (${element.symbol}). Half-life of ${element.halfLife} ${element.units}. Free online calculator for nuclear decay calculations.`;
+const keywords = `${element.name} half-life, ${element.symbol} decay calculator, ${element.name} decay rate, nuclear decay calculator, radioactive decay`;
+
+const elementSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  mainEntity: {
+    "@type": "Article",
+    name: `${element.name} Half-Life`,
+    description: element.description,
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  additionalSchema={elementSchema}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-6"
+        >
+          <div class="text-center mb-8">
+            <h1 class="text-4xl font-display font-bold mb-4">
+              {element.name} ({element.symbol})
+            </h1>
+            <p
+              class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Half-Life: {element.halfLife}
+              {element.units}
+            </p>
+          </div>
+          <HalfLifeCalculator
+            client:load
+            defaultHalfLife={element.halfLife}
+            mode="calculate-remaining"
+          />
+        </div>
+      </div>
+
+      {/* Element Details */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          About {element.name}
+        </h2>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6">
+          {element.description}
+        </p>
+        <h3 class="font-display font-semibold text-lg mb-4">Applications</h3>
+        <ul
+          class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          {element.applications.map((app) => <li>{app}</li>)}
+        </ul>
+      </div>
+
+      {/* Decay Information */}
+      <div class="grid md:grid-cols-2 gap-6">
+        <div
+          class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h2 class="text-2xl font-display font-bold mb-6">Decay Constants</h2>
+          <div class="space-y-4">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <p class="font-mono mb-2">
+                λ = {(Math.log(2) / element.halfLife).toFixed(6)}
+              </p>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Decay constant in units of {element.units}⁻¹
+              </p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <p class="font-mono mb-2">
+                τ = {(1 / (Math.log(2) / element.halfLife)).toFixed(6)}
+              </p>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Mean lifetime in {element.units}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h2 class="text-2xl font-display font-bold mb-6">Decay Formula</h2>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <p class="font-mono mb-4">
+              N(t) = N₀ × (1/2)^(t/{element.halfLife})
+            </p>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Where:<br />
+              N(t) = Quantity remaining at time t<br />
+              N₀ = Initial quantity<br />
+              t = Time in {element.units}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Elements */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Related Elements</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href="/calculators/half-life/carbon14"
+            class:list={[
+              "p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow",
+              {
+                "pointer-events-none opacity-50": element.slug === "carbon14",
+              },
+            ]}
+          >
+            Carbon-14
+          </a>
+          <a
+            href="/calculators/half-life/uranium238"
+            class:list={[
+              "p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow",
+              {
+                "pointer-events-none opacity-50": element.slug === "uranium238",
+              },
+            ]}
+          >
+            Uranium-238
+          </a>
+          <a
+            href="/calculators/half-life/iodine131"
+            class:list={[
+              "p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow",
+              {
+                "pointer-events-none opacity-50": element.slug === "iodine131",
+              },
+            ]}
+          >
+            Iodine-131
+          </a>
+        </div>
+      </div>
+    </div></GpaLayout
+  >
+</Layout>
