@@ -17,7 +17,10 @@
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0",
+    "use-tw-zipcode": "^2.0.4",
+    "zipcodes": "^8.0.0",
+    "zipcodes-ph": "^1.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

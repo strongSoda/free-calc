@@ -2018,6 +2018,11 @@ jiti@^1.21.6:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.6.tgz#6c7f7398dd4b3142767f9a168af2f317a428d268"
   integrity sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==
 
+jp-zipcode-lookup@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/jp-zipcode-lookup/-/jp-zipcode-lookup-0.3.4.tgz#9d96d372d03ade699b08201e1615471f6d0bc09c"
+  integrity sha512-khA3+d2eP4iBM+U3pNatxY30FybnXCDpHaPwu5+bY/thPFT9vwJeX/n7ns5sAAV089SJ224zhXCMlTT8vzjolA==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -3556,6 +3561,11 @@ update-browserslist-db@^1.1.1:
     escalade "^3.2.0"
     picocolors "^1.1.0"
 
+use-tw-zipcode@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/use-tw-zipcode/-/use-tw-zipcode-2.0.4.tgz#772c7d0e65bc272968d8ce2222c7c66f0a1e237f"
+  integrity sha512-DQw4jjsOJtgucU2Z4V/tjyeu9tX2f0kQz/EYTcGcKyOcmRyu6dxaCTxFM77JT6CXJN1QcE7Md7LLLS7jnsYcQQ==
+
 util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
@@ -3715,6 +3725,16 @@ yoctocolors@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/yoctocolors/-/yoctocolors-2.1.1.tgz#e0167474e9fbb9e8b3ecca738deaa61dd12e56fc"
   integrity sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==
+
+zipcodes-ph@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/zipcodes-ph/-/zipcodes-ph-1.1.2.tgz#c961b17f5f9e353e8b516c947c3b0e5d35fa5ff0"
+  integrity sha512-V5DQ+rsJCFOS1Uc8vMlyu3xiCpCwEt6Gvudyyxvba0D5n9lbgtRGgfgbj7w7hoaRfg5/4UUHFj8DCk4pXUs+dg==
+
+zipcodes@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/zipcodes/-/zipcodes-8.0.0.tgz#4d124cdeedfc693f1b0ef8060323f206aeb98a9b"
+  integrity sha512-V8NolFaJhsPamGeCv5lJdk60Q7JBiXI6e+8JDksPC1NJWZ0t7g1OFfqVLZb2Nc2F5jmf9JTdYdWJBnIhGBvtbA==
 
 zod-to-json-schema@^3.23.5:
   version "3.24.1"

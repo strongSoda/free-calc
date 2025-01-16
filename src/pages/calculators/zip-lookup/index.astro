@@ -1,0 +1,318 @@
+---
+// src/pages/calculators/zip-lookup/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import ZipLookup from "../../../components/ZipLookup";
+import { getCodeInfo, getAllCodes } from "../../../data/postal-codes";
+import { caZipCodes } from "../../../data/ca-zip-codes";
+
+const title = "International Zip Code Lookup Tool | Free Address Finder";
+const description =
+  "Free global postal code lookup tool with support for US ZIP codes, Canadian postal codes, Taiwan postal codes and Philippine ZIP codes. Find addresses, location details, and more.";
+const keywords =
+  "zip code lookup, postal code finder, international postal codes, ZIP lookup, address finder, postal code search, global zip codes";
+
+const countries = [
+  {
+    code: "us",
+    name: "United States",
+    format: "5 digits (e.g., 12345)",
+    example: "10001",
+    total: "41,692",
+    popularCities: [
+      { code: "10001", name: "New York (Manhattan)" },
+      { code: "90210", name: "Beverly Hills" },
+      { code: "60601", name: "Chicago Loop" },
+      { code: "02108", name: "Boston" },
+      { code: "94102", name: "San Francisco" },
+    ],
+  },
+  {
+    code: "ca",
+    name: "Canada",
+    format: "A1A1A1 (without spaces)",
+    example: "M5V2T6",
+    total: "850,000",
+    popularCities: [
+      { code: "M5V2T6", name: "Toronto Downtown" },
+      { code: "H2Y1C6", name: "Montreal Old Port" },
+      { code: "V6B1B2", name: "Vancouver Downtown" },
+      { code: "T2P1J9", name: "Calgary Downtown" },
+    ],
+  },
+  {
+    code: "tw",
+    name: "Taiwan",
+    format: "Three digits (100-999)",
+    example: "100",
+    total: "368",
+    popularCities: [
+      { code: "100", name: "Taipei City" },
+      { code: "200", name: "Keelung City" },
+      { code: "300", name: "Hsinchu City" },
+      { code: "400", name: "Taichung City" },
+    ],
+  },
+  {
+    code: "ph",
+    name: "Philippines",
+    format: "Four digits (1000-9999)",
+    example: "1000",
+    total: "1,634",
+    popularCities: [
+      { code: "1000", name: "Manila" },
+      { code: "1200", name: "Makati" },
+      { code: "6000", name: "Cebu City" },
+      { code: "8000", name: "Davao City" },
+    ],
+  },
+];
+
+// Filter to only show valid codes
+countries.forEach((country) => {
+  const validCodes = new Set(getAllCodes(country.code));
+  country.popularCities = country.popularCities.filter((city) =>
+    validCodes.has(city.code)
+  );
+});
+
+const statistics = [
+  { label: "Countries Covered", value: "3" },
+  { label: "Total Postal Codes", value: "890,000+" },
+  { label: "Daily Lookups", value: "50,000+" },
+  { label: "Database Updated", value: "Daily" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-6 md:p-8"
+        >
+          <h1 class="text-4xl font-display font-bold text-center mb-4">
+            Global Postal Code Lookup
+          </h1>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8"
+          >
+            Instant address lookup for US ZIP codes, Canadian postal codes,
+            Taiwan post codes, and Philippine ZIP codes
+          </p>
+          <ZipLookup client:load />
+
+          {/* Statistics */}
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+            {
+              statistics.map((stat) => (
+                <div class="bg-surface-light dark:bg-surface-dark bg-opacity-50 dark:bg-opacity-50 p-4 rounded-lg text-center">
+                  <div class="text-2xl font-bold text-accent-primary">
+                    {stat.value}
+                  </div>
+                  <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                    {stat.label}
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Popular Cities & Postal Codes
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {
+            countries.map((country) => (
+              <div class="space-y-4">
+                <h3 class="font-display text-lg font-semibold bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
+                  {country.name}
+                </h3>
+                <div class="grid gap-2">
+                  {country.code === "ca"
+                    ? // Special handling for Canada's regions
+                      Object.entries(caZipCodes)
+                        .slice(0, 4) // Show first 4 regions
+                        .map(([code, info]) => (
+                          <a
+                            href={`/calculators/zip-lookup/ca/${info.zip}`}
+                            class="flex justify-between items-center p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
+                          >
+                            <span class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                              {info.city}
+                            </span>
+                            <span class="font-mono font-medium text-accent-primary">
+                              {info.zip}
+                            </span>
+                          </a>
+                        ))
+                    : // Other countries remain the same
+                      country.popularCities.map((city) => {
+                        const info = getCodeInfo(country.code, city.code);
+                        return (
+                          info && (
+                            <a
+                              href={`/calculators/zip-lookup/${country.code}/${city.code}`}
+                              class="flex justify-between items-center p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
+                            >
+                              <span class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                                {city.name}
+                              </span>
+                              <span class="font-mono font-medium text-accent-primary">
+                                {city.code}
+                              </span>
+                            </a>
+                          )
+                        );
+                      })}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Country Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Postal Code Systems Worldwide
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            countries.map((country) => (
+              <div class="p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                  <h3 class="text-xl font-display font-bold mb-2 md:mb-0">
+                    {country.name}
+                  </h3>
+                  <a
+                    href={`/calculators/zip-lookup/${country.code}`}
+                    class="text-accent-primary hover:text-accent-primary/80 transition-colors"
+                  >
+                    View all {country.name} postal codes →
+                  </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
+                    <p class="font-medium mb-1">Format:</p>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {country.format}
+                    </p>
+                  </div>
+                  <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
+                    <p class="font-medium mb-1">Example:</p>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {country.example}
+                    </p>
+                  </div>
+                  <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
+                    <p class="font-medium mb-1">Total Codes:</p>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {country.total}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Usage Guide */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">How to Use</h2>
+        </div>
+        <div class="p-6 grid gap-6">
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+              <div class="text-lg font-medium">1. Select Country</div>
+              <p
+                class="text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Choose from our supported countries including US, Canada,
+                Taiwan, and Philippines
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="text-lg font-medium">2. Enter Code</div>
+              <p
+                class="text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                Input the postal code following the country-specific format
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="text-lg font-medium">3. Get Results</div>
+              <p
+                class="text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                View detailed location information, nearby codes, and more
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQs */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "What information can I find using the postal code lookup?",
+                a: "Our tool provides detailed location information including city, state/province, country, and in many cases additional data like nearby postal codes and geographic coordinates.",
+              },
+              {
+                q: "How accurate is the postal code database?",
+                a: "Our database is updated daily from official postal service sources for each country, ensuring high accuracy. However, new developments might take some time to be reflected.",
+              },
+              {
+                q: "Why do postal code formats differ between countries?",
+                a: "Each country has developed its own postal code system based on its specific needs, geographical size, population distribution, and mail sorting requirements.",
+              },
+              {
+                q: "Can I lookup international postal codes?",
+                a: "Yes, our tool supports postal code lookup across multiple countries including the United States, Canada, Taiwan, and the Philippines, with more countries being added regularly.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

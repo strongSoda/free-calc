@@ -1,0 +1,326 @@
+---
+// src/pages/calculators/zip-lookup/[country]/index.astro
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import ZipLookup from "../../../../components/ZipLookup";
+import PostalPatterns from "../../../../components/PostalPatterns";
+import { getCodeInfo, getAllCodes } from "../../../../data/postal-codes";
+import { twZipCodes } from "../../../../data/tw-zip-codes";
+import { caZipCodes } from "../../../../data/ca-zip-codes";
+
+export function getStaticPaths() {
+  return [
+    { params: { country: "us" }, props: { countryName: "United States" } },
+    { params: { country: "ca" }, props: { countryName: "Canada" } },
+    { params: { country: "tw" }, props: { countryName: "Taiwan" } },
+    { params: { country: "ph" }, props: { countryName: "Philippines" } },
+  ];
+}
+
+const { country } = Astro.params;
+const { countryName } = Astro.props;
+
+// Country-specific data
+const countryData = {
+  us: {
+    title: "US ZIP Code Directory",
+    description:
+      "Complete directory of United States ZIP codes. Find addresses and location data for any US ZIP code. Updated ZIP code database with city and state information.",
+    format: "5 digits (12345)",
+    total: "41,692",
+    coverage: "All 50 states and territories",
+    popularCities: [
+      { name: "New York", codes: ["10001", "10002", "10003"], state: "NY" },
+      { name: "Los Angeles", codes: ["90001", "90012", "90015"], state: "CA" },
+      { name: "Chicago", codes: ["60601", "60602", "60603"], state: "IL" },
+      { name: "Houston", codes: ["77001", "77002", "77003"], state: "TX" },
+    ],
+  },
+  ca: {
+    title: "Canada Postal Code Directory",
+    description:
+      "Complete directory of Canadian postal codes. Look up any Canadian postal code to find address and location details. Updated database covering all provinces.",
+    format: "A1A1A1 (without spaces)",
+    total: "850,000",
+    coverage: "All provinces and territories",
+    popularCities: [
+      { name: "Toronto", codes: ["M5V2T6", "M4W1A1", "M5H2N1"], state: "ON" },
+      { name: "Vancouver", codes: ["V6B3K9", "V6C3L2", "V6E1V3"], state: "BC" },
+      { name: "Montreal", codes: ["H2Y1C6", "H3B2Y3", "H3C5H7"], state: "QC" },
+      { name: "Ottawa", codes: ["K1P1A1", "K1N6N5", "K1M1M4"], state: "ON" },
+    ],
+  },
+  tw: {
+    title: "Taiwan Postal Code Directory",
+    description:
+      "Complete directory of Taiwan postal codes (郵遞區號). Find addresses and location data for any postal code in Taiwan. Updated database covering all cities and districts.",
+    format: "Three digits (100-999)",
+    total: "368",
+    coverage: "All cities and districts",
+    popularCities: [
+      { name: "Taipei", codes: ["100", "103", "104"], state: "台北市" },
+      { name: "New Taipei", codes: ["220", "221", "222"], state: "新北市" },
+      { name: "Taichung", codes: ["400", "401", "402"], state: "台中市" },
+      { name: "Kaohsiung", codes: ["800", "801", "802"], state: "高雄市" },
+    ],
+  },
+  ph: {
+    title: "Philippines ZIP Code Directory",
+    description:
+      "Complete directory of Philippines ZIP codes. Find addresses and location information for any ZIP code in the Philippines. Updated database covering all regions.",
+    format: "Four digits (1000-9999)",
+    total: "1,634",
+    coverage: "All regions and provinces",
+    popularCities: [
+      {
+        name: "Manila",
+        codes: ["1000", "1001", "1002"],
+        state: "Metro Manila",
+      },
+      {
+        name: "Quezon City",
+        codes: ["1100", "1101", "1102"],
+        state: "Metro Manila",
+      },
+      { name: "Cebu City", codes: ["6000", "6001", "6002"], state: "Cebu" },
+      { name: "Davao City", codes: ["8000", "8001", "8002"], state: "Davao" },
+    ],
+  },
+};
+
+const data = countryData[country];
+const title = data.title;
+const description = data.description;
+const keywords = `${countryName} postal codes, ${countryName} zip codes, ${countryName} post code lookup, ${countryName} postal code directory, ${countryName} zip code finder`;
+
+// Filter only valid codes
+const validCodes = new Set(getAllCodes(country));
+data.popularCities = data.popularCities
+  .map((city) => ({
+    ...city,
+    codes: city.codes.filter((code) => validCodes.has(code)),
+  }))
+  .filter((city) => city.codes.length > 0);
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-6 md:p-8"
+        >
+          <h1 class="text-4xl font-display font-bold text-center mb-4">
+            {countryName} Postal Code Directory
+          </h1>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8"
+          >
+            Find detailed information for any {countryName} postal code
+          </p>
+          <ZipLookup client:load defaultCountry={country} />
+        </div>
+      </div>
+
+      {/* Country Stats */}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div
+          class="p-4 bg-surface-light dark:bg-surface-dark-hover rounded-lg text-center"
+        >
+          <div class="text-2xl font-bold text-accent-primary">{data.total}</div>
+          <div
+            class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            Total Codes
+          </div>
+        </div>
+        <div
+          class="p-4 bg-surface-light dark:bg-surface-dark-hover rounded-lg text-center"
+        >
+          <div class="text-2xl font-bold text-accent-primary">
+            {data.coverage}
+          </div>
+          <div
+            class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            Coverage
+          </div>
+        </div>
+        <div
+          class="p-4 bg-surface-light dark:bg-surface-dark-hover rounded-lg text-center"
+        >
+          <div class="text-2xl font-bold text-accent-primary">Daily</div>
+          <div
+            class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            Updates
+          </div>
+        </div>
+        <div
+          class="p-4 bg-surface-light dark:bg-surface-dark-hover rounded-lg text-center"
+        >
+          <div class="text-2xl font-bold text-accent-primary">100%</div>
+          <div
+            class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            Accuracy
+          </div>
+        </div>
+      </div>
+
+{/* Major Cities */}
+<div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+  <h2 class="text-2xl font-display font-bold mb-6">
+    {country === 'ca' ? 'Major Regions Directory' : 'Major Cities Directory'}
+  </h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    {country === 'ca' ? (
+      // Special handling for Canada
+      Object.entries(caZipCodes).slice(0, 6).map(([code, info]) => (
+        <div class="space-y-4">
+          <h3 class="font-display text-lg font-semibold">
+            {info.city}, {info.state}
+          </h3>
+          <div class="grid grid-cols-3 gap-2">
+            <a
+              href={`/calculators/zip-lookup/${country}/${info.zip}`}
+              class="p-2 bg-surface-light-hover dark:bg-surface-dark rounded text-center hover:bg-accent-primary/5 transition-colors"
+            >
+              <span class="font-mono text-accent-primary">
+                {info.zip}
+              </span>
+            </a>
+          </div>
+        </div>
+      ))
+    ) : (
+      // Other countries remain the same
+      data.popularCities.map((city) => (
+        <div class="space-y-4">
+          <h3 class="font-display text-lg font-semibold">
+            {city.name}, {city.state}
+          </h3>
+          <div class="grid grid-cols-3 gap-2">
+            {city.codes.map((code) => {
+              const info = getCodeInfo(country, code);
+              return info && (
+                <a
+                  href={`/calculators/zip-lookup/${country}/${code}`}
+                  class="p-2 bg-surface-light-hover dark:bg-surface-dark rounded text-center hover:bg-accent-primary/5 transition-colors"
+                >
+                  <span class="font-mono text-accent-primary">
+                    {code}
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+</div>
+
+      {/* Format Guide */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {countryName} Postal Code Format
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="space-y-2">
+            <div class="text-lg font-medium">Format</div>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {data.format}
+            </p>
+          </div>
+          <div class="space-y-2">
+            <div class="text-lg font-medium">Coverage</div>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              {data.coverage}
+            </p>
+          </div>
+          <div class="space-y-2">
+            <div class="text-lg font-medium">Updates</div>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Our database is updated daily with official postal service data.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Code Examples Section */}
+      {
+        country === "tw" && (
+          <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+            <h2 class="text-2xl font-display font-bold mb-6">
+              District Code Examples
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(twZipCodes["台北市"])
+                .slice(0, 9)
+                .map(([district, code]) => (
+                  <a
+                    href={`/calculators/zip-lookup/tw/${code}`}
+                    class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
+                  >
+                    <div class="font-mono text-accent-primary mb-1">{code}</div>
+                    <div class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {district}
+                    </div>
+                  </a>
+                ))}
+            </div>
+          </div>
+        )
+      }
+
+      {/* FAQs */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Frequently Asked Questions
+        </h2>
+        <div class="grid gap-6">
+          {
+            [
+              {
+                q: `How are ${countryName} postal codes structured?`,
+                a: `${countryName} uses ${data.format} format for postal codes, covering ${data.coverage}.`,
+              },
+              {
+                q: "How often is the postal code database updated?",
+                a: "Our database is updated daily with information from official postal services to ensure accuracy.",
+              },
+              {
+                q: `Can I lookup any ${countryName} postal code?`,
+                a: `Yes, our directory includes all ${data.total} postal codes in ${countryName}.`,
+              },
+              {
+                q: "Is this service free to use?",
+                a: "Yes, our postal code lookup service is completely free and requires no registration.",
+              },
+            ].map((faq) => (
+              <div class="space-y-2">
+                <h3 class="font-medium">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

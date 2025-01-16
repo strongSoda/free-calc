@@ -27,6 +27,7 @@ const Footer = () => {
         { name: "Period", url: "/calculators/period" },        
         { name: "Dice Roller", url: "/calculators/dice-roller" },        
         { name: "Body Fat", url: "/calculators/body-fat" },        
+        { name: "Zip Code Lookup", url: "/calculators/zip-lookup" },        
       ]
     },
     {
