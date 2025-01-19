@@ -25,7 +25,18 @@ const affiliateProducts = [
     image: "https://screen.studio/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-transparent.681d19be.png&w=256&q=75",
     link: "https://screen.studio/@Xenr1",
     tags: ["macOS", "Recording", "Video"]
-  }
+  },
+  {
+    id: 3,
+    name: "Code Fast",
+    description: "Learn to code and build your SaaS in just 14 days.",
+    price: 169,
+    originalPrice: 299,
+    discount: 43,
+    image: "https://pbs.twimg.com/profile_images/1514863683574599681/9k7PqDTA_400x400.jpg",
+    link: "https://codefa.st/?via=imran",
+    tags: ["coding", "startup", "SaaS"]
+  },
 ];
 
 export default function AffiliateSection() {

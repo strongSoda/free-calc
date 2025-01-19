@@ -26,7 +26,7 @@ export default function AffiliateProduct({ product }) {
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {product.tags?.map(tag => (
-              <span key={tag} className="px-2 py-1 bg-surface-200/50 dark:bg-surface-700/50 rounded-full text-xs font-medium text-surface-700 dark:text-surface-300">
+              <span key={tag} className="px-2 py-1 bg-primary-200/50 dark:bg-primary-700/50 rounded-full text-xs font-medium text-primary-700 dark:text-primary-300">
                 {tag}
               </span>
             ))}
@@ -34,7 +34,7 @@ export default function AffiliateProduct({ product }) {
 
           {/* Title and Description */}
           <div>
-            <h3 className="text-xl font-display font-semibold text-surface-900 dark:text-surface-50">
+            <h3 className="text-xl font-display font-semibold text-primary-900 dark:text-primary-50">
               {product.name}
             </h3>
             <p className="mt-2 text-surface-600 dark:text-surface-300">
@@ -50,7 +50,7 @@ export default function AffiliateProduct({ product }) {
                   ${product.originalPrice}
                 </span>
               )}
-              <span className="text-2xl font-display font-bold text-surface-900 dark:text-surface-50">
+              <span className="text-2xl font-display font-bold text-primary-900 dark:text-primary-50">
                 ${product.price}
               </span>
             </div>
