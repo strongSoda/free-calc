@@ -26,7 +26,7 @@ const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
     setError('');
     try {
       // using free proxy to avoid ssl, cors for protocol errors/failures
-      const response = await fetch(`https://thingproxy.freeboard.io/fetch/http://ip-api.com/json/${ip}?lang=${selectedLang}&fields=66846719`);
+      const response = await fetch(`https://spiff.guru/any-proxy?url=http://ip-api.com/json/${ip}?lang=${selectedLang}&fields=66846719`);
       const data = await response.json();
       setResults(data);
     } catch (err) {
