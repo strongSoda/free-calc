@@ -77,7 +77,7 @@ const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
         </button>
       </div>
 
-      <p>Quick Link: <a class="text-accent-primary hover:text-accent-secondary transition-colors" href="/calculators/subnet">Subnet Calculator</a></p>
+      <p>Quick Link: <a className="text-accent-primary hover:text-accent-secondary transition-colors" href="/calculators/subnet">Subnet Calculator</a></p>
 
       {error && (
         <div className="p-4 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg">
@@ -144,7 +144,7 @@ const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
       )}
 
                 {/* Add Affiliate Section before Continue Learning */}
-                <div class="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+                <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
                   <AffiliateSection client:load />
                 </div>
     </div>

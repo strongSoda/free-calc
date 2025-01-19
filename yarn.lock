@@ -2018,11 +2018,6 @@ jiti@^1.21.6:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.6.tgz#6c7f7398dd4b3142767f9a168af2f317a428d268"
   integrity sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==
 
-jp-zipcode-lookup@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/jp-zipcode-lookup/-/jp-zipcode-lookup-0.3.4.tgz#9d96d372d03ade699b08201e1615471f6d0bc09c"
-  integrity sha512-khA3+d2eP4iBM+U3pNatxY30FybnXCDpHaPwu5+bY/thPFT9vwJeX/n7ns5sAAV089SJ224zhXCMlTT8vzjolA==
-
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"

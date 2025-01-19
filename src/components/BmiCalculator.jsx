@@ -211,12 +211,12 @@ const BMICalculator = ({
       </div>
 
       {/* Add Affiliate Section before Continue Learning */}
-      <div class="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
         <AffiliateSection client:load />
       </div>
 
       {results && (
-        <div class="mt-8">
+        <div className="mt-8">
           <BMIResults
             {...results}
             showDetails={true}
