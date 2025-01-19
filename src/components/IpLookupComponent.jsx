@@ -25,7 +25,8 @@ const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`https://ip-api.com/json/${ip}?lang=${selectedLang}&fields=66846719`);
+      // using free proxy to avoid ssl, cors for protocol errors/failures
+      const response = await fetch(`https://thingproxy.freeboard.io/fetch/http://ip-api.com/json/${ip}?lang=${selectedLang}&fields=66846719`);
       const data = await response.json();
       setResults(data);
     } catch (err) {
