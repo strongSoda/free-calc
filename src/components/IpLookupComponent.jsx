@@ -25,7 +25,7 @@ const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://ip-api.com/json/${ip}?lang=${selectedLang}&fields=66846719`);
+      const response = await fetch(`https://ip-api.com/json/${ip}?lang=${selectedLang}&fields=66846719`);
       const data = await response.json();
       setResults(data);
     } catch (err) {
