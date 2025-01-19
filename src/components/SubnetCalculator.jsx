@@ -205,6 +205,8 @@ const SubnetCalculator = ({
           Calculate
         </button>
 
+        <p>Quick Link: <a class="text-accent-primary hover:text-accent-secondary transition-colors" href="/calculators/ip-lookup">IP Lookup</a></p>
+
         {results && !results.error && ipVersion === 'ipv4' && (
           <div className="mt-4 space-y-4">
             <h3 className="font-display text-xl font-semibold">Results:</h3>

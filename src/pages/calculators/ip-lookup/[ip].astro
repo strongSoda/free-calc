@@ -1,0 +1,290 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import IpLookupComponent from "../../../components/IpLookupComponent";
+
+// Generate static paths for common IPs
+export async function getStaticPaths() {
+  const commonIPs = [
+    { ip: "8.8.8.8", name: "Google DNS", org: "Google LLC" },
+    { ip: "1.1.1.1", name: "Cloudflare DNS", org: "Cloudflare, Inc." },
+    { ip: "208.67.222.222", name: "OpenDNS", org: "Cisco OpenDNS" },
+    { ip: "192.168.1.1", name: "Default Gateway", org: "Private Network" },
+    { ip: "127.0.0.1", name: "Localhost", org: "Local Machine" },
+    { ip: "8.8.4.4", name: "Google Backup DNS", org: "Google LLC" },
+    { ip: "9.9.9.9", name: "Quad9 DNS", org: "Quad9 Foundation" },
+    { ip: "1.0.0.1", name: "Cloudflare Backup DNS", org: "Cloudflare, Inc." },
+    { ip: "208.67.220.220", name: "OpenDNS Backup", org: "Cisco OpenDNS" },
+    { ip: "10.0.0.1", name: "Private Network Gateway", org: "Private Network" },
+    { ip: "198.18.0.1", name: "Benchmark Test IP", org: "IANA" },
+    { ip: "203.0.113.1", name: "Test IP", org: "IANA" },
+    { ip: "224.0.0.1", name: "Multicast IP", org: "IANA" },
+    { ip: "255.255.255.255", name: "Broadcast Address", org: "Reserved" },
+    { ip: "192.0.2.1", name: "Documentation Example", org: "IANA" },
+    { ip: "100.64.0.1", name: "Carrier-Grade NAT", org: "IANA" },
+    { ip: "172.16.0.1", name: "Private Network", org: "Private Network" },
+    { ip: "169.254.0.1", name: "Link-Local Address", org: "Reserved" },
+    { ip: "198.51.100.1", name: "Example IP", org: "IANA" },
+    { ip: "192.88.99.1", name: "6to4 Relay", org: "IANA" },
+    {
+      ip: "91.198.174.192",
+      name: "Wikipedia Server",
+      org: "Wikimedia Foundation",
+    },
+    { ip: "185.199.108.153", name: "GitHub Pages", org: "GitHub, Inc." },
+    { ip: "140.82.112.4", name: "GitHub API", org: "GitHub, Inc." },
+    { ip: "192.0.32.10", name: "VeriSign", org: "VeriSign, Inc." },
+    { ip: "198.41.0.4", name: "Root DNS Server", org: "IANA" },
+    { ip: "202.89.233.100", name: "ISP DNS", org: "Local ISP" },
+    { ip: "3.3.3.3", name: "Future Use", org: "Reserved" },
+    { ip: "4.2.2.1", name: "Level 3 DNS", org: "CenturyLink" },
+    { ip: "4.2.2.2", name: "Level 3 Backup DNS", org: "CenturyLink" },
+    { ip: "13.107.42.12", name: "Microsoft Azure", org: "Microsoft Corp." },
+    { ip: "52.95.110.1", name: "Amazon AWS", org: "Amazon Web Services" },
+    { ip: "35.190.247.1", name: "Google Cloud", org: "Google LLC" },
+    { ip: "74.125.24.100", name: "Google Search", org: "Google LLC" },
+    { ip: "172.217.0.0", name: "Google Services", org: "Google LLC" },
+    { ip: "64.233.187.99", name: "Google Web", org: "Google LLC" },
+    { ip: "142.250.190.78", name: "YouTube", org: "Google LLC" },
+    { ip: "151.101.1.69", name: "Fastly CDN", org: "Fastly, Inc." },
+    { ip: "151.101.65.69", name: "Fastly Backup", org: "Fastly, Inc." },
+    { ip: "185.60.216.35", name: "Facebook", org: "Meta Platforms, Inc." },
+    {
+      ip: "157.240.22.35",
+      name: "Facebook Backup",
+      org: "Meta Platforms, Inc.",
+    },
+    {
+      ip: "172.67.216.144",
+      name: "Cloudflare Content",
+      org: "Cloudflare, Inc.",
+    },
+    { ip: "104.21.63.173", name: "Cloudflare CDN", org: "Cloudflare, Inc." },
+    { ip: "31.13.71.36", name: "Instagram", org: "Meta Platforms, Inc." },
+    { ip: "69.171.250.35", name: "WhatsApp", org: "Meta Platforms, Inc." },
+    { ip: "20.54.37.122", name: "Microsoft Edge", org: "Microsoft Corp." },
+    { ip: "185.40.65.1", name: "ProtonMail", org: "Proton Technologies" },
+    { ip: "50.17.219.208", name: "Amazon EC2", org: "Amazon Web Services" },
+    { ip: "3.5.140.0", name: "Amazon API Gateway", org: "Amazon Web Services" },
+    { ip: "162.125.66.1", name: "Dropbox", org: "Dropbox, Inc." },
+    { ip: "142.250.0.78", name: "Google APIs", org: "Google LLC" },
+    { ip: "54.239.28.85", name: "Amazon S3", org: "Amazon Web Services" },
+    { ip: "74.6.143.26", name: "Yahoo", org: "Yahoo Inc." },
+    { ip: "204.79.197.200", name: "Bing", org: "Microsoft Corp." },
+    { ip: "202.54.1.5", name: "VSNL", org: "Tata Communications" },
+    { ip: "210.210.19.82", name: "Asianet ISP", org: "Asianet Broadband" },
+    { ip: "103.21.244.0", name: "Cloudflare India", org: "Cloudflare, Inc." },
+    { ip: "43.225.55.0", name: "APNIC", org: "APNIC" },
+    { ip: "144.76.176.222", name: "Hetzner", org: "Hetzner Online GmbH" },
+    { ip: "62.210.101.12", name: "Scaleway", org: "Scaleway" },
+    { ip: "51.38.67.128", name: "OVHcloud", org: "OVH SAS" },
+    { ip: "145.239.37.162", name: "OVH Backup", org: "OVH SAS" },
+    {
+      ip: "13.32.253.0",
+      name: "Amazon CloudFront",
+      org: "Amazon Web Services",
+    },
+    {
+      ip: "52.216.176.0",
+      name: "Amazon S3 Backup",
+      org: "Amazon Web Services",
+    },
+    { ip: "104.20.0.0", name: "Cloudflare IP", org: "Cloudflare, Inc." },
+    { ip: "172.64.0.0", name: "Cloudflare IP Range", org: "Cloudflare, Inc." },
+    {
+      ip: "13.225.0.0",
+      name: "Amazon CloudFront Edge",
+      org: "Amazon Web Services",
+    },
+    { ip: "172.217.10.46", name: "Google Frontend", org: "Google LLC" },
+    { ip: "17.253.144.10", name: "Apple Server", org: "Apple Inc." },
+    { ip: "151.101.2.217", name: "Fastly Edge", org: "Fastly, Inc." },
+    { ip: "185.199.108.153", name: "GitHub Pages Edge", org: "GitHub, Inc." },
+    { ip: "64.233.160.0", name: "Google Search Edge", org: "Google LLC" },
+    { ip: "162.159.0.0", name: "Cloudflare Warp", org: "Cloudflare, Inc." },
+    { ip: "74.125.136.0", name: "Google Mail", org: "Google LLC" },
+    { ip: "52.114.0.0", name: "Microsoft Teams", org: "Microsoft Corp." },
+    { ip: "52.95.0.0", name: "AWS Services", org: "Amazon Web Services" },
+    { ip: "172.217.6.0", name: "Google Drive", org: "Google LLC" },
+    { ip: "13.107.64.0", name: "Microsoft Graph", org: "Microsoft Corp." },
+    { ip: "20.42.0.0", name: "Azure DevOps", org: "Microsoft Corp." },
+    { ip: "199.232.41.0", name: "Fastly GitHub", org: "Fastly, Inc." },
+    { ip: "104.244.42.0", name: "Twitter", org: "Twitter, Inc." },
+    { ip: "18.234.32.0", name: "AWS EC2 US", org: "Amazon Web Services" },
+    { ip: "34.201.0.0", name: "AWS US-East-1", org: "Amazon Web Services" },
+    { ip: "52.28.0.0", name: "AWS EU", org: "Amazon Web Services" },
+    { ip: "52.95.245.0", name: "AWS S3 EU", org: "Amazon Web Services" },
+    { ip: "8.26.56.26", name: "Comodo Secure DNS", org: "Comodo Group" },
+    { ip: "8.20.247.20", name: "Comodo Backup DNS", org: "Comodo Group" },
+    { ip: "76.223.0.0", name: "Amazon Lightsail", org: "Amazon Web Services" },
+    { ip: "172.253.0.0", name: "Google Network", org: "Google LLC" },
+    { ip: "35.192.0.0", name: "Google Cloud Central", org: "Google LLC" },
+    { ip: "34.68.0.0", name: "Google Cloud East", org: "Google LLC" },
+    { ip: "172.104.0.0", name: "Linode", org: "Akamai" },
+    { ip: "139.162.0.0", name: "Linode EU", org: "Akamai" },
+    { ip: "13.57.0.0", name: "AWS EC2 US-West", org: "Amazon Web Services" },
+    { ip: "35.182.0.0", name: "AWS Canada", org: "Amazon Web Services" },
+    { ip: "52.60.0.0", name: "AWS Canada Central", org: "Amazon Web Services" },
+    { ip: "8.23.224.110", name: "Norton DNS", org: "NortonLifeLock" },
+  ];
+
+  return commonIPs.map((ip) => ({
+    params: { ip: ip.ip.replaceAll(".", "-") },
+    props: { ipData: ip },
+  }));
+}
+
+const { ip } = Astro.params;
+const { ipData } = Astro.props;
+const ipAddress = ip.replaceAll("-", ".");
+
+const title = `IP Lookup: ${ipAddress} (${ipData.name})`;
+const description = `Lookup detailed information about IP address ${ipAddress}. Get location, ISP, organization (${ipData.org}), and more details about this IP address.`;
+const keywords = `${ipAddress} lookup, ${ipAddress} location, ${ipData.name} ip, ${ipData.org} ip address, ip address lookup ${ipAddress}`;
+
+// Related IPs for internal linking (excluding current IP)
+const relatedIPs = [
+  { ip: "8.8.8.8", name: "Google DNS" },
+  { ip: "1.1.1.1", name: "Cloudflare DNS" },
+  { ip: "208.67.222.222", name: "OpenDNS" },
+].filter((related) => related.ip !== ipAddress);
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-8"
+        >
+          <h1 class="text-4xl font-display font-bold text-center mb-2">
+            {ipData.name}
+          </h1>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8"
+          >
+            {ipAddress} • {ipData.org}
+          </p>
+          <IpLookupComponent client:load defaultIp={ipAddress} />
+        </div>
+      </div>
+
+      {/* IP Information */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          About This IP Address
+        </h2>
+        <div class="prose dark:prose-invert max-w-none">
+          <p>
+            {ipAddress} is {ipData.name}, operated by {ipData.org}. This IP
+            address is commonly used for {
+              ipData.name === "Google DNS"
+                ? "DNS resolution by Google"
+                : ipData.name === "Cloudflare DNS"
+                  ? "Cloudflare's DNS services"
+                  : ipData.name === "OpenDNS"
+                    ? "Cisco's OpenDNS service"
+                    : ipData.name === "Default Gateway"
+                      ? "local network routing"
+                      : "local machine loopback"
+            }.
+          </p>
+          <h3>Common Uses</h3>
+          <ul>
+            {
+              ipData.name === "Google DNS" && (
+                <>
+                  <li>Primary DNS resolver (8.8.8.8)</li>
+                  <li>Secondary DNS resolver (8.8.4.4)</li>
+                  <li>Public DNS service by Google</li>
+                </>
+              )
+            }
+            {
+              ipData.name === "Cloudflare DNS" && (
+                <>
+                  <li>Primary DNS resolver (1.1.1.1)</li>
+                  <li>Secondary DNS resolver (1.0.0.1)</li>
+                  <li>Privacy-focused DNS resolution</li>
+                </>
+              )
+            }
+            {
+              ipData.name === "OpenDNS" && (
+                <>
+                  <li>DNS resolution and filtering</li>
+                  <li>Network security</li>
+                  <li>Content filtering</li>
+                </>
+              )
+            }
+            {
+              ipData.name === "Default Gateway" && (
+                <>
+                  <li>Local network routing</li>
+                  <li>Router administration</li>
+                  <li>Network configuration</li>
+                </>
+              )
+            }
+            {
+              ipData.name === "Localhost" && (
+                <>
+                  <li>Local development</li>
+                  <li>Testing and debugging</li>
+                  <li>Loopback addressing</li>
+                </>
+              )
+            }
+          </ul>
+        </div>
+      </div>
+
+      {/* Related IPs */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related IP Addresses
+        </h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          {
+            relatedIPs.map((related) => (
+              <a
+                href={`/calculators/ip-lookup/${related.ip.replaceAll(".", "-")}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-mono font-medium">{related.ip}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {related.name}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div class="flex justify-between items-center">
+        <a
+          href="/calculators/ip-lookup"
+          class="text-accent-primary hover:text-accent-secondary transition-colors"
+        >
+          ← Back to IP Lookup Tool
+        </a>
+        <a
+          href="/calculators/ip-lookup/languages/de#languages"
+          class="text-accent-primary hover:text-accent-secondary transition-colors"
+        >
+          View in Other Languages →
+        </a>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

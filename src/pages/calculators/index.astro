@@ -19,6 +19,7 @@ import {
   DollarSign,
   Heart,
   Mailbox,
+  MapPinHouse,
   Network,
   PersonStanding,
   Power,
@@ -155,6 +156,13 @@ const calculators = [
     url: "/calculators/zip-lookup",
     gradient: "from-accent-primary to-accent-secondary",
   },
+  {
+    title: "IP Address Lookup",
+    description:
+      "Get info on IP address including location, ISP, timezone, and more.",
+    url: "/calculators/ip-lookup",
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -265,6 +273,9 @@ const keywords =
               )}
               {index === 18 && (
                 <Mailbox client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 19 && (
+                <MapPinHouse client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2

@@ -1,0 +1,201 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import GpaLayout from "../../../../components/GpaLayout";
+import IpLookupComponent from "../../../../components/IpLookupComponent";
+
+export function getStaticPaths() {
+  const languages = [
+    {
+      code: "de",
+      name: "Deutsch",
+      title: "IP-Adresse Nachschlagen",
+      description: "Kostenloses IP-Lookup-Tool",
+    },
+    {
+      code: "es",
+      name: "Español",
+      title: "Búsqueda de Direcciones IP",
+      description: "Herramienta gratuita de búsqueda de IP",
+    },
+    {
+      code: "fr",
+      name: "Français",
+      title: "Recherche d'Adresse IP",
+      description: "Outil gratuit de recherche d'IP",
+    },
+    {
+      code: "pt-BR",
+      name: "Português",
+      title: "Pesquisa de Endereço IP",
+      description: "Ferramenta gratuita de pesquisa de IP",
+    },
+    {
+      code: "ja",
+      name: "日本語",
+      title: "IPアドレス検索",
+      description: "無料IPルックアップツール",
+    },
+    {
+      code: "zh-CN",
+      name: "中文",
+      title: "IP地址查询",
+      description: "免费IP查询工具",
+    },
+    {
+      code: "ru",
+      name: "Русский",
+      title: "Поиск IP-адреса",
+      description: "Бесплатный инструмент поиска IP",
+    },
+  ];
+
+  return languages.map((lang) => ({
+    params: { lang: lang.code },
+    props: { langData: lang, languages },
+  }));
+}
+
+const { lang } = Astro.params;
+const { langData, languages } = Astro.props;
+
+const title = `${langData.title} - IP Lookup Tool`;
+const description = `${langData.description}. ${langData.name} version of our IP address lookup tool.`;
+const keywords = `ip lookup ${langData.name}, ${langData.title}, ip address finder ${langData.name}`;
+
+// Navigation links in current language
+const commonIPs = [
+  { ip: "8.8.8.8", name: "Google DNS" },
+  { ip: "1.1.1.1", name: "Cloudflare DNS" },
+];
+
+// Get other languages for language selector (excluding current language)
+const otherLanguages = languages.filter((l) => l.code !== lang);
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/ip-lookup-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-8"
+        >
+          <h1 class="text-4xl font-display font-bold text-center mb-2">
+            {langData.title}
+          </h1>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8"
+          >
+            {langData.description}
+          </p>
+          <IpLookupComponent client:load defaultLang={lang} />
+        </div>
+      </div>
+
+      {/* Common IPs */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {
+            lang === "de"
+              ? "Häufige IP-Adressen"
+              : lang === "es"
+                ? "IPs Comunes"
+                : lang === "fr"
+                  ? "IPs Courantes"
+                  : lang === "pt-BR"
+                    ? "IPs Comuns"
+                    : lang === "ja"
+                      ? "一般的なIP"
+                      : lang === "zh-CN"
+                        ? "常用IP"
+                        : lang === "ru"
+                          ? "Популярные IP"
+                          : "Common IPs"
+          }
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          {
+            commonIPs.map((ip) => (
+              <a
+                href={`/calculators/ip-lookup/${ip.ip.replaceAll(".", "-")}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-mono font-medium">{ip.ip}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ip.name}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Language Selector */}
+      <div id="languages" class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {
+            lang === "de"
+              ? "Andere Sprachen"
+              : lang === "es"
+                ? "Otros Idiomas"
+                : lang === "fr"
+                  ? "Autres Langues"
+                  : lang === "pt-BR"
+                    ? "Outros Idiomas"
+                    : lang === "ja"
+                      ? "他の言語"
+                      : lang === "zh-CN"
+                        ? "其他语言"
+                        : lang === "ru"
+                          ? "Другие языки"
+                          : "Other Languages"
+          }
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <a
+            href="/calculators/ip-lookup"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+          >
+            <div class="font-medium">English</div>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              English Version
+            </div>
+          </a>
+          {
+            otherLanguages.map((lang) => (
+              <a
+                href={`/calculators/ip-lookup/languages/${lang.code}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-medium">{lang.name}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {lang.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div class="flex justify-between items-center">
+        <a
+          href="/calculators/ip-lookup"
+          class="text-accent-primary hover:text-accent-secondary transition-colors"
+        >
+          ← Back to IP Lookup Tool
+        </a>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

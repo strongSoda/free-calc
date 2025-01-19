@@ -1,0 +1,136 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import IpLookupComponent from "../../../components/IpLookupComponent";
+
+const title = "IP Address Lookup Tool";
+const description =
+  "Free IP address lookup tool. Get detailed information about any IP address including location, ISP, timezone, and more.";
+const keywords =
+  "ip address lookup, ip lookup, ip locator, ip number lookup, ip address and location, ip lookup by address, ip number search, whois ip, ip address finder, ip checker";
+
+// Common IPs for internal linking
+const commonIPs = [
+  { ip: "8.8.8.8", name: "Google DNS" },
+  { ip: "1.1.1.1", name: "Cloudflare DNS" },
+  { ip: "208.67.222.222", name: "OpenDNS" },
+];
+
+// Common usage examples
+const examples = [
+  {
+    title: "Website Analytics",
+    desc: "Track visitor locations and enhance targeting",
+  },
+  {
+    title: "Security",
+    desc: "Identify potential threats and suspicious activities",
+  },
+  { title: "Network Diagnostics", desc: "Troubleshoot connectivity issues" },
+];
+
+// IP address ranges
+const ipRanges = [
+  { range: "192.168.0.0/16", type: "Private Network" },
+  { range: "10.0.0.0/8", type: "Private Network" },
+  { range: "172.16.0.0/12", type: "Private Network" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/ip-lookup-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-8"
+        >
+          <h2 class="text-4xl font-display font-bold text-center mb-6">
+            Lookup IP Address
+          </h2>
+          <IpLookupComponent client:load />
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">Common IP Lookups</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          {
+            commonIPs.map((ip) => (
+              <a
+                href={`/calculators/ip-lookup/${ip.ip.replaceAll(".", "-")}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div class="font-mono font-medium">{ip.ip}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ip.name}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Usage Examples */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">Common Use Cases</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            examples.map((ex) => (
+              <div class="p-6 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-display text-lg font-semibold mb-2">
+                  {ex.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ex.desc}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* IP Ranges Table */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Common IP Address Ranges
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                  <th class="text-left py-2 px-4">Range</th>
+                  <th class="text-left py-2 px-4">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  ipRanges.map((range) => (
+                    <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                      <td class="py-2 px-4 font-mono">{range.range}</td>
+                      <td class="py-2 px-4">{range.type}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

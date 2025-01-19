@@ -28,6 +28,7 @@ const Footer = () => {
         { name: "Dice Roller", url: "/calculators/dice-roller" },        
         { name: "Body Fat", url: "/calculators/body-fat" },        
         { name: "Zip Code Lookup", url: "/calculators/zip-lookup" },        
+        { name: "IP Lookup", url: "/calculators/ip-lookup" },        
       ]
     },
     {
