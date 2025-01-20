@@ -23,6 +23,7 @@ import {
   Network,
   PersonStanding,
   Power,
+  QrCode,
   Table,
   VenetianMask,
 } from "lucide-react";
@@ -163,6 +164,13 @@ const calculators = [
     url: "/calculators/ip-lookup",
     gradient: "from-accent-primary to-accent-secondary",
   },
+  {
+    title: "QR Code Generator",
+    description:
+      "Generate QR codes for URLs, text, email, phone numbers, and SMS.",
+    url: "/calculators/qr-code",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -275,7 +283,16 @@ const keywords =
                 <Mailbox client:load className="w-8 h-8 text-accent-primary" />
               )}
               {index === 19 && (
-                <MapPinHouse client:load className="w-8 h-8 text-accent-primary" />
+                <MapPinHouse
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
+              {index === 20 && (
+                <QrCode
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
               )}
             </div>
             <h2

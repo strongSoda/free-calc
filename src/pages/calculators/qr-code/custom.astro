@@ -1,0 +1,299 @@
+---
+// src/pages/calculators/qr-code/custom.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import QRCodeGenerator from "../../../components/QRCodeGenerator";
+
+const title = "Custom Logo QR Code Generator - Create Branded QR Codes";
+const description =
+  "Create custom QR codes with your logo and brand colors. Advanced styling options including gradients, dot styles, and corner customization. Free custom QR code generator.";
+const keywords =
+  "custom qr code generator, logo qr code, branded qr code, qr code with logo, custom qr code design, styled qr code";
+
+const stylingOptions = [
+  {
+    title: "Custom Logo",
+    description: "Add your brand logo to the center of the QR code",
+    tips: [
+      "Use PNG or SVG with transparent background",
+      "Keep logo simple and recognizable",
+      "Recommended size: 150x150px or larger",
+    ],
+    icon: "🎨",
+  },
+  {
+    title: "Color Gradients",
+    description: "Apply linear or radial gradients to dots and corners",
+    tips: [
+      "Use contrasting colors for better scanning",
+      "Match gradient to your brand colors",
+      "Test readability with multiple scanners",
+    ],
+    icon: "🌈",
+  },
+  {
+    title: "Dot Styles",
+    description: "Choose from multiple dot patterns and shapes",
+    tips: [
+      "Rounded dots for modern look",
+      "Square dots for traditional style",
+      "Classy style for elegant designs",
+    ],
+    icon: "💫",
+  },
+];
+
+const bestPractices = [
+  {
+    title: "Logo Placement",
+    description: "Center your logo and keep it within 25% of QR code size",
+    tips: "Logo should not interfere with QR code scanning patterns",
+  },
+  {
+    title: "Color Contrast",
+    description: "Maintain high contrast between dots and background",
+    tips: "At least 40% contrast ratio for reliable scanning",
+  },
+  {
+    title: "Testing",
+    description: "Test QR code on different devices and lighting conditions",
+    tips: "Verify scanning works with various QR code readers",
+  },
+];
+
+const exampleDesigns = [
+  {
+    name: "Modern Gradient",
+    colors: ["#FF6B6B", "#4ECDC4"],
+    style: "dots",
+    cornerStyle: "extra-rounded",
+  },
+  {
+    name: "Corporate Clean",
+    colors: ["#2C3E50", "#3498DB"],
+    style: "rounded",
+    cornerStyle: "square",
+  },
+  {
+    name: "Elegant Dark",
+    colors: ["#2C3E50", "#8E44AD"],
+    style: "classy",
+    cornerStyle: "dots",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/qr-code-generator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-8"
+        >
+          <h2
+            class="text-4xl md:text-5xl font-display font-bold text-center mb-4"
+          >
+            Custom Logo QR Code Generator
+          </h2>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8 max-w-2xl mx-auto"
+          >
+            Create branded QR codes with your logo, custom colors, and unique
+            styling. Perfect for marketing materials and brand identity.
+          </p>
+
+          <QRCodeGenerator
+            client:load
+            defaultType="url"
+            defaultValue="https://rref-calculator.com/calculators/qr-code/custom"
+          />
+        </div>
+      </div>
+
+      {/* Styling Options */}
+      <div class="grid md:grid-cols-3 gap-6">
+        {
+          stylingOptions.map((option) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+              <div class="text-3xl mb-4">{option.icon}</div>
+              <h3 class="font-display font-semibold text-lg mb-2">
+                {option.title}
+              </h3>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                {option.description}
+              </p>
+              <div class="space-y-2">
+                {option.tips.map((tip) => (
+                  <div class="flex items-start gap-2 text-sm">
+                    <span class="text-accent-primary">•</span>
+                    <span>{tip}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Example Designs */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Example Designs</h2>
+        </div>
+        <div class="p-6 grid md:grid-cols-3 gap-6">
+          {
+            exampleDesigns.map((design) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div
+                  class="h-4 rounded-full mb-4 bg-gradient-to-r"
+                  style={`from-[${design.colors[0]}] to-[${design.colors[1]}]`}
+                />
+                <h3 class="font-display font-semibold mb-2">{design.name}</h3>
+                <div class="space-y-1 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  <div>Dot Style: {design.style}</div>
+                  <div>Corner Style: {design.cornerStyle}</div>
+                  <div>Colors: {design.colors.join(" → ")}</div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Best Practices */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Best Practices</h2>
+        </div>
+        <div class="p-6 grid md:grid-cols-3 gap-6">
+          {
+            bestPractices.map((practice) => (
+              <div class="space-y-2">
+                <h3 class="font-display font-semibold mb-2">
+                  {practice.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {practice.description}
+                </p>
+                <p class="text-sm text-accent-primary">Tip: {practice.tips}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Design Tips */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Advanced Styling Tips
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <h3 class="font-display font-semibold">Logo Design</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li class="flex items-start gap-2">
+                <span class="text-accent-primary">•</span>
+                Keep logos simple and high contrast
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-primary">•</span>
+                Use transparent backgrounds for better integration
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-primary">•</span>
+                Ensure logo is clearly visible at small sizes
+              </li>
+            </ul>
+          </div>
+          <div class="space-y-4">
+            <h3 class="font-display font-semibold">Color Selection</h3>
+            <ul
+              class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li class="flex items-start gap-2">
+                <span class="text-accent-primary">•</span>
+                Use brand colors that maintain scanning contrast
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-primary">•</span>
+                Test gradient combinations for readability
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-primary">•</span>
+                Consider background colors in final placement
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Other QR Code Types */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Other QR Code Types
+        </h2>
+        <div class="grid md:grid-cols-4 gap-4">
+          <a
+            href="/calculators/qr-code/url"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">URL QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create QR codes for websites
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/text"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Text QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Generate text QR codes
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/email"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Email QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create email QR codes
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/phone"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Phone QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Generate phone QR codes
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

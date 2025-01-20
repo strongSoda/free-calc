@@ -1,0 +1,238 @@
+---
+// src/pages/calculators/qr-code/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import QRCodeGenerator from "../../../components/QRCodeGenerator";
+
+const title = "Free QR Code Generator - Create Custom QR Codes Online";
+const description =
+  "Generate QR codes for URLs, text, email, phone numbers, and SMS. Customize with logos and colors. Free QR code generator with unlimited downloads and high-quality exports.";
+const keywords =
+  "qr code generator, qrcode generator, generate qr, qr code builder, scan code generator, qr builder, qr gen, qr tag generator, free qr code generator";
+
+// Common QR code types for quick access
+const qrTypes = [
+  {
+    type: "url",
+    title: "Website QR Code",
+    description: "Convert any URL into a scannable QR code",
+    icon: "🌐",
+    example: "https://example.com",
+  },
+  {
+    type: "text",
+    title: "Text QR Code",
+    description: "Create QR codes for plain text messages",
+    icon: "📝",
+    example: "Your message here",
+  },
+  {
+    type: "email",
+    title: "Email QR Code",
+    description: "Generate QR codes for email addresses",
+    icon: "✉️",
+    example: "email@example.com",
+  },
+  {
+    type: "phone",
+    title: "Phone QR Code",
+    description: "Make QR codes for phone numbers",
+    icon: "📞",
+    example: "+1234567890",
+  },
+  {
+    type: "sms",
+    title: "SMS QR Code",
+    description: "Create QR codes for text messages",
+    icon: "💬",
+    example: "Send a quick message",
+  },
+];
+
+// Usage examples and best practices
+const usageTips = [
+  {
+    title: "Marketing Materials",
+    description: "Add QR codes to brochures, business cards, and posters",
+    icon: "📊",
+  },
+  {
+    title: "Digital Menus",
+    description: "Create contactless menus for restaurants",
+    icon: "🍽️",
+  },
+  {
+    title: "Business Cards",
+    description: "Share contact information instantly",
+    icon: "📇",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/qr-code-generator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-8">
+      {/* Hero Generator Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-6 md:p-8"
+        >
+          <h2
+            class="text-3xl md:text-4xl font-display font-bold text-center mb-3"
+          >
+            Free QR Code Generator
+          </h2>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8 max-w-2xl mx-auto"
+          >
+            Create professional QR codes instantly. Add your logo, choose custom
+            colors, and download in multiple formats.
+          </p>
+
+          {/* Main Generator Component */}
+          <QRCodeGenerator client:load />
+        </div>
+      </div>
+
+      {/* QR Code Types Grid */}
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          qrTypes.map((type) => (
+            <a
+              href={`/calculators/qr-code/${type.type}`}
+              class="group bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 hover:shadow-lg transition-all"
+            >
+              <div class="flex items-start gap-4">
+                <div class="text-2xl">{type.icon}</div>
+                <div>
+                  <h2 class="font-display font-semibold text-lg mb-2 group-hover:text-accent-primary transition-colors">
+                    {type.title}
+                  </h2>
+                  <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
+                    {type.description}
+                  </p>
+                  <div class="text-sm font-mono text-accent-primary/75">
+                    {type.example}
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      {/* Usage Examples */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">Popular Use Cases</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            usageTips.map((tip) => (
+              <div class="space-y-2">
+                <div class="text-3xl mb-4">{tip.icon}</div>
+                <h3 class="font-display font-semibold">{tip.title}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {tip.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Features List */}
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+          <h2 class="text-xl font-display font-bold mb-4">Key Features</h2>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>High-resolution QR codes</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>Custom logo upload</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>Multiple download formats</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>Color customization</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+          <h2 class="text-xl font-display font-bold mb-4">Why Choose Us</h2>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>100% Free to use</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>No registration required</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>Unlimited QR codes</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-accent-success">✓</span>
+              <span>Mobile-friendly design</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Related Tools */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-xl font-display font-bold mb-4">Related Tools</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          <a
+            href="/calculators/gpa-to-percentage"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">GPA Calculator</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Convert between GPA and percentage
+            </p>
+          </a>
+          <a
+            href="/calculators/subnet"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Subnet Calculator</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Calculate IP subnets and ranges
+            </p>
+          </a>
+          <a
+            href="/calculators/volume"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Volume Calculator</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Calculate volumes of various shapes
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

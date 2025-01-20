@@ -1,0 +1,244 @@
+---
+// src/pages/calculators/qr-code/phone.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import QRCodeGenerator from "../../../components/QRCodeGenerator";
+
+const title = "Phone QR Code Generator - Create Phone Number QR Codes";
+const description =
+  "Generate QR codes for phone numbers. Create scannable QR codes that instantly open the dialer with your number. Free online phone QR code generator.";
+const keywords =
+  "phone qr code generator, phone number qr code, generate phone qr, create phone qr code, contact qr code, call qr code";
+
+const examples = [
+  {
+    title: "Business Line",
+    description: "Direct line for customer inquiries",
+    phone: "+1 (800) 123-4567",
+    context: "Use on business cards and storefronts",
+  },
+  {
+    title: "Customer Service",
+    description: "24/7 support hotline",
+    phone: "+1 (888) 555-0123",
+    context: "Add to product packaging and manuals",
+  },
+  {
+    title: "Appointment Booking",
+    description: "Direct line to scheduling desk",
+    phone: "+1 (877) 987-6543",
+    context: "Include in appointment reminders and marketing",
+  },
+];
+
+const bestPractices = [
+  {
+    title: "Include Country Code",
+    description:
+      "Always use the full international format (+1 for US) to ensure compatibility worldwide",
+  },
+  {
+    title: "Verify Number Format",
+    description:
+      "Test the QR code to ensure it dials correctly on both Android and iOS devices",
+  },
+  {
+    title: "Add Business Hours",
+    description:
+      "Display operating hours near the QR code so people know when to call",
+  },
+];
+
+const useCases = [
+  {
+    title: "Business Cards",
+    description: "Quick scan to save contact details",
+    icon: "📇",
+  },
+  {
+    title: "Store Displays",
+    description: "Easy contact for inquiries",
+    icon: "🏪",
+  },
+  {
+    title: "Product Support",
+    description: "Direct line to help desk",
+    icon: "🛠️",
+  },
+  {
+    title: "Emergency Contact",
+    description: "Quick access to important numbers",
+    icon: "🚨",
+  },
+  {
+    title: "Restaurant Orders",
+    description: "Direct line for takeout orders",
+    icon: "🍽️",
+  },
+  {
+    title: "Service Quotes",
+    description: "Instant contact for pricing",
+    icon: "💰",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/qr-code-generator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-8"
+        >
+          <h2
+            class="text-4xl md:text-5xl font-display font-bold text-center mb-4"
+          >
+            Phone QR Code Generator
+          </h2>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8 max-w-2xl mx-auto"
+          >
+            Create QR codes that instantly open the phone dialer with your
+            number. Perfect for business cards, storefronts, and marketing
+            materials.
+          </p>
+
+          <QRCodeGenerator
+            client:load
+            defaultType="phone"
+            defaultValue="+1234567890"
+          />
+        </div>
+      </div>
+
+      {/* Example Use Cases */}
+      <div class="grid md:grid-cols-3 gap-6">
+        {
+          examples.map((example) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+              <h3 class="font-display font-semibold text-lg mb-2">
+                {example.title}
+              </h3>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                {example.description}
+              </p>
+              <div class="font-mono text-sm text-accent-primary break-all mb-2">
+                {example.phone}
+              </div>
+              <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed italic">
+                {example.context}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Popular Use Cases Grid */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Popular Use Cases</h2>
+        </div>
+        <div class="p-6 grid grid-cols-2 md:grid-cols-3 gap-6">
+          {
+            useCases.map((useCase) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-3xl mb-2">{useCase.icon}</div>
+                <h3 class="font-display font-semibold mb-2">{useCase.title}</h3>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {useCase.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Best Practices */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Best Practices</h2>
+        </div>
+        <div class="p-6 grid md:grid-cols-3 gap-6">
+          {
+            bestPractices.map((practice) => (
+              <div>
+                <h3 class="font-display font-semibold mb-2">
+                  {practice.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {practice.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Other QR Code Types */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Other QR Code Types
+        </h2>
+        <div class="grid md:grid-cols-4 gap-4">
+          <a
+            href="/calculators/qr-code/url"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">URL QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create QR codes for websites
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/text"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Text QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Generate text message QR codes
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/email"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Email QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create email address QR codes
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/sms"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">SMS QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Generate SMS message QR codes
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

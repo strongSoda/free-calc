@@ -1,0 +1,288 @@
+---
+// src/pages/calculators/qr-code/sms.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import QRCodeGenerator from "../../../components/QRCodeGenerator";
+
+const title = "SMS QR Code Generator - Create Text Message QR Codes";
+const description =
+  "Generate QR codes for SMS messages. Create scannable QR codes that open text messages with pre-filled numbers and content. Free online SMS QR code generator.";
+const keywords =
+  "sms qr code generator, text message qr code, message qr code creator, sms code generator, text qr code, message qr code";
+
+const examples = [
+  {
+    title: "Customer Service",
+    description: "Quick support via text message",
+    phone: "+1 (800) 123-4567",
+    message: "Hi, I need assistance with",
+    context: "Use for product packaging and support materials",
+  },
+  {
+    title: "Appointment Reminders",
+    description: "Easy appointment confirmation",
+    phone: "+1 (888) 555-0123",
+    message: "Please confirm my appointment for",
+    context: "Perfect for medical offices and service businesses",
+  },
+  {
+    title: "Marketing Opt-in",
+    description: "Subscribe to SMS updates",
+    phone: "+1 (877) 987-6543",
+    message: "SUBSCRIBE",
+    context: "Include on promotional materials and advertisements",
+  },
+];
+
+const bestPractices = [
+  {
+    title: "Keep Messages Short",
+    description:
+      "Pre-filled messages should be concise and leave room for customer input",
+  },
+  {
+    title: "Include Clear Instructions",
+    description:
+      "Tell users what will happen when they scan (e.g., 'Scan to text us')",
+  },
+  {
+    title: "Test Message Format",
+    description:
+      "Verify the message opens correctly on both Android and iPhone devices",
+  },
+];
+
+const useCases = [
+  {
+    title: "Support Requests",
+    description: "Quick customer service access",
+    icon: "🛟",
+  },
+  {
+    title: "Appointment Bookings",
+    description: "Easy scheduling messages",
+    icon: "📅",
+  },
+  {
+    title: "Order Updates",
+    description: "Status check requests",
+    icon: "📦",
+  },
+  {
+    title: "Feedback Collection",
+    description: "Customer reviews and feedback",
+    icon: "⭐",
+  },
+  {
+    title: "Event RSVPs",
+    description: "Quick event confirmations",
+    icon: "🎉",
+  },
+  {
+    title: "Marketing Lists",
+    description: "SMS list subscriptions",
+    icon: "📱",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/qr-code-generator-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-8"
+        >
+          <h2
+            class="text-4xl md:text-5xl font-display font-bold text-center mb-4"
+          >
+            SMS QR Code Generator
+          </h2>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8 max-w-2xl mx-auto"
+          >
+            Create QR codes that open text messages with pre-filled numbers and
+            content. Perfect for customer service, appointments, and marketing.
+          </p>
+
+          <QRCodeGenerator
+            client:load
+            defaultType="sms"
+            defaultValue="+1234567890"
+          />
+        </div>
+      </div>
+
+      {/* Example Use Cases */}
+      <div class="grid md:grid-cols-3 gap-6">
+        {
+          examples.map((example) => (
+            <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+              <h3 class="font-display font-semibold text-lg mb-2">
+                {example.title}
+              </h3>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                {example.description}
+              </p>
+              <div class="font-mono text-sm text-accent-primary break-all mb-2">
+                Number: {example.phone}
+              </div>
+              <div class="font-mono text-sm text-accent-primary break-all mb-2">
+                Message: {example.message}
+              </div>
+              <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed italic">
+                {example.context}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Popular Use Cases Grid */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Popular Use Cases</h2>
+        </div>
+        <div class="p-6 grid grid-cols-2 md:grid-cols-3 gap-6">
+          {
+            useCases.map((useCase) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-3xl mb-2">{useCase.icon}</div>
+                <h3 class="font-display font-semibold mb-2">{useCase.title}</h3>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {useCase.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* SMS Messaging Tips */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Best Practices</h2>
+        </div>
+        <div class="p-6 grid md:grid-cols-3 gap-6">
+          {
+            bestPractices.map((practice) => (
+              <div>
+                <h3 class="font-display font-semibold mb-2">
+                  {practice.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {practice.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Additional Features */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          SMS QR Code Features
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Pre-filled Messages</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create QR codes with pre-written message content for convenience
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Custom Phone Numbers</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Set any phone number as the SMS recipient
+            </p>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Universal Compatibility</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Works on both Android and iOS devices
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Other QR Code Types */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Other QR Code Types
+        </h2>
+        <div class="grid md:grid-cols-4 gap-4">
+          <a
+            href="/calculators/qr-code/url"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">URL QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create QR codes for websites
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/text"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Text QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Generate text message QR codes
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/email"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Email QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Create email address QR codes
+            </p>
+          </a>
+          <a
+            href="/calculators/qr-code/phone"
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+          >
+            <h3 class="font-medium mb-2">Phone QR Code</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Generate phone number QR codes
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

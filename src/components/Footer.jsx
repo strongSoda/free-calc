@@ -25,10 +25,16 @@ const Footer = () => {
         { name: "Love Percentage", url: "/calculators/love-calculator" }, 
         { name: "Pregnancy Due Date", url: "/calculators/pregnancy" },        
         { name: "Period", url: "/calculators/period" },        
-        { name: "Dice Roller", url: "/calculators/dice-roller" },        
         { name: "Body Fat", url: "/calculators/body-fat" },        
+      ]
+    },
+    {
+      title: "Tools",
+      links: [        
+        { name: "Dice Roller", url: "/calculators/dice-roller" },        
         { name: "Zip Code Lookup", url: "/calculators/zip-lookup" },        
         { name: "IP Lookup", url: "/calculators/ip-lookup" },        
+        { name: "QR Maker", url: "/calculators/qr-code" },        
       ]
     },
     {

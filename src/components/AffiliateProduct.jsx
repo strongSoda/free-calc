@@ -61,7 +61,7 @@ export default function AffiliateProduct({ product }) {
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent-secondary hover:bg-brand-700 text-white rounded-lg font-medium transition-all hover:gap-3 w-full sm:w-auto"
             >
               <ShoppingBag size={18} />
-              Shop Now
+                Learn More
               <ArrowRight size={16} />
             </a>
           </div>
