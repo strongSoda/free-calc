@@ -1,0 +1,188 @@
+---
+// src/pages/calculators/color-picker/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import ColorPicker from "../../../components/ColorPicker";
+import ColorContrast from "../../../components/ColorContrast";
+import { ColorHarmonies } from "../../../components/ColorHarmonies";
+
+const title = "Free Color Picker Tool - HEX, RGB Color Codes & Color Schemes";
+const description =
+  "Free online color picker and palette generator. Get color codes in HEX, RGB, HSL formats, check color contrast for accessibility, and generate color harmonies for your design.";
+const keywords =
+  "color picker, color chooser, color code chooser, color finder hex, hex color picker, color picker hex, color selector hex, color codes, rgb colors";
+
+// Common colors for quick access
+const commonColors = [
+  { name: "Blue", hex: "#0ea5e9", usage: "Primary actions, links" },
+  { name: "Green", hex: "#10b981", usage: "Success states, confirmations" },
+  { name: "Red", hex: "#ef4444", usage: "Error states, alerts" },
+  { name: "Yellow", hex: "#f59e0b", usage: "Warnings, notifications" },
+  { name: "Purple", hex: "#8b5cf6", usage: "Secondary actions" },
+];
+
+// Popular color combinations
+const colorCombos = [
+  { name: "Classic Blue", colors: ["#0ea5e9", "#ffffff", "#1e293b"] },
+  { name: "Nature Green", colors: ["#10b981", "#ecfdf5", "#064e3b"] },
+  { name: "Warm Red", colors: ["#ef4444", "#fef2f2", "#7f1d1d"] },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/color-picker-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-1 md:p-8"
+        >
+          <h1 class="text-4xl font-display font-bold text-center mb-2">
+            Color Picker
+          </h1>
+          <p
+            class="text-center text-content-light-dimmed dark:text-content-dark-dimmed mb-8"
+          >
+            Choose colors, get codes, and create beautiful palettes
+          </p>
+          <ColorPicker client:load />
+        </div>
+      </div>
+
+      {/* Quick Access Colors */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">Common Colors</h2>
+        <div class="grid md:grid-cols-5 gap-4">
+          {
+            commonColors.map((color) => (
+              <a
+                href={`/calculators/color-picker/${color.hex.substring(1)}`}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
+              >
+                <div
+                  class="w-full h-12 rounded-lg mb-2"
+                  style={`background-color: ${color.hex}`}
+                />
+                <div>
+                  <div class="font-medium">{color.name}</div>
+                  <div class="font-mono text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                    {color.hex}
+                  </div>
+                  <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mt-1">
+                    {color.usage}
+                  </div>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Color Combinations */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Popular Color Combinations
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {
+            colorCombos.map((combo) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-medium mb-3">{combo.name}</div>
+                <div class="flex gap-2">
+                  {combo.colors.map((color) => (
+                    <a
+                      href={`/calculators/color-picker/${color.substring(1)}`}
+                      class="flex-1"
+                    >
+                      <div
+                        class="w-full h-12 rounded-lg"
+                        style={`background-color: ${color}`}
+                      />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Color Theory Guide */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">
+        <h2 class="text-2xl font-display font-bold mb-6">Color Theory Guide</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-display text-xl font-semibold mb-4">
+              Color Properties
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex gap-3">
+                <span class="font-bold">Hue:</span>
+                <span
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  The pure color without tint or shade
+                </span>
+              </li>
+              <li class="flex gap-3">
+                <span class="font-bold">Saturation:</span>
+                <span
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  The intensity or purity of the color
+                </span>
+              </li>
+              <li class="flex gap-3">
+                <span class="font-bold">Brightness:</span>
+                <span
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  The lightness or darkness of the color
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-semibold mb-4">
+              Color Schemes
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex gap-3">
+                <span class="font-bold">Monochromatic:</span>
+                <span
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  Different shades and tints of one color
+                </span>
+              </li>
+              <li class="flex gap-3">
+                <span class="font-bold">Complementary:</span>
+                <span
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  Colors opposite each other on the color wheel
+                </span>
+              </li>
+              <li class="flex gap-3">
+                <span class="font-bold">Analogous:</span>
+                <span
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed"
+                >
+                  Colors adjacent to each other on the color wheel
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
