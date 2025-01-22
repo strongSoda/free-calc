@@ -35,6 +35,7 @@ const Footer = () => {
         { name: "Zip Code Lookup", url: "/calculators/zip-lookup" },        
         { name: "IP Lookup", url: "/calculators/ip-lookup" },        
         { name: "QR Maker", url: "/calculators/qr-code" },        
+        { name: "Color Picker", url: "/calculators/color-picker" },        
       ]
     },
     {

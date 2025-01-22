@@ -22,6 +22,7 @@ import {
   MapPinHouse,
   Network,
   PersonStanding,
+  Pipette,
   Power,
   QrCode,
   Table,
@@ -171,6 +172,13 @@ const calculators = [
     url: "/calculators/qr-code",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Color Picker Tool",
+    description:
+      "Get color codes in HEX, RGB, HSL formats, check color contrast for accessibility, and generate color harmonies for your design.",
+    url: "/calculators/color-picker",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -289,10 +297,10 @@ const keywords =
                 />
               )}
               {index === 20 && (
-                <QrCode
-                  client:load
-                  className="w-8 h-8 text-accent-primary"
-                />
+                <QrCode client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 21 && (
+                <Pipette client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2
