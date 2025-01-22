@@ -5,9 +5,10 @@ import { Copy, Check, ChevronRight } from 'lucide-react';
 import ColorContrast from './ColorContrast';
 import ColorVariations from './ColorVariations';
 import ColorHarmonies from './ColorHarmonies';
-import { hex8ToRgba, hexToRgb } from '../utils/colorUtils';
+import { hexToRgb } from '../utils/colorUtils';
+import ShareURL from './ShareURL';
 
-const ColorPicker = ({ defaultColor = '#0ea5e9', onChange }) => {
+const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange }) => {
   const initialRgb = hexToRgb(defaultColor);
 
   const [colorState, setColorState] = useState({
@@ -27,8 +28,7 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', onChange }) => {
   }, [colorState]);
 
   useEffect(() => {
-  const rgb = hex8ToRgba(defaultColor);
-  console.log('rgba', rgb);
+  const rgb = hexToRgb(defaultColor);
   
   setColorState({
     hex: defaultColor,
@@ -79,7 +79,7 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', onChange }) => {
     };
   };
 
-  const handleColorChange = (newColor) => {      
+  const handleColorChange = (newColor) => {          
     setColorState({
       hex: newColor.hex,
       rgb: newColor.rgb
@@ -87,7 +87,7 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', onChange }) => {
     
     // Update URL if we're not in a static environment
     if (typeof window !== 'undefined') {
-      const newPath = `/calculators/color-picker/${newColor.hex.substring(1)}`;
+      const newPath = `/calculators/color-picker?code=${newColor.hex.substring(1)}`;
       if (window.location.pathname !== newPath) {
         window.history.pushState({}, '', newPath);
       }
@@ -126,14 +126,17 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', onChange }) => {
   return (
     <div className="space-y-8">
       {/* Main Color Picker */}
+      <ShareURL url={`https://rref-calculator.com/calculators/color-picker?code=${colorState.hex.substring(1)}`} />
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-auto">
           <ChromePicker
             color={colorState.hex}
+            alpha={colorState.rgb.a}
             onChange={handleColorChange}
             disableAlpha={false}
           />
         </div>
+        
 
         <div className="flex-1 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -186,7 +189,7 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', onChange }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div>      
 
       {/* Color Swatches */}
       <div>

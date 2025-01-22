@@ -1,10 +1,16 @@
 ---
+export const prerender = false;
+
 // src/pages/calculators/color-picker/index.astro
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
 import ColorPicker from "../../../components/ColorPicker";
 import ColorContrast from "../../../components/ColorContrast";
-import { ColorHarmonies } from "../../../components/ColorHarmonies";
+
+// export function getAstroQueryParams(request) {
+//   const url = new URL(request.url);
+//   return Object.fromEntries(url.searchParams);
+// }
 
 const title = "Free Color Picker Tool - HEX, RGB Color Codes & Color Schemes";
 const description =
@@ -27,6 +33,12 @@ const colorCombos = [
   { name: "Nature Green", colors: ["#10b981", "#ecfdf5", "#064e3b"] },
   { name: "Warm Red", colors: ["#ef4444", "#fef2f2", "#7f1d1d"] },
 ];
+
+const color = Astro.url.searchParams.get("code")
+  ? "#" + Astro.url.searchParams.get("code")
+  : "#0ea5e9";
+
+const share = Astro.url.href;
 ---
 
 <Layout
@@ -36,7 +48,7 @@ const colorCombos = [
   currentUrl={Astro.url.pathname}
   ogImage="/color-picker-og.png"
 >
-  <GpaLayout client:load {title} {description} {keywords}>
+  <GpaLayout client:only {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Hero Section */}
       <div
@@ -53,7 +65,7 @@ const colorCombos = [
           >
             Choose colors, get codes, and create beautiful palettes
           </p>
-          <ColorPicker client:load />
+          <ColorPicker client:load defaultColor={color} share={share} />
         </div>
       </div>
 
@@ -64,7 +76,7 @@ const colorCombos = [
           {
             commonColors.map((color) => (
               <a
-                href={`/calculators/color-picker/${color.hex.substring(1)}`}
+                href={`/calculators/color-picker?code=${color.hex.substring(1)}`}
                 class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-all"
               >
                 <div
@@ -99,7 +111,7 @@ const colorCombos = [
                 <div class="flex gap-2">
                   {combo.colors.map((color) => (
                     <a
-                      href={`/calculators/color-picker/${color.substring(1)}`}
+                      href={`/calculators/color-picker?code=${color.substring(1)}`}
                       class="flex-1"
                     >
                       <div
