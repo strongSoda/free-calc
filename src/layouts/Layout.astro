@@ -146,31 +146,6 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
-
-    <!-- MathJax Configuration -->
-    <script is:inline>
-      MathJax = {
-        tex: {
-          inlineMath: [
-            ["$", "$"],
-            ["\\(", "\\)"],
-          ],
-          displayMath: [
-            ["$$", "$$"],
-            ["\\[", "\\]"],
-          ],
-          processEscapes: true,
-        },
-        options: {
-          ignoreHtmlClass: "tex2jax_ignore",
-          processHtmlClass: "tex2jax_process",
-        },
-      };
-    </script>
-    <script
-      async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    ></script>
   </head>
   <body>
     <slot />
