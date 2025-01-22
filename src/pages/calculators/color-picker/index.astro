@@ -1,16 +1,9 @@
 ---
-export const prerender = false;
 
 // src/pages/calculators/color-picker/index.astro
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
 import ColorPicker from "../../../components/ColorPicker";
-import ColorContrast from "../../../components/ColorContrast";
-
-// export function getAstroQueryParams(request) {
-//   const url = new URL(request.url);
-//   return Object.fromEntries(url.searchParams);
-// }
 
 const title = "Free Color Picker Tool - HEX, RGB Color Codes & Color Schemes";
 const description =
@@ -34,11 +27,6 @@ const colorCombos = [
   { name: "Warm Red", colors: ["#ef4444", "#fef2f2", "#7f1d1d"] },
 ];
 
-const color = Astro.url.searchParams.get("code")
-  ? "#" + Astro.url.searchParams.get("code")
-  : "#0ea5e9";
-
-const share = Astro.url.href;
 ---
 
 <Layout
@@ -65,7 +53,7 @@ const share = Astro.url.href;
           >
             Choose colors, get codes, and create beautiful palettes
           </p>
-          <ColorPicker client:load defaultColor={color} share={share} />
+          <ColorPicker client:load />
         </div>
       </div>
 

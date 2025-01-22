@@ -24,17 +24,26 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange }) => {
   ];
 
   useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const codeParam = params.get('code');
+  
+  // If URL has a color parameter, use it; otherwise use defaultColor
+  const colorToUse = codeParam ? '#' + codeParam : defaultColor;
+  const rgb = hexToRgb(colorToUse);
+  
+  if (rgb) {
+    setColorState({
+      hex: colorToUse,
+      rgb: { ...rgb, a: 1 }
+    });
+  }
+}, [defaultColor]); // Include defaultColor in dependencies
+
+
+  useEffect(() => {
     if (onChange) onChange(colorState.hex);
   }, [colorState]);
 
-  useEffect(() => {
-  const rgb = hexToRgb(defaultColor);
-  
-  setColorState({
-    hex: defaultColor,
-    rgb: { ...rgb, a: 1 }, // Assuming alpha = 1 for defaultColor
-  });
-}, [defaultColor]);
 
   const copyToClipboard = async (text, key) => {
     try {
