@@ -1,9 +1,8 @@
 ---
-// src/pages/calculators/zip-lookup/index.astro
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
 import ZipLookup from "../../../components/ZipLookup";
-import { getCodeInfo, getAllCodes } from "../../../data/postal-codes";
+import { twZipCodes } from "../../../data/tw-zip-codes";
 import { caZipCodes } from "../../../data/ca-zip-codes";
 
 const title = "International Zip Code Lookup Tool | Free Address Finder";
@@ -12,32 +11,36 @@ const description =
 const keywords =
   "zip code lookup, postal code finder, international postal codes, ZIP lookup, address finder, postal code search, global zip codes";
 
-const countries = [
+const statistics = [
+  { label: "Countries Covered", value: "4" },
+  { label: "Total Postal Codes", value: "890,000+" },
+  { label: "Daily Lookups", value: "50,000+" },
+  { label: "Database Updated", value: "Daily" },
+];
+
+const countryInfo = [
   {
     code: "us",
     name: "United States",
     format: "5 digits (e.g., 12345)",
     example: "10001",
     total: "41,692",
+    coverage: "All 50 states and territories",
     popularCities: [
-      { code: "10001", name: "New York (Manhattan)" },
-      { code: "90210", name: "Beverly Hills" },
-      { code: "60601", name: "Chicago Loop" },
-      { code: "02108", name: "Boston" },
-      { code: "94102", name: "San Francisco" },
+      { name: "New York", codes: ["10001", "10002"], state: "NY" },
+      { name: "Los Angeles", codes: ["90001", "90012"], state: "CA" },
     ],
   },
   {
     code: "ca",
     name: "Canada",
-    format: "A1A1A1 (without spaces)",
+    format: "A1A 1A1",
     example: "M5V2T6",
     total: "850,000",
+    coverage: "All provinces and territories",
     popularCities: [
-      { code: "M5V2T6", name: "Toronto Downtown" },
-      { code: "H2Y1C6", name: "Montreal Old Port" },
-      { code: "V6B1B2", name: "Vancouver Downtown" },
-      { code: "T2P1J9", name: "Calgary Downtown" },
+      { name: "Toronto", codes: ["M5V2T6", "M4W1A1"], state: "ON" },
+      { name: "Vancouver", codes: ["V6B3K9", "V6C3L2"], state: "BC" },
     ],
   },
   {
@@ -46,12 +49,7 @@ const countries = [
     format: "Three digits (100-999)",
     example: "100",
     total: "368",
-    popularCities: [
-      { code: "100", name: "Taipei City" },
-      { code: "200", name: "Keelung City" },
-      { code: "300", name: "Hsinchu City" },
-      { code: "400", name: "Taichung City" },
-    ],
+    coverage: "All cities and districts",
   },
   {
     code: "ph",
@@ -59,28 +57,12 @@ const countries = [
     format: "Four digits (1000-9999)",
     example: "1000",
     total: "1,634",
+    coverage: "All regions and provinces",
     popularCities: [
-      { code: "1000", name: "Manila" },
-      { code: "1200", name: "Makati" },
-      { code: "6000", name: "Cebu City" },
-      { code: "8000", name: "Davao City" },
+      { name: "Manila", codes: ["1000", "1001"], state: "Metro Manila" },
+      { name: "Cebu City", codes: ["6000", "6001"], state: "Cebu" },
     ],
   },
-];
-
-// Filter to only show valid codes
-countries.forEach((country) => {
-  const validCodes = new Set(getAllCodes(country.code));
-  country.popularCities = country.popularCities.filter((city) =>
-    validCodes.has(city.code)
-  );
-});
-
-const statistics = [
-  { label: "Countries Covered", value: "3" },
-  { label: "Total Postal Codes", value: "890,000+" },
-  { label: "Daily Lookups", value: "50,000+" },
-  { label: "Database Updated", value: "Daily" },
 ];
 ---
 
@@ -108,9 +90,9 @@ const statistics = [
             Instant address lookup for US ZIP codes, Canadian postal codes,
             Taiwan post codes, and Philippine ZIP codes
           </p>
+
           <ZipLookup client:load />
 
-          {/* Statistics */}
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             {
               statistics.map((stat) => (
@@ -137,19 +119,19 @@ const statistics = [
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {
-            countries.map((country) => (
+            countryInfo.map((country) => (
               <div class="space-y-4">
                 <h3 class="font-display text-lg font-semibold bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
                   {country.name}
                 </h3>
                 <div class="grid gap-2">
                   {country.code === "ca"
-                    ? // Special handling for Canada's regions
+                    ? // Special handling for Canada
                       Object.entries(caZipCodes)
-                        .slice(0, 4) // Show first 4 regions
+                        .slice(0, 4)
                         .map(([code, info]) => (
                           <a
-                            href={`/calculators/zip-lookup/ca/${info.zip}`}
+                            href={`/calculators/zip-lookup?country=ca&code=${info.zip}`}
                             class="flex justify-between items-center p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
                           >
                             <span class="text-content-light-dimmed dark:text-content-dark-dimmed">
@@ -160,25 +142,39 @@ const statistics = [
                             </span>
                           </a>
                         ))
-                    : // Other countries remain the same
-                      country.popularCities.map((city) => {
-                        const info = getCodeInfo(country.code, city.code);
-                        return (
-                          info && (
+                    : country.code === "tw"
+                      ? // Special handling for Taiwan
+                        Object.entries(twZipCodes["台北市"])
+                          .slice(0, 4)
+                          .map(([district, code]) => (
                             <a
-                              href={`/calculators/zip-lookup/${country.code}/${city.code}`}
+                              href={`/calculators/zip-lookup?country=tw&code=${code}`}
+                              class="flex justify-between items-center p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
+                            >
+                              <span class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                                {district}
+                              </span>
+                              <span class="font-mono font-medium text-accent-primary">
+                                {code}
+                              </span>
+                            </a>
+                          ))
+                      : // Other countries
+                        country.popularCities?.map((city) =>
+                          city.codes.slice(0, 2).map((code) => (
+                            <a
+                              href={`/calculators/zip-lookup?country=${country.code}&code=${code}`}
                               class="flex justify-between items-center p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:bg-accent-primary/5 transition-colors"
                             >
                               <span class="text-content-light-dimmed dark:text-content-dark-dimmed">
                                 {city.name}
                               </span>
                               <span class="font-mono font-medium text-accent-primary">
-                                {city.code}
+                                {code}
                               </span>
                             </a>
-                          )
-                        );
-                      })}
+                          ))
+                        )}
                 </div>
               </div>
             ))
@@ -186,7 +182,7 @@ const statistics = [
         </div>
       </div>
 
-      {/* Country Information */}
+      {/* Format Guide Section */}
       <div
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
       >
@@ -197,7 +193,7 @@ const statistics = [
         </div>
         <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
           {
-            countries.map((country) => (
+            countryInfo.map((country) => (
               <div class="p-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
                   <h3 class="text-xl font-display font-bold mb-2 md:mb-0">
@@ -224,9 +220,9 @@ const statistics = [
                     </p>
                   </div>
                   <div class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg">
-                    <p class="font-medium mb-1">Total Codes:</p>
+                    <p class="font-medium mb-1">Coverage:</p>
                     <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
-                      {country.total}
+                      {country.coverage}
                     </p>
                   </div>
                 </div>
@@ -235,7 +231,6 @@ const statistics = [
           }
         </div>
       </div>
-
       {/* Usage Guide */}
       <div
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
@@ -276,14 +271,12 @@ const statistics = [
 
       {/* FAQs */}
       <div
-        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
       >
-        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
-          <h2 class="text-2xl font-display font-bold">
-            Frequently Asked Questions
-          </h2>
-        </div>
-        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Frequently Asked Questions
+        </h2>
+        <div class="grid gap-6">
           {
             [
               {
@@ -300,11 +293,11 @@ const statistics = [
               },
               {
                 q: "Can I lookup international postal codes?",
-                a: "Yes, our tool supports postal code lookup across multiple countries including the United States, Canada, Taiwan, and the Philippines, with more countries being added regularly.",
+                a: "Yes, our tool supports postal code lookup across multiple countries including the United States, Canada, Taiwan, and the Philippines.",
               },
             ].map((faq) => (
-              <div class="p-6">
-                <h3 class="font-display font-semibold text-lg mb-2">{faq.q}</h3>
+              <div class="space-y-2">
+                <h3 class="font-medium">{faq.q}</h3>
                 <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
                   {faq.a}
                 </p>

@@ -1,106 +1,172 @@
 import React, { useState, useEffect } from 'react';
 import zipcodes from 'zipcodes';
-import { useTwZipCode, cities, districts } from 'use-tw-zipcode';
 import zipcodesPH from 'zipcodes-ph';
+import { twZipCodes } from '../data/tw-zip-codes';
 import AffiliateSection from './AffiliateSection';
 
-const ZipLookup = ({ defaultCountry = 'us', defaultQuery = '', mode = 'zip-to-address' }) => {
+const ZipLookup = ({ defaultCountry = '', defaultQuery = '', mode = 'zip-to-address' }) => {
   const [country, setCountry] = useState(defaultCountry);
   const [query, setQuery] = useState(defaultQuery);
   const [results, setResults] = useState(null);
   const [error, setError] = useState('');
   
-  // Taiwan specific state using the hook
-  const { city: twCity, district: twDistrict, zipCode: twZipCode, 
-          handleCityChange, handleDistrictChange } = useTwZipCode();
+  // Taiwan specific state
+  const [twCity, setTwCity] = useState(Object.keys(twZipCodes)[0]);
+  const [twDistrict, setTwDistrict] = useState('');
 
   const countries = [
     { code: 'us', name: 'United States', format: '12345 or 12345-6789' },
     { code: 'ca', name: 'Canada', format: 'A1A 1A1' },
-    // { code: 'jp', name: 'Japan', format: '123-4567' },
-    { code: 'tw', name: 'Taiwan', format: '123' },
+    { code: 'tw', name: 'Taiwan', format: 'Select city and district' },
     { code: 'ph', name: 'Philippines', format: '1234' }
   ];
 
-  const handleSearch = () => {
-
-    console.log('handleSearch', country, query);
-    
-    setError('');
+  // Handle Taiwan city/district selection
+  const handleTwCityChange = (city) => {
+    setTwCity(city);
+    setTwDistrict('');
+    setQuery('');
     setResults(null);
-    
-    try {
-      switch(country) {
-        case 'us':
-        case 'ca': {
-          const result = zipcodes.lookup(query);
-          if (result) {
-            // Get nearby zipcodes
-            const nearbyZips = zipcodes.radius(query, 10);
-            const distance = nearbyZips.length > 1 ? 
-              zipcodes.distance(query, nearbyZips[1]) : null;
-              
-            setResults({
-              ...result,
-              nearbyZips: nearbyZips.slice(0, 5),
-              distanceToNearest: distance
-            });
-          } else {
-            setError('Zip code not found');
-          }
-          break;
-        }
-        
-        // case 'jp': {
-        //   const result = Oaza.byZipcode(query)[0];
-        //   if (result) {
-        //     setResults({
-        //       city: result.city.name,
-        //       prefecture: result.pref.name,
-        //       district: result.name,
-        //       country: 'Japan'
-        //     });
-        //   } else {
-        //     setError('郵便番号が見つかりません');
-        //   }
-        //   break;
-        // }
-        
-        case 'ph': {
-          const result = zipcodesPH.find(query);
-          if (result) {
-            setResults({
-              city: result,
-              country: 'Philippines'
-            });
-          } else {
-            setError('Zip code not found');
-          }
-          break;
-        }
-      }
-    } catch (err) {
-      setError('Error looking up zip code');
-      console.error(err);
+  };
+
+  const handleTwDistrictChange = (district) => {
+    setTwDistrict(district);
+    const zipCode = twZipCodes[twCity]?.[district];
+    if (zipCode) {
+      setQuery(zipCode);
+      setResults({
+        city: twCity,
+        district: district,
+        zipCode: zipCode,
+        country: 'Taiwan'
+      });
+      updateUrl('tw', zipCode);
     }
   };
 
-    // Reset form when country changes
-  useEffect(() => {
+  // Handle Taiwan zipcode lookup (reverse lookup)
+  const handleTaiwanLookup = (zipCode) => {
+    for (const [city, districts] of Object.entries(twZipCodes)) {
+      for (const [district, code] of Object.entries(districts)) {
+        if (code === zipCode) {
+          setTwCity(city);
+          setTwDistrict(district);
+          setResults({
+            city: city,
+            district: district,
+            zipCode: code,
+            country: 'Taiwan'
+          });
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  // Separate click handler that updates URL
+const handleSearchClick = () => {
+  handleSearch();
+  updateUrl(country, query);
+};
+
+  // Remove updateUrl from handleSearch
+const handleSearch = (searchCountry = country, searchQuery = query) => {
+  console.log('handleSearch', searchCountry, searchQuery);
+  
+  setError('');
+  setResults(null);
+  
+  try {
+    switch(searchCountry) {
+      case 'us':
+      case 'ca': {
+        const result = zipcodes.lookup(searchQuery);
+        console.log(result);
+        
+        if (result) {
+          const nearbyZips = zipcodes.radius(searchQuery, 10);
+          const distance = nearbyZips.length > 1 ? 
+            zipcodes.distance(searchQuery, nearbyZips[1]) : null;
+            
+          setResults({
+            ...result,
+            nearbyZips: nearbyZips.slice(0, 5),
+            distanceToNearest: distance
+          });
+        } else {
+          setError('Zip code not found');
+        }
+        break;
+      }
+      
+      case 'tw': {
+        if (!handleTaiwanLookup(searchQuery)) {
+          setError('Zip code not found');
+        }
+        break;
+      }
+      
+      case 'ph': {
+        const result = zipcodesPH.find(searchQuery);
+        if (result) {
+          setResults({
+            city: result,
+            country: 'Philippines'
+          });
+        } else {
+          setError('Zip code not found');
+        }
+        break;
+      }
+    }
+  } catch (err) {
+    setError('Error looking up zip code');
+    console.error(err);
+  }
+};
+
+  // Update URL without page reload
+  const updateUrl = (country, code) => {
+    const url = new URL(window.location);
+    url.searchParams.set('country', country);
+    url.searchParams.set('code', code);
+    window.history.pushState({}, '', url);
+  };
+
+  // Simplified useEffects
+useEffect(() => {
+  // Handle URL params only on initial mount
+  const url = new URL(window.location);
+  const urlCountry = url.searchParams.get('country');
+  const urlCode = url.searchParams.get('code');
+  
+  if (urlCountry && urlCode) {
+    setCountry(urlCountry);
+    setQuery(urlCode);
+    handleSearch(urlCountry, urlCode);
+  }
+}, []); // Empty deps array - only runs once
+
+// Country change handler - only clear if user changes country manually
+const handleCountryChange = (newCountry) => {
+  // Don't reset if this is the initial URL param load
+  if (newCountry !== country) {
+    setCountry(newCountry);
     setQuery('');
     setResults(null);
     setError('');
-  }, [country]);
-  
-  // Perform lookup on initial render if defaultQuery is provided
-  useEffect(() => {
-    if (defaultQuery) {
-      console.log(defaultCountry, defaultQuery);
-      setCountry(defaultCountry);
-      setQuery(defaultQuery)
-      handleSearch();
-    }
-  }, [defaultQuery]);
+  }
+};
+
+  // Reset form when country changes (except Taiwan)
+  // useEffect(() => {
+  //   if (country !== 'tw') {
+  //     setQuery('');
+  //     setResults(null);
+  //     setError('');
+  //   }
+  // }, [country]);
 
   return (
     <div className="space-y-6">
@@ -111,9 +177,10 @@ const ZipLookup = ({ defaultCountry = 'us', defaultQuery = '', mode = 'zip-to-ad
             <label className="block text-sm font-medium">Country</label>
             <select
               value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              onChange={(e) => handleCountryChange(e.target.value)}
               className="w-full px-4 py-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-200/50 dark:border-gray-800/50 focus:ring-2 focus:ring-accent-primary/50 outline-none"
             >
+              <option value="">Select Country</option>
               {countries.map(country => (
                 <option key={country.code} value={country.code}>
                   {country.name}
@@ -126,19 +193,22 @@ const ZipLookup = ({ defaultCountry = 'us', defaultQuery = '', mode = 'zip-to-ad
             // Taiwan specific interface
             <div className="grid grid-cols-2 gap-2">
               <select
-                onChange={(e) => handleCityChange(e.target.value)}
+                value={twCity}
+                onChange={(e) => handleTwCityChange(e.target.value)}
                 className="w-full px-4 py-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-200/50 dark:border-gray-800/50"
               >
-                {cities.map((city, i) => (
-                  <option key={i}>{city}</option>
+                {Object.keys(twZipCodes).map((city) => (
+                  <option key={city} value={city}>{city}</option>
                 ))}
               </select>
               <select
-                onChange={(e) => handleDistrictChange(e.target.value)}
+                value={twDistrict}
+                onChange={(e) => handleTwDistrictChange(e.target.value)}
                 className="w-full px-4 py-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-200/50 dark:border-gray-800/50"
               >
-                {districts[twCity]?.map((district, i) => (
-                  <option key={i}>{district}</option>
+                <option value="">Select District</option>
+                {Object.keys(twZipCodes[twCity] || {}).map((district) => (
+                  <option key={district} value={district}>{district}</option>
                 ))}
               </select>
             </div>
@@ -147,32 +217,24 @@ const ZipLookup = ({ defaultCountry = 'us', defaultQuery = '', mode = 'zip-to-ad
               <label className="block text-sm font-medium">
                 {mode === 'zip-to-address' ? 'Postal Code' : 'Address'}
               </label>
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-200/50 dark:border-gray-800/50 focus:ring-2 focus:ring-accent-primary/50 outline-none"
-                placeholder={countries.find(c => c.code === country)?.format}
-              />
+              <div className="flex">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="flex-1 px-4 py-2 rounded-l-lg bg-surface-light dark:bg-surface-dark border border-gray-200/50 dark:border-gray-800/50 focus:ring-2 focus:ring-accent-primary/50 outline-none"
+                  placeholder={countries.find(c => c.code === country)?.format}
+                />
+                <button
+                  onClick={() => handleSearchClick()}
+                  className="px-6 py-2 bg-accent-primary text-white rounded-r-lg hover:bg-accent-primary/90"
+                >
+                  Search
+                </button>
+              </div>
             </div>
           )}
         </div>
-
-        <button
-          onClick={handleSearch}
-          disabled={country === 'tw'}
-          className="w-full bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          Search
-        </button>
-      </div>
-
-      {/* Format Guide */}
-      <div className="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
-        <h3 className="font-medium mb-2">Format Guide:</h3>
-        <p className="text-content-light-dimmed dark:text-content-dark-dimmed">
-          {countries.find(c => c.code === country)?.format}
-        </p>
       </div>
 
       {/* Error Message */}
@@ -225,10 +287,18 @@ const ZipLookup = ({ defaultCountry = 'us', defaultQuery = '', mode = 'zip-to-ad
         </div>
       )}
 
-                {/* Add Affiliate Section before Continue Learning */}
-          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-            <AffiliateSection client:load />
-          </div>
+            {/* Format Guide */}
+      <div className="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+        <h3 className="font-medium mb-2">Format Guide:</h3>
+        <p className="text-content-light-dimmed dark:text-content-dark-dimmed">
+          {countries.find(c => c.code === country)?.format}
+        </p>
+      </div>
+
+      {/* Add Affiliate Section */}
+      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+        <AffiliateSection client:load />
+      </div>
     </div>
   );
 };

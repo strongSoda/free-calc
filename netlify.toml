@@ -2,6 +2,14 @@
   command = "CI= yarn run build"
   publish = "dist"
 
+# Redirect old zip code lookup URLs to new query parameter format
+[[redirects]]
+  from = "/calculators/zip-lookup/:country/:code"
+  to = "/calculators/zip-lookup?country=:country&code=:code"
+  status = 301
+  force = true
+
+# Keep existing redirects
 [[redirects]]
   from = "/calculators/bmi/metric/:weight/:height"
   to = "/calculators/bmi?unit=metric&weight=:weight&height=:height"
@@ -19,6 +27,7 @@
   to = "/calculators/bmi"
   status = 301
 
+# SPA Fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
