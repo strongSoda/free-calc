@@ -176,58 +176,68 @@ data.popularCities = data.popularCities
         </div>
       </div>
 
-{/* Major Cities */}
-<div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
-  <h2 class="text-2xl font-display font-bold mb-6">
-    {country === 'ca' ? 'Major Regions Directory' : 'Major Cities Directory'}
-  </h2>
-  <div class="grid md:grid-cols-2 gap-6">
-    {country === 'ca' ? (
-      // Special handling for Canada
-      Object.entries(caZipCodes).slice(0, 6).map(([code, info]) => (
-        <div class="space-y-4">
-          <h3 class="font-display text-lg font-semibold">
-            {info.city}, {info.state}
-          </h3>
-          <div class="grid grid-cols-3 gap-2">
-            <a
-              href={`/calculators/zip-lookup/${country}/${info.zip}`}
-              class="p-2 bg-surface-light-hover dark:bg-surface-dark rounded text-center hover:bg-accent-primary/5 transition-colors"
-            >
-              <span class="font-mono text-accent-primary">
-                {info.zip}
-              </span>
-            </a>
-          </div>
+      {/* Major Cities */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          {
+            country === "ca"
+              ? "Major Regions Directory"
+              : "Major Cities Directory"
+          }
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            country === "ca"
+              ? // Special handling for Canada
+                Object.entries(caZipCodes)
+                  .slice(0, 6)
+                  .map(([code, info]) => (
+                    <div class="space-y-4">
+                      <h3 class="font-display text-lg font-semibold">
+                        {info.city}, {info.state}
+                      </h3>
+                      <div class="grid grid-cols-3 gap-2">
+                        <a
+                          href={`/calculators/zip-lookup/${country}/${info.zip}`}
+                          class="p-2 bg-surface-light-hover dark:bg-surface-dark rounded text-center hover:bg-accent-primary/5 transition-colors"
+                        >
+                          <span class="font-mono text-accent-primary">
+                            {info.zip}
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+                  ))
+              : // Other countries remain the same
+                data.popularCities.map((city) => (
+                  <div class="space-y-4">
+                    <h3 class="font-display text-lg font-semibold">
+                      {city.name}, {city.state}
+                    </h3>
+                    <div class="grid grid-cols-3 gap-2">
+                      {city.codes.map((code) => {
+                        const info = getCodeInfo(country, code);
+                        return (
+                          info && (
+                            <a
+                              href={`/calculators/zip-lookup/?country=${country}&code=${code}`}
+                              class="p-2 bg-surface-light-hover dark:bg-surface-dark rounded text-center hover:bg-accent-primary/5 transition-colors"
+                            >
+                              <span class="font-mono text-accent-primary">
+                                {code}
+                              </span>
+                            </a>
+                          )
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
+          }
         </div>
-      ))
-    ) : (
-      // Other countries remain the same
-      data.popularCities.map((city) => (
-        <div class="space-y-4">
-          <h3 class="font-display text-lg font-semibold">
-            {city.name}, {city.state}
-          </h3>
-          <div class="grid grid-cols-3 gap-2">
-            {city.codes.map((code) => {
-              const info = getCodeInfo(country, code);
-              return info && (
-                <a
-                  href={`/calculators/zip-lookup/${country}/${code}`}
-                  class="p-2 bg-surface-light-hover dark:bg-surface-dark rounded text-center hover:bg-accent-primary/5 transition-colors"
-                >
-                  <span class="font-mono text-accent-primary">
-                    {code}
-                  </span>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-</div>
+      </div>
 
       {/* Format Guide */}
       <div
