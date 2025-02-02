@@ -1,0 +1,9 @@
+# Redirect BMI calculator URLs 
+/calculators/bmi/metric/:weight/:height   /calculators/bmi?unit=metric&weight=:weight&height=:height   301!
+/calculators/bmi/imperial/:weight/:height   /calculators/bmi?unit=imperial&weight=:weight&height=:height   301!
+
+# Splat redirect for any other calculators/bmi paths
+/calculators/bmi/*   /calculators/bmi   301
+
+# SPA fallback
+/*    /index.html   200

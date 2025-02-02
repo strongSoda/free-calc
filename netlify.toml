@@ -1,0 +1,25 @@
+[build]
+  command = "CI= yarn run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/calculators/bmi/metric/:weight/:height"
+  to = "/calculators/bmi?unit=metric&weight=:weight&height=:height"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/calculators/bmi/imperial/:weight/:height"
+  to = "/calculators/bmi?unit=imperial&weight=:weight&height=:height"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/calculators/bmi/*"
+  to = "/calculators/bmi"
+  status = 301
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

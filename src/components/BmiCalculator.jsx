@@ -19,34 +19,60 @@ const BMICalculator = ({
   const [category, setCategory] = useState('');
   const [results, setResults] = useState(null);
 
-  useEffect(() => {
-    if (autoCalculate && defaultWeight && defaultHeight) {
-      calculateBMI();
-    }
-  }, [defaultWeight, defaultHeight, defaultUnit]);
-
-  const calculateBMI = () => {
-    if (!weight || !height) return;
-
-    let bmiValue;
-    if (unit === 'metric') {
-      bmiValue = (weight / Math.pow(height / 100, 2)).toFixed(1);
-    } else {
-      bmiValue = ((703 * weight) / Math.pow(height, 2)).toFixed(1);
-    }
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    // First check query parameters
+    const params = new URLSearchParams(window.location.search);
+    const paramUnit = params.get('unit');
+    const paramWeight = params.get('weight');
+    const paramHeight = params.get('height');
     
-    setBmi(bmiValue);
-    setCategory(getBMICategory(bmiValue, age, gender));
+    // If we have query params, use those
+    if (paramUnit && paramWeight && paramHeight) {
+      setUnit(paramUnit);
+      setWeight(paramWeight);
+      setHeight(paramHeight);
+      calculateBMI(Number(paramWeight), Number(paramHeight), paramUnit);
+    }
+    // Otherwise use default values if they exist
+    else if (defaultWeight && defaultHeight && defaultUnit && autoCalculate) {
+      setUnit(defaultUnit);
+      setWeight(defaultWeight);
+      setHeight(defaultHeight);
+      calculateBMI(Number(defaultWeight), Number(defaultHeight), defaultUnit);
+    }
+  }
+}, [defaultWeight, defaultHeight, defaultUnit, autoCalculate]); // Include autoCalculate in dependencies
 
-    // Set results for BMIResults component
-    setResults({
-      bmi: bmiValue,
-      weight,
-      height,
-      age,
-      unit
-    });
-  };
+  // Modify the calculateBMI function to optionally accept parameters
+const calculateBMI = (weightInput = null, heightInput = null, unitInput = null) => {
+  
+  // Use passed values or state values
+  const weightNum = Number(weight ? weight : weightInput);
+  const heightNum = Number(height ? height : heightInput);
+  const currentUnit = unit ? unit : unitInput;
+  
+  if (!weightNum || !heightNum || isNaN(weightNum) || isNaN(heightNum)) return;
+
+  let bmiValue;
+  if (currentUnit === 'metric') {
+    bmiValue = (weightNum / Math.pow(heightNum / 100, 2)).toFixed(1);
+  } else {
+    bmiValue = ((703 * weightNum) / Math.pow(heightNum, 2)).toFixed(1);
+  }
+  
+  setBmi(bmiValue);
+  setCategory(getBMICategory(bmiValue, age, gender));
+
+  // Set results for BMIResults component
+  setResults({
+    bmi: bmiValue,
+    weight: weightNum,
+    height: heightNum,
+    age,
+    unit: currentUnit
+  });
+};
 
   const getBMICategory = (bmi, age, gender) => {
     // Adjust thresholds slightly based on gender
