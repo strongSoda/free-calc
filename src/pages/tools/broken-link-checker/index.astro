@@ -1,0 +1,193 @@
+---
+// src/pages/tools/broken-link-checker/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import FastLinkChecker from "../../../components/FastLinkChecker";
+
+// Example sites with common broken link issues
+const exampleSites = [
+  {
+    name: "Wikipedia",
+    url: "https://www.wikipedia.org",
+    description: "Large site with many internal and external links",
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com",
+    description: "Check developer resource links",
+  },
+  {
+    name: "MDN Web Docs",
+    url: "https://developer.mozilla.org",
+    description: "Documentation with extensive cross-references",
+  },
+];
+
+// Common broken link patterns
+const commonPatterns = [
+  {
+    type: "404 Pages",
+    examples: ["about.html", "old-page.html", "products/discontinued"],
+    impact: "Direct user experience impact",
+  },
+  {
+    type: "Missing Media",
+    examples: ["images/banner.jpg", "videos/intro.mp4", "css/old-style.css"],
+    impact: "Visual content and styling issues",
+  },
+  {
+    type: "External Resources",
+    examples: ["cdn.example.com/script.js", "api.service.com/v1"],
+    impact: "Functionality and performance issues",
+  },
+];
+
+const title = "Free Broken Link Checker Tool | Find & Fix Dead Links";
+const description =
+  "Fast, free broken link checker tool. Find broken links, dead pages, and missing resources on your website. Check internal and external links, images, scripts, and more.";
+const keywords =
+  "broken link checker, link checker, find broken links, hyperlink checker, test broken links, broken link search, website link checker, dead link checker, free broken link checker, 404 checker, find dead links, broken links tool";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/broken-link-checker-og.png"
+>
+  <GpaLayout client:load {title} {description} {keywords}>
+    <div class="space-y-8">
+      {/* Quick Start Examples */}
+      <div class="grid gap-4 md:grid-cols-3">
+        {
+          exampleSites.map((site) => (
+            <a
+              href={`/tools/broken-link-checker?url=${encodeURIComponent(site.url)}&mode=single`}
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:shadow-md transition-shadow"
+            >
+              <h3 class="font-medium mb-1">{site.name}</h3>
+              <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                {site.description}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+
+      {/* Main Tool */}
+      <FastLinkChecker client:load />
+
+      {/* Features Grid */}
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg">
+          <h2 class="text-xl font-semibold mb-4">What We Check</h2>
+          <ul
+            class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            <li>• Internal and external links</li>
+            <li>• Images and media resources</li>
+            <li>• Stylesheets and scripts</li>
+            <li>• Iframes and embedded content</li>
+          </ul>
+        </div>
+
+        <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg">
+          <h2 class="text-xl font-semibold mb-4">Common Issues</h2>
+          <ul
+            class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            <li>• 404 - Page Not Found errors</li>
+            <li>• Broken media and resources</li>
+            <li>• Server errors (500 series)</li>
+            <li>• Mixed content warnings</li>
+          </ul>
+        </div>
+
+        <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-lg">
+          <h2 class="text-xl font-semibold mb-4">Business Impact</h2>
+          <ul
+            class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            <li>• Lower SEO rankings</li>
+            <li>• Poor user experience</li>
+            <li>• Reduced conversion rates</li>
+            <li>• Damaged brand credibility</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Common Patterns Section */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Common Broken Link Patterns
+          </h2>
+          <p
+            class="mt-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            Watch out for these common patterns that often lead to broken links
+          </p>
+        </div>
+
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            commonPatterns.map((pattern) => (
+              <div class="p-6">
+                <h3 class="text-lg font-semibold mb-2">{pattern.type}</h3>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  <div class="mb-2">Examples:</div>
+                  <div class="font-mono bg-surface-light dark:bg-surface-dark p-2 rounded-lg mb-2">
+                    {pattern.examples.join("\n")}
+                  </div>
+                  <div class="text-accent-warning">
+                    Impact: {pattern.impact}
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">
+            Frequently Asked Questions
+          </h2>
+        </div>
+
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+          {
+            [
+              {
+                q: "How often should I check for broken links?",
+                a: "Regular checks, ideally monthly, help maintain site health. More frequent checks are recommended for large, frequently updated sites.",
+              },
+              {
+                q: "Why do broken links matter for SEO?",
+                a: "Search engines consider broken links as indicators of poor site maintenance, which can negatively impact your site's rankings.",
+              },
+              {
+                q: "What causes broken links?",
+                a: "Common causes include site restructuring, content deletion, external site changes, and typos in URLs.",
+              },
+            ].map((faq) => (
+              <div class="p-6">
+                <h3 class="font-semibold mb-2">{faq.q}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {faq.a}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
