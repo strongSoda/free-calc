@@ -2,7 +2,7 @@
 // src/pages/tools/broken-link-checker/index.astro
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
-import FastLinkChecker from "../../../components/FastLinkChecker";
+import LinkChecker from "../../../components/FastLinkChecker";
 
 // Example sites with common broken link issues
 const exampleSites = [
@@ -76,7 +76,7 @@ const keywords =
       </div>
 
       {/* Main Tool */}
-      <FastLinkChecker client:load />
+      <LinkChecker client:load />
 
       {/* Features Grid */}
       <div class="grid md:grid-cols-3 gap-6">
