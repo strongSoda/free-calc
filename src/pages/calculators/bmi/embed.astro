@@ -70,7 +70,12 @@ const useCases = [
 ];
 ---
 
-<Layout title={title} description={description} keywords={keywords}>
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
   <GpaLayout {title} {description} {keywords}>
     <div class="space-y-12">
       {/* Hero Section */}

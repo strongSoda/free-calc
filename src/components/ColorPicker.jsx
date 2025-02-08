@@ -8,6 +8,7 @@ import ColorHarmonies from './ColorHarmonies';
 import { hexToRgb } from '../utils/colorUtils';
 import ShareURL from './ShareURL';
 import AffiliateSection from './AffiliateSection';
+// import SponsorsSection from './SponsorCard';
 
 const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange }) => {
   const initialRgb = hexToRgb(defaultColor);
@@ -199,7 +200,13 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange }) => {
             </div>
           </div>
         </div>
-      </div>      
+      </div>     
+
+      <div class="text-center mt-4">
+  <a href="/calculators/color-picker/embed" class="text-accent-primary hover:text-accent-secondary inline-flex items-center gap-2">
+    <span>📋 Add this color picker to your website for free</span>
+  </a>
+</div> 
 
       {/* Color Swatches */}
       <div>
@@ -233,6 +240,9 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange }) => {
           </div>
         )}
       </div>
+
+      {/* <SponsorsSection /> */}
+
 
       {/* Add Affiliate Section before Continue Learning */}
       <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">

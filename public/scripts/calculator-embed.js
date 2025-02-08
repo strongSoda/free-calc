@@ -20,7 +20,13 @@
       title: 'Body Fat Calculator',
       description: 'Calculate your body fat percentage using the U.S. Navy formula. Supports both metric and imperial units.',
       path: '/calculators/body-fat'
-    },    
+    },
+    'color-picker': {
+      title: 'Color Picker',
+      description: 'Pick colors, get codes in HEX, RGB, HSL formats, and generate color schemes.',
+      path: '/calculators/color-picker'
+    },
+ 
     'gpa': {
       title: 'GPA Calculator',
       description: 'Convert between GPA and percentage grades with support for different scales.',

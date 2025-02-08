@@ -1,0 +1,16 @@
+---
+// src/pages/calculators/color-picker/widget.astro
+import WidgetPageLayout from "../../../layouts/WidgetPageLayout.astro";
+import WidgetLayout from "../../../components/WidgetLayout";
+import ColorPicker from "../../../components/ColorPicker";
+---
+
+<WidgetPageLayout>
+  <WidgetLayout
+    calculatorName="Color Picker"
+    calculatorPath="/calculators/color-picker"
+    client:load
+  >
+    <ColorPicker client:load />
+  </WidgetLayout>
+</WidgetPageLayout>
