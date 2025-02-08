@@ -69,8 +69,8 @@
     iframe.title = calculator.title;
 
     // Add both elements to container
-    container.appendChild(attribution);
     container.appendChild(iframe);
+    container.appendChild(attribution);
 
     // Handle dark mode
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
