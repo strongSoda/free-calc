@@ -76,7 +76,7 @@ const useCases = [
   keywords={keywords}
   currentUrl={Astro.url.pathname}
 >
-  <GpaLayout {title} {description} {keywords}>
+  <GpaLayout {title} {description} {keywords} client:load>
     <div class="space-y-12">
       {/* Hero Section */}
       <div class="text-center">
