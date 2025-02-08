@@ -1,0 +1,175 @@
+---
+// src/pages/calculators/bmi/embed.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import CopyCodeBlock from "../../../components/CopyCodeBlock";
+
+const title = "Embed BMI Calculator - Free Widget";
+const description =
+  "Embed our free BMI (Body Mass Index) calculator on your website. Calculate BMI instantly with both metric and imperial units.";
+const keywords =
+  "embed BMI calculator, body mass index widget, BMI calculator embed, free BMI calculator";
+
+const embedCode = `<!-- BMI Calculator -->
+<div id="bmi-calculator"></div>
+<script src="https://rref-calculator.com/scripts/calculator-embed.js"></script>
+<script>
+  createCalculator('bmi', 'bmi-calculator');
+</script>`;
+
+const features = [
+  {
+    title: "Metric & Imperial Support",
+    description:
+      "Support for both metric (kg/cm) and imperial (lbs/inches) units with easy switching.",
+  },
+  {
+    title: "Instant BMI Calculation",
+    description:
+      "Real-time BMI calculation with immediate visual feedback and health category indication.",
+  },
+  {
+    title: "Age & Gender Adjustments",
+    description:
+      "Customized BMI interpretations based on age and gender factors.",
+  },
+  {
+    title: "Comprehensive Results",
+    description:
+      "Detailed BMI analysis including health category, weight ranges, and recommendations.",
+  },
+  {
+    title: "Responsive Design",
+    description:
+      "Calculator automatically adjusts to fit any screen size or container width.",
+  },
+  {
+    title: "Dark Mode Support",
+    description:
+      "Automatic dark mode detection and switching to match your website's theme.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Health & Fitness Websites",
+    description: "Add BMI calculations to your health and fitness content.",
+  },
+  {
+    title: "Medical Practices",
+    description: "Help patients understand their BMI and health status.",
+  },
+  {
+    title: "Nutritionist Websites",
+    description: "Provide instant BMI calculations for dietary consultations.",
+  },
+  {
+    title: "Fitness Apps & Tools",
+    description: "Integrate BMI calculations into your fitness tracking tools.",
+  },
+];
+---
+
+<Layout title={title} description={description} keywords={keywords}>
+  <GpaLayout {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div class="text-center">
+        <h1 class="text-4xl font-display font-bold mb-4">
+          Embed Our BMI Calculator
+        </h1>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          Add a professional BMI calculator to your website in minutes.
+        </p>
+      </div>
+
+      {/* Embed Instructions */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">How to Embed</h2>
+
+        <h3>Embed Code</h3>
+        <p class="mb-4">
+          Copy and paste this code into your HTML where you want the calculator
+          to appear:
+        </p>
+        <CopyCodeBlock code={embedCode} client:load />
+      </div>
+
+      {/* Metric Preview */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Preview</h2>
+        <div
+          class="w-full aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden"
+        >
+          <iframe
+            src="/calculators/bmi/widget"
+            width="100%"
+            height="500px"
+            style="border: none;"
+            title="BMI Calculator Preview"></iframe>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div class="space-y-8">
+        <h2 class="text-2xl font-display font-bold">Features</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            features.map((feature) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {feature.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {feature.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Use Cases */}
+      <div class="space-y-8">
+        <h2 class="text-2xl font-display font-bold">Use Cases</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            useCases.map((useCase) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {useCase.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {useCase.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Terms of Use */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Terms of Use</h2>
+        <ul
+          class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          <li>The calculator is free to embed on any website</li>
+          <li>Attribution links must remain visible and unmodified</li>
+          <li>The calculator may not be modified or reverse engineered</li>
+          <li>
+            We reserve the right to update or modify the calculator at any time
+          </li>
+        </ul>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

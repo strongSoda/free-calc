@@ -1,0 +1,16 @@
+---
+// src/pages/calculators/body-fat/widget.astro
+import WidgetPageLayout from "../../../layouts/WidgetPageLayout.astro";
+import WidgetLayout from "../../../components/WidgetLayout";
+import BodyFatCalculator from "../../../components/BodyFatCalculator";
+---
+
+<WidgetPageLayout>
+  <WidgetLayout
+    calculatorName="Body Fat Calculator"
+    calculatorPath="/calculators/body-fat"
+    client:load
+  >
+    <BodyFatCalculator client:load />
+  </WidgetLayout>
+</WidgetPageLayout>

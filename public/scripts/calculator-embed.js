@@ -11,6 +11,16 @@
       description: 'Calculate IPv6 subnets, CIDR notation, network addresses and more.',
       path: '/calculators/subnet/ipv6'
     },
+    'bmi': {
+      title: 'BMI Calculator',
+      description: 'Calculate your Body Mass Index using metric units (kg/cm).',
+      path: '/calculators/bmi'
+    },
+    'body-fat': {
+      title: 'Body Fat Calculator',
+      description: 'Calculate your body fat percentage using the U.S. Navy formula. Supports both metric and imperial units.',
+      path: '/calculators/body-fat'
+    },    
     'gpa': {
       title: 'GPA Calculator',
       description: 'Convert between GPA and percentage grades with support for different scales.',

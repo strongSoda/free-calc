@@ -1,0 +1,173 @@
+---
+// src/pages/calculators/body-fat/embed.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import CopyCodeBlock from "../../../components/CopyCodeBlock";
+
+const title = "Embed Body Fat Calculator - Free Widget";
+const description =
+  "Embed our free Body Fat Calculator on your website. Calculate body fat percentage using the U.S. Navy formula with both metric and imperial units.";
+const keywords =
+  "embed body fat calculator, fat percentage calculator widget, U.S. Navy formula calculator embed, free body fat calculator";
+
+const embedCode = `<!-- Body Fat Calculator -->
+<div id="body-fat-calculator"></div>
+<script src="https://rref-calculator.com/scripts/calculator-embed.js"></script>
+<script>
+  createCalculator('body-fat', 'body-fat-calculator');
+</script>`;
+
+const features = [
+  {
+    title: "U.S. Navy Formula",
+    description:
+      "Uses the proven U.S. Navy method for accurate body fat calculations.",
+  },
+  {
+    title: "Gender-Specific Calculations",
+    description:
+      "Different formulas and ranges for males and females for better accuracy.",
+  },
+  {
+    title: "Dual Unit Support",
+    description:
+      "Support for both metric (cm/kg) and imperial (inches/lbs) measurements.",
+  },
+  {
+    title: "Category Classification",
+    description:
+      "Automatically categorizes results into fitness levels with visual indicators.",
+  },
+  {
+    title: "Responsive Design",
+    description:
+      "Calculator automatically adjusts to fit any screen size or container width.",
+  },
+  {
+    title: "Dark Mode Support",
+    description:
+      "Automatic dark mode detection and switching to match your website's theme.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Fitness Websites",
+    description: "Add body composition analysis tools to your fitness content.",
+  },
+  {
+    title: "Personal Trainer Sites",
+    description: "Help clients track their body composition progress.",
+  },
+  {
+    title: "Nutrition Blogs",
+    description: "Provide body fat analysis alongside dietary recommendations.",
+  },
+  {
+    title: "Gym Websites",
+    description: "Offer valuable fitness assessment tools to your members.",
+  },
+];
+---
+
+<Layout title={title} description={description} keywords={keywords}>
+  <GpaLayout {title} {description} {keywords}>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div class="text-center">
+        <h1 class="text-4xl font-display font-bold mb-4">
+          Embed Our Body Fat Calculator
+        </h1>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          Add a professional body fat calculator to your website in minutes.
+        </p>
+      </div>
+
+      {/* Embed Instructions */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">How to Embed</h2>
+        <p class="mb-4">
+          Copy and paste this code into your HTML where you want the calculator
+          to appear:
+        </p>
+        <CopyCodeBlock code={embedCode} client:load />
+      </div>
+
+      {/* Preview */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Preview</h2>
+        <div
+          class="w-full aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden"
+        >
+          <iframe
+            src="/calculators/body-fat/widget"
+            width="100%"
+            height="500px"
+            style="border: none;"
+            title="Body Fat Calculator Preview"></iframe>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div class="space-y-8">
+        <h2 class="text-2xl font-display font-bold">Features</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            features.map((feature) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {feature.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {feature.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Use Cases */}
+      <div class="space-y-8">
+        <h2 class="text-2xl font-display font-bold">Use Cases</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            useCases.map((useCase) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {useCase.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {useCase.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Terms of Use */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Terms of Use</h2>
+        <ul
+          class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          <li>The calculator is free to embed on any website</li>
+          <li>Attribution links must remain visible and unmodified</li>
+          <li>The calculator may not be modified or reverse engineered</li>
+          <li>
+            We reserve the right to update or modify the calculator at any time
+          </li>
+        </ul>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

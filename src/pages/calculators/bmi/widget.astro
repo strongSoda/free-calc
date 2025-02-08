@@ -1,0 +1,16 @@
+---
+// src/pages/calculators/bmi/widget.astro
+import WidgetPageLayout from "../../../layouts/WidgetPageLayout.astro";
+import WidgetLayout from "../../../components/WidgetLayout";
+import BMICalculator from "../../../components/BmiCalculator";
+---
+
+<WidgetPageLayout>
+  <WidgetLayout
+    calculatorName="BMI Calculator"
+    calculatorPath="/calculators/bmi"
+    client:load
+  >
+    <BMICalculator client:load defaultAge="25" />
+  </WidgetLayout>
+</WidgetPageLayout>
