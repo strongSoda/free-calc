@@ -5,10 +5,5 @@
 # Splat redirect for any other calculators/bmi paths
 /calculators/bmi/*   /calculators/bmi   301
 
-[[redirects]]
-  from = "/scripts/*"
-  to = "/scripts/:splat"
-  status = 200
-
 # SPA fallback
 /*    /index.html   200
