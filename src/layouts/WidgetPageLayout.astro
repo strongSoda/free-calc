@@ -1,0 +1,32 @@
+---
+// src/layouts/WidgetPageLayout.astro
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Calculator Widget</title>
+    <style>
+      /* Reset margin and padding */
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      /* Hide scrollbar but allow scrolling */
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      * {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

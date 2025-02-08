@@ -1,0 +1,16 @@
+---
+// src/pages/calculators/subnet/widget.astro
+import WidgetPageLayout from "../../../../layouts/WidgetPageLayout.astro";
+import WidgetLayout from "../../../../components/WidgetLayout";
+import SubnetCalculator from "../../../../components/SubnetCalculator";
+---
+
+<WidgetPageLayout>
+  <WidgetLayout
+    calculatorName="IP Subnet Calculator"
+    calculatorPath="/calculators/subnet"
+    client:load
+  >
+    <SubnetCalculator ipVersion="ipv6" client:load />
+  </WidgetLayout>
+</WidgetPageLayout>

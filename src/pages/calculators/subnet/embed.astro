@@ -1,0 +1,210 @@
+---
+// src/pages/calculators/subnet/embed.astro
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import CopyCodeBlock from "../../../components/CopyCodeBlock";
+
+const title = "Embed IP Subnet Calculator - Free Widget";
+const description =
+  "Embed our free IP subnet calculator on your website. Calculate IPv4 and IPv6 subnets, CIDR notations, network addresses and more.";
+const keywords =
+  "embed subnet calculator, IP calculator widget, network calculator embed, free subnet calculator";
+
+const embedCodeipv4 = `<!-- Subnet Calculator -->
+<div id="subnet-calculator"></div>
+<script src="https://rref-calculator.com/scripts/calculator-embed.js"></script>
+<script>
+  createCalculator('subnet-ipv4', 'subnet-calculator');
+</script>`;
+
+const embedCodeipv6 = `<!-- Subnet Calculator -->
+<div id="subnet-calculator"></div>
+<script src="https://rref-calculator.com/scripts/calculator-embed.js"></script>
+<script>
+  createCalculator('subnet-ipv6', 'subnet-calculator');
+</script>`;
+
+const features = [
+  {
+    title: "Complete IPv4 & IPv6 Support",
+    description:
+      "Calculate subnets for both IPv4 and IPv6 networks with automatic detection and appropriate outputs.",
+  },
+  {
+    title: "Comprehensive Network Details",
+    description:
+      "Get network address, broadcast address, usable host range, subnet mask, and more with a single calculation.",
+  },
+  {
+    title: "CIDR Notation Support",
+    description:
+      "Work with modern CIDR notation or traditional subnet masks, with automatic conversion between formats.",
+  },
+  {
+    title: "Responsive Design",
+    description:
+      "Calculator automatically adjusts to fit any screen size or container width.",
+  },
+  {
+    title: "Dark Mode Support",
+    description:
+      "Automatic dark mode detection and switching to match your website's theme.",
+  },
+  {
+    title: "Regular Updates",
+    description:
+      "Continuously updated with new features and improvements at no additional cost.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Network Administration",
+    description:
+      "Help network administrators quickly calculate subnet ranges and addresses.",
+  },
+  {
+    title: "Educational Websites",
+    description:
+      "Teach students about IP addressing and subnetting with practical examples.",
+  },
+  {
+    title: "IT Documentation",
+    description:
+      "Add interactive subnet calculations to your technical documentation.",
+  },
+  {
+    title: "Network Design Tools",
+    description:
+      "Integrate subnet calculations into your network design and planning tools.",
+  },
+];
+---
+
+<Layout title={title} description={description} keywords={keywords}>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div class="text-center">
+        <h1 class="text-4xl font-display font-bold mb-4">
+          Embed Our Subnet Calculator
+        </h1>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          Add a powerful subnet calculator to your website in minutes.
+        </p>
+      </div>
+
+      {/* Embed Instructions */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">How to Embed</h2>
+
+        <h3>IPv4 Embed Code</h3>
+        <p class="mb-4">
+          Copy and paste this code into your HTML where you want the calculator
+          to appear:
+        </p>
+        <CopyCodeBlock code={embedCodeipv4} client:load />
+      </div>
+
+      {/* Embed Preview */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Preview</h2>
+        <div
+          class="w-full aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden"
+        >
+          <iframe
+            src="/calculators/subnet/ipv4/widget"
+            width="100%"
+            height="500px"
+            style="border: none;"
+            title="IP Subnet Calculator Preview"></iframe>
+        </div>
+      </div>
+
+      <h3>IPv6 Embed Code</h3>
+      <p class="mb-4">
+        Copy and paste this code into your HTML where you want the calculator to
+        appear:
+      </p>
+      <CopyCodeBlock code={embedCodeipv6} client:load />
+    </div>
+
+    {/* Embed Preview */}
+    <div
+      class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+    >
+      <h2 class="text-2xl font-display font-bold mb-4">Preview</h2>
+      <div
+        class="w-full aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden"
+      >
+        <iframe
+          src="/calculators/subnet/ipv6/widget"
+          width="100%"
+          height="500px"
+          style="border: none;"
+          title="IP Subnet Calculator Preview"></iframe>
+      </div>
+    </div>
+
+    {/* Features */}
+    <div class="space-y-8">
+      <h2 class="text-2xl font-display font-bold">Features</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        {
+          features.map((feature) => (
+            <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+              <h3 class="text-xl font-display font-bold mb-2">
+                {feature.title}
+              </h3>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                {feature.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {/* Use Cases */}
+    <div class="space-y-8">
+      <h2 class="text-2xl font-display font-bold">Use Cases</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        {
+          useCases.map((useCase) => (
+            <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+              <h3 class="text-xl font-display font-bold mb-2">
+                {useCase.title}
+              </h3>
+              <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                {useCase.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {/* Terms of Use */}
+    <div
+      class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+    >
+      <h2 class="text-2xl font-display font-bold mb-4">Terms of Use</h2>
+      <ul
+        class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+      >
+        <li>The calculator is free to embed on any website</li>
+        <li>Attribution links must remain visible and unmodified</li>
+        <li>The calculator may not be modified or reverse engineered</li>
+        <li>
+          We reserve the right to update or modify the calculator at any time
+        </li>
+      </ul>
+    </div>
+  </GpaLayout>
+</Layout>
