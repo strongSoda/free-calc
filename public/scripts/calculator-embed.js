@@ -38,7 +38,7 @@
     if (!container || !CALCULATORS[type]) return;
 
     const calculator = CALCULATORS[type];
-    const baseUrl = 'http://localhost:4321';
+    const baseUrl = 'http://rref-calculator.com';
 
     // Create wrapper for loading state
     const wrapper = document.createElement('div');
