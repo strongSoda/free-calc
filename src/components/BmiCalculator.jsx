@@ -8,7 +8,8 @@ const BMICalculator = ({
   defaultWeight = '',
   defaultHeight = '',
   defaultAge = '',
-  autoCalculate = false
+  autoCalculate = false,
+  showAffiliate = true
 }) => {
   const [unit, setUnit] = useState(defaultUnit);
   const [weight, setWeight] = useState(defaultWeight);
@@ -243,10 +244,13 @@ const calculateBMI = (weightInput = null, heightInput = null, unitInput = null) 
         ))}
       </div>
 
-      {/* Add Affiliate Section before Continue Learning */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+        {
+          showAffiliate && (
+            <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+              <AffiliateSection client:load />
+            </div>
+          )
+        }
 
       {results && (
         <div className="mt-8">

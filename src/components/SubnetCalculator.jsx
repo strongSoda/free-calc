@@ -5,7 +5,8 @@ const SubnetCalculator = ({
   defaultIp = '',
   defaultCidr = '',
   ipVersion = 'ipv4',
-  onCalculate = () => {} 
+  onCalculate = () => {},
+  showAffiliate = true
 }) => {
   const [ip, setIp] = useState(defaultIp);
   const [cidr, setCidr] = useState(defaultCidr);
@@ -238,9 +239,13 @@ const SubnetCalculator = ({
               <ResultRow label="6to4 Prefix" value={results.sixToFourPrefix} />
 
               {/* Add Affiliate Section before Continue Learning */}
-              <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-                <AffiliateSection client:load />
-              </div>
+              {
+                showAffiliate && (
+                  <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+                    <AffiliateSection client:load />
+                  </div>
+                )
+              }
 
               <div className="mt-6">
                 <h4 className="font-display text-lg font-semibold mb-4">

@@ -9,7 +9,8 @@ const BodyFatCalculator = ({
   defaultNeck = '',
   defaultWaist = '',
   defaultHip = '',
-  defaultUnit = 'metric'
+  defaultUnit = 'metric',
+  showAffiliate = true
 }) => {
   const [gender, setGender] = useState(defaultGender);
   const [age, setAge] = useState(defaultAge);
@@ -275,10 +276,13 @@ const BodyFatCalculator = ({
         </div>
       )}
 
-      {/* Add Affiliate Section */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+        showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            <AffiliateSection client:load />
+          </div>
+        )
+      }
     </div>
   );
 };
