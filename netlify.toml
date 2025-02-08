@@ -27,6 +27,11 @@
   to = "/calculators/bmi"
   status = 301
 
+[[redirects]]
+  from = "/scripts/*"
+  to = "/scripts/:splat"
+  status = 200
+  
 # SPA Fallback
 [[redirects]]
   from = "/*"
