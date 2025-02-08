@@ -206,6 +206,13 @@ const calculateBMI = (weightInput = null, heightInput = null, unitInput = null) 
         </button>
       </div>
 
+      {/* Add this embed link */}
+    <div class="text-center mt-4">
+      <a href="/calculators/bmi/embed" class="text-accent-primary hover:text-accent-secondary inline-flex items-center gap-2">
+        <span>📋 Add this calculator to your website for free</span>
+      </a>
+    </div>
+
       {bmi && (
         <div className="text-center space-y-4 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl">
           <div className="text-4xl font-bold font-display">{bmi}</div>

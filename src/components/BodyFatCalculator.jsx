@@ -211,6 +211,16 @@ const BodyFatCalculator = ({
         Calculate Body Fat
       </button>
 
+      {/* Add this embed link */}
+        <div class="text-center mt-4">
+          <a
+            href="/calculators/body-fat/embed"
+            class="text-accent-primary hover:text-accent-secondary inline-flex items-center gap-2"
+          >
+            <span>📋 Add this calculator to your website for free</span>
+          </a>
+        </div>
+
       {error && (
         <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-3 rounded-lg">
           {error}

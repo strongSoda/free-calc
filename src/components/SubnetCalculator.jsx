@@ -205,7 +205,15 @@ const SubnetCalculator = ({
           Calculate
         </button>
 
+        {/* Add this embed link */}
+    <div class="text-center mt-4">
+      <a href="/calculators/subnet/embed" class="text-accent-primary hover:text-accent-secondary inline-flex items-center gap-2">
+        <span>📋 Add this calculator to your website for free</span>
+      </a>
+    </div>
+
         <p>Quick Link: <a className="text-accent-primary hover:text-accent-secondary transition-colors" href="/calculators/ip-lookup">IP Lookup</a></p>
+        
 
         {results && !results.error && ipVersion === 'ipv4' && (
           <div className="mt-4 space-y-4">

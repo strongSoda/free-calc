@@ -34,16 +34,30 @@
     // Add other calculators here
   };
 
-  function createCalculator(type, containerId) {
+function createCalculator(type, containerId) {
     const container = document.getElementById(containerId);
     if (!container || !CALCULATORS[type]) return;
 
     const calculator = CALCULATORS[type];
     const baseUrl = 'https://rref-calculator.com';
 
+    // Create iframe for the calculator
+    const iframe = document.createElement('iframe');
+    iframe.src = `${baseUrl}${calculator.path}/widget`;
+    iframe.style.cssText = `
+      width: 100%;
+      height: 800px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 8px;
+      background: white;
+    `;
+    iframe.title = calculator.title;
+
     // Create SEO-friendly attribution div with links
     const attribution = document.createElement('div');
-    attribution.style.cssText = 'font-family: system-ui, -apple-system, sans-serif; font-size: 14px; margin-bottom: 8px; color: #666;';
+    attribution.style.cssText = 'font-family: system-ui, -apple-system, sans-serif; font-size: 14px; margin-top: 8px; color: #666;';
     attribution.innerHTML = `
       <div>
         Powered by 
@@ -64,20 +78,6 @@
       </div>
     `;
 
-    // Create iframe for the calculator
-    const iframe = document.createElement('iframe');
-    iframe.src = `${baseUrl}${calculator.path}/widget`;
-    iframe.style.cssText = `
-      width: 100%;
-      height: 800px;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-top: 8px;
-      background: white;
-    `;
-    iframe.title = calculator.title;
-
     // Add both elements to container
     container.appendChild(iframe);
     container.appendChild(attribution);
@@ -92,6 +92,21 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       attribution.style.color = e.matches ? '#94a3b8' : '#666';
       iframe.style.background = e.matches ? '#1e293b' : 'white';
+    });
+
+    // Hide affiliate sections in the iframe
+    iframe.addEventListener('load', function() {
+      try {
+        // Try to access iframe content and hide affiliate sections
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const affiliateSections = iframeDoc.querySelectorAll('[id*="affiliate-section"], [id*="AffiliateSection"]');
+        affiliateSections.forEach(section => {
+          section.style.display = 'none';
+        });
+      } catch (err) {
+        // Handle potential cross-origin errors silently
+        console.warn('Could not modify iframe content due to same-origin policy');
+      }
     });
 
     // Adjust iframe height based on content

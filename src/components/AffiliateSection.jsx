@@ -53,6 +53,7 @@ export default function AffiliateSection() {
       aria-label="Affiliate"
       data-nosnippet
       role="complementary"
+      id="affiliate-section"
     >
       <div className="space-y-6">        
         <AffiliateProduct key={randomProduct.id} product={randomProduct} />
