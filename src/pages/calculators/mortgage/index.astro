@@ -1,0 +1,123 @@
+---
+import GpaLayout from "../../../components/GpaLayout.jsx";
+import MortgageCalculator from "../../../components/MortgageCalculator";
+import Layout from "../../../layouts/Layout.astro";
+
+const title = "Free Mortgage Calculator | Payment & Amortization Schedule";
+const description =
+  "Calculate your monthly mortgage payments, view amortization schedules, and estimate total costs including taxes and insurance with our free mortgage calculator.";
+const keywords =
+  "mortgage calculator, mortgage payment calculator, mortgage estimator, mortgage amortization calculator, home loan calculator, mtg calc, house payment calculator";
+
+const url = Astro.url;
+---
+
+<Layout title={title} description={description} keywords={keywords} url={url} />
+<GpaLayout {title} {description} {keywords} client:load>
+  <MortgageCalculator client:load />
+
+  <div class="mt-12 prose dark:prose-invert max-w-none">
+    <h2>Understanding Your Mortgage Calculator Results</h2>
+    <p>
+      Our mortgage calculator helps you estimate your monthly mortgage payments
+      and understand the full cost of homeownership. Here's what each component
+      means:
+    </p>
+
+    <h3>Monthly Payment Components</h3>
+    <ul>
+      <li>
+        <strong>Principal and Interest:</strong> The base monthly payment that goes
+        toward paying off your loan.
+      </li>
+      <li>
+        <strong>Property Taxes:</strong> Annual property taxes divided into monthly
+        payments.
+      </li>
+      <li>
+        <strong>Home Insurance:</strong> Your annual homeowner's insurance premium
+        divided into monthly payments.
+      </li>
+      <li>
+        <strong>PMI (Private Mortgage Insurance):</strong> Required if your down
+        payment is less than 20% of the home price.
+      </li>
+      <li>
+        <strong>HOA Fees:</strong> Monthly homeowners association fees, if applicable.
+      </li>
+    </ul>
+
+    <h3>Understanding Amortization</h3>
+    <p>
+      The amortization schedule shows how your loan balance decreases over time.
+      In the early years, a larger portion of your payment goes toward interest.
+      As time progresses, more of each payment goes toward reducing the
+      principal balance.
+    </p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How is my monthly mortgage payment calculated?</h3>
+    <p>Your monthly mortgage payment is calculated using several factors:</p>
+    <ul>
+      <li>Principal loan amount</li>
+      <li>Interest rate</li>
+      <li>Loan term (usually 15 or 30 years)</li>
+      <li>Property taxes</li>
+      <li>Home insurance</li>
+      <li>Private Mortgage Insurance (if applicable)</li>
+    </ul>
+
+    <h3>What is PMI and when is it required?</h3>
+    <p>
+      Private Mortgage Insurance (PMI) is typically required when your down
+      payment is less than 20% of the home's purchase price. PMI protects the
+      lender if you default on your loan. Once you build up 20% equity in your
+      home, you may be able to remove PMI.
+    </p>
+
+    <h3>How can I lower my monthly mortgage payment?</h3>
+    <p>There are several ways to lower your monthly mortgage payment:</p>
+    <ul>
+      <li>Make a larger down payment</li>
+      <li>Extend the loan term (though this increases total interest paid)</li>
+      <li>Find a lower interest rate</li>
+      <li>Buy a less expensive home</li>
+      <li>Avoid PMI by putting 20% down</li>
+      <li>Shop around for better property insurance rates</li>
+    </ul>
+
+    <h2>Making Extra Payments</h2>
+    <p>
+      Making extra payments can significantly reduce your loan term and total
+      interest paid. Even small additional monthly payments can make a big
+      difference over time. Use our calculator to see how extra payments affect
+      your amortization schedule.
+    </p>
+
+    <h2>Mortgage Terms and Definitions</h2>
+    <dl>
+      <dt>Principal</dt>
+      <dd>The original amount of money borrowed in the mortgage loan.</dd>
+
+      <dt>Interest Rate</dt>
+      <dd>
+        The percentage charged by the lender for borrowing the money, expressed
+        as an annual rate.
+      </dd>
+
+      <dt>Amortization</dt>
+      <dd>
+        The process of paying off a debt over time through regular payments,
+        split between principal and interest.
+      </dd>
+
+      <dt>Escrow</dt>
+      <dd>
+        An account managed by your lender to pay property taxes and insurance
+        premiums.
+      </dd>
+    </dl>
+  </div>
+</GpaLayout>
+</Layout>

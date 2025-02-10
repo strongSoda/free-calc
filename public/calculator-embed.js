@@ -30,7 +30,12 @@
       description: 'Pick colors, get codes in HEX, RGB, HSL formats, and generate color schemes.',
       path: '/calculators/color-picker',
       defaultHeight: '100vh'
-    }
+    },
+    'mortgage': {
+      title: 'Mortgage Calculator',
+      description: 'Calculate mortgage payments, amortization schedules, and total costs including taxes and insurance.',
+      path: '/calculators/mortgage',
+    },
   };
 
   function createCalculator(type, containerId, iHeight='100vh') {

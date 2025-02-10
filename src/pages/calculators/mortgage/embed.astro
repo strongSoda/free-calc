@@ -1,0 +1,180 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import CopyCodeBlock from "../../../components/CopyCodeBlock";
+
+const title = "Embed Mortgage Calculator - Free Widget";
+const description =
+  "Embed our free mortgage calculator on your website. Calculate mortgage payments, amortization schedules, and total costs with support for taxes and insurance.";
+const keywords =
+  "embed mortgage calculator, mortgage payment widget, loan calculator embed, free mortgage calculator";
+
+const embedCode = `<!-- Mortgage Calculator -->
+<div id="mortgage-calculator"></div>
+<script src="https://rref-calculator.com/calculator-embed.js"></script>
+<script>
+  createCalculator('mortgage', 'mortgage-calculator');
+</script>`;
+
+const features = [
+  {
+    title: "Complete Payment Breakdown",
+    description:
+      "Detailed monthly payment breakdown including principal, interest, taxes, and insurance.",
+  },
+  {
+    title: "Amortization Schedule",
+    description:
+      "Visual and tabular representation of loan amortization over time.",
+  },
+  {
+    title: "Tax & Insurance Support",
+    description:
+      "Optional inclusion of property taxes, home insurance, PMI, and HOA fees.",
+  },
+  {
+    title: "Extra Payments Calculator",
+    description:
+      "Calculate the impact of additional payments on loan term and total interest.",
+  },
+  {
+    title: "Interactive Charts",
+    description:
+      "Visual representation of payment distribution and loan balance over time.",
+  },
+  {
+    title: "Dark Mode Support",
+    description:
+      "Automatic dark mode detection and switching to match your website's theme.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Real Estate Websites",
+    description: "Help potential buyers understand monthly payments and costs.",
+  },
+  {
+    title: "Mortgage Brokers",
+    description:
+      "Provide instant mortgage calculations for different scenarios.",
+  },
+  {
+    title: "Financial Advisors",
+    description:
+      "Assist clients in understanding the full cost of homeownership.",
+  },
+  {
+    title: "Property Listings",
+    description: "Add payment estimates directly to your property listings.",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Hero Section */}
+      <div class="text-center">
+        <h1 class="text-4xl font-display font-bold mb-4">
+          Embed Our Mortgage Calculator
+        </h1>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          Add a professional mortgage calculator to your website in minutes.
+        </p>
+      </div>
+
+      {/* Embed Instructions */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">How to Embed</h2>
+        <h3>Embed Code</h3>
+        <p class="mb-4">
+          Copy and paste this code into your HTML where you want the calculator
+          to appear:
+        </p>
+        <CopyCodeBlock code={embedCode} client:load />
+      </div>
+
+      {/* Preview */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Preview</h2>
+        <div
+          class="w-full aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden"
+        >
+          <iframe
+            src="/calculators/mortgage/widget"
+            width="100%"
+            height="700px"
+            style="border: none;"
+            title="Mortgage Calculator Preview"></iframe>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div class="space-y-8">
+        <h2 class="text-2xl font-display font-bold">Features</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            features.map((feature) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {feature.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {feature.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Use Cases */}
+      <div class="space-y-8">
+        <h2 class="text-2xl font-display font-bold">Use Cases</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            useCases.map((useCase) => (
+              <div class="bg-surface-light-hover dark:bg-surface-dark p-6 rounded-xl">
+                <h3 class="text-xl font-display font-bold mb-2">
+                  {useCase.title}
+                </h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {useCase.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Terms of Use */}
+      <div
+        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Terms of Use</h2>
+        <ul
+          class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+        >
+          <li>The calculator is free to embed on any website</li>
+          <li>Attribution links must remain visible and unmodified</li>
+          <li>The calculator may not be modified or reverse engineered</li>
+          <li>
+            We reserve the right to update or modify the calculator at any time
+          </li>
+        </ul>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

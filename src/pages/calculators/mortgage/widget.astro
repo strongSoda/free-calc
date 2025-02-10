@@ -1,0 +1,17 @@
+---
+// src/pages/calculators/mortgage/widget.astro
+import WidgetPageLayout from "../../../layouts/WidgetPageLayout.astro"; import WidgetLayout
+from "../../../components/WidgetLayout"; import MortgageCalculator from "../../../components/MortgageCalculator";
+---
+<WidgetPageLayout>
+  <WidgetLayout
+    calculatorName="Mortgage Calculator"
+    calculatorPath="/calculators/mortgage"
+    client:load
+  >
+    <MortgageCalculator
+      client:load
+      showAffiliate={false}
+    />
+  </WidgetLayout>
+</WidgetPageLayout>

@@ -17,6 +17,7 @@ import {
   Dice6,
   Divide,
   DollarSign,
+  HandCoins,
   Heart,
   Mailbox,
   MapPinHouse,
@@ -179,6 +180,13 @@ const calculators = [
     url: "/calculators/color-picker",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Mortgage Calculator",
+    description:
+      "Calculate your monthly mortgage payments, view amortization schedules, and estimate total costs including taxes and insurance.",
+    url: "/calculators/mortgage",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -301,6 +309,9 @@ const keywords =
               )}
               {index === 21 && (
                 <Pipette client:load className="w-8 h-8 text-accent-primary" />
+              )}
+              {index === 22 && (
+                <HandCoins client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2

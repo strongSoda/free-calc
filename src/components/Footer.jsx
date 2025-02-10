@@ -52,15 +52,12 @@ const Footer = () => {
         { name: "Power Converter", url: "/calculators/power" },
       ]
     },
-    // {
-    //   title: "Resources",
-    //   links: [
-    //     { name: "Sitemap", url: "/sitemap" },
-    //     // { name: "Grading Systems", url: "#" },
-    //     // { name: "Academic Scales", url: "#" },
-    //     // { name: "Grade Conversion", url: "#" }
-    //   ]
-    // },
+    {
+      title: "Finance Calculators",
+      links: [
+        { name: "Mortgage", url: "/calculators/mortgage" },        
+      ]
+    },
     {
       title: "About",
       links: [
