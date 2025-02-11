@@ -24,10 +24,6 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
 
-    <!-- Canonical URL -->
-    <!-- <link rel="canonical" href={canonicalURL} /> -->
-     <Canonical client:only />
-
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0ea5e9" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -144,6 +140,10 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9779862910631944"
       crossorigin="anonymous"></script>
+
+    <!-- Canonical URL -->
+    <!-- <link rel="canonical" href={canonicalURL} /> -->
+    <Canonical client:only />
   </head>
   <body>
     <slot />
