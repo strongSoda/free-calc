@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
 import BMICalculator from "../../../components/BmiCalculator";
+import { ChevronRight } from "lucide-react";
 
 const title = "BMI Calculator | Calculate Body Mass Index";
 const description =
@@ -38,6 +39,37 @@ const healthCategories = [
     range: "30.0 or higher",
     description:
       "Increased risk of several health conditions. Consult healthcare provider.",
+  },
+];
+
+const relatedPosts = [
+  {
+    title: "Essential vs Storage Body Fat: Understanding the Key Differences",
+    excerpt:
+      "Learn the crucial differences between essential body fat and storage body fat, their roles in health, and how to maintain optimal levels.",
+    url: "/blog/explain-difference-between-essential-body-fat-and-storage-body-fat",
+  },
+  {
+    title: "Understanding BMI and Its Limitations",
+    excerpt:
+      "Learn about Body Mass Index, how it's calculated, and why it might not tell the whole story.",
+    url: "/blog/understanding-bmi",
+  },
+];
+
+// Related calculators data
+const relatedCalculators = [
+  {
+    title: "Period Calculator",
+    url: "/calculators/period/",
+  },
+  {
+    title: "Body Fat Calculator",
+    url: "/calculators/body-fat/",
+  },
+  {
+    title: "Pregnancy Calculator",
+    url: "/calculators/pregnancy/",
   },
 ];
 ---
@@ -251,6 +283,55 @@ const healthCategories = [
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Related Content */}
+      <div class="mt-16 grid md:grid-cols-2 gap-8">
+        {/* Related Posts */}
+        {
+          relatedPosts.length > 0 && (
+            <div class="space-y-6">
+              <h2 class="font-display text-2xl font-bold">Related Articles</h2>
+              <div class="space-y-4">
+                {relatedPosts.map((post) => (
+                  <a
+                    href={post.url}
+                    class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors"
+                  >
+                    <h3 class="font-display font-semibold mb-2">
+                      {post.title}
+                    </h3>
+                    <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {post.excerpt}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {/* Related Calculators */}
+        {
+          relatedCalculators.length > 0 && (
+            <div class="space-y-6">
+              <h2 class="font-display text-2xl font-bold">
+                Related Calculators
+              </h2>
+              <div class="space-y-4">
+                {relatedCalculators.map((calc) => (
+                  <a
+                    href={calc.url}
+                    class="flex items-center justify-between p-4 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors group"
+                  >
+                    <h3 class="font-display font-semibold">{calc.title}</h3>
+                    <ChevronRight class="w-5 h-5 text-accent-primary transform group-hover:translate-x-1 transition-transform" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   </GpaLayout>

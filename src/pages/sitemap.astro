@@ -35,6 +35,23 @@ const scales = {
 
 const percentages = generatePercentages();
 
+// Add blog posts data
+const blogPosts = [
+  {
+    title: "Essential vs Storage Body Fat: Understanding the Key Differences",
+    url: "/blog/explain-difference-between-essential-body-fat-and-storage-body-fat",
+  },
+  {
+    title: "Understanding BMI and Its Limitations",
+    url: "/blog/understanding-bmi",
+  },
+  {
+    title: "How to Calculate Your Ideal Body Weight",
+    url: "/blog/ideal-body-weight",
+  },
+];
+
+
 const title = "Site Map - All Calculator Pages";
 const description =
   "Complete list of all calculator pages and tools available on our website.";
@@ -226,6 +243,33 @@ const keywords =
           </ul>
         </div>
       </section>
+
+      <!-- New Blog Section -->
+      <div class="mb-12">
+        <h2 class="font-display text-2xl font-bold mb-6">Blog Articles</h2>
+        <div class="grid gap-4">
+          <div class="grid gap-2">
+            <a
+              href="/blog"
+              class="text-accent-primary hover:text-accent-primary/80 font-semibold"
+            >
+              All Blog Posts →
+            </a>
+          </div>
+          <div class="grid gap-2">
+            {
+              blogPosts.map((post) => (
+                <a
+                  href={post.url}
+                  class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary transition-colors"
+                >
+                  {post.title}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
 
       {/* GPA to Percentage Conversions */}
       <section>
