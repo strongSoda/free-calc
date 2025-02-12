@@ -1,0 +1,241 @@
+---
+// src/pages/blog/index.astro
+import GpaLayout from "../../components/GpaLayout";
+import Layout from "../../layouts/Layout.astro";
+import { Search, Clock, ChevronRight } from "lucide-react";
+
+// Categories for our blog posts
+// const categories = [
+//   { name: "Body Composition", slug: "body-composition" },
+//   { name: "Weight Management", slug: "weight-management" },
+//   { name: "Fitness Metrics", slug: "fitness-metrics" },
+//   { name: "Health Calculators", slug: "health-calculators" },
+// ];
+
+// Blog posts data
+const posts = [
+  {
+    title: "Essential vs Storage Body Fat: Understanding the Key Differences",
+    slug: "explain-difference-between-essential-body-fat-and-storage-body-fat",
+    excerpt:
+      "Learn the crucial differences between essential body fat and storage body fat, their roles in health, and how to maintain optimal body fat levels for wellness.",
+    date: "2024-02-12",
+    readingTime: 8,
+    category: "health-calculators",
+    thumbnail: "https://i.imgur.com/R5ei7lX.jpeg",
+    featured: true,
+    calculator: "/calculators/body-fat", // New field to link to related calculator
+  },
+  {
+    title: "Understanding BMI and Its Limitations",
+    slug: "understanding-bmi",
+    excerpt:
+      "Learn about Body Mass Index calculations, how to interpret BMI results, and important considerations when using this metric.",
+    date: "2024-02-12",
+    readingTime: 7,
+    category: "health-calculators",
+    thumbnail: "/blog/bmi-explained.jpg",
+    calculator: "/calculators/bmi",
+  },
+  {
+    title: "How to Calculate Your Ideal Body Weight",
+    slug: "ideal-body-weight",
+    excerpt:
+      "Explore different methods and formulas for calculating ideal body weight ranges based on various factors.",
+    date: "2024-02-12",
+    readingTime: 6,
+    category: "health-calculators",
+    thumbnail: "/blog/ideal-weight.jpg",
+    calculator: "/calculators/ideal-weight",
+  },
+];
+// Schema markup for blog index
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  url: "https://rref-calculator.com/blog",
+  name: "Calculator Guides & Tutorials",
+  description:
+    "Educational articles and guides about mathematical calculations, conversions, and practical problem-solving tools.",
+  publisher: {
+    "@type": "Organization",
+    name: "Free Calculators",
+    url: "https://rref-calculator.com",
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://rref-calculator.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Blog",
+      item: "https://rref-calculator.com/blog",
+    },
+  ],
+};
+---
+
+<Layout
+  title="Calculator Guides & Tutorials | Free Calculators"
+  description="Educational articles and guides about mathematical calculations, conversions, and practical problem-solving tools. Learn how to use our free calculators effectively."
+  keywords="calculator guides, tutorials, mathematical calculations, conversion guides, calculator tutorials"
+  currentUrl="/blog"
+>
+  <GpaLayout
+    client:load
+    title="Calculator Guides & Tutorials | Free Calculators"
+    description="Educational articles and guides about mathematical calculations, conversions, and practical problem-solving tools. Learn how to use our free calculators effectively."
+    keywords="calculator guides, tutorials, mathematical calculations, conversion guides, calculator tutorials"
+    about="Page"
+  >
+    <script type="application/ld+json" set:html={JSON.stringify(blogSchema)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(breadcrumbSchema)}
+    />
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      {/* Hero Section */}
+      <!-- <div class="text-center mb-16">
+        <h1
+          class="font-display text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
+        >
+          Calculator Guides & Tutorials
+        </h1>
+        <p
+          class="text-xl text-content-light-dimmed dark:text-content-dark-dimmed max-w-2xl mx-auto"
+        >
+          Learn about different types of calculations, conversions, and how to
+          solve real-world mathematical problems efficiently.
+        </p>
+      </div> -->
+
+      {/* Featured Post */}
+      <!-- {
+        posts
+          .filter((post) => post.featured)
+          .map((post) => (
+            <a href={`/blog/${post.slug}`} class="block mb-16 group">
+              <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent-primary/10 to-accent-secondary/10">
+                <div class="grid md:grid-cols-2 gap-8 p-8">
+                  <div class="space-y-4">
+                    <div class="inline-block px-4 py-1 rounded-full bg-accent-primary/10 text-accent-primary text-sm font-medium">
+                      Featured Article
+                    </div>
+                    <h2 class="font-display text-2xl md:text-3xl font-bold group-hover:text-accent-primary transition-colors">
+                      {post.title}
+                    </h2>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {post.excerpt}
+                    </p>
+                    <div class="flex items-center gap-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      <span>
+                        {new Date(post.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
+                      <span class="flex items-center">
+                        <Clock class="w-4 h-4 mr-1" />
+                        {post.readingTime} min read
+                      </span>
+                    </div>
+                    <div class="inline-flex items-center text-accent-primary group-hover:translate-x-2 transition-transform">
+                      Read More
+                      <ChevronRight class="w-4 h-4 ml-1" />
+                    </div>
+                  </div>
+                  <div class="relative aspect-[4/3] rounded-xl overflow-hidden">
+                    <img
+                      src={post.thumbnail}
+                      alt={post.title}
+                      class="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))
+      } -->
+
+      {/* Categories */}
+      <!-- <div class="flex flex-wrap gap-2 mb-8">
+        {
+          categories.map((category) => (
+            <button class="px-4 py-2 rounded-lg bg-surface-light-hover dark:bg-surface-dark-hover hover:bg-accent-primary/10 transition-colors">
+              {category.name}
+            </button>
+          ))
+        }
+      </div> -->
+
+      {/* Simple Post Grid */}
+      <div class="grid gap-6">
+        {
+          posts.map((post) => (
+            <a href={`/blog/${post.slug}`} class="block group">
+              <article class="p-6 rounded-xl bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors">
+                <h2 class="font-display text-xl font-bold group-hover:text-accent-primary transition-colors mb-2">
+                  {post.title}
+                </h2>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+                  {post.excerpt}
+                </p>
+                <div class="flex items-center gap-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  <span>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                  <span class="flex items-center">
+                    <Clock class="w-4 h-4 mr-1" />
+                    {post.readingTime} min read
+                  </span>
+                </div>
+              </article>
+            </a>
+          ))
+        }
+      </div>
+      {/* Newsletter Signup */}
+      <!-- <div
+        class="mt-16 p-8 rounded-2xl bg-gradient-to-br from-accent-primary/10 to-accent-secondary/10"
+      >
+        <div class="max-w-2xl mx-auto text-center">
+          <h2 class="font-display text-2xl font-bold mb-4">Stay Updated</h2>
+          <p
+            class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6"
+          >
+            Get the latest calculator guides, tutorials, and mathematical
+            problem-solving tips delivered to your inbox.
+          </p>
+          <form class="flex gap-4">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              class="flex-1 px-4 py-2 rounded-lg bg-white dark:bg-surface-dark border border-gray-200/20 dark:border-gray-800/20 focus:ring-2 focus:ring-accent-primary focus:border-transparent outline-none"
+            />
+            <button
+              type="submit"
+              class="px-6 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-primary/90 transition-colors"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div> -->
+    </div>
+  </GpaLayout>
+</Layout>

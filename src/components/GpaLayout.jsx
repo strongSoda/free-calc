@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import AdUnit from './AdUnit';
 
-const GpaLayout = ({ children, title, description, keywords }) => {
+const GpaLayout = ({ children, title, description, keywords, about="Calculator" }) => {
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-content-light dark:text-content-dark">
       <Navbar client:load />
@@ -35,7 +35,8 @@ const GpaLayout = ({ children, title, description, keywords }) => {
                     </div>
 
                     <div className="mt-12">
-                      <h2 className="font-display text-2xl font-semibold mb-4">About this Calculator</h2>
+                      <h2 className="font-display text-2xl font-semibold mb-4">About this {about}
+                      </h2>
                       <div className="text-content-light-dimmed dark:text-content-dark-dimmed">
                         <p>{description}</p>
 

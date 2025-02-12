@@ -1,0 +1,128 @@
+---
+// src/pages/blog/ideal-body-weight.astro
+import Layout from "../../layouts/Layout.astro";
+import BlogLayout from "../../components/BlogLayout";
+import BMICalculator from "../../components/BmiCalculator";
+import GpaLayout from "../../components/GpaLayout";
+
+const title = "How to Calculate Your Ideal Body Weight";
+const description =
+  "Discover reliable methods to calculate your ideal body weight, understand different formulas, and learn why one size doesn't fit all when it comes to healthy weight ranges.";
+const date = "2024-02-12";
+const readingTime = 6;
+
+const relatedPosts = [
+  {
+    title: "Essential vs Storage Body Fat: Understanding the Key Differences",
+    excerpt:
+      "Learn the crucial differences between essential body fat and storage body fat, their roles in health, and how to maintain optimal levels.",
+    url: "/blog/explain-difference-between-essential-body-fat-and-storage-body-fat",
+  },
+  {
+    title: "Understanding BMI and Its Limitations",
+    excerpt:
+      "Learn about Body Mass Index, how it's calculated, and why it might not tell the whole story.",
+    url: "/blog/understanding-bmi",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "Body Fat Calculator",
+    url: "/calculators/body-fat/",
+  },
+  {
+    title: "BMI Calculator",
+    url: "/calculators/bmi/",
+  },
+  {
+    title: "Pregnancy Calculator",
+    url: "/calculators/pregnancy/",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords="ideal body weight, healthy weight range, weight calculator, body weight formula, Hamwi formula"
+  ogImage="https://i.imgur.com/R5ei7lX.jpeg"
+  currentUrl="/blog/ideal-body-weight"
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords="ideal body weight, healthy weight range, weight calculator, body weight formula, Hamwi formula"
+  >
+    <BlogLayout
+      client:load
+      title={title}
+      subtitle={description}
+      date={date}
+      readingTime={readingTime}
+      relatedPosts={relatedPosts}
+      relatedCalculators={relatedCalculators}
+      author={{
+        name: "Free Calculators",
+        url: "https://rref-calculator.com",
+      }}
+    >
+      <div class="prose dark:prose-invert max-w-none">
+        <h2 id="what-is-ibw">What is Ideal Body Weight?</h2>
+        <p>
+          Ideal Body Weight (IBW) is an estimated weight range considered
+          healthy for your height, age, and body frame. However, it's important
+          to note that "ideal" varies significantly between individuals.
+        </p>
+
+        <h2 id="calculation-methods">Common Calculation Methods</h2>
+        <h3 id="hamwi-formula">Hamwi Formula</h3>
+        <ul>
+          <li>For men: 48.0 kg + 2.7 kg per inch over 5 feet</li>
+          <li>For women: 45.5 kg + 2.2 kg per inch over 5 feet</li>
+        </ul>
+
+        <h3 id="divine-formula">Divine Formula</h3>
+        <ul>
+          <li>For men: 50.0 kg + 2.3 kg per inch over 5 feet</li>
+          <li>For women: 45.5 kg + 2.3 kg per inch over 5 feet</li>
+        </ul>
+
+        <h2 id="factors">Factors Affecting Ideal Weight</h2>
+        <ul>
+          <li>Body frame size</li>
+          <li>Muscle mass</li>
+          <li>Age</li>
+          <li>Gender</li>
+          <li>Overall health status</li>
+        </ul>
+
+        <h2 id="healthy-range">Understanding Healthy Weight Range</h2>
+        <p>
+          Rather than focusing on a single "ideal" number, it's better to
+          consider a healthy weight range that accounts for your individual
+          factors and body composition.
+        </p>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>
+          While ideal body weight calculations can provide a useful reference
+          point, they shouldn't be considered absolute targets. Focus on overall
+          health, body composition, and consult with healthcare professionals
+          for personalized guidance.
+        </p>
+
+        {/* Embed Weight Calculator */}
+        <div
+          class="my-12 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h3 class="text-xl font-display font-bold mb-6">
+            Calculate Your BMI
+          </h3>
+          <BMICalculator showAffiliate={false} />
+        </div>
+      </div>
+    </BlogLayout>
+  </GpaLayout>
+</Layout>

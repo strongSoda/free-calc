@@ -1,0 +1,153 @@
+---
+// src/pages/blog/understanding-bmi.astro
+import Layout from "../../layouts/Layout.astro";
+import BlogLayout from "../../components/BlogLayout";
+import BMICalculator from "../../components/BmiCalculator";
+import GpaLayout from "../../components/GpaLayout";
+
+const title = "Understanding BMI and Its Limitations";
+const description =
+  "Learn about Body Mass Index (BMI), how it's calculated, what your BMI means, and why this metric has important limitations you should know about.";
+const date = "2024-02-12";
+const readingTime = 7;
+
+const relatedPosts = [
+  {
+    title: "Essential vs Storage Body Fat: Understanding the Key Differences",
+    excerpt:
+      "Learn the crucial differences between essential body fat and storage body fat, their roles in health, and how to maintain optimal levels.",
+    url: "/blog/explain-difference-between-essential-body-fat-and-storage-body-fat",
+  },
+  {
+    title: "How to Calculate Your Ideal Body Weight",
+    excerpt:
+      "Discover different methods to determine your healthy weight range based on height and body composition.",
+    url: "/blog/ideal-body-weight",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "BMI Calculator",
+    url: "/calculators/bmi/",
+  },
+  {
+    title: "Body Fat Calculator",
+    url: "/calculators/body-fat/",
+  },
+  {
+    title: "Period Calculator",
+    url: "/calculators/period/",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords="BMI, Body Mass Index, BMI limitations, healthy weight, BMI calculator, body composition"
+  ogImage="https://i.imgur.com/R5ei7lX.jpeg"
+  currentUrl="/blog/understanding-bmi"
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords="BMI, Body Mass Index, BMI limitations, healthy weight, BMI calculator, body composition"
+    about="Article"
+  >
+    <BlogLayout
+      client:load
+      title={title}
+      subtitle={description}
+      date={date}
+      readingTime={readingTime}
+      relatedPosts={relatedPosts}
+      relatedCalculators={relatedCalculators}
+      author={{
+        name: "Free Calculators",
+        url: "https://rref-calculator.com",
+      }}
+    >
+      <div class="prose dark:prose-invert max-w-none">
+        <h2 id="what-is-bmi">What is BMI (Body Mass Index)?</h2>
+        <p>
+          Body Mass Index (BMI) is a simple measurement that uses your height
+          and weight to work out if your weight is healthy. It's widely used by
+          healthcare professionals as a quick screening tool to categorize
+          weight status.
+        </p>
+
+        <h2 id="bmi-calculation">How is BMI Calculated?</h2>
+        <p>
+          BMI is calculated by dividing your weight in kilograms by your height
+          in meters squared:
+        </p>
+        <div
+          class="bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg font-mono"
+        >
+          BMI = weight (kg) / height² (m²)
+        </div>
+
+        <h2 id="bmi-categories">BMI Categories</h2>
+        <ul>
+          <li>
+            <strong>Underweight</strong>: BMI less than 18.5
+          </li>
+          <li>
+            <strong>Normal weight</strong>: BMI 18.5 to 24.9
+          </li>
+          <li>
+            <strong>Overweight</strong>: BMI 25 to 29.9
+          </li>
+          <li>
+            <strong>Obese</strong>: BMI 30 or greater
+          </li>
+        </ul>
+
+        <h2 id="bmi-limitations">Limitations of BMI</h2>
+        <p>
+          While BMI is useful as a quick screening tool, it has several
+          important limitations:
+        </p>
+        <ul>
+          <li>Doesn't account for muscle mass</li>
+          <li>Doesn't consider body fat distribution</li>
+          <li>May not be suitable for athletes</li>
+          <li>Different thresholds may apply to different ethnicities</li>
+          <li>Not accurate for pregnant women or elderly</li>
+        </ul>
+
+        {/* Embed BMI Calculator */}
+        <div
+          class="my-12 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h3 class="text-xl font-display font-bold mb-6">
+            Calculate Your BMI
+          </h3>
+          <BMICalculator showAffiliate={false} />
+        </div>
+
+        <h2 id="alternatives">Alternative Measurements</h2>
+        <p>
+          Due to BMI's limitations, consider using these additional
+          measurements:
+        </p>
+        <ul>
+          <li>Body Fat Percentage</li>
+          <li>Waist Circumference</li>
+          <li>Waist-to-Hip Ratio</li>
+          <li>Body Composition Analysis</li>
+        </ul>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>
+          While BMI is a useful screening tool, it should not be the only
+          measure used to assess health and body composition. Consider using it
+          alongside other measurements and always consult healthcare
+          professionals for personalized advice.
+        </p>
+      </div>
+    </BlogLayout>
+  </GpaLayout>
+</Layout>
