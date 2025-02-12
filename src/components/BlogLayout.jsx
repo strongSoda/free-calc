@@ -181,7 +181,7 @@ const BlogLayout = ({
       </div>
 
       {/* Related Content */}
-      <footer className="mt-16 grid md:grid-cols-2 gap-8">
+      <div className="mt-16 grid md:grid-cols-2 gap-8">
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <div className="space-y-6">
@@ -221,7 +221,7 @@ const BlogLayout = ({
             </div>
           </div>
         )}
-      </footer>
+      </div>
     </div>
   );
 };
