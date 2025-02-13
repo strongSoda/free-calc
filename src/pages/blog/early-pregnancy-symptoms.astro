@@ -1,0 +1,339 @@
+---
+import BlogLayout from "../../components/BlogLayout";
+import GpaLayout from "../../components/GpaLayout";
+import Layout from "../../layouts/Layout.astro";
+import PregnancyCalculator from "../../components/PregnancyCalculator";
+
+const title = "Early Pregnancy Symptoms: First Signs You Might Be Pregnant";
+const description =
+  "Learn about the earliest signs of pregnancy, from common symptoms like missed periods and morning sickness to lesser-known indicators. Know when to take a pregnancy test and start planning for your journey.";
+const date = "2024-02-13";
+const readingTime = 8;
+
+// FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What are the earliest signs of pregnancy?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The earliest signs include missed period, tender breasts, fatigue, mild cramping, and nausea. Some women may experience implantation bleeding and mood changes as early as 1-2 weeks after conception.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How soon do pregnancy symptoms start?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Some women may notice symptoms as early as 1-2 weeks after conception, but most commonly symptoms begin around 4-6 weeks into pregnancy.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can you be pregnant without any symptoms?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, some women experience few or no symptoms in early pregnancy. Every pregnancy is different, and the absence of symptoms doesn't necessarily mean there's a problem.",
+      },
+    },
+  ],
+};
+
+// Article Schema
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  headline: title,
+  description: description,
+  datePublished: date,
+  dateModified: date,
+  about: {
+    "@type": "MedicalCondition",
+    name: "Pregnancy Symptoms",
+    description: "Early signs and symptoms of pregnancy",
+  },
+};
+
+const relatedPosts = [
+  {
+    title: "What is a Chemical Pregnancy?",
+    excerpt:
+      "Understanding early pregnancy loss and what it means for future pregnancies.",
+    url: "/blog/what-is-a-chemical-pregnancy",
+  },
+  {
+    title: "How to Calculate Your Due Date",
+    excerpt:
+      "Discover accurate methods for estimating your pregnancy due date.",
+    url: "/blog/calculate-due-date",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "Pregnancy Calculator",
+    url: "/calculators/pregnancy/",
+  },
+  {
+    title: "Ovulation Calculator",
+    url: "/calculators/ovulation/",
+  },
+  {
+    title: "Period Calculator",
+    url: "/calculators/period/",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords="early pregnancy symptoms, first signs of pregnancy, pregnancy symptoms, morning sickness, missed period, pregnancy test"
+  ogImage="/chemical-pregnancy-guide.jpg"  
+  currentUrl="/blog/early-pregnancy-symptoms"
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords="early pregnancy symptoms, pregnancy signs, morning sickness, pregnancy calculator"
+    about="Medical Article"
+  >
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+
+    <BlogLayout
+      client:load
+      title={title}
+      subtitle={description}
+      date={date}
+      readingTime={readingTime}
+      relatedPosts={relatedPosts}
+      relatedCalculators={relatedCalculators}
+      author={{
+        name: "Free Calculators",
+        url: "https://rref-calculator.com",
+      }}
+    >
+      <>
+        <div class="prose dark:prose-invert max-w-none">
+          <h2 id="first-signs">First Signs of Pregnancy</h2>
+          <p class="lead">
+            The earliest signs of pregnancy can appear even before a missed
+            period. Understanding these early symptoms can help you recognize
+            pregnancy sooner and begin appropriate prenatal care.
+          </p>
+
+          <div class="my-8 p-6 bg-accent-primary/10 rounded-xl">
+            <p class="text-lg font-medium">
+              Think you might be pregnant? Use our{" "}
+              <a
+                href="/calculators/pregnancy"
+                class="text-accent-primary hover:text-accent-primary/80"
+              >
+                Pregnancy Calculator
+              </a>{" "}
+              to estimate important dates and milestones!
+            </p>
+          </div>
+
+          <h2 id="common-symptoms">Most Common Early Pregnancy Symptoms</h2>
+          <div class="grid gap-4">
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">1.</span>
+              <div>
+                <strong>Missed Period</strong>
+                <p>
+                  Often the first clear sign of pregnancy, especially if your
+                  cycles are regular.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">2.</span>
+              <div>
+                <strong>Tender, Swollen Breasts</strong>
+                <p>
+                  Hormonal changes can cause breast tenderness as early as 1-2
+                  weeks after conception.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">3.</span>
+              <div>
+                <strong>Nausea/Morning Sickness</strong>
+                <p>
+                  Can start as early as 2-3 weeks after conception, despite the
+                  name can occur any time.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">4.</span>
+              <div>
+                <strong>Fatigue</strong>
+                <p>
+                  Increased progesterone levels can cause unusual tiredness.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="lesser-known">Lesser-Known Early Pregnancy Signs</h2>
+          <div
+            class="my-8 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+          >
+            <ul class="space-y-4">
+              <li>
+                <strong>Implantation Bleeding:</strong> Light spotting 6-12 days
+                after conception
+              </li>
+              <li>
+                <strong>Mood Changes:</strong> Hormonal fluctuations can affect emotions
+              </li>
+              <li>
+                <strong>Food Aversions:</strong> Sudden dislike of certain foods
+                or smells
+              </li>
+              <li>
+                <strong>Heightened Sense of Smell:</strong> Increased sensitivity
+                to odors
+              </li>
+              <li>
+                <strong>Mild Cramping:</strong> Similar to menstrual cramps but lighter
+              </li>
+            </ul>
+          </div>
+
+          <h2 id="timeline">When Do Pregnancy Symptoms Start?</h2>
+          <div class="space-y-4">
+            <div>
+              <h3>Weeks 1-2</h3>
+              <ul>
+                <li>Mild cramping</li>
+                <li>Possible implantation bleeding</li>
+                <li>Breast tenderness</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Weeks 3-4</h3>
+              <ul>
+                <li>Missed period</li>
+                <li>Fatigue</li>
+                <li>Frequent urination</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Weeks 5-6</h3>
+              <ul>
+                <li>Morning sickness</li>
+                <li>Food aversions</li>
+                <li>Mood changes</li>
+              </ul>
+            </div>
+          </div>
+
+          <h2 id="when-test">When Should You Take a Pregnancy Test?</h2>
+          <p>
+            For most accurate results, wait until after your missed period to
+            take a home pregnancy test. However, some tests can detect pregnancy
+            a few days before a missed period.
+          </p>
+
+          <div class="my-8 p-6 bg-accent-primary/10 rounded-xl">
+            <h3 class="text-xl font-display font-bold mb-4">
+              Track Your Pregnancy Journey
+            </h3>
+            <p class="mb-4">Our Pregnancy Calculator helps you:</p>
+            <ul class="space-y-2">
+              <li>• Calculate important pregnancy milestones</li>
+              <li>• Estimate your due date</li>
+              <li>• Track fetal development</li>
+              <li>• Plan prenatal appointments</li>
+            </ul>
+            <a
+              href="/calculators/pregnancy"
+              class="inline-block mt-4 px-6 py-3 bg-accent-primary text-white dark:text-white rounded-lg hover:bg-accent-primary/90 transition-colors"
+            >
+              Try Our Pregnancy Calculator
+            </a>
+          </div>
+
+          <h2 id="what-next">What to Do If You Think You're Pregnant</h2>
+          <ol>
+            <li>Take a home pregnancy test</li>
+            <li>Schedule a doctor's appointment</li>
+            <li>Start taking prenatal vitamins</li>
+            <li>Calculate your due date</li>
+            <li>Make healthy lifestyle changes</li>
+          </ol>
+
+          <h2 id="faq">Frequently Asked Questions</h2>
+          <div class="space-y-6">
+            <div>
+              <h3>Can you have pregnancy symptoms before a positive test?</h3>
+              <p>
+                Yes, some women experience symptoms before there's enough hCG
+                for a positive test.
+              </p>
+            </div>
+            <div>
+              <h3>Are pregnancy symptoms the same for everyone?</h3>
+              <p>
+                No, symptoms vary greatly between individuals and even between
+                pregnancies.
+              </p>
+            </div>
+            <div>
+              <h3>How accurate are early pregnancy symptoms?</h3>
+              <p>
+                Many early pregnancy symptoms can mimic PMS, so a pregnancy test
+                is the best way to confirm.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="my-8 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+          >
+            <h3 class="text-xl font-display font-bold mb-6">
+              Calculate Your Due Date
+            </h3>
+            <PregnancyCalculator client:load showAffiliate={false} />
+          </div>
+
+          <h2 id="conclusion">Final Thoughts</h2>
+          <p>
+            Early pregnancy symptoms can vary greatly from person to person.
+            While these signs can indicate pregnancy, the only way to be sure is
+            through a pregnancy test and medical confirmation. Use our <a
+              href="/calculators/pregnancy">pregnancy calculator</a
+            > to track important dates and milestones once pregnancy is confirmed.
+          </p>
+
+          <h2 id="references">References & Medical Sources</h2>
+          <ul>
+            <li>
+              American Pregnancy Association: <a
+                href="https://americanpregnancy.org"
+                rel="nofollow">Early Signs of Pregnancy</a
+              >
+            </li>
+            <li>
+              Mayo Clinic: <a href="https://www.mayoclinic.org" rel="nofollow"
+                >Symptoms of Pregnancy</a
+              >
+            </li>
+          </ul>
+        </div>
+      </>
+    </BlogLayout>
+  </GpaLayout>
+</Layout>

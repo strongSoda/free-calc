@@ -3,12 +3,43 @@
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
 import PregnancyCalculator from "../../../components/PregnancyCalculator";
+import { ChevronRight } from "lucide-react";
 
 const title = "Pregnancy Due Date Calculator";
 const description =
   "Calculate your pregnancy due date, see weekly milestones, and track your pregnancy progress using your last period, conception date, IVF transfer, or ultrasound date.";
 const keywords =
   "pregnancy calculator, due date calculator, pregnancy due date, pregnancy week calculator, conception date calculator, pregnancy tracker";
+
+const relatedPosts = [
+  {
+    title: "Understanding Early Pregnancy Symptoms",
+    excerpt:
+      "Learn about the first signs of pregnancy and when they typically appear.",
+    url: "/blog/early-pregnancy-symptoms",
+  },
+  {
+    title: "How to Calculate Your Due Date",
+    excerpt:
+      "Discover accurate methods for estimating your pregnancy due date.",
+    url: "/blog/calculate-due-date",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "BMI Calculator",
+    url: "/calculators/bmi/",
+  },
+  {
+    title: "Ovulation Calculator",
+    url: "/calculators/ovulation/",
+  },
+  {
+    title: "Period Calculator",
+    url: "/calculators/period/",
+  },
+];
 ---
 
 <Layout
@@ -212,9 +243,7 @@ const keywords =
         </div>
       </div>
 
-      <div
-        class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6"
-      >
+      <div class="bg-surface-light-hover dark:bg-surface-dark rounded-xl p-6">
         <div class="flex items-start space-x-4">
           <div class="flex-shrink-0">
             <svg
@@ -233,9 +262,7 @@ const keywords =
           </div>
           <div>
             <h3 class="font-semibold text-lg">Medical Disclaimer</h3>
-            <p
-              class="text-content-light-dimmed dark:text-content-dark-dimmed"
-            >
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
               This calculator provides estimations based on standard pregnancy
               durations. Every pregnancy is unique, and actual dates may vary.
               Always consult with your healthcare provider for personalized
@@ -243,6 +270,55 @@ const keywords =
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Related Content */}
+      <div class="mt-16 grid md:grid-cols-2 gap-8">
+        {/* Related Posts */}
+        {
+          relatedPosts.length > 0 && (
+            <div class="space-y-6">
+              <h2 class="font-display text-2xl font-bold">Related Articles</h2>
+              <div class="space-y-4">
+                {relatedPosts.map((post) => (
+                  <a
+                    href={post.url}
+                    class="block p-4 bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors"
+                  >
+                    <h3 class="font-display font-semibold mb-2">
+                      {post.title}
+                    </h3>
+                    <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {post.excerpt}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {/* Related Calculators */}
+        {
+          relatedCalculators.length > 0 && (
+            <div class="space-y-6">
+              <h2 class="font-display text-2xl font-bold">
+                Related Calculators
+              </h2>
+              <div class="space-y-4">
+                {relatedCalculators.map((calc) => (
+                  <a
+                    href={calc.url}
+                    class="flex items-center justify-between p-4 bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors group"
+                  >
+                    <h3 class="font-display font-semibold">{calc.title}</h3>
+                    <ChevronRight class="w-5 h-5 text-accent-primary transform group-hover:translate-x-1 transition-transform" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   </GpaLayout>

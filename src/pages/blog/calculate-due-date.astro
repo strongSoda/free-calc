@@ -1,0 +1,322 @@
+---
+import BlogLayout from "../../components/BlogLayout";
+import GpaLayout from "../../components/GpaLayout";
+import Layout from "../../layouts/Layout.astro";
+import PregnancyCalculator from "../../components/PregnancyCalculator";
+
+const title = "How to Calculate Your Due Date: Methods & Accuracy";
+const description =
+  "Learn how to accurately calculate your pregnancy due date using different methods, including last menstrual period, conception date, and ultrasound measurements.";
+const date = "2024-02-13";
+const readingTime = 7;
+
+// FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How accurate are due date calculations?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Due date calculations are estimates with an accuracy of about 2 weeks. Only 5% of babies are born on their exact due date, but most arrive within 2 weeks before or after.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How is a due date calculated?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Due dates are typically calculated by adding 280 days (40 weeks) to the first day of the last menstrual period, or by adding 266 days to the conception date.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Which due date calculation method is most accurate?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Early ultrasound dating (before 12 weeks) is considered the most accurate method for determining due date, followed by LMP method for women with regular cycles.",
+      },
+    },
+  ],
+};
+
+// Article Schema
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  headline: title,
+  description: description,
+  datePublished: date,
+  dateModified: date,
+  about: {
+    "@type": "MedicalCondition",
+    name: "Pregnancy Due Date",
+    description: "Methods for calculating pregnancy due date",
+  },
+};
+
+const relatedPosts = [
+  {
+    title: "Early Pregnancy Symptoms",
+    excerpt:
+      "Learn about the first signs of pregnancy and when they typically appear.",
+    url: "/blog/early-pregnancy-symptoms",
+  },
+  {
+    title: "What is a Chemical Pregnancy?",
+    excerpt:
+      "Understanding early pregnancy loss and its impact on future pregnancies.",
+    url: "/blog/what-is-a-chemical-pregnancy",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "Pregnancy Calculator",
+    url: "/calculators/pregnancy/",
+  },
+  {
+    title: "Ovulation Calculator",
+    url: "/calculators/ovulation/",
+  },
+  {
+    title: "Period Calculator",
+    url: "/calculators/period/",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords="due date calculator, pregnancy due date, how to calculate due date, pregnancy calculator, estimated due date"
+  ogImage="/chemical-pregnancy-guide.jpg"  
+  currentUrl="/blog/calculate-due-date"
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords="due date calculator, pregnancy calculation, pregnancy week calculator"
+    about="Medical Article"
+  >
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+
+    <BlogLayout
+      client:load
+      title={title}
+      subtitle={description}
+      date={date}
+      readingTime={readingTime}
+      relatedPosts={relatedPosts}
+      relatedCalculators={relatedCalculators}
+      author={{
+        name: "Free Calculators",
+        url: "https://rref-calculator.com",
+      }}
+    >
+      <>
+        <div class="prose dark:prose-invert max-w-none">
+          <h2 id="understanding">Understanding Due Date Calculation</h2>
+          <p class="lead">
+            Calculating your due date is one of the first steps in pregnancy
+            planning. While only about 5% of babies are born on their exact due
+            date, having an accurate estimate helps you and your healthcare
+            provider plan for your pregnancy journey.
+          </p>
+
+          <div class="my-8 p-6 bg-accent-primary/10 rounded-xl">
+            <p class="text-lg font-medium">
+              Get an accurate due date estimate with our{" "}
+              <a
+                href="/calculators/pregnancy"
+                class="text-accent-primary hover:text-accent-primary/80"
+              >
+                Pregnancy Calculator
+              </a>
+              !
+            </p>
+          </div>
+
+          <h2 id="calculation-methods">Methods to Calculate Due Date</h2>
+
+          <h3 id="lmp-method">1. Last Menstrual Period (LMP) Method</h3>
+          <div
+            class="my-4 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl"
+          >
+            <p>
+              <strong>Calculation:</strong> Add 280 days (40 weeks) to the first
+              day of your last period
+            </p>
+            <ul class="mt-4">
+              <li><strong>Pros:</strong> Easy to calculate, widely used</li>
+              <li><strong>Cons:</strong> Less accurate for irregular cycles</li>
+              <li><strong>Accuracy:</strong> ±2 weeks</li>
+            </ul>
+          </div>
+
+          <h3 id="conception-method">2. Conception Date Method</h3>
+          <div
+            class="my-4 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl"
+          >
+            <p>
+              <strong>Calculation:</strong> Add 266 days (38 weeks) to the conception
+              date
+            </p>
+            <ul class="mt-4">
+              <li>
+                <strong>Pros:</strong> More accurate if conception date is known
+              </li>
+              <li><strong>Cons:</strong> Conception date often uncertain</li>
+              <li><strong>Accuracy:</strong> ±2 weeks</li>
+            </ul>
+          </div>
+
+          <h3 id="ultrasound-method">3. Ultrasound Method</h3>
+          <div
+            class="my-4 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl"
+          >
+            <p>
+              <strong>Method:</strong> Measures fetal size to determine gestational
+              age
+            </p>
+            <ul class="mt-4">
+              <li>
+                <strong>Pros:</strong> Most accurate method, especially before 12
+                weeks
+              </li>
+              <li><strong>Cons:</strong> Requires medical visit</li>
+              <li><strong>Accuracy:</strong> ±5-7 days (early ultrasound)</li>
+            </ul>
+          </div>
+
+          <h2 id="factors">Factors Affecting Due Date Accuracy</h2>
+          <div class="grid gap-2">
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">•</span>
+              <span
+                ><strong>Cycle Length:</strong> Irregular cycles can affect LMP calculations</span
+              >
+            </div>
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">•</span>
+              <span
+                ><strong>Multiple Pregnancies:</strong> Twins often deliver earlier</span
+              >
+            </div>
+            <div class="flex items-start">
+              <span class="text-accent-primary mr-2">•</span>
+              <span
+                ><strong>Previous Pregnancies:</strong> Can influence delivery timing</span
+              >
+            </div>
+          </div>
+
+          <div class="my-8 p-6 bg-accent-primary/10 rounded-xl">
+            <h3 class="text-xl font-display font-bold mb-4">
+              Calculate Your Due Date
+            </h3>
+            <p class="mb-4">Our Pregnancy Calculator helps you:</p>
+            <ul class="space-y-2">
+              <li>• Get accurate due date estimates</li>
+              <li>• Track pregnancy milestones</li>
+              <li>• Plan prenatal appointments</li>
+              <li>• Monitor fetal development</li>
+            </ul>
+            <a
+              href="/calculators/pregnancy"
+              class="inline-block mt-4 px-6 py-3 bg-accent-primary text-white dark:text-white rounded-lg hover:bg-accent-primary/90 transition-colors"
+            >
+              Calculate Your Due Date Now
+            </a>
+          </div>
+
+          <h2 id="pregnancy-milestones">Important Pregnancy Milestones</h2>
+          <div class="space-y-4">
+            <div>
+              <h3>First Trimester (Weeks 1-12)</h3>
+              <ul>
+                <li>First ultrasound (6-8 weeks)</li>
+                <li>End of highest risk period (12 weeks)</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Second Trimester (Weeks 13-26)</h3>
+              <ul>
+                <li>Gender ultrasound (18-22 weeks)</li>
+                <li>First felt movements (18-20 weeks)</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Third Trimester (Weeks 27-40)</h3>
+              <ul>
+                <li>Viability (24 weeks)</li>
+                <li>Full term (37 weeks)</li>
+              </ul>
+            </div>
+          </div>
+
+          <h2 id="faq">Frequently Asked Questions</h2>
+          <div class="space-y-6">
+            <div>
+              <h3>Why do doctors add 40 weeks from LMP?</h3>
+              <p>
+                This accounts for the typical 2 weeks before ovulation plus 38
+                weeks of pregnancy.
+              </p>
+            </div>
+            <div>
+              <h3>What if I have irregular periods?</h3>
+              <p>
+                An early ultrasound will provide the most accurate due date.
+              </p>
+            </div>
+            <div>
+              <h3>How often do babies arrive on their due date?</h3>
+              <p>Only about 5% of babies are born on their exact due date.</p>
+            </div>
+          </div>
+
+          <div
+            class="my-8 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+          >
+            <h3 class="text-xl font-display font-bold mb-6">
+              Try Our Pregnancy Calculator
+            </h3>
+            <PregnancyCalculator client:load showAffiliate={false} />
+          </div>
+
+          <h2 id="conclusion">Final Thoughts</h2>
+          <p>
+            While due date calculations provide essential estimates, remember
+            they're just predictions. Every pregnancy is unique. Use our <a
+              href="/calculators/pregnancy">pregnancy calculator</a
+            > to get a comprehensive view of your pregnancy timeline and important
+            milestones.
+          </p>
+
+          <h2 id="references">References & Medical Sources</h2>
+          <ul>
+            <li>
+              American College of Obstetricians and Gynecologists (ACOG): <a
+                href="https://www.acog.org"
+                rel="nofollow">Due Date Calculation Methods</a
+              >
+            </li>
+            <li>
+              Mayo Clinic: <a href="https://www.mayoclinic.org" rel="nofollow"
+                >Pregnancy Week by Week</a
+              >
+            </li>
+          </ul>
+        </div>
+      </>
+    </BlogLayout>
+  </GpaLayout>
+</Layout>

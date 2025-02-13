@@ -5,7 +5,8 @@ import AffiliateSection from './AffiliateSection';
 const PregnancyCalculator = ({ 
   defaultMethod = 'last_period',
   defaultDate = '',
-  showDetails = true
+  showDetails = true,
+  showAffiliate = true
 }) => {
   const [method, setMethod] = useState(defaultMethod);
   const [inputDate, setInputDate] = useState(defaultDate);
@@ -168,9 +169,9 @@ const PregnancyCalculator = ({
           </div>
 
                   {/* Add Affiliate Section before Continue Learning */}
-                  <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+                  {showAffiliate && <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
                     <AffiliateSection client:load />
-                  </div>
+                  </div>}
                   
           {/* Milestones Table */}
           {showDetails && (

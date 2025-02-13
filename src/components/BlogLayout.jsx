@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, ArrowLeft, ChevronRight } from 'lucide-react';
+import BlogFeaturedImage from './BlogFeaturedImage';
 
 // Helper function to generate a TOC item ID
 const generateId = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -15,7 +16,8 @@ const BlogLayout = ({
     name: "Free Calculators",
     url: "https://rref-calculator.com"
   },  
-  children
+  children,
+  featuredImage
 }) => {
   const [activeSection, setActiveSection] = useState("");
   const [toc, setToc] = useState([]);
@@ -123,7 +125,7 @@ const BlogLayout = ({
       </a>
 
       {/* Header */}
-      <header className="mb-12">
+      <header className="mb-12">        
         {/* <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
           {title}
         </h1>
@@ -181,7 +183,7 @@ const BlogLayout = ({
       </div>
 
       {/* Related Content */}
-      <div className="mt-16 grid md:grid-cols-2 gap-8">
+      <div className="my-16 grid md:grid-cols-2 gap-8">
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <div className="space-y-6">
@@ -222,6 +224,10 @@ const BlogLayout = ({
           </div>
         )}
       </div>
+
+      {featuredImage && (
+          <BlogFeaturedImage image={featuredImage} />
+        )}
     </div>
   );
 };
