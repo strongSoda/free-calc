@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import GpaLayout from "../../../components/GpaLayout";
 import TipCalculator from "../../../components/TipCalculator";
+import { ChevronRight } from "lucide-react";
 
 const title = "Tip Calculator - Calculate Tips and Split Bills";
 const description =
@@ -40,6 +41,22 @@ const calculatorSchema = {
     "Per-person amount calculation",
   ],
 };
+
+const relatedPosts = [
+  {
+    title: "How Much to Tip Movers? Complete Guide to Tipping Moving Companies",
+    excerpt:
+      "Learn exactly how much to tip movers with our comprehensive guide.",
+    url: "/blog/how-much-to-tip-movers",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "Mortgage Calculator",
+    url: "/calculators/mortgage/",
+  },
+];
 ---
 
 <Layout
@@ -130,6 +147,57 @@ const calculatorSchema = {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Related Content */}
+      <div class="my-16 grid md:grid-cols-2 gap-8">
+        {/* Related Posts */}
+        {
+          relatedPosts.length > 0 && (
+            <div class="space-y-6">
+              <h2 class="font-display text-2xl font-bold">Related Articles</h2>
+              <div class="space-y-4">
+                {relatedPosts.map((post) => (
+                  <a
+                    key={post.url}
+                    href={post.url}
+                    class="block p-4 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors"
+                  >
+                    <h3 class="font-display font-semibold mb-2">
+                      {post.title}
+                    </h3>
+                    <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {post.excerpt}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {/* Related Calculators */}
+        {
+          relatedCalculators.length > 0 && (
+            <div class="space-y-6">
+              <h2 class="font-display text-2xl font-bold">
+                Related Calculators
+              </h2>
+              <div class="space-y-4">
+                {relatedCalculators.map((calc) => (
+                  <a
+                    key={calc.url}
+                    href={calc.url}
+                    class="flex items-center justify-between p-4 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors group"
+                  >
+                    <h3 class="font-display font-semibold">{calc.title}</h3>
+                    <ChevronRight class="w-5 h-5 text-accent-primary transform group-hover:translate-x-1 transition-transform" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
 
       {/* Related Tools */}

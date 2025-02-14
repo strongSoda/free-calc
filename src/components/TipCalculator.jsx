@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AffiliateSection from './AffiliateSection';
 
-const TipCalculator = ({ defaultBill = "", defaultTip = 15 }) => {
+const TipCalculator = ({ defaultBill = "", defaultTip = 15, showAffiliate=true }) => {
   const [billAmount, setBillAmount] = useState(defaultBill);
   const [tipPercentage, setTipPercentage] = useState(defaultTip);
   const [splitCount, setSplitCount] = useState(1);
@@ -9,7 +9,7 @@ const TipCalculator = ({ defaultBill = "", defaultTip = 15 }) => {
 
   const tipAmount = billAmount ? (parseFloat(billAmount) * (tipPercentage / 100)) : 0;
   const totalAmount = billAmount ? (parseFloat(billAmount) + tipAmount) : 0;
-  const perPersonAmount = splitCount > 0 ? totalAmount / splitCount : 0;
+  const perPersonAmount = splitCount > 0 ? (tipAmount / splitCount) : 0;
 
   const commonTips = [10, 15, 18, 20, 25];
 
@@ -115,9 +115,10 @@ const TipCalculator = ({ defaultBill = "", defaultTip = 15 }) => {
       </div>
 
       {/* Add Affiliate Section before Continue Learning */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+      {showAffiliate && <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
         <AffiliateSection client:load />
-      </div>
+      </div>}
+      
     </div>
   );
 };

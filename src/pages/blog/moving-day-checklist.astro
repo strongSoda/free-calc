@@ -1,0 +1,332 @@
+---
+import BlogLayout from "../../components/BlogLayout";
+import GpaLayout from "../../components/GpaLayout";
+import Layout from "../../layouts/Layout.astro";
+
+const title = "Moving Day Checklist: Essential Tips for a Smooth Move";
+const description =
+  "Get organized with our comprehensive moving day checklist. Follow our expert tips and timeline to ensure a stress-free moving experience.";
+const date = "2024-02-14";
+const readingTime = 10;
+
+// FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What should I prepare the night before moving day?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The night before moving day, pack an essentials box, charge all devices, set aside important documents, prepare cash for movers, and get a good night's sleep.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "In what order should I pack when moving?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Start with rarely used items and out-of-season items, then pack room by room. Leave essential items for last. Pack a separate box of necessities you'll need immediately in your new home.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What should you not pack when moving?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Don't pack important documents, valuables, medications, basic tools, cleaning supplies, and a change of clothes - keep these with you. Also avoid packing hazardous materials, perishables, and plants in moving trucks.",
+      },
+    },
+  ],
+};
+
+// Article Schema
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: title,
+  description: description,
+  datePublished: date,
+  dateModified: date,
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "2 Months Before",
+      text: "Create inventory, research movers, and start decluttering.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "1 Month Before",
+      text: "Begin packing non-essential items and notify important parties of your move.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Moving Day",
+      text: "Prepare your home, coordinate with movers, and ensure smooth transition.",
+    },
+  ],
+};
+
+const relatedPosts = [
+  {
+    title: "How Much to Tip Movers? Complete Guide to Tipping Moving Companies",
+    excerpt:
+      "Learn exactly how much to tip movers with our comprehensive guide.",
+    url: "/blog/how-much-to-tip-movers",
+  },
+];
+
+const relatedCalculators = [
+  {
+    title: "Tip Calculator",
+    url: "/calculators/tip-calculator/",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords="moving day checklist, moving tips, packing tips, moving house checklist, moving preparation, moving day preparation"
+  ogImage="/movers-tipping-guide.jpg"
+  currentUrl="/blog/moving-day-checklist"
+>
+  <GpaLayout
+    client:load
+    title={title}
+    description={description}
+    keywords="moving checklist, moving tips, packing tips, moving day preparation"
+    about="Moving Guide"
+  >
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+
+    <BlogLayout
+      client:load
+      title={title}
+      subtitle={description}
+      date={date}
+      readingTime={readingTime}
+      relatedPosts={relatedPosts}
+      relatedCalculators={relatedCalculators}
+      author={{
+        name: "Free Calculators",
+        url: "https://rref-calculator.com",
+      }}
+    >
+      <>
+        <div class="prose dark:prose-invert max-w-none">
+          <h2 id="introduction">Introduction</h2>
+          <p>
+            Moving to a new home can feel overwhelming, but with proper planning
+            and organization, it doesn't have to be. This comprehensive moving
+            day checklist will help you stay organized and ensure nothing gets
+            forgotten in the process.
+          </p>
+
+          <div class="my-8 p-6 bg-accent-primary/10 rounded-xl">
+            <p class="text-lg font-medium">
+              Don't forget to properly compensate your movers! Use our{" "}
+            <a
+              href="/calculators/tip-calculator" class="text-accent-primary
+              hover:text-accent-primary/80" > Tip Calculator
+            </p>{" "}
+            to determine appropriate gratuity.
+          </div>
+        </div>
+
+        <h2 id="two-months">2 Months Before Moving Day</h2>
+        <ul>
+          <li>
+            <strong>Create a Moving Inventory</strong>
+            <ul>
+              <li>Document valuable items</li>
+              <li>Take photos of electronics setups</li>
+              <li>List items requiring special handling</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Research Moving Companies</strong>
+            <ul>
+              <li>Get at least three quotes</li>
+              <li>Check reviews and credentials</li>
+              <li>Verify insurance coverage</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Start Decluttering</strong>
+            <ul>
+              <li>Donate unused items</li>
+              <li>Host a garage sale</li>
+              <li>Dispose of hazardous materials</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h2 id="one-month">1 Month Before Moving Day</h2>
+        <ul>
+          <li>
+            <strong>Begin Packing Non-Essential Items</strong>
+            <ul>
+              <li>Out-of-season clothes</li>
+              <li>Extra linens</li>
+              <li>Books and decorative items</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Notify Important Parties</strong>
+            <ul>
+              <li>Update address with USPS</li>
+              <li>Transfer utilities</li>
+              <li>Inform insurance providers</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Gather Supplies</strong>
+            <ul>
+              <li>Moving boxes</li>
+              <li>Packing tape</li>
+              <li>Bubble wrap</li>
+              <li>Markers for labeling</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h2 id="two-weeks">2 Weeks Before Moving Day</h2>
+        <div
+          class="my-8 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h3 class="text-xl font-display font-bold mb-4">Essential Tasks</h3>
+          <ul class="space-y-2">
+            <li>✓ Confirm moving company details</li>
+            <li>✓ Pack room by room</li>
+            <li>✓ Label boxes clearly</li>
+            <li>✓ Arrange parking for moving truck</li>
+            <li>✓ Service your car if driving to new location</li>
+          </ul>
+        </div>
+
+        <h2 id="one-week">1 Week Before Moving Day</h2>
+        <ul>
+          <li>
+            <strong>Pack an Essentials Box</strong>
+            <ul>
+              <li>Toiletries</li>
+              <li>Change of clothes</li>
+              <li>Basic tools</li>
+              <li>Phone chargers</li>
+              <li>Important documents</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Deep Clean</strong>
+            <ul>
+              <li>Clean empty rooms</li>
+              <li>Take photos of empty spaces</li>
+              <li>Dispose of cleaning supplies</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h2 id="moving-day">Moving Day Checklist</h2>
+        <div
+          class="my-8 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10"
+        >
+          <h3 class="text-xl font-display font-bold mb-4">Morning Tasks</h3>
+          <ul class="space-y-2">
+            <li>□ Wake up early</li>
+            <li>□ Prepare coffee and snacks</li>
+            <li>□ Remove bedding</li>
+            <li>□ Take meter readings</li>
+            <li>□ Keep important documents handy</li>
+          </ul>
+
+          <h3 class="text-xl font-display font-bold mb-4 mt-6">
+            When Movers Arrive
+          </h3>
+          <ul class="space-y-2">
+            <li>□ Walk through home with movers</li>
+            <li>□ Point out fragile items</li>
+            <li>□ Show items not to be moved</li>
+            <li>□ Provide water and bathroom access</li>
+            <li>
+              □ Keep cash ready for tip (<a
+                href="/calculators/tip-calculator"
+                class="text-accent-primary hover:text-accent-primary/80"
+                >calculate tip here</a
+              >)
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="arriving">Arriving at Your New Home</h2>
+        <ul>
+          <li>
+            <strong>Before Unloading</strong>
+            <ul>
+              <li>Check utilities are working</li>
+              <li>Verify all rooms are clean</li>
+              <li>Take photos of any existing damage</li>
+            </ul>
+          </li>
+          <li>
+            <strong>During Unloading</strong>
+            <ul>
+              <li>Direct boxes to correct rooms</li>
+              <li>Mark off inventory list</li>
+              <li>Check furniture for damage</li>
+            </ul>
+          </li>
+          <li>
+            <strong>After Movers Leave</strong>
+            <ul>
+              <li>Unpack essentials box</li>
+              <li>Make beds</li>
+              <li>Set up basic kitchen items</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h2 id="tips">Pro Tips for a Successful Move</h2>
+        <ul>
+          <li>
+            <strong>Color-code boxes</strong> by room for easy identification
+          </li>
+          <li>Keep <strong>valuable items and documents</strong> with you</li>
+          <li>
+            Take photos of <strong>electronics connections</strong> before disconnecting
+          </li>
+          <li>Pack an <strong>overnight bag</strong> with essentials</li>
+          <li>
+            Keep <strong>tools and cleaning supplies</strong> easily accessible
+          </li>
+        </ul>
+
+        <div class="my-8 p-6 bg-accent-primary/10 rounded-xl">
+          <h3 class="text-xl font-display font-bold mb-4">
+            Don't Forget the Movers!
+          </h3>
+          <p>
+            Ensure you have cash ready to tip your moving crew. Use our <a
+              href="/calculators/tip-calculator"
+              class="text-accent-primary hover:text-accent-primary/80"
+              >Tip Calculator</a
+            > to determine appropriate amounts based on your move's complexity and
+            duration.
+          </p>
+        </div>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>
+          A successful move depends on careful planning and organization. Follow
+          this checklist to ensure nothing gets overlooked, and don't forget to
+          properly thank your moving crew with an appropriate tip.
+        </p>  
+      </>
+    </BlogLayout>
+  </GpaLayout>
+</Layout>
