@@ -117,21 +117,23 @@ const relatedCalculators = [
       set:html={JSON.stringify(articleSchema)}
     />
 
-    {/* Image Schema */}
+    <!-- Image Schema -->
     <script type="application/ld+json">
-      {{
+      {
         "@context": "https://schema.org",
         "@type": "ImageObject",
         "contentUrl": "https://rref-calculator.com/chemical-pregnancy-guide.jpg",
-        "license": "https://rref-calculator.com/license",
+        "license": "https://rref-calculator.com/about",
         "acquireLicensePage": "https://rref-calculator.com/about",
         "creditText": "Free Calculators",
         "creator": {
           "@type": "Organization",
           "name": "Free Calculators"
         },
-        "copyrightNotice": "Free Calculators"
-      }}
+        "copyrightNotice": "Free Calculators",
+        "name": "Chemical Pregnancy Guide",
+        "description": "An informative guide on chemical pregnancy with useful insights."
+      }
     </script>
 
     <BlogLayout
@@ -151,7 +153,7 @@ const relatedCalculators = [
         alt: "Understanding Chemical Pregnancy: Early Signs and Symptoms",
         title: "Chemical Pregnancy Guide - Early Pregnancy Loss",
         width: 1200,
-        height: 630
+        height: 630,
       }}
     >
       <>
@@ -424,11 +426,13 @@ const relatedCalculators = [
           <ul>
             <li>
               Mayo Clinic: <a href="https://www.mayoclinic.org" rel="nofollow"
-                >Chemical Pregnancy Explained</a>
+                >Chemical Pregnancy Explained</a
+              >
             </li>
             <li>
               WebMD: <a href="https://www.webmd.com" rel="nofollow"
-                >Early Pregnancy Loss</a>
+                >Early Pregnancy Loss</a
+              >
             </li>
           </ul>
         </div>
