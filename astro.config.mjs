@@ -33,7 +33,7 @@ const homePrices = generateHomePrices();
 
 // Generate additional URLs for sitemap (as simple strings)
 const additionalPages = homePrices.map(price => 
-  `https://rref-calculator.com/calculators/mortgage?homePrice=${price}`
+  `https://rref-calculator.com/calculators/mortgage/?homePrice=${price}`
 );
 
 export default defineConfig({
