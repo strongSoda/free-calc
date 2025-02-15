@@ -163,14 +163,17 @@ const [amortizationData, setAmortizationData] = useState([]);
 useEffect(() => {
   const params = new URLSearchParams(window.location.search);
   const homePriceParam = params.get('homePrice');
+  
   if (homePriceParam) {
     setPageTitle(`Mortgage Calculator for ${formatCurrency(homePriceParam)} Home`);
     setInputs(prev => ({ ...prev, homePrice: homePriceParam }));
-    calculateMortgage();
-  } else {
-    calculateMortgage();
   }
 }, []);
+
+// Separate useEffect for calculations
+useEffect(() => {
+  calculateMortgage();
+}, [inputs.homePrice]); // Recalculate when homePrice changes
 
 // URL update function
 const updateUrl = (homePrice) => {
