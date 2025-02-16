@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import AdUnit from './AdUnit';
+import MobileBottomAd from './MobileBottomAd';
 
 const GpaLayout = ({ children, title, description, keywords, about="Calculator" }) => {
   return (
@@ -85,7 +86,13 @@ const GpaLayout = ({ children, title, description, keywords, about="Calculator" 
         </div>
       </div>
 
-      {/* <AdUnit type="inArticle" client:load /> */}
+      <div 
+        aria-label="Advertisement"
+        data-nosnippet
+        role="complementary"
+      >
+        <MobileBottomAd client:load />
+      </div>
 
       <Footer />
     </div>

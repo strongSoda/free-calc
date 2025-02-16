@@ -60,7 +60,17 @@ const AdUnit = ({ type = 'square' }) => {
       maxWidth: 728,
       height: 300,
       aspectRatio: '728/300'
-    }
+    },
+    mobileBottom: {
+      slot: '2571315295', // Replace with your actual ad slot
+      format: 'auto',
+      style: 'display:block',
+      className: 'text-center',
+      maxWidth: 320,
+      height: 150,
+      aspectRatio: '320/150'
+    },
+
   };
 
   const config = adConfigs[type];
