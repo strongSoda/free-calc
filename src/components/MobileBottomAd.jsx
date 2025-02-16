@@ -208,7 +208,7 @@ const MobileBottomAd = () => {
       <div className="relative w-full h-full px-2">
         <button
           onClick={() => setIsDismissed(true)}
-          className="absolute top-2 right-2 p-2 rounded-lg bg-surface-light-hover dark:bg-surface-dark-hover hover:bg-accent-primary/10 transition-colors z-10"
+          className="absolute top-2 right-2 p-2 rounded-full bg-surface-light dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors z-10 border border-accent-primary dark:border-accent-primary/50"
           aria-label="Dismiss ad"
         >
           <X className="w-5 h-5 text-content-light-dimmed dark:text-content-dark-dimmed" />
