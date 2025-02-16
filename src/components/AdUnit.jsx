@@ -61,16 +61,15 @@ const AdUnit = ({ type = 'square' }) => {
       height: 300,
       aspectRatio: '728/300'
     },
-    mobileBottom: {
-      slot: '2571315295', // Replace with your actual ad slot
-      format: 'auto',
-      style: 'display:block',
-      className: 'text-center',
-      maxWidth: 320,
-      height: 150,
-      aspectRatio: '320/150'
-    },
-
+   mobileBottom: {
+    slot: '2571315295',
+    format: 'horizontal', // Changed to horizontal for better responsive behavior
+    style: 'display:block',
+    className: 'text-center w-full', // Added w-full
+    maxWidth: '100%', // Changed from fixed width to 100%
+    height: 100, // Fixed height (matches our MobileBottomAd component)
+    aspectRatio: 'auto' // Removed fixed aspect ratio to allow width flexibility
+  },
   };
 
   const config = adConfigs[type];

@@ -10,59 +10,34 @@ const MobileBottomAd = () => {
   const observerRef = useRef(null);
   const isDevelopment = false;
 
-  // Constants for dimensions to ensure consistency
-  const AD_HEIGHT = 150;
-  const AD_WIDTH = 320;
-  const CONTAINER_HEIGHT = 166; // Including padding
+  // Constants for dimensions
+  const CONTAINER_HEIGHT = 116; // Including padding
   const CONTAINER_PADDING = 8;
 
   useEffect(() => {
     setIsClient(true);
-    
-    // Clean up on component unmount
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
+    return () => observerRef.current?.disconnect();
   }, []);
 
   useEffect(() => {
     if (!isClient || isDevelopment) return;
 
     try {
-      // Create observer to monitor ad loading and dimensions
       observerRef.current = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length > 0) {
             const adFrame = adContainerRef.current?.querySelector('iframe');
             if (adFrame) {
-              // Set strict dimensions on the iframe
-              adFrame.style.maxHeight = `${AD_HEIGHT}px`;
-              adFrame.style.height = `${AD_HEIGHT}px`;
-              adFrame.style.maxWidth = `${AD_WIDTH}px`;
-              adFrame.style.width = `${AD_WIDTH}px`;
+              adFrame.style.maxHeight = `${CONTAINER_HEIGHT - (CONTAINER_PADDING * 2)}px`;
+              adFrame.style.height = `${CONTAINER_HEIGHT - (CONTAINER_PADDING * 2)}px`;
               adFrame.style.overflow = 'hidden';
 
-              // Monitor ad content after a brief delay
               setTimeout(() => {
                 const rect = adFrame.getBoundingClientRect();
-                
-                // Check if ad is empty or invalid
-                if (rect.height < 20 || rect.width < 20) {
+                if (rect.height < 20) {
                   setAdState('empty');
                   return;
                 }
-
-                // Check if ad is oversized
-                if (rect.height > AD_HEIGHT || rect.width > AD_WIDTH) {
-                  console.warn('Ad exceeds container dimensions - enforcing constraints');
-                  adFrame.style.transform = `scale(${Math.min(
-                    AD_HEIGHT / rect.height,
-                    AD_WIDTH / rect.width
-                  )})`;
-                }
-
                 setAdState('loaded');
               }, 1000);
             }
@@ -77,20 +52,16 @@ const MobileBottomAd = () => {
           attributes: true 
         });
 
-        // Initialize the ad
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
 
-      // Set timeout for ad loading
       const timeout = setTimeout(() => {
         if (adState === 'loading') {
           setAdState('failed');
         }
       }, 2000);
 
-      return () => {
-        clearTimeout(timeout);
-      };
+      return () => clearTimeout(timeout);
     } catch (err) {
       console.error('Error initializing ad:', err);
       setAdState('failed');
@@ -137,30 +108,21 @@ const MobileBottomAd = () => {
   const renderAdContent = () => {
     if (isDevelopment) {
       return (
-        <div 
-          className="bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
-          style={{ width: `${AD_WIDTH}px`, height: `${AD_HEIGHT}px` }}
-        >
-          <span className="text-sm text-gray-500">Ad Placeholder ({AD_WIDTH}x{AD_HEIGHT})</span>
+        <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+          <span className="text-sm text-gray-500">Ad Placeholder</span>
         </div>
       );
     }
 
     if (!isClient || adState === 'loading') {
       return (
-        <div 
-          className="bg-surface-light-hover dark:bg-surface-dark-hover animate-pulse rounded"
-          style={{ width: `${AD_WIDTH}px`, height: `${AD_HEIGHT}px` }}
-        />
+        <div className="w-full h-full bg-surface-light-hover dark:bg-surface-dark-hover animate-pulse rounded" />
       );
     }
 
     if (adState === 'failed' || adState === 'empty') {
       return (
-        <div 
-          className="flex flex-col items-center justify-center bg-surface-light-hover dark:bg-surface-dark-hover rounded p-4"
-          style={{ width: `${AD_WIDTH}px`, height: `${AD_HEIGHT}px` }}
-        >
+        <div className="w-full h-full flex flex-col items-center justify-center bg-surface-light-hover dark:bg-surface-dark-hover rounded p-4">
           <div className="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
             Share this calculator
           </div>
@@ -218,26 +180,18 @@ const MobileBottomAd = () => {
     return (
       <div 
         ref={adContainerRef}
-        style={{ 
-          width: `${AD_WIDTH}px`, 
-          height: `${AD_HEIGHT}px`,
-          overflow: 'hidden'
-        }}
+        className="w-full h-full overflow-hidden"
       >
         <ins
-          className="adsbygoogle"
+          className="adsbygoogle w-full h-full"
           style={{
             display: 'block',
-            width: `${AD_WIDTH}px`,
-            height: `${AD_HEIGHT}px`,
-            minHeight: `${AD_HEIGHT}px`,
-            maxHeight: `${AD_HEIGHT}px`,
             overflow: 'hidden'
           }}
           data-ad-client="ca-pub-9779862910631944"
           data-ad-slot="2571315295"
-          data-ad-format="auto"
-          data-full-width-responsive="false"
+          data-ad-format="horizontal"
+          data-full-width-responsive="true"
         />
       </div>
     );
@@ -251,20 +205,19 @@ const MobileBottomAd = () => {
         maxHeight: `${CONTAINER_HEIGHT}px`
       }}
     >
-      <div className="relative max-w-md mx-auto">
+      <div className="relative w-full h-full px-2">
         <button
           onClick={() => setIsDismissed(true)}
-          className="absolute top-0 right-2 p-2 rounded-full bg-surface-light dark:bg-surface-dark hover:bg-accent-primary/10 transition-colors z-10 border border-accent-primary dark:border-accent-primary"
+          className="absolute top-2 right-2 p-2 rounded-lg bg-surface-light-hover dark:bg-surface-dark-hover hover:bg-accent-primary/10 transition-colors z-10"
           aria-label="Dismiss ad"
         >
           <X className="w-5 h-5 text-content-light-dimmed dark:text-content-dark-dimmed" />
         </button>
         
         <div 
-          className="flex justify-center overflow-hidden"
+          className="w-full h-full overflow-hidden"
           style={{ 
-            padding: `${CONTAINER_PADDING}px`,
-            height: `${CONTAINER_HEIGHT}px`
+            padding: `${CONTAINER_PADDING}px`
           }}
         >
           {renderAdContent()}
