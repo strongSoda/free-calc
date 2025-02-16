@@ -44,26 +44,6 @@ export default defineConfig({
     })
   ],  
   build: {
-    inlineStylesheets: 'auto',  // Keep this for critical CSS
-    assets: 'assets'            // Keep custom asset directory
-  },
-  vite: {
-    build: {
-      cssMinify: true,          // Keep CSS minification
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
-            'chart-vendor': ['recharts'],
-            'ui-vendor': ['lucide-react']
-          }
-        }
-      }
-    },
-    // Add optimization settings here
-    optimizeDeps: {
-      include: ['react', 'react-dom', 'recharts', 'lucide-react']
-    }
-  },
-  compressHTML: true
+    assets: 'assets' // This will put assets in /calculators/assets instead of /_astro
+  }
 });
