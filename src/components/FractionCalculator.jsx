@@ -1,13 +1,14 @@
 // src/components/FractionCalculator.jsx
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const FractionCalculator = ({ 
   defaultDecimal = '', 
   defaultNumerator = '',
   defaultDenominator = '',
   mode = 'decimal-to-fraction',
-  onCalculate = () => {} 
+  onCalculate = () => {},
+  showAffiliate = true 
 }) => {
   const [decimal, setDecimal] = useState(defaultDecimal);
   const [fraction, setFraction] = useState({ 
@@ -180,9 +181,14 @@ const FractionCalculator = ({
         )}
       </div>
 
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4 mt-8">
-        <AffiliateSection client:load />
-      </div>
+     {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

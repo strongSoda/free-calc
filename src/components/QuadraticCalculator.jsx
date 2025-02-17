@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const QuadraticCalculator = ({ defaultA = '', defaultB = '', defaultC = '' }) => {
+const QuadraticCalculator = ({ defaultA = '', defaultB = '', defaultC = '', showAffiliate = true }) => {
   const [coefficients, setCoefficients] = useState({ 
     a: defaultA, 
     b: defaultB, 
@@ -200,9 +200,14 @@ const QuadraticCalculator = ({ defaultA = '', defaultB = '', defaultC = '' }) =>
       )}
 
       {/* Add Affiliate Section */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

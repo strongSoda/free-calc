@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Download, HelpCircle } from 'lucide-react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const currencies = {
   USD: { symbol: '$', name: 'US Dollar' },
@@ -735,7 +735,8 @@ const formatCurrency = (value) => {
 
           {/* Add Affiliate Section */}
           {showAffiliate && <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-            <AffiliateSection client:load />
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
           </div>}
         </div>
       )}

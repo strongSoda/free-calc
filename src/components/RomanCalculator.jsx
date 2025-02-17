@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const RomanCalculator = ({ mode = 'both', defaultValue = '' }) => {
+const RomanCalculator = ({ mode = 'both', defaultValue = '', showAffiliate = true }) => {
   const [number, setNumber] = useState(defaultValue);
   const [romanNumeral, setRomanNumeral] = useState('');
   const [conversionMode, setConversionMode] = useState(mode === 'both' ? 'toRoman' : mode);
@@ -148,7 +148,14 @@ const RomanCalculator = ({ mode = 'both', defaultValue = '' }) => {
         </div>
       </div>
 
-      <AffiliateSection client:load />
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

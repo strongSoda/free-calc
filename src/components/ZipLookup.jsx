@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import zipcodes from 'zipcodes';
 import zipcodesPH from 'zipcodes-ph';
 import { twZipCodes } from '../data/tw-zip-codes';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const ZipLookup = ({ defaultCountry = '', defaultQuery = '', mode = 'zip-to-address' }) => {
+const ZipLookup = ({ defaultCountry = '', defaultQuery = '', mode = 'zip-to-address',
+  showAffiliate = true
+ }) => {
   const [country, setCountry] = useState(defaultCountry);
   const [query, setQuery] = useState(defaultQuery);
   const [results, setResults] = useState(null);
@@ -296,9 +298,14 @@ const handleCountryChange = (newCountry) => {
       </div>
 
       {/* Add Affiliate Section */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

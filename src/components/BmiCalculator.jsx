@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BMIResults from './BMIResults';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const BMICalculator = ({ 
   defaultGender = 'all', 
@@ -242,15 +242,7 @@ const calculateBMI = (weightInput = null, heightInput = null, unitInput = null) 
             </div>
           </div>
         ))}
-      </div>
-
-        {
-          showAffiliate && (
-            <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-              <AffiliateSection client:load />
-            </div>
-          )
-        }
+      </div>        
 
       {results && (
         <div className="mt-8">
@@ -260,6 +252,15 @@ const calculateBMI = (weightInput = null, heightInput = null, unitInput = null) 
           />
         </div>
       )}
+
+        {
+          showAffiliate && (
+            <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+              {/* <AffiliateSection client:load /> */}
+              <SponsorsSection client:load />
+            </div>
+          )
+        }
     </div>
   );
 };

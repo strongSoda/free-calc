@@ -1,13 +1,14 @@
 // src/components/HalfLifeCalculator.jsx
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const HalfLifeCalculator = ({ 
   defaultInitialQuantity = '', 
   defaultRemainingQuantity = '',
   defaultTime = '',
   defaultHalfLife = '',
-  mode = 'calculate-half-life'  // or 'calculate-remaining'
+  mode = 'calculate-half-life',  // or 'calculate-remaining'
+  showAffiliate = true
 }) => {
   const [values, setValues] = useState({
     initialQuantity: defaultInitialQuantity,
@@ -163,9 +164,14 @@ const HalfLifeCalculator = ({
       </div>
 
       {/* Add Affiliate Section */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

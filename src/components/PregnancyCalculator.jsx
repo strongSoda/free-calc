@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar } from 'lucide-react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const PregnancyCalculator = ({ 
   defaultMethod = 'last_period',
@@ -167,11 +167,7 @@ const PregnancyCalculator = ({
               />
             </div>
           </div>
-
-                  {/* Add Affiliate Section before Continue Learning */}
-                  {showAffiliate && <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-                    <AffiliateSection client:load />
-                  </div>}
+                  
                   
           {/* Milestones Table */}
           {showDetails && (
@@ -221,6 +217,12 @@ const PregnancyCalculator = ({
           )}
         </div>
       )}
+
+      {/* Add Affiliate Section before Continue Learning */}
+                  {showAffiliate && <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+                    {/* <AffiliateSection client:load /> */}
+                    <SponsorsSection client:load />
+                  </div>}
     </div>
   );
 };

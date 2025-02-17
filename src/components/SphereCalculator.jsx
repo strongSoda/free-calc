@@ -1,6 +1,6 @@
 // src/components/SphereCalculator.jsx
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const units = {
   metric: [
@@ -18,7 +18,8 @@ const units = {
 
 const SphereCalculator = ({ 
   defaultRadius = '', 
-  defaultUnit = 'm³'
+  defaultUnit = 'm³',
+  showAffiliate = true
 }) => {
   const [radius, setRadius] = useState(defaultRadius);
   const [unit, setUnit] = useState(defaultUnit);
@@ -183,9 +184,14 @@ const SphereCalculator = ({
       </div>
 
             {/* Add Affiliate Section before Continue Learning */}
-            <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-              <AffiliateSection client:load />
-            </div>
+            {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

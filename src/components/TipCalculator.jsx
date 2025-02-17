@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const TipCalculator = ({ defaultBill = "", defaultTip = 15, showAffiliate=true }) => {
   const [billAmount, setBillAmount] = useState(defaultBill);
@@ -116,7 +116,8 @@ const TipCalculator = ({ defaultBill = "", defaultTip = 15, showAffiliate=true }
 
       {/* Add Affiliate Section before Continue Learning */}
       {showAffiliate && <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
+        {/* <AffiliateSection client:load /> */}
+        <SponsorsSection client:load />
       </div>}
       
     </div>

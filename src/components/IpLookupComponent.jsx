@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Map, Server, Copy, Check } from 'lucide-react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
+const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en', showAffiliate = true }) => {
   const [ip, setIp] = useState(defaultIp);
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -145,9 +145,14 @@ const IpLookupComponent = ({ defaultIp = '', defaultLang = 'en' }) => {
       )}
 
                 {/* Add Affiliate Section before Continue Learning */}
-                <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-                  <AffiliateSection client:load />
-                </div>
+     {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

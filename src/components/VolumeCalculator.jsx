@@ -1,6 +1,6 @@
 // src/components/VolumeCalculator.jsx
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const units = {
   metric: [
@@ -20,7 +20,9 @@ const units = {
 
 const VolumeCalculator = ({ shape = 'cube',
   defaultValue = '',
-  defaultUnit = 'm³' }) => {
+  defaultUnit = 'm³',
+  showAffiliate = true
+ }) => {
   const [dimensions, setDimensions] = useState({ side: defaultValue });
   const [unit, setUnit] = useState(defaultUnit);
   const [result, setResult] = useState(null);
@@ -171,9 +173,14 @@ const VolumeCalculator = ({ shape = 'cube',
       </div>
 
       {/* Add Affiliate Section before Continue Learning */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

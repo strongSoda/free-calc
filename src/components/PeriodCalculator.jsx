@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const PeriodCalculator = ({ 
   defaultStartDate = '', 
   defaultCycleLength = 28,
   defaultPeriodLength = 5,
-  showMonths = 3 
+  showMonths = 3,
+  showAffiliate = true 
 }) => {
   const [startDate, setStartDate] = useState(defaultStartDate || new Date().toISOString().split('T')[0]);
   const [cycleLength, setCycleLength] = useState(defaultCycleLength);
@@ -125,12 +126,7 @@ const PeriodCalculator = ({
                 </tbody>
               </table>
             </div>
-          </div>
-
-          {/* Add Affiliate Section before Continue Learning */}
-          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-            <AffiliateSection client:load />
-          </div>
+          </div>          
 
           {/* Additional Info */}
           <div className="bg-surface-light-hover dark:bg-surface-dark rounded-lg p-6">
@@ -143,6 +139,16 @@ const PeriodCalculator = ({
           </div>
         </div>
       )}
+
+      {/* Add Affiliate Section before Continue Learning */}
+          {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

@@ -7,8 +7,7 @@ import ColorVariations from './ColorVariations';
 import ColorHarmonies from './ColorHarmonies';
 import { hexToRgb } from '../utils/colorUtils';
 import ShareURL from './ShareURL';
-import AffiliateSection from './AffiliateSection';
-// import SponsorsSection from './SponsorCard';
+import SponsorsSection from './SponsorCard';
 
 const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange, showAffiliate= true }) => {
   const initialRgb = hexToRgb(defaultColor);
@@ -241,17 +240,15 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange, showAffilia
         )}
       </div>
 
-      {/* <SponsorsSection /> */}
-
-
       {/* Add Affiliate Section before Continue Learning */}
       {
-        showAffiliate && (
-          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-            <AffiliateSection client:load />
-          </div>
-        )
-      }
+          showAffiliate && (
+            <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+              {/* <AffiliateSection client:load /> */}
+              <SponsorsSection client:load />
+            </div>
+          )
+        }
 
       {/* Components */}
       <div className="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6">

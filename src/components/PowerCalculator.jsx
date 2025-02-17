@@ -1,6 +1,6 @@
 // src/components/PowerCalculator.jsx
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const powerUnits = {
   standard: [
@@ -23,7 +23,8 @@ const powerUnits = {
 const PowerCalculator = ({ 
   defaultValue = '', 
   defaultFromUnit = 'W',
-  defaultToUnit = 'kW'
+  defaultToUnit = 'kW',
+  showAffiliate = true
 }) => {
   const [value, setValue] = useState(defaultValue);
   const [fromUnit, setFromUnit] = useState(defaultFromUnit);
@@ -207,9 +208,14 @@ const PowerCalculator = ({
       </div>
 
       {/* Add Affiliate Section */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4 mt-8">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const StandardDeviationCalculator = () => {
+const StandardDeviationCalculator = ({showAffiliate = true}) => {
   const [numbers, setNumbers] = useState('');
   const [results, setResults] = useState(null);
   const [error, setError] = useState('');
@@ -191,9 +191,14 @@ const StandardDeviationCalculator = () => {
       )}
 
       {/* Affiliate Section */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

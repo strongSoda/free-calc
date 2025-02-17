@@ -1,8 +1,8 @@
 // src/components/RREFCalculator.jsx
 import React, { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const RREFCalculator = ({ labels }) => {
+const RREFCalculator = ({ labels, showAffiliate = true }) => {
   const [dimensions, setDimensions] = useState({ rows: 2, cols: 3 });
   const [matrixInputs, setMatrixInputs] = useState([]);
   const [result, setResult] = useState(null);
@@ -203,9 +203,14 @@ const RREFCalculator = ({ labels }) => {
       )}
 
       {/* Add Affiliate Section before Continue Learning */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

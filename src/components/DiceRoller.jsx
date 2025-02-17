@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
-const DiceRoller = ({ numberOfDice = 1, showHistory = true }) => {
+const DiceRoller = ({ numberOfDice = 1, showHistory = true, showAffiliate = true }) => {
   const [results, setResults] = useState([]);
   const [rolling, setRolling] = useState(false);
   const [rollHistory, setRollHistory] = useState([]);
@@ -107,9 +107,14 @@ const DiceRoller = ({ numberOfDice = 1, showHistory = true }) => {
       )}
 
       {/* Add Affiliate Section before Continue Learning */}
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };

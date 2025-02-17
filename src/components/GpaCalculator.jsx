@@ -1,13 +1,14 @@
 // GpaCalculator.jsx
 import { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const GpaCalculator = ({ 
   defaultMode = 'gpa-to-percent',
   defaultScale = '4.0',
   defaultGpa = '',
   defaultPercentage = '',
-  onValuesChange = () => {}
+  onValuesChange = () => {},
+  showAffiliate = true
 }) => {
   const [scale, setScale] = useState(defaultScale);
   const [percentage, setPercentage] = useState('');
@@ -116,9 +117,14 @@ const GpaCalculator = ({
       </div>
 
     {/* Add Affiliate Section before Continue Learning */}
-    <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-      <AffiliateSection client:load />
-    </div>
+    {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
 
     </div>
   );

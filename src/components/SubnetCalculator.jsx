@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const SubnetCalculator = ({ 
   defaultIp = '',
@@ -240,12 +240,13 @@ const SubnetCalculator = ({
 
               {/* Add Affiliate Section before Continue Learning */}
               {
-                showAffiliate && (
-                  <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-                    <AffiliateSection client:load />
-                  </div>
-                )
-              }
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
 
               <div className="mt-6">
                 <h4 className="font-display text-lg font-semibold mb-4">
@@ -279,9 +280,14 @@ const SubnetCalculator = ({
             </div>
 
             {/* Add Affiliate Section before Continue Learning */}
-              <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
-                <AffiliateSection client:load />
-              </div>
+              {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
           </div>
         )}
 

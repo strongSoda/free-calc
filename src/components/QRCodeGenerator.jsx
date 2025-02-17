@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Download, Share2, Image as ImageIcon, ArrowRight, Palette, Sliders } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
-import AffiliateSection from './AffiliateSection';
+import SponsorsSection from './SponsorCard';
 
 const QRCodeGenerator = ({ 
   defaultType = 'url',
   defaultValue = 'https://rref-calculator.com/calculators/qr-code',
-  showTypeSelector = true
+  showTypeSelector = true,
+  showAffiliate = true
 }) => {
   const qrRef = useRef(null);
   const containerRef = useRef(null);
@@ -412,9 +413,14 @@ const QRCodeGenerator = ({
 
       </div>
 
-      <div className="w-full md:max-w-4xl mx-auto px-1 md:px-2">
-        <AffiliateSection client:load />
-      </div>
+      {
+          showAffiliate && (
+          <div className="w-full md:max-w-4xl mx-auto px-1 md:px-4">
+            {/* <AffiliateSection client:load /> */}
+            <SponsorsSection client:load />
+          </div>
+          )
+        }
     </div>
   );
 };
