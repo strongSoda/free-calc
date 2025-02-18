@@ -159,7 +159,7 @@ const BlogLayout = ({
         {/* Sidebar */}
         <aside className="space-y-8">
           {/* Table of Contents */}
-          <div className="sticky top-24 space-y-4 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10">
+          <div className="sticky top-24 space-y-4 p-6 bg-surface-light-hover dark:bg-surface-dark rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-auto">
             <h2 className="font-display text-lg font-semibold">Table of Contents</h2>
             <nav className="space-y-2">
               {toc.map((item) => (

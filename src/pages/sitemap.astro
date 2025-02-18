@@ -69,6 +69,15 @@ const blogPosts = [
     title: "Moving Day Checklist: Essential Tips for a Smooth Move",
     url: "/blog/moving-day-checklist",
   },
+  {
+    title:
+      "How to Fix errordomain=nscocoaerrordomain&errormessage=could not find the specified shortcut.&errorcode=4 on macOS, Windows, iOS & Android",
+    url: "/blog/errordomain-nscocoaerrordomain-errormessage-could-not-find-the-specified-shortcut-errorcode-4",
+  },
+  {
+    title: "How to Fix Common App Errors: A Complete Troubleshooting Guide",
+    url: "/blog/fix-common-app-errors",
+  },
 ];
 
 const title = "Site Map - All Calculator Pages";
@@ -277,7 +286,7 @@ const keywords =
           </div>
           <div class="grid gap-2">
             {
-              blogPosts.map((post) => (
+              blogPosts.reverse().map((post) => (
                 <a
                   href={post.url}
                   class="text-content-light-dimmed dark:text-content-dark-dimmed hover:text-accent-primary transition-colors"

@@ -25,7 +25,7 @@ const GpaLayout = ({ children, title, description, keywords, about="Calculator" 
 
                 <div className="w-full">
 
-                    <h1 className="font-display text-3xl font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
+                    <h1 className="font-display text-3xl font-bold mb-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text break-words whitespace-normal">
                       {title}
                     </h1>
                     <p className="text-content-light-dimmed dark:text-content-dark-dimmed mb-8">

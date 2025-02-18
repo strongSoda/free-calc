@@ -100,6 +100,29 @@ const posts = [
     featured: false,
     calculator: "/calculators/tip-calculator",
   },
+  {
+    title:
+      "How to Fix errordomain=nscocoaerrordomain&errormessage=could not find the specified shortcut.&errorcode=4 on macOS, Windows, iOS & Android",
+    slug: "errordomain-nscocoaerrordomain-errormessage-could-not-find-the-specified-shortcut-errorcode-4",
+    excerpt:
+      "Comprehensive guide to fixing the NSCocoaErrorDomain shortcut error on macOS, Windows, iOS, and Android. Learn step-by-step solutions for each platform with expert troubleshooting tips.",
+    date: "2024-02-18",
+    readingTime: 10,
+    category: "tech-guides",
+    featured: true,
+    calculator: "/calculators/binary",
+  },
+  {
+    title: "How to Fix Common App Errors: A Complete Troubleshooting Guide",
+    slug: "fix-common-app-errors",
+    excerpt:
+      "Learn how to diagnose and fix the most common application errors across all platforms. This comprehensive guide covers crash reports, permission issues, installation problems, and more.",
+    date: "2024-02-18",
+    readingTime: 8,
+    category: "tech-guides",
+    featured: false,
+    calculator: "/calculators/storage",
+  },
 ];
 // Schema markup for blog index
 const blogSchema = {
@@ -234,7 +257,7 @@ const breadcrumbSchema = {
       {/* Simple Post Grid */}
       <div class="grid gap-6">
         {
-          posts.map((post) => (
+          posts.reverse().map((post) => (
             <a href={`/blog/${post.slug}`} class="block group">
               <article class="p-6 rounded-xl bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 transition-colors">
                 <h2 class="font-display text-xl font-bold group-hover:text-accent-primary transition-colors mb-2">
