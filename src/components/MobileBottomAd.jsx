@@ -182,10 +182,10 @@ const MobileBottomAd = () => {
       <div 
         ref={adContainerRef}
         className="w-full h-full"
-        style={{ minWidth: '300px', minHeight: '50px' }}
+        style={{ minWidth: '300px', minHeight: '150px' }}
       >
         <ins
-          className="adsbygoogle min-w-[300px]"
+          className="adsbygoogle min-w-[300px] h-[150px]"
           style={{
             display: 'block',            
           }}
