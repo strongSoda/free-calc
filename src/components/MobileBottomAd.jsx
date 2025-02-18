@@ -7,85 +7,67 @@ const MobileBottomAd = () => {
   const [adState, setAdState] = useState('loading');
   const [copied, setCopied] = useState(false);
   const adContainerRef = useRef(null);
-  const observerRef = useRef(null);
+  const adAttempted = useRef(false);
   const isDevelopment = false;
 
   // Constants for dimensions
-  const CONTAINER_HEIGHT = 116; // Including padding
+  const CONTAINER_HEIGHT = 150;
   const CONTAINER_PADDING = 8;
 
   useEffect(() => {
     setIsClient(true);
-    return () => observerRef.current?.disconnect();
   }, []);
 
-  // Update the useEffect that handles ad initialization
-useEffect(() => {
-  if (!isClient || isDevelopment) return;
+  useEffect(() => {
+    if (!isClient || isDevelopment || adAttempted.current) return;
 
-  const initAd = () => {
-    try {
-      // Wait for container to be properly sized
-      if (!adContainerRef.current?.offsetWidth) {
-        setTimeout(initAd, 100);
-        return;
-      }
+    const loadAd = async () => {
+      try {
+        // Mark that we've attempted to load the ad
+        adAttempted.current = true;
 
-      observerRef.current = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.addedNodes.length > 0) {
-            const adFrame = adContainerRef.current?.querySelector('iframe');
-            if (adFrame) {
-              adFrame.style.maxHeight = `${CONTAINER_HEIGHT - (CONTAINER_PADDING * 2)}px`;
-              adFrame.style.height = `${CONTAINER_HEIGHT - (CONTAINER_PADDING * 2)}px`;
-              adFrame.style.width = '100%'; // Ensure width is set
-              adFrame.style.overflow = 'hidden';
+        // Check if container exists and has width
+        if (!adContainerRef.current?.offsetWidth) {
+          setAdState('failed');
+          return;
+        }
 
-              setTimeout(() => {
-                const rect = adFrame.getBoundingClientRect();
-                if (rect.width === 0 || rect.height < 20) {
-                  setAdState('empty');
-                  return;
-                }
-                setAdState('loaded');
-              }, 1000);
-            }
+        // Try to push the ad
+        await new Promise((resolve, reject) => {
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            // Give the ad some time to load
+            setTimeout(resolve, 1000);
+          } catch (error) {
+            reject(error);
           }
         });
-      });
 
-      if (adContainerRef.current) {
-        observerRef.current.observe(adContainerRef.current, { 
-          childList: true, 
-          subtree: true,
-          attributes: true 
-        });
-
-        // Ensure container has explicit dimensions
-        adContainerRef.current.style.width = '100%';
-        adContainerRef.current.style.minWidth = '300px'; // Minimum width for AdSense ads
-
-        // Push ad after container is sized
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-
-      const timeout = setTimeout(() => {
-        if (adState === 'loading') {
-          setAdState('failed');
+        // Check if ad loaded successfully
+        const adFrame = adContainerRef.current?.querySelector('iframe');
+        if (!adFrame || adFrame.offsetWidth === 0) {
+          throw new Error('Ad failed to load');
         }
-      }, 2000);
 
-      return () => clearTimeout(timeout);
-    } catch (err) {
-      console.error('Error initializing ad:', err);
-      setAdState('failed');
-    }
-  };
+        setAdState('loaded');
+      } catch (error) {
+        console.error('Ad loading error:', error);
+        setAdState('failed');
+      }
+    };
 
-  initAd();
-  return () => observerRef.current?.disconnect();
-}, [isClient]);
+    // Add a small delay before attempting to load the ad
+    setTimeout(loadAd, 100);
 
+    // Fallback to failed state if ad takes too long
+    const timeout = setTimeout(() => {
+      if (adState === 'loading') {
+        setAdState('failed');
+      }
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [isClient]);
 
   // Share handlers
   const handleShare = async () => {
@@ -124,24 +106,23 @@ useEffect(() => {
   if (typeof window !== 'undefined' && window.innerWidth >= 1280) return null;
   if (isDismissed) return null;
 
-const renderAdContent = () => 
-{
-  if (isDevelopment) {
-    return (
-      <div className="w-full h-full min-w-[300px] bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-        <span className="text-sm text-gray-500">Ad Placeholder</span>
-      </div>
-    );
-  }
+  const renderAdContent = () => {
+    if (isDevelopment) {
+      return (
+        <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+          <span className="text-sm text-gray-500">Ad Placeholder</span>
+        </div>
+      );
+    }
 
-  if (!isClient || adState === 'loading') {
-    return (
-      <div className="w-full h-full min-w-[300px] bg-surface-light-hover dark:bg-surface-dark-hover animate-pulse rounded" />
-    );
-  }
+    if (adState === 'loading') {
+      return (
+        <div className="w-full h-full bg-surface-light-hover dark:bg-surface-dark-hover animate-pulse rounded" />
+      );
+    }
 
-  if (adState === 'failed' || adState === 'empty') {
-    return (
+    if (adState === 'failed' || adState === 'empty') {
+      return (
         <div className="w-full h-full flex flex-col items-center justify-center bg-surface-light-hover dark:bg-surface-dark-hover rounded p-4">
           <div className="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
             Share this calculator
@@ -195,36 +176,37 @@ const renderAdContent = () =>
           </div>
         </div>
       );
-  }
+    }
 
-  return (
-    <div 
-      ref={adContainerRef}
-      className="w-full h-full min-w-[300px] overflow-hidden"
-    >
-      <ins
-        className="adsbygoogle w-full h-full"
-        style={{
-          display: 'block',
-          width: '100%',
-          minWidth: '300px',
-          overflow: 'hidden'
-        }}
-        data-ad-client="ca-pub-9779862910631944"
-        data-ad-slot="2571315295"
-        data-ad-format="horizontal"
-        data-full-width-responsive="true"
-      />
-    </div>
-  );
+    return (
+      <div 
+        ref={adContainerRef}
+        className="w-full h-full"
+        style={{ minWidth: '300px', minHeight: '50px' }}
+      >
+        <ins
+          className="adsbygoogle"
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            minWidth: '300px',
+            minHeight: '50px'
+          }}
+          data-ad-client="ca-pub-9779862910631944"
+          data-ad-slot="2571315295"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+      </div>
+    );
   };
 
   return (
     <div 
-      className="xl:hidden fixed bottom-0 left-0 right-0 bg-surface-light dark:bg-surface-dark border-t border-gray-200/10 dark:border-gray-800/10 z-50 overflow-hidden"
+      className="xl:hidden fixed bottom-0 left-0 right-0 w-full bg-surface-light dark:bg-surface-dark border-t border-gray-200/10 dark:border-gray-800/10 z-50"
       style={{ 
         height: `${CONTAINER_HEIGHT}px`,
-        maxHeight: `${CONTAINER_HEIGHT}px`,
         minWidth: '300px'
       }}
     >
@@ -237,12 +219,7 @@ const renderAdContent = () =>
           <X className="w-5 h-5 text-content-light-dimmed dark:text-content-dark-dimmed" />
         </button>
         
-        <div 
-          className="w-full h-full overflow-hidden"
-          style={{ 
-            padding: `${CONTAINER_PADDING}px`
-          }}
-        >
+        <div className="w-full h-full p-2">
           {renderAdContent()}
         </div>
       </div>
