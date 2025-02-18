@@ -11,7 +11,7 @@ const MobileBottomAd = () => {
   const isDevelopment = false;
 
   // Constants for dimensions
-  const CONTAINER_HEIGHT = 150;
+  const CONTAINER_HEIGHT = 116;
   const CONTAINER_PADDING = 8;
 
   useEffect(() => {
@@ -182,10 +182,10 @@ const MobileBottomAd = () => {
       <div 
         ref={adContainerRef}
         className="w-full h-full"
-        style={{ minWidth: '300px', minHeight: '150px' }}
+        style={{ minWidth: '300px', minHeight: '116px' }}
       >
         <ins
-          className="adsbygoogle min-w-[300px] h-[150px]"
+          className="adsbygoogle min-w-[300px] h-[116px]"
           style={{
             display: 'block',            
           }}
