@@ -19,10 +19,18 @@ const MobileBottomAd = () => {
     return () => observerRef.current?.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!isClient || isDevelopment) return;
+  // Update the useEffect that handles ad initialization
+useEffect(() => {
+  if (!isClient || isDevelopment) return;
 
+  const initAd = () => {
     try {
+      // Wait for container to be properly sized
+      if (!adContainerRef.current?.offsetWidth) {
+        setTimeout(initAd, 100);
+        return;
+      }
+
       observerRef.current = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length > 0) {
@@ -30,11 +38,12 @@ const MobileBottomAd = () => {
             if (adFrame) {
               adFrame.style.maxHeight = `${CONTAINER_HEIGHT - (CONTAINER_PADDING * 2)}px`;
               adFrame.style.height = `${CONTAINER_HEIGHT - (CONTAINER_PADDING * 2)}px`;
+              adFrame.style.width = '100%'; // Ensure width is set
               adFrame.style.overflow = 'hidden';
 
               setTimeout(() => {
                 const rect = adFrame.getBoundingClientRect();
-                if (rect.height < 20) {
+                if (rect.width === 0 || rect.height < 20) {
                   setAdState('empty');
                   return;
                 }
@@ -52,6 +61,11 @@ const MobileBottomAd = () => {
           attributes: true 
         });
 
+        // Ensure container has explicit dimensions
+        adContainerRef.current.style.width = '100%';
+        adContainerRef.current.style.minWidth = '300px'; // Minimum width for AdSense ads
+
+        // Push ad after container is sized
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
 
@@ -66,7 +80,12 @@ const MobileBottomAd = () => {
       console.error('Error initializing ad:', err);
       setAdState('failed');
     }
-  }, [isClient]);
+  };
+
+  initAd();
+  return () => observerRef.current?.disconnect();
+}, [isClient]);
+
 
   // Share handlers
   const handleShare = async () => {
@@ -105,23 +124,24 @@ const MobileBottomAd = () => {
   if (typeof window !== 'undefined' && window.innerWidth >= 1280) return null;
   if (isDismissed) return null;
 
-  const renderAdContent = () => {
-    if (isDevelopment) {
-      return (
-        <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-          <span className="text-sm text-gray-500">Ad Placeholder</span>
-        </div>
-      );
-    }
+const renderAdContent = () => 
+{
+  if (isDevelopment) {
+    return (
+      <div className="w-full h-full min-w-[300px] bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+        <span className="text-sm text-gray-500">Ad Placeholder</span>
+      </div>
+    );
+  }
 
-    if (!isClient || adState === 'loading') {
-      return (
-        <div className="w-full h-full bg-surface-light-hover dark:bg-surface-dark-hover animate-pulse rounded" />
-      );
-    }
+  if (!isClient || adState === 'loading') {
+    return (
+      <div className="w-full h-full min-w-[300px] bg-surface-light-hover dark:bg-surface-dark-hover animate-pulse rounded" />
+    );
+  }
 
-    if (adState === 'failed' || adState === 'empty') {
-      return (
+  if (adState === 'failed' || adState === 'empty') {
+    return (
         <div className="w-full h-full flex flex-col items-center justify-center bg-surface-light-hover dark:bg-surface-dark-hover rounded p-4">
           <div className="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
             Share this calculator
@@ -175,26 +195,28 @@ const MobileBottomAd = () => {
           </div>
         </div>
       );
-    }
+  }
 
-    return (
-      <div 
-        ref={adContainerRef}
-        className="w-full h-full overflow-hidden"
-      >
-        <ins
-          className="adsbygoogle w-full h-full"
-          style={{
-            display: 'block',
-            overflow: 'hidden'
-          }}
-          data-ad-client="ca-pub-9779862910631944"
-          data-ad-slot="2571315295"
-          data-ad-format="horizontal"
-          data-full-width-responsive="true"
-        />
-      </div>
-    );
+  return (
+    <div 
+      ref={adContainerRef}
+      className="w-full h-full min-w-[300px] overflow-hidden"
+    >
+      <ins
+        className="adsbygoogle w-full h-full"
+        style={{
+          display: 'block',
+          width: '100%',
+          minWidth: '300px',
+          overflow: 'hidden'
+        }}
+        data-ad-client="ca-pub-9779862910631944"
+        data-ad-slot="2571315295"
+        data-ad-format="horizontal"
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
   };
 
   return (
@@ -202,7 +224,8 @@ const MobileBottomAd = () => {
       className="xl:hidden fixed bottom-0 left-0 right-0 bg-surface-light dark:bg-surface-dark border-t border-gray-200/10 dark:border-gray-800/10 z-50 overflow-hidden"
       style={{ 
         height: `${CONTAINER_HEIGHT}px`,
-        maxHeight: `${CONTAINER_HEIGHT}px`
+        maxHeight: `${CONTAINER_HEIGHT}px`,
+        minWidth: '300px'
       }}
     >
       <div className="relative w-full h-full px-2">
