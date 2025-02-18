@@ -1,0 +1,273 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Binary to Decimal Converter | Convert Binary to Decimal Numbers";
+const description =
+  "Free online binary to decimal converter. Convert binary numbers to decimal format with step-by-step explanations. Includes conversion table and practice examples.";
+const keywords =
+  "binary to decimal, binary to decimal converter, convert binary to decimal, binary decimal conversion, decimal converter";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+  {
+    title: "Decimal to Binary",
+    url: "/calculators/binary-translator/decimal-to-binary",
+  },
+  {
+    title: "Decimal to Hex",
+    url: "/calculators/binary-translator/decimal-to-hex",
+  },
+];
+
+// Common examples
+const examples = [
+  {
+    binary: "1010",
+    decimal: "10",
+    description: "Powers: 8 + 0 + 2 + 0 = 10",
+  },
+  {
+    binary: "1111",
+    decimal: "15",
+    description: "Maximum 4-bit value",
+  },
+  {
+    binary: "10000",
+    decimal: "16",
+    description: "Power of 2 (2⁴)",
+  },
+  {
+    binary: "11111111",
+    decimal: "255",
+    description: "Maximum 8-bit value (byte)",
+  },
+];
+
+// Place values for demonstration
+const placeValues = [
+  { position: 7, value: "128" },
+  { position: 6, value: "64" },
+  { position: 5, value: "32" },
+  { position: 4, value: "16" },
+  { position: 3, value: "8" },
+  { position: 2, value: "4" },
+  { position: 1, value: "2" },
+  { position: 0, value: "1" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Binary to Decimal Converter
+          </h2>
+          <BinaryTranslator
+            client:load
+            defaultFrom="binary"
+            defaultTo="decimal"
+          />
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-mono text-sm break-all mb-2">
+                  Binary: {ex.binary}
+                </div>
+                <div class="font-medium mb-2">Decimal: {ex.decimal}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ex.description}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Place Values Explanation */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Understanding Place Values
+        </h2>
+        <div class="space-y-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-center">
+              <thead>
+                <tr>
+                  {
+                    placeValues.map((place) => (
+                      <th class="p-2 border-b border-gray-200/10 dark:border-gray-800/10">
+                        2<sup>{place.position}</sup>
+                      </th>
+                    ))
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {
+                    placeValues.map((place) => (
+                      <td class="p-2 font-mono">{place.value}</td>
+                    ))
+                  }
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Example: 1101₂</h3>
+            <div class="space-y-2 text-sm">
+              <p>1 × 2³ = 1 × 8 = 8</p>
+              <p>1 × 2² = 1 × 4 = 4</p>
+              <p>0 × 2¹ = 0 × 2 = 0</p>
+              <p>1 × 2⁰ = 1 × 1 = 1</p>
+              <p class="font-medium mt-4">Sum: 8 + 4 + 0 + 1 = 13</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Binary to Decimal Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Step-by-Step Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Identify each digit's place value (powers of 2)</li>
+              <li>Multiply each binary digit (0 or 1) by its place value</li>
+              <li>Sum all the results to get the decimal number</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Easy Method: Right to Left</h4>
+              <ol class="list-none space-y-1 text-sm">
+                <li>1. Start from rightmost digit</li>
+                <li>2. Multiply by increasing powers of 2</li>
+                <li>3. Add results as you go</li>
+              </ol>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Quick Tips</h4>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Each position doubles in value</li>
+                <li>Powers of 2 are easy to spot</li>
+                <li>8-bit numbers max at 255</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Common Bit Patterns */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Bit Patterns
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            [
+              {
+                binary: "10000000",
+                decimal: "128",
+                note: "Leftmost bit (MSB)",
+              },
+              {
+                binary: "11111111",
+                decimal: "255",
+                note: "All bits set (byte)",
+              },
+              {
+                binary: "10101010",
+                decimal: "170",
+                note: "Alternating pattern",
+              },
+              { binary: "01111111", decimal: "127", note: "Max 7-bit value" },
+            ].map((pattern) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-mono text-sm mb-1">{pattern.binary}</div>
+                <div class="font-medium">= {pattern.decimal}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {pattern.note}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

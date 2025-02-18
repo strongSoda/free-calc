@@ -1,0 +1,212 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Binary to Hexadecimal Converter | Convert Binary to Hex";
+const description =
+  "Free online binary to hexadecimal converter. Convert binary numbers to hex instantly. Includes conversion table and step-by-step explanations.";
+const keywords =
+  "binary to hex, binary to hexadecimal converter, convert binary to hex, binary to hexadecimal conversion, hex converter";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Binary to Text",
+    url: "/calculators/binary-translator/binary-to-text",
+  },
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+  {
+    title: "Hex to Binary",
+    url: "/calculators/binary-translator/hex-to-binary",
+  },
+  {
+    title: "Hex to Decimal",
+    url: "/calculators/binary-translator/hex-to-decimal",
+  },
+];
+
+// Common examples
+const examples = [
+  {
+    binary: "1010",
+    hex: "A",
+    description: "Simple 4-bit conversion",
+  },
+  {
+    binary: "11111111",
+    hex: "FF",
+    description: "Maximum 8-bit value",
+  },
+  {
+    binary: "10100101",
+    hex: "A5",
+    description: "Common byte pattern",
+  },
+  {
+    binary: "0100 1000 0110 0101",
+    hex: "4865",
+    description: "Multi-byte example (He)",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Binary to Hexadecimal Converter
+          </h2>
+          <BinaryTranslator client:load defaultFrom="binary" defaultTo="hex" />
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Binary to Hex Examples
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+                  {ex.description}
+                </div>
+                <div class="font-mono text-sm break-all mb-2">
+                  Binary: {ex.binary}
+                </div>
+                <div class="font-medium">Hex: {ex.hex}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Conversion Table */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Binary to Hex Conversion Table
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <th class="py-2 px-4 text-left">Binary</th>
+                <th class="py-2 px-4 text-left">Hex</th>
+                <th class="py-2 px-4 text-left">Decimal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
+                  (num) => (
+                    <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                      <td class="py-2 px-4 font-mono">
+                        {num.toString(2).padStart(4, "0")}
+                      </td>
+                      <td class="py-2 px-4 font-mono">
+                        {num.toString(16).toUpperCase()}
+                      </td>
+                      <td class="py-2 px-4">{num}</td>
+                    </tr>
+                  )
+                )
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Binary to Hex Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Step-by-Step Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Group binary digits into sets of 4 (from right to left)</li>
+              <li>Convert each 4-bit group to its hexadecimal equivalent</li>
+              <li>Combine the hex digits to form the final number</li>
+            </ol>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">
+              Example: Converting "1010 1111" to Hex
+            </h4>
+            <ol class="list-none space-y-1 text-sm">
+              <li>1. Split into groups: 1010 1111</li>
+              <li>2. Convert each group:</li>
+              <li class="ml-4">• 1010 = A</li>
+              <li class="ml-4">• 1111 = F</li>
+              <li>3. Final hex: AF</li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Quick Tips</h3>
+            <ul
+              class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Each hex digit represents exactly 4 binary digits</li>
+              <li>Add leading zeros to make complete 4-bit groups</li>
+              <li>Hex uses A-F to represent values 10-15</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

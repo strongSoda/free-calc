@@ -9,6 +9,7 @@ import {
   Baby,
   BarChart,
   BarChart2,
+  Binary,
   CalculatorIcon,
   ChartSpline,
   Check,
@@ -187,6 +188,13 @@ const calculators = [
     url: "/calculators/mortgage",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Binary Translator",
+    description:
+      "Convert between Text, Binary, Hexadecimal, Decimal, and Octal numbers. Supports multiple character encodings.",
+    url: "/calculators/binary-translator",
+    gradient: "from-accent-primary/90 to-accent-secondary/90",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -311,7 +319,16 @@ const keywords =
                 <Pipette client:load className="w-8 h-8 text-accent-primary" />
               )}
               {index === 22 && (
-                <HandCoins client:load className="w-8 h-8 text-accent-primary" />
+                <HandCoins
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
+              )}
+              {index === 23 && (
+                <Binary
+                  client:load
+                  className="w-8 h-8 text-accent-primary"
+                />
               )}
             </div>
             <h2

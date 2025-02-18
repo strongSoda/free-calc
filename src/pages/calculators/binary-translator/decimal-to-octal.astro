@@ -1,0 +1,341 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Decimal to Octal Converter | Convert Decimal to Octal Numbers";
+const description =
+  "Free online decimal to octal converter. Convert decimal numbers to octal with step-by-step explanations. Includes conversion tables and examples.";
+const keywords =
+  "decimal to octal, dec to oct, decimal octal converter, convert decimal to octal, base-10 to base-8, decimal to oct calculator";
+
+// Related conversions
+const relatedConversions = [
+  {
+    title: "Decimal to Binary",
+    url: "/calculators/binary-translator/decimal-to-binary",
+  },
+  {
+    title: "Decimal to Hex",
+    url: "/calculators/binary-translator/decimal-to-hex",
+  },
+  {
+    title: "Octal to Decimal",
+    url: "/calculators/binary-translator/octal-to-decimal",
+  },
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+];
+
+// Common examples with step-by-step conversions
+const examples = [
+  {
+    decimal: "255",
+    octal: "377",
+    explanation: "Maximum 8-bit value",
+    steps: [
+      "255 ÷ 8 = 31 remainder 7",
+      "31 ÷ 8 = 3 remainder 7",
+      "3 ÷ 8 = 0 remainder 3",
+      "Reading from bottom up: 377",
+    ],
+  },
+  {
+    decimal: "64",
+    octal: "100",
+    explanation: "Power of 8 (8²)",
+    steps: [
+      "64 ÷ 8 = 8 remainder 0",
+      "8 ÷ 8 = 1 remainder 0",
+      "1 ÷ 8 = 0 remainder 1",
+      "Reading from bottom up: 100",
+    ],
+  },
+  {
+    decimal: "511",
+    octal: "777",
+    explanation: "Maximum 9-bit value",
+    steps: [
+      "511 ÷ 8 = 63 remainder 7",
+      "63 ÷ 8 = 7 remainder 7",
+      "7 ÷ 8 = 0 remainder 7",
+      "Reading from bottom up: 777",
+    ],
+  },
+];
+
+// Powers of 8 reference
+const powersOfEight = [
+  { power: 0, value: "1" },
+  { power: 1, value: "8" },
+  { power: 2, value: "64" },
+  { power: 3, value: "512" },
+  { power: 4, value: "4,096" },
+  { power: 5, value: "32,768" },
+];
+
+// Unix file permissions examples
+const unixPermissions = [
+  {
+    octal: "777",
+    meaning: "rwxrwxrwx",
+    description: "Full permissions for all",
+  },
+  { octal: "755", meaning: "rwxr-xr-x", description: "Standard executable" },
+  { octal: "644", meaning: "rw-r--r--", description: "Standard file" },
+  { octal: "600", meaning: "rw-------", description: "Private file" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Decimal to Octal Converter
+          </h2>
+          <BinaryTranslator
+            client:load
+            defaultFrom="decimal"
+            defaultTo="octal"
+          />
+        </div>
+      </div>
+
+      {/* Powers of 8 */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Powers of 8 Reference
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
+          {
+            powersOfEight.map((power) => (
+              <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center">
+                <div class="font-mono mb-1">
+                  8<sup>{power.power}</sup>
+                </div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  = {power.value}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Conversion Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Step-by-Step Examples
+        </h2>
+        <div class="grid gap-6 md:grid-cols-3">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-medium mb-2">
+                  {ex.decimal}₁₀ = {ex.octal}₈
+                </h3>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
+                  {ex.explanation}
+                </p>
+                <div class="space-y-1 text-sm font-mono">
+                  {ex.steps.map((step) => (
+                    <div>{step}</div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Decimal to Octal Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Division Method</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Divide the decimal number by 8</li>
+              <li>Note down the remainder (0-7)</li>
+              <li>Divide the quotient by 8</li>
+              <li>Repeat until quotient becomes 0</li>
+              <li>Read the remainders from bottom to top</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Key Points</h4>
+              <ul
+                class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                <li>Valid octal digits are 0-7 only</li>
+                <li>Each octal digit represents 3 binary digits</li>
+                <li>Octal is common in Unix systems</li>
+                <li>Powers of 8 are important reference points</li>
+              </ul>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Common Values</h4>
+              <div class="text-sm space-y-1">
+                <p>8₁₀ = 10₈</p>
+                <p>64₁₀ = 100₈</p>
+                <p>255₁₀ = 377₈</p>
+                <p>511₁₀ = 777₈</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Unix File Permissions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Unix File Permissions
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <th class="p-2 text-left">Octal</th>
+                <th class="p-2 text-left">Permission String</th>
+                <th class="p-2 text-left">Usage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                unixPermissions.map((perm) => (
+                  <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                    <td class="p-2 font-mono">{perm.octal}</td>
+                    <td class="p-2 font-mono">{perm.meaning}</td>
+                    <td class="p-2">{perm.description}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Practice Problems */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Practice Problems</h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            [
+              { decimal: "42", octal: "52" },
+              { decimal: "100", octal: "144" },
+              { decimal: "255", octal: "377" },
+            ].map((problem) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="font-mono mb-2">Convert: {problem.decimal}₁₀</p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed opacity-0 hover:opacity-100 transition-opacity">
+                  Answer: {problem.octal}₈
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Real-World Applications */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Real-World Applications
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Unix/Linux Systems</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <p>
+                Octal numbers are used extensively in Unix-like systems for:
+              </p>
+              <ul class="list-disc list-inside mt-2">
+                <li>File permissions</li>
+                <li>Access control</li>
+                <li>System configuration</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Legacy Systems</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <p>Octal notation is still used in:</p>
+              <ul class="list-disc list-inside mt-2">
+                <li>Embedded systems</li>
+                <li>Assembly programming</li>
+                <li>Hardware interfaces</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

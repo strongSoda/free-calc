@@ -1,0 +1,315 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Octal to Decimal Converter | Convert Octal to Decimal Numbers";
+const description =
+  "Free online octal to decimal converter. Convert octal numbers to decimal with step-by-step explanations and instant results. Includes conversion tables and examples.";
+const keywords =
+  "octal to decimal, oct to decimal, octal decimal converter, convert octal to decimal, octal conversion calculator, base-8 converter";
+
+// Related conversions
+const relatedConversions = [
+  {
+    title: "Octal to Binary",
+    url: "/calculators/binary-translator/octal-to-binary",
+  },
+  { title: "Octal to Hex", url: "/calculators/binary-translator/octal-to-hex" },
+  {
+    title: "Decimal to Octal",
+    url: "/calculators/binary-translator/decimal-to-octal",
+  },
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+];
+
+// Examples with detailed explanations
+const examples = [
+  {
+    octal: "377",
+    decimal: "255",
+    explanation: "(3 × 8²) + (7 × 8¹) + (7 × 8⁰) = 192 + 56 + 7 = 255",
+  },
+  {
+    octal: "123",
+    decimal: "83",
+    explanation: "(1 × 8²) + (2 × 8¹) + (3 × 8⁰) = 64 + 16 + 3 = 83",
+  },
+  {
+    octal: "10",
+    decimal: "8",
+    explanation: "(1 × 8¹) + (0 × 8⁰) = 8 + 0 = 8",
+  },
+  {
+    octal: "777",
+    decimal: "511",
+    explanation: "(7 × 8²) + (7 × 8¹) + (7 × 8⁰) = 448 + 56 + 7 = 511",
+  },
+];
+
+// Place values for demonstration
+const placeValues = [
+  { position: 3, value: "512", power: "8³" },
+  { position: 2, value: "64", power: "8²" },
+  { position: 1, value: "8", power: "8¹" },
+  { position: 0, value: "1", power: "8⁰" },
+];
+
+// Quick reference values
+const quickReference = [
+  { octal: "10", decimal: "8" },
+  { octal: "20", decimal: "16" },
+  { octal: "40", decimal: "32" },
+  { octal: "100", decimal: "64" },
+  { octal: "200", decimal: "128" },
+  { octal: "400", decimal: "256" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Octal to Decimal Converter
+          </h2>
+          <BinaryTranslator
+            client:load
+            defaultFrom="octal"
+            defaultTo="decimal"
+          />
+        </div>
+      </div>
+
+      {/* Place Values Explanation */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Understanding Octal Place Values
+        </h2>
+        <div class="space-y-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-center">
+              <thead>
+                <tr>
+                  {
+                    placeValues.map((place) => (
+                      <th class="p-2 border-b border-gray-200/10 dark:border-gray-800/10">
+                        {place.power}
+                      </th>
+                    ))
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {
+                    placeValues.map((place) => (
+                      <td class="p-2 font-mono">{place.value}</td>
+                    ))
+                  }
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Powers of 8</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <p>8⁰ = 1</p>
+              <p>8¹ = 8</p>
+              <p>8² = 64</p>
+              <p>8³ = 512</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Detailed Examples</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-mono text-lg mb-2">Octal: {ex.octal}</div>
+                <div class="font-mono mb-2">Decimal: {ex.decimal}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ex.explanation}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Quick Reference Values */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Octal Values
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            quickReference.map((ref) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-mono text-lg mb-1">Octal: {ref.octal}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Decimal: {ref.decimal}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Octal to Decimal Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Step-by-Step Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Identify the position value of each digit (powers of 8)</li>
+              <li>Multiply each digit by its position value</li>
+              <li>Sum all products to get the decimal result</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Converting "47"₈</h4>
+              <div class="text-sm space-y-1">
+                <p>4 in position 1: 4 × 8 = 32</p>
+                <p>7 in position 0: 7 × 1 = 7</p>
+                <p class="font-medium mt-2">Sum: 32 + 7 = 39₁₀</p>
+              </div>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Important Tips</h4>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Valid octal digits: 0-7 only</li>
+                <li>Each position is 8 times the previous</li>
+                <li>Right-most position value is 1</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Practice Problems */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Practice Problems</h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            [
+              { octal: "77", decimal: "63" },
+              { octal: "123", decimal: "83" },
+              { octal: "200", decimal: "128" },
+            ].map((problem) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="font-mono mb-2">Convert: {problem.octal}₈</p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed opacity-0 hover:opacity-100 transition-opacity">
+                  Answer: {problem.decimal}₁₀
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Applications */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Real-World Applications
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Unix File Permissions</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <p>chmod 777 - Full permissions (read, write, execute)</p>
+              <p>chmod 644 - Standard file permissions</p>
+              <p>chmod 755 - Executable file permissions</p>
+            </div>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Other Uses</h3>
+            <ul
+              class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Legacy computing systems</li>
+              <li>Assembly language programming</li>
+              <li>Data representation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

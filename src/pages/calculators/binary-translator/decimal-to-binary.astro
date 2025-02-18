@@ -1,0 +1,282 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Decimal to Binary Converter | Convert Decimal to Binary Numbers";
+const description =
+  "Free online decimal to binary converter. Convert decimal numbers to binary with step-by-step explanations. Includes conversion tables and examples.";
+const keywords =
+  "decimal to binary, convert decimal to binary, decimal binary converter, base-10 to binary, decimal to base-2 converter";
+
+// Related conversions
+const relatedConversions = [
+  {
+    title: "Binary to Decimal",
+    url: "/calculators/binary-translator/binary-to-decimal",
+  },
+  {
+    title: "Decimal to Hex",
+    url: "/calculators/binary-translator/decimal-to-hex",
+  },
+  {
+    title: "Decimal to Octal",
+    url: "/calculators/binary-translator/decimal-to-octal",
+  },
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+];
+
+// Common examples
+const examples = [
+  {
+    decimal: "255",
+    binary: "11111111",
+    explanation: "Maximum 8-bit value (2⁸ - 1)",
+    steps: [
+      "255 ÷ 2 = 127 remainder 1",
+      "127 ÷ 2 = 63  remainder 1",
+      "63 ÷ 2 = 31   remainder 1",
+      "31 ÷ 2 = 15   remainder 1",
+      "15 ÷ 2 = 7    remainder 1",
+      "7 ÷ 2 = 3     remainder 1",
+      "3 ÷ 2 = 1     remainder 1",
+      "1 ÷ 2 = 0     remainder 1",
+    ],
+  },
+  {
+    decimal: "128",
+    binary: "10000000",
+    explanation: "Power of 2 (2⁷)",
+    steps: [
+      "128 ÷ 2 = 64  remainder 0",
+      "64 ÷ 2 = 32   remainder 0",
+      "32 ÷ 2 = 16   remainder 0",
+      "16 ÷ 2 = 8    remainder 0",
+      "8 ÷ 2 = 4     remainder 0",
+      "4 ÷ 2 = 2     remainder 0",
+      "2 ÷ 2 = 1     remainder 0",
+      "1 ÷ 2 = 0     remainder 1",
+    ],
+  },
+];
+
+// Powers of 2 reference
+const powersOfTwo = [
+  { power: 0, value: 1 },
+  { power: 1, value: 2 },
+  { power: 2, value: 4 },
+  { power: 3, value: 8 },
+  { power: 4, value: 16 },
+  { power: 5, value: 32 },
+  { power: 6, value: 64 },
+  { power: 7, value: 128 },
+  { power: 8, value: 256 },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Decimal to Binary Converter
+          </h2>
+          <BinaryTranslator
+            client:load
+            defaultFrom="decimal"
+            defaultTo="binary"
+          />
+        </div>
+      </div>
+
+      {/* Powers of 2 Reference */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Powers of 2 Reference Table
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {
+            powersOfTwo.map((power) => (
+              <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center">
+                <div class="font-mono text-lg">
+                  2<sup>{power.power}</sup> = {power.value}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Conversion Method */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How to Convert Decimal to Binary
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Division Method</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Divide the decimal number by 2</li>
+              <li>Write down the remainder (0 or 1)</li>
+              <li>Divide the quotient by 2</li>
+              <li>Repeat until quotient becomes 0</li>
+              <li>Read the remainders from bottom to top</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            {
+              examples.map((ex) => (
+                <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                  <h4 class="font-medium mb-2">
+                    Converting {ex.decimal} to Binary
+                  </h4>
+                  <div class="space-y-2">
+                    <div class="text-sm font-mono">
+                      {ex.steps.map((step) => (
+                        <div>{step}</div>
+                      ))}
+                    </div>
+                    <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mt-4">
+                      Result: {ex.binary}
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      {/* Subtraction Method */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Alternative Method: Power Subtraction
+        </h2>
+        <div class="space-y-4">
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            Another way to convert is by subtracting the largest power of 2 that
+            fits:
+          </p>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">Example: Converting 44 to Binary</h4>
+            <div class="space-y-1 text-sm">
+              <p>44 - 32 (2⁵) = 12 → 1</p>
+              <p>12 - 8 (2³) = 4 → 1</p>
+              <p>4 - 4 (2²) = 0 → 1</p>
+              <p>Powers used: 2⁵, 2³, 2²</p>
+              <p class="font-medium mt-2">Result: 00101100</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Practice Problems */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Practice Problems</h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            [
+              { decimal: "15", binary: "1111" },
+              { decimal: "64", binary: "1000000" },
+              { decimal: "100", binary: "1100100" },
+            ].map((problem) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="font-mono mb-2">Convert: {problem.decimal}₁₀</p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed opacity-0 hover:opacity-100 transition-opacity">
+                  Answer: {problem.binary}₂
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Quick Tips */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Quick Tips</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Common Patterns</h3>
+            <ul
+              class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <li>Powers of 2 have a single 1 bit</li>
+              <li>15 = 1111 (all bits set in 4 bits)</li>
+              <li>255 = 11111111 (all bits set in 8 bits)</li>
+              <li>Even numbers end in 0</li>
+            </ul>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Helpful Reminders</h3>
+            <ul
+              class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <li>Each bit doubles in value</li>
+              <li>8 bits = 1 byte</li>
+              <li>Leading zeros don't change value</li>
+              <li>Binary numbers can get long quickly</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

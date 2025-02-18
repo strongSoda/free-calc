@@ -1,0 +1,328 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Binary to Octal Converter | Convert Binary to Oct";
+const description =
+  "Free online binary to octal converter. Convert binary numbers to octal format instantly. Includes conversion table and step-by-step explanations.";
+const keywords =
+  "binary to octal, binary to octal converter, convert binary to oct, binary to octal conversion, octal converter";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+  {
+    title: "Binary to Decimal",
+    url: "/calculators/binary-translator/binary-to-decimal",
+  },
+  {
+    title: "Octal to Binary",
+    url: "/calculators/binary-translator/octal-to-binary",
+  },
+  { title: "Octal to Hex", url: "/calculators/binary-translator/octal-to-hex" },
+];
+
+// Common examples
+const examples = [
+  {
+    binary: "111",
+    octal: "7",
+    description: "Maximum 3-bit value",
+  },
+  {
+    binary: "001 010 011",
+    octal: "123",
+    description: "Simple sequential digits",
+  },
+  {
+    binary: "111 000",
+    octal: "70",
+    description: "Common pattern",
+  },
+  {
+    binary: "001 111 000",
+    octal: "170",
+    description: "Multi-digit example",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Binary to Octal Converter
+          </h2>
+          <BinaryTranslator
+            client:load
+            defaultFrom="binary"
+            defaultTo="octal"
+          />
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Binary to Octal Examples
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+                  {ex.description}
+                </div>
+                <div class="font-mono text-sm break-all mb-2">
+                  Binary: {ex.binary}
+                </div>
+                <div class="font-medium">Octal: {ex.octal}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Conversion Table */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Binary to Octal Conversion Table
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <th class="py-2 px-4 text-left">Binary</th>
+                <th class="py-2 px-4 text-left">Octal</th>
+                <th class="py-2 px-4 text-left">Decimal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                [0, 1, 2, 3, 4, 5, 6, 7].map((num) => (
+                  <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                    <td class="py-2 px-4 font-mono">
+                      {num.toString(2).padStart(3, "0")}
+                    </td>
+                    <td class="py-2 px-4 font-mono">{num.toString(8)}</td>
+                    <td class="py-2 px-4">{num}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Binary to Octal Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Step-by-Step Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Group binary digits into sets of 3 (from right to left)</li>
+              <li>Convert each 3-bit group to its octal equivalent (0-7)</li>
+              <li>Combine the octal digits to form the final number</li>
+            </ol>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">
+              Example: Converting "110 101" to Octal
+            </h4>
+            <ol class="list-none space-y-1 text-sm">
+              <li>1. Split into groups of 3: 110 101</li>
+              <li>2. Convert each group:</li>
+              <li class="ml-4">• 110 = 6</li>
+              <li class="ml-4">• 101 = 5</li>
+              <li>3. Final octal: 65</li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Key Points</h3>
+            <ul
+              class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Each octal digit represents exactly 3 binary digits</li>
+              <li>Octal only uses digits 0-7</li>
+              <li>Add leading zeros to make complete 3-bit groups</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Additional Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          About Binary to Octal Conversion
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Why Use Octal?</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Octal numbers are often used in computing as a more concise way to
+              represent binary numbers. Since each octal digit represents
+              exactly three binary digits, it's easier to read and write octal
+              numbers compared to long strings of binary digits.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Common Applications</h3>
+            <ul
+              class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Unix file permissions (chmod commands)</li>
+              <li>Legacy computing systems</li>
+              <li>Some microcontroller programming</li>
+              <li>Data representation in certain programming languages</li>
+            </ul>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">Power of 3 Relationship</h4>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              The relationship between binary and octal is based on powers of
+              2³:
+            </p>
+            <div class="mt-2 font-mono text-sm">
+              2³ = 8 (octal base)<br />
+              000 = 0₈<br />
+              111 = 7₈
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Practice Problems */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Practice Problems</h2>
+        <div class="space-y-4">
+          <p
+            class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4"
+          >
+            Try converting these binary numbers to octal:
+          </p>
+          <div class="grid gap-4 md:grid-cols-2">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <p class="font-mono mb-2">Binary: 111 000 101</p>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                (Hover for answer: 705₈)
+              </p>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <p class="font-mono mb-2">Binary: 001 010 011</p>
+              <p
+                class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                (Hover for answer: 123₈)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Reference */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Quick Reference</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Binary to Octal Steps</h3>
+            <ol
+              class="list-decimal list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Group binary into threes</li>
+              <li>Convert each group (000-111)</li>
+              <li>Combine octal digits</li>
+            </ol>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Common Patterns</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed font-mono"
+            >
+              111 = 7₈<br />
+              100 = 4₈<br />
+              011 = 3₈<br />
+              001 = 1₈
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

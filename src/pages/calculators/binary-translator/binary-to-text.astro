@@ -1,0 +1,211 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Binary to Text Converter | Convert Binary Numbers to Text";
+const description =
+  "Free online binary to text converter. Convert binary numbers back to readable text. Supports UTF-8, ASCII, and UTF-16 encodings with instant conversion.";
+const keywords =
+  "binary to text, binary to text converter, convert binary to text, binary to text translator, binary decoder";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Text to Binary",
+    url: "/calculators/binary-translator/text-to-binary",
+  },
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+  {
+    title: "Binary to Decimal",
+    url: "/calculators/binary-translator/binary-to-decimal",
+  },
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+];
+
+// Common examples
+const examples = [
+  {
+    input: "01001000 01100101 01101100 01101100 01101111",
+    expected: "Hello",
+    description: "The word 'Hello' in binary",
+  },
+  {
+    input: "01010111 01101111 01110010 01101100 01100100",
+    expected: "World",
+    description: "The word 'World' in binary",
+  },
+  {
+    input: "00110001 00110010 00110011",
+    expected: "123",
+    description: "Numbers in binary",
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Binary to Text Converter
+          </h2>
+          <BinaryTranslator client:load defaultFrom="binary" defaultTo="text" />
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common Binary Examples
+        </h2>
+        <div class="space-y-4">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+                  {ex.description}
+                </div>
+                <div class="font-mono text-sm break-all mb-2">
+                  Binary: {ex.input}
+                </div>
+                <div class="font-medium">Text: {ex.expected}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Binary to Text Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Conversion Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Each 8-bit binary number represents one character</li>
+              <li>
+                The binary is converted to its decimal ASCII/Unicode value
+              </li>
+              <li>
+                The decimal value is converted to its corresponding character
+              </li>
+            </ol>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">
+              Example: Converting "01000001" to Text
+            </h4>
+            <ol class="list-none space-y-1 text-sm">
+              <li>1. Binary: 01000001</li>
+              <li>2. Decimal: 65</li>
+              <li>3. Character: 'A' (ASCII code 65)</li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Important Notes</h3>
+            <ul
+              class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Binary numbers should be separated by spaces</li>
+              <li>Each binary number should be 8 bits long</li>
+              <li>Invalid binary numbers will result in conversion errors</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* ASCII Table Preview */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Common ASCII Binary Values
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                <th class="py-2 px-4 text-left">Character</th>
+                <th class="py-2 px-4 text-left">Binary</th>
+                <th class="py-2 px-4 text-left">Decimal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                [
+                  { char: "A", dec: 65 },
+                  { char: "a", dec: 97 },
+                  { char: "0", dec: 48 },
+                  { char: "space", dec: 32 },
+                  { char: ".", dec: 46 },
+                ].map((item) => (
+                  <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                    <td class="py-2 px-4">{item.char}</td>
+                    <td class="py-2 px-4 font-mono">
+                      {item.dec.toString(2).padStart(8, "0")}
+                    </td>
+                    <td class="py-2 px-4">{item.dec}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

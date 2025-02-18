@@ -1,0 +1,133 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Text to Binary Converter | Convert Text to Binary Online";
+const description =
+  "Free online text to binary converter. Convert text to binary numbers instantly with support for different character encodings like UTF-8, ASCII, and UTF-16.";
+const keywords =
+  "text to binary, text to binary converter, convert text to binary, text to binary translator, text to binary online";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Binary to Text",
+    url: "/calculators/binary-translator/binary-to-text",
+  },
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+  {
+    title: "Hex to Binary",
+    url: "/calculators/binary-translator/hex-to-binary",
+  },
+];
+
+// Common examples
+const examples = [
+  { input: "Hello", expected: "01001000 01100101 01101100 01101100 01101111" },
+  { input: "123", expected: "00110001 00110010 00110011" },
+  { input: "ABC", expected: "01000001 01000010 01000011" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Text to Binary Converter
+          </h2>
+          <BinaryTranslator client:load defaultFrom="text" defaultTo="binary" />
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Examples</h2>
+        <div class="space-y-4">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-medium mb-2">Input: {ex.input}</div>
+                <div class="font-mono text-sm break-all">{ex.expected}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Text to Binary Conversion Works
+        </h2>
+        <div class="space-y-4">
+          <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            Converting text to binary involves these steps:
+          </p>
+          <ol
+            class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+          >
+            <li>Each character is converted to its ASCII/Unicode code</li>
+            <li>The code is converted to an 8-bit binary number</li>
+            <li>Spaces are added between each 8-bit group for readability</li>
+          </ol>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg mt-4"
+          >
+            <p class="font-medium mb-2">Example: Converting "A" to Binary</p>
+            <ol class="list-none space-y-1 text-sm">
+              <li>1. "A" has ASCII code 65</li>
+              <li>2. 65 in binary is 1000001</li>
+              <li>3. Padded to 8 bits: 01000001</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10"
+              >
+                <div class="font-medium">{conv.title}</div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

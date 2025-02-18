@@ -1,0 +1,281 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Octal to Binary Converter | Convert Octal to Binary Numbers";
+const description =
+  "Free online octal to binary converter. Convert octal numbers to binary with instant results and step-by-step explanations. Includes conversion table and examples.";
+const keywords =
+  "octal to binary, oct to binary, octal binary converter, convert octal to binary, octal conversion calculator";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Binary to Octal",
+    url: "/calculators/binary-translator/binary-to-octal",
+  },
+  {
+    title: "Octal to Decimal",
+    url: "/calculators/binary-translator/octal-to-decimal",
+  },
+  { title: "Octal to Hex", url: "/calculators/binary-translator/octal-to-hex" },
+  {
+    title: "Binary to Decimal",
+    url: "/calculators/binary-translator/binary-to-decimal",
+  },
+];
+
+// Common examples
+const examples = [
+  {
+    octal: "377",
+    binary: "11111111",
+    description: "Maximum 8-bit value",
+  },
+  {
+    octal: "177",
+    binary: "01111111",
+    description: "Maximum 7-bit value",
+  },
+  {
+    octal: "077",
+    binary: "00111111",
+    description: "Maximum 6-bit value",
+  },
+  {
+    octal: "123",
+    binary: "01010011",
+    description: "Common sequence",
+  },
+];
+
+// Octal to binary lookup table
+const conversionTable = [
+  { octal: "0", binary: "000" },
+  { octal: "1", binary: "001" },
+  { octal: "2", binary: "010" },
+  { octal: "3", binary: "011" },
+  { octal: "4", binary: "100" },
+  { octal: "5", binary: "101" },
+  { octal: "6", binary: "110" },
+  { octal: "7", binary: "111" },
+];
+
+// Practice problems
+const practiceProblems = [
+  { octal: "123", binary: "001010011" },
+  { octal: "456", binary: "100101110" },
+  { octal: "777", binary: "111111111" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Octal to Binary Converter
+          </h2>
+          <BinaryTranslator
+            client:load
+            defaultFrom="octal"
+            defaultTo="binary"
+          />
+        </div>
+      </div>
+
+      {/* Quick Reference Table */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Octal to Binary Reference Table
+        </h2>
+        <div class="grid gap-4 md:grid-cols-4">
+          {
+            conversionTable.map((entry) => (
+              <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center">
+                <div class="font-mono text-lg font-medium">
+                  Octal: {entry.octal}
+                </div>
+                <div class="font-mono text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  Binary: {entry.binary}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-mono text-lg mb-2">Octal: {ex.octal}</div>
+                <div class="font-mono mb-2">Binary: {ex.binary}</div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ex.description}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Octal to Binary Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Step-by-Step Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Convert each octal digit to its 3-bit binary equivalent</li>
+              <li>Combine all binary groups in order</li>
+              <li>Remove leading zeros if not needed</li>
+            </ol>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">Example: Converting "25" to Binary</h4>
+            <ol class="list-none space-y-1 text-sm">
+              <li>1. Split octal number: 2 | 5</li>
+              <li>2. Convert each digit:</li>
+              <li class="ml-4">• 2 = 010</li>
+              <li class="ml-4">• 5 = 101</li>
+              <li>3. Combine: 010101</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <h3 class="font-medium mb-2">Key Points</h3>
+              <ul
+                class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+              >
+                <li>Each octal digit converts to 3 bits</li>
+                <li>Valid octal digits are 0-7 only</li>
+                <li>Maintain proper place values</li>
+              </ul>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Common Patterns</h4>
+              <div class="font-mono text-sm space-y-1">
+                <p>7 = 111</p>
+                <p>4 = 100</p>
+                <p>2 = 010</p>
+                <p>1 = 001</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Practice Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Practice Conversions
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            practiceProblems.map((problem) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="font-mono mb-2">Convert: {problem.octal}₈</p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed opacity-0 hover:opacity-100 transition-opacity">
+                  Answer: {problem.binary}₂
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Additional Information */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Additional Information
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Uses of Octal Numbers</h3>
+            <ul
+              class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <li>Unix file permissions</li>
+              <li>Legacy computing systems</li>
+              <li>Some embedded systems</li>
+              <li>Data representation</li>
+            </ul>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Binary Grouping</h3>
+            <p
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              Octal is useful because three binary digits perfectly represent
+              one octal digit, making conversion straightforward.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

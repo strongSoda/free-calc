@@ -1,0 +1,173 @@
+---
+import BinaryTranslator from "../../../components/BinaryTranslator";
+import GpaLayout from "../../../components/GpaLayout";
+import Layout from "../../../layouts/Layout.astro";
+
+
+const title = "Binary Translator | Convert Text, Binary, Hex, Decimal & Octal";
+const description = "Free online binary translator and converter. Convert between Text, Binary, Hexadecimal, Decimal, and Octal numbers. Supports multiple character encodings.";
+const keywords = "binary translator, binary converter, text to binary, binary to text, hex to binary, binary to hex, octal to binary, decimal to binary";
+
+const conversionTypes = [
+  { from: 'text', to: 'binary', url: '/calculators/binary-translator/text-to-binary' },
+  { from: 'binary', to: 'text', url: '/calculators/binary-translator/binary-to-text' },
+  { from: 'binary', to: 'hex', url: '/calculators/binary-translator/binary-to-hex' },
+  { from: 'binary', to: 'octal', url: '/calculators/binary-translator/binary-to-octal' },
+  { from: 'binary', to: 'decimal', url: '/calculators/binary-translator/binary-to-decimal' },
+  { from: 'hex', to: 'binary', url: '/calculators/binary-translator/hex-to-binary' },
+  { from: 'hex', to: 'decimal', url: '/calculators/binary-translator/hex-to-decimal' },
+  { from: 'hex', to: 'octal', url: '/calculators/binary-translator/hex-to-octal' },
+  { from: 'octal', to: 'binary', url: '/calculators/binary-translator/octal-to-binary' },
+  { from: 'octal', to: 'decimal', url: '/calculators/binary-translator/octal-to-decimal' },
+  { from: 'octal', to: 'hex', url: '/calculators/binary-translator/octal-to-hex' }
+];
+
+// const commonExamples = [
+//   { input: 'Hello', from: 'text', to: 'binary', label: 'Convert "Hello" to Binary' },
+//   { input: '01001000 01100101 01101100 01101100 01101111', from: 'binary', to: 'text', label: 'Convert Binary to Text' },
+//   { input: '48 65 6C 6C 6F', from: 'hex', to: 'text', label: 'Convert Hex to Text' }
+// ];
+---
+
+<Layout title={title} description={description} keywords={keywords} currentUrl={Astro.url.pathname} ogImage="/binary-translator.png">
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden">
+        <div class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8">
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Binary Translator & Converter
+          </h2>
+          <BinaryTranslator client:load />
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+        <h2 class="text-2xl font-display font-bold mb-6">Quick Conversions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {conversionTypes.map(conv => (
+            <a
+              href={conv.url}
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10"
+            >
+              <div class="font-medium text-lg mb-2">
+                {conv.from.toUpperCase()} to {conv.to.toUpperCase()}
+              </div>
+              <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                Convert from {conv.from} to {conv.to} format
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Common Examples */}
+      <!-- <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid gap-4">
+          {commonExamples.map(ex => (
+            <a
+              href={`/calculators/binary-translator/${ex.from}-to-${ex.to}/${encodeURIComponent(ex.input)}`}
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10"
+            >
+              <div class="font-medium mb-2">{ex.label}</div>
+              <div class="font-mono text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                Input: {ex.input}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div> -->
+
+      {/* Theory Section */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+        <h2 class="text-2xl font-display font-bold mb-6">Number Systems & Conversions</h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Binary (Base-2)</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+              Binary uses only 0s and 1s. Each position represents a power of 2: ..., 8, 4, 2, 1
+            </p>
+            <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg font-mono">
+              Example: 1101 = 1×8 + 1×4 + 0×2 + 1×1 = 13
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Hexadecimal (Base-16)</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+              Uses digits 0-9 and letters A-F. Each hex digit represents 4 binary digits.
+            </p>
+            <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg font-mono">
+              Example: 1F = 1×16 + 15 = 31
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Octal (Base-8)</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-2">
+              Uses digits 0-7. Each octal digit represents 3 binary digits.
+            </p>
+            <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg font-mono">
+              Example: 17 = 1×8 + 7 = 15
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <h3 class="text-xl font-semibold mb-3">Conversion Table</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                    <th class="py-2 px-4 text-left">Decimal</th>
+                    <th class="py-2 px-4 text-left">Binary</th>
+                    <th class="py-2 px-4 text-left">Octal</th>
+                    <th class="py-2 px-4 text-left">Hexadecimal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(num => (
+                    <tr class="border-b border-gray-200/10 dark:border-gray-800/10">
+                      <td class="py-2 px-4">{num}</td>
+                      <td class="py-2 px-4">{num.toString(2).padStart(4, '0')}</td>
+                      <td class="py-2 px-4">{num.toString(8)}</td>
+                      <td class="py-2 px-4">{num.toString(16).toUpperCase()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Additional Information */}
+      <div class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+        <h2 class="text-2xl font-display font-bold mb-6">Character Encodings</h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">ASCII</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              7-bit encoding scheme representing 128 characters. Includes English letters, numbers, and basic symbols.
+            </p>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold mb-3">UTF-8</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Variable-width encoding that can represent any Unicode character. Backward compatible with ASCII.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">UTF-16</h3>
+            <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              Variable-width encoding using 16 bits. Common in Windows systems and programming languages like JavaScript.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

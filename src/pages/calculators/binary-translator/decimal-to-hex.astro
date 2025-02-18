@@ -1,0 +1,316 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Decimal to Hexadecimal Converter | Convert Decimal to Hex";
+const description =
+  "Free online decimal to hexadecimal converter. Convert decimal numbers to hex with step-by-step explanations. Includes conversion tables and examples.";
+const keywords =
+  "decimal to hex, decimal to hexadecimal, convert decimal to hex, base-10 to base-16, decimal hex converter, hex conversion";
+
+// Related conversions
+const relatedConversions = [
+  {
+    title: "Decimal to Binary",
+    url: "/calculators/binary-translator/decimal-to-binary",
+  },
+  {
+    title: "Decimal to Octal",
+    url: "/calculators/binary-translator/decimal-to-octal",
+  },
+  {
+    title: "Hex to Decimal",
+    url: "/calculators/binary-translator/hex-to-decimal",
+  },
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+];
+
+// Common examples with step-by-step conversions
+const examples = [
+  {
+    decimal: "255",
+    hex: "FF",
+    explanation: "Maximum 8-bit value",
+    steps: [
+      "255 ÷ 16 = 15 remainder 15 (F)",
+      "15 ÷ 16 = 0 remainder 15 (F)",
+      "Result: FF",
+    ],
+  },
+  {
+    decimal: "256",
+    hex: "100",
+    explanation: "Power of 16 (16²)",
+    steps: [
+      "256 ÷ 16 = 16 remainder 0",
+      "16 ÷ 16 = 1 remainder 0",
+      "1 ÷ 16 = 0 remainder 1",
+      "Result: 100",
+    ],
+  },
+  {
+    decimal: "4095",
+    hex: "FFF",
+    explanation: "Maximum 12-bit value",
+    steps: [
+      "4095 ÷ 16 = 255 remainder 15 (F)",
+      "255 ÷ 16 = 15 remainder 15 (F)",
+      "15 ÷ 16 = 0 remainder 15 (F)",
+      "Result: FFF",
+    ],
+  },
+];
+
+// Hex digits reference
+const hexDigits = [
+  { decimal: "10", hex: "A" },
+  { decimal: "11", hex: "B" },
+  { decimal: "12", hex: "C" },
+  { decimal: "13", hex: "D" },
+  { decimal: "14", hex: "E" },
+  { decimal: "15", hex: "F" },
+];
+
+// Powers of 16 reference
+const powersOfSixteen = [
+  { power: 0, value: "1" },
+  { power: 1, value: "16" },
+  { power: 2, value: "256" },
+  { power: 3, value: "4,096" },
+  { power: 4, value: "65,536" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Decimal to Hexadecimal Converter
+          </h2>
+          <BinaryTranslator client:load defaultFrom="decimal" defaultTo="hex" />
+        </div>
+      </div>
+
+      {/* Quick Reference */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Hex Digits (10-15)</h2>
+        <div class="grid gap-4 md:grid-cols-6">
+          {
+            hexDigits.map((digit) => (
+              <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center">
+                <div class="font-mono text-lg mb-1">Dec: {digit.decimal}</div>
+                <div class="font-mono text-2xl font-bold text-accent-primary">
+                  Hex: {digit.hex}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Powers of 16 */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Powers of 16</h2>
+        <div class="grid gap-4 md:grid-cols-5">
+          {
+            powersOfSixteen.map((power) => (
+              <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center">
+                <div class="font-mono mb-1">
+                  16<sup>{power.power}</sup>
+                </div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  = {power.value}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Conversion Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Step-by-Step Examples
+        </h2>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <h3 class="font-medium mb-2">
+                  {ex.decimal}₁₀ = {ex.hex}₁₆
+                </h3>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
+                  {ex.explanation}
+                </p>
+                <div class="space-y-1 text-sm font-mono">
+                  {ex.steps.map((step) => (
+                    <div>{step}</div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Decimal to Hex Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Division Method</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Divide the decimal number by 16</li>
+              <li>Convert remainder (0-15) to hex digit (0-F)</li>
+              <li>Divide quotient by 16</li>
+              <li>Repeat until quotient becomes 0</li>
+              <li>Read the hex digits from bottom to top</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Tips</h4>
+              <ul
+                class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                <li>Remember: A=10, B=11, C=12, D=13, E=14, F=15</li>
+                <li>Each hex digit represents 4 binary digits</li>
+                <li>Two hex digits = one byte</li>
+              </ul>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Common Values</h4>
+              <div class="text-sm space-y-1">
+                <p>255 = FF (max byte)</p>
+                <p>16 = 10 (single hex digit)</p>
+                <p>15 = F (max single digit)</p>
+                <p>256 = 100 (power of 16)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Practice Problems */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Practice Problems</h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            [
+              { decimal: "42", hex: "2A" },
+              { decimal: "160", hex: "A0" },
+              { decimal: "255", hex: "FF" },
+            ].map((problem) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="font-mono mb-2">Convert: {problem.decimal}₁₀</p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed opacity-0 hover:opacity-100 transition-opacity">
+                  Answer: {problem.hex}₁₆
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Real-World Uses */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Real-World Applications
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Color Codes</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <p>RGB colors use hex codes:</p>
+              <p class="font-mono mt-1">
+                255, 0, 0 = #FF0000 (Red)<br />
+                0, 255, 0 = #00FF00 (Green)<br />
+                0, 0, 255 = #0000FF (Blue)
+              </p>
+            </div>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Memory Addresses</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <p>Computer memory addresses are often shown in hex:</p>
+              <p class="font-mono mt-1">
+                65535 = 0xFFFF<br />
+                4096 = 0x1000<br />
+                256 = 0x100
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>

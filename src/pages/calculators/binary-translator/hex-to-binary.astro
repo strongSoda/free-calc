@@ -1,0 +1,285 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import GpaLayout from "../../../components/GpaLayout";
+import BinaryTranslator from "../../../components/BinaryTranslator";
+
+const title = "Hex to Binary Converter | Convert Hexadecimal to Binary";
+const description =
+  "Free online hexadecimal to binary converter. Convert hex numbers to binary with instant results. Includes conversion tables and examples for easy reference.";
+const keywords =
+  "hex to binary, hexadecimal to binary, hex binary converter, convert hex to binary, hex conversion";
+
+// Related conversions for navigation
+const relatedConversions = [
+  {
+    title: "Binary to Hex",
+    url: "/calculators/binary-translator/binary-to-hex",
+  },
+  {
+    title: "Hex to Decimal",
+    url: "/calculators/binary-translator/hex-to-decimal",
+  },
+  { title: "Hex to Octal", url: "/calculators/binary-translator/hex-to-octal" },
+  {
+    title: "Binary to Decimal",
+    url: "/calculators/binary-translator/binary-to-decimal",
+  },
+];
+
+// Common examples
+const examples = [
+  {
+    hex: "FF",
+    binary: "11111111",
+    description: "Maximum 8-bit value",
+  },
+  {
+    hex: "A5",
+    binary: "10100101",
+    description: "Common checkered pattern",
+  },
+  {
+    hex: "0F",
+    binary: "00001111",
+    description: "Half-byte pattern",
+  },
+  {
+    hex: "DEAD",
+    binary: "1101 1110 1010 1101",
+    description: "Popular test pattern",
+  },
+];
+
+// Hex to binary lookup table
+const hexBinaryTable = [
+  { hex: "0", binary: "0000" },
+  { hex: "1", binary: "0001" },
+  { hex: "2", binary: "0010" },
+  { hex: "3", binary: "0011" },
+  { hex: "4", binary: "0100" },
+  { hex: "5", binary: "0101" },
+  { hex: "6", binary: "0110" },
+  { hex: "7", binary: "0111" },
+  { hex: "8", binary: "1000" },
+  { hex: "9", binary: "1001" },
+  { hex: "A", binary: "1010" },
+  { hex: "B", binary: "1011" },
+  { hex: "C", binary: "1100" },
+  { hex: "D", binary: "1101" },
+  { hex: "E", binary: "1110" },
+  { hex: "F", binary: "1111" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={Astro.url.pathname}
+  ogImage="/binary-translator.png"
+>
+  <GpaLayout {title} {description} {keywords} client:load>
+    <div class="space-y-12">
+      {/* Main Converter */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-2xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 p-2 md:p-8"
+        >
+          <h2 class="text-3xl font-display font-bold text-center mb-6">
+            Hexadecimal to Binary Converter
+          </h2>
+          <BinaryTranslator client:load defaultFrom="hex" defaultTo="binary" />
+        </div>
+      </div>
+
+      {/* Conversion Table */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Hex to Binary Conversion Table
+        </h2>
+        <div class="grid gap-4 md:grid-cols-4">
+          {
+            hexBinaryTable.map((entry) => (
+              <div class="p-3 bg-surface-light-hover dark:bg-surface-dark rounded-lg text-center">
+                <div class="font-mono mb-1 text-lg font-medium">
+                  {entry.hex}
+                </div>
+                <div class="font-mono text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {entry.binary}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Examples */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Common Examples</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            examples.map((ex) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <div class="font-mono text-lg mb-2">Hex: {ex.hex}</div>
+                <div class="font-mono text-sm break-all mb-2">
+                  Binary: {ex.binary}
+                </div>
+                <div class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                  {ex.description}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          How Hex to Binary Conversion Works
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Step-by-Step Process</h3>
+            <ol
+              class="list-decimal list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+            >
+              <li>Convert each hex digit separately</li>
+              <li>Each hex digit becomes 4 binary digits</li>
+              <li>Combine all binary groups in order</li>
+            </ol>
+          </div>
+
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h4 class="font-medium mb-2">Example: Converting "1A" to Binary</h4>
+            <ol class="list-none space-y-1 text-sm">
+              <li>1. Split hex number: 1 | A</li>
+              <li>2. Convert each digit:</li>
+              <li class="ml-4">• 1 = 0001</li>
+              <li class="ml-4">• A = 1010</li>
+              <li>3. Combine: 0001 1010</li>
+            </ol>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <h3 class="text-xl font-semibold mb-3">Key Points</h3>
+              <ul
+                class="list-disc list-inside space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed"
+              >
+                <li>Each hex digit = 4 binary digits</li>
+                <li>Hex uses 0-9 and A-F</li>
+                <li>A-F represent values 10-15</li>
+                <li>Leading zeros matter</li>
+              </ul>
+            </div>
+            <div
+              class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+            >
+              <h4 class="font-medium mb-2">Common Patterns</h4>
+              <div class="font-mono text-sm space-y-1">
+                <p>F = 1111</p>
+                <p>A = 1010</p>
+                <p>5 = 0101</p>
+                <p>0 = 0000</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tips and Tricks */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">Tips and Tricks</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Quick Conversion Tips</h3>
+            <ul
+              class="list-disc list-inside text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <li>Learn common hex digit patterns</li>
+              <li>Practice with single digits first</li>
+              <li>Remember F is all ones (1111)</li>
+              <li>0 is always four zeros (0000)</li>
+            </ul>
+          </div>
+          <div
+            class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg"
+          >
+            <h3 class="font-medium mb-2">Memory Aids</h3>
+            <div
+              class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1"
+            >
+              <p>A (10) = 1010 (alternating)</p>
+              <p>5 = 0101 (opposite of A)</p>
+              <p>C (12) = 1100 (ones then zeros)</p>
+              <p>3 = 0011 (zeros then ones)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Practice Section */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Practice Conversions
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            [
+              { hex: "B5", hint: "1011 0101" },
+              { hex: "E7", hint: "1110 0111" },
+              { hex: "3F", hint: "0011 1111" },
+            ].map((problem) => (
+              <div class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg">
+                <p class="font-mono mb-2">Convert: {problem.hex}</p>
+                <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed opacity-0 hover:opacity-100 transition-opacity">
+                  Answer: {problem.hint}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Related Conversions */}
+      <div
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-6">
+          Related Conversions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            relatedConversions.map((conv) => (
+              <a
+                href={conv.url}
+                class="p-4 bg-surface-light-hover dark:bg-surface-dark rounded-lg hover:border-accent-primary/20 transition-colors border border-gray-200/10 dark:border-gray-800/10 group"
+              >
+                <div class="font-medium group-hover:text-accent-primary transition-colors">
+                  {conv.title}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
