@@ -185,19 +185,15 @@ const MobileBottomAd = () => {
         style={{ minWidth: '300px', minHeight: '50px' }}
       >
         <ins
-          className="adsbygoogle"
+          className="adsbygoogle min-w-[300px]"
           style={{
-            display: 'block',
-            width: '100%',
-            height: '100%',
-            minWidth: '300px',
-            minHeight: '50px'
+            display: 'block',            
           }}
           data-ad-client="ca-pub-9779862910631944"
           data-ad-slot="2571315295"
           data-ad-format="auto"
           data-full-width-responsive="true"
-        />
+        ></ins>
       </div>
     );
   };
