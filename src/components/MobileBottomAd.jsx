@@ -4,72 +4,73 @@ import { X, Share2, Copy, Twitter, Facebook, Check, Linkedin } from 'lucide-reac
 const MobileBottomAd = () => {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [adState, setAdState] = useState('loading');
+  const [adState, setAdState] = useState('failed');
   const [copied, setCopied] = useState(false);
   const adContainerRef = useRef(null);
   const adAttempted = useRef(false);
   const isDevelopment = false;
 
   // Constants for dimensions
-  const CONTAINER_HEIGHT = 116;
+  const CONTAINER_HEIGHT = 60;
   const CONTAINER_PADDING = 8;
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (!isClient || isDevelopment || adAttempted.current) return;
+  // useEffect(() => {
+  //   if (!isClient || isDevelopment || adAttempted.current) return;
 
-    const loadAd = async () => {
-      try {
-        // Mark that we've attempted to load the ad
-        adAttempted.current = true;
+  //   const loadAd = async () => {
+  //     try {
+  //       // Mark that we've attempted to load the ad
+  //       adAttempted.current = true;
 
-        // Check if container exists and has width
-        if (!adContainerRef.current?.offsetWidth) {
-          setAdState('failed');
-          return;
-        }
+  //       // Check if container exists and has width
+  //       if (!adContainerRef.current?.offsetWidth) {
+  //         setAdState('failed');
+  //         return;
+  //       }
 
-        // Try to push the ad
-        await new Promise((resolve, reject) => {
-          try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            // Give the ad some time to load
-            setTimeout(resolve, 1000);
-          } catch (error) {
-            reject(error);
-          }
-        });
+  //       // Try to push the ad
+  //       await new Promise((resolve, reject) => {
+  //         try {
+  //           (window.adsbygoogle = window.adsbygoogle || []).push({});
+  //           // Give the ad some time to load
+  //           setTimeout(resolve, 1000);
+  //         } catch (error) {
+  //           reject(error);
+  //         }
+  //       });
 
-        // Check if ad loaded successfully
-        const adFrame = adContainerRef.current?.querySelector('iframe');
-        if (!adFrame || adFrame.offsetWidth === 0) {
-          throw new Error('Ad failed to load');
-        }
+  //       // Check if ad loaded successfully
+  //       const adFrame = adContainerRef.current?.querySelector('iframe');
+  //       if (!adFrame || adFrame.offsetWidth === 0) {
+  //         throw new Error('Ad failed to load');
+  //       }
 
-        setAdState('loaded');
-      } catch (error) {
-        console.error('Ad loading error:', error);
-        setAdState('failed');
-      }
-    };
+  //       setAdState('loaded');
+  //     } catch (error) {
+  //       console.error('Ad loading error:', error);
+  //       setAdState('failed');
+  //     }
+  //   };
 
-    // Add a small delay before attempting to load the ad
-    setTimeout(loadAd, 100);
+  //   // Add a small delay before attempting to load the ad
+  //   setTimeout(loadAd, 100);
 
-    // Fallback to failed state if ad takes too long
-    const timeout = setTimeout(() => {
-      if (adState === 'loading') {
-        setAdState('failed');
-      }
-    }, 2000);
+  //   // Fallback to failed state if ad takes too long
+  //   const timeout = setTimeout(() => {
+  //     if (adState === 'loading') {
+  //       setAdState('failed');
+  //     }
+  //   }, 2000);
 
-    return () => clearTimeout(timeout);
-  }, [isClient]);
+  //   return () => clearTimeout(timeout);
+  // }, [isClient]);
 
   // Share handlers
+  
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -124,11 +125,11 @@ const MobileBottomAd = () => {
     if (adState === 'failed' || adState === 'empty') {
       return (
         <div className="w-full h-full flex flex-col items-center justify-center bg-surface-light-hover dark:bg-surface-dark-hover rounded p-4">
-          <div className="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
+          {/* <div className="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
             Share this calculator
-          </div>
+          </div> */}
           <div className="flex items-center gap-4">
-            {navigator?.share && (
+            {(
               <button 
                 onClick={handleShare}
                 className="p-2 rounded-lg hover:bg-surface-light dark:hover:bg-surface-dark transition-colors"
