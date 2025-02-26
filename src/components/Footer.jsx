@@ -77,6 +77,7 @@ const Footer = () => {
         { name: "AI Shorts", url: "https://aivideo.to" },
         { name: "Coding Tutorials", url: "https://jutsupoint.com" },
         { name: "AI Directory", url: "https://spiff.store" },
+        { name: "Shop Pebble Ice Maker", url: "https://shoppebbleicemaker.com/" },
         // { name: "Grading Systems", url: "#" },
         // { name: "Academic Scales", url: "#" },
         // { name: "Grade Conversion", url: "#" }
