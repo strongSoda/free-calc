@@ -78,6 +78,8 @@ const Footer = () => {
         { name: "Coding Tutorials", url: "https://jutsupoint.com" },
         { name: "AI Directory", url: "https://spiff.store" },
         { name: "Shop Pebble Ice Maker", url: "https://shoppebbleicemaker.com/" },
+        { name: "PDF to JPG", url: "https://formatfile.com/pdf-to-jpg/" },
+        { name: "JPG to PDF", url: "https://formatfile.com/jpg-to-pdf/" },
         // { name: "Grading Systems", url: "#" },
         // { name: "Academic Scales", url: "#" },
         // { name: "Grade Conversion", url: "#" }
