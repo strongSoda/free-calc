@@ -1,6 +1,6 @@
 ---
 import "../styles.css";
-import Canonical from "../components/Canonical";
+// import Canonical from "../components/Canonical";
 const {
   title = "Free Academic Calculators",
   description = "Free online academic calculators for GPA and percentage conversions",
@@ -152,8 +152,8 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
       crossorigin="anonymous"></script>
 
     <!-- Canonical URL -->
-    <!-- <link rel="canonical" href={canonicalURL} /> -->
-    <Canonical client:only />
+    <link rel="canonical" href={canonicalURL} />
+    <!-- <Canonical client:only /> -->
   </head>
   <body>
     <slot />

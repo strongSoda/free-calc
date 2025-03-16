@@ -25,7 +25,6 @@ const BlogLayout = ({
   // Find all section headings and their IDs
   useEffect(() => {
     const article = document.querySelector('article');
-    console.log(article);
     if (!article) return;
 
     
