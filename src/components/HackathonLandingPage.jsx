@@ -109,7 +109,7 @@ const HackathonLandingPage = () => {
     try {
       // Create a customer in Stripe first
       const customer = await createCustomer(email);
-      const cusId = customer.id || `cus_${Math.random().toString(36).substring(2, 10)}`;
+      const cusId = customer.id;
       const price = 'price_1RFW2WSJy4iMiCE3HYbLNobe';
       const successUrl = 'https://forms.gle/1psaBNADWoxwa6Eq8';
       const cancelUrl = window.location.origin + '/hackathon';
@@ -117,7 +117,7 @@ const HackathonLandingPage = () => {
       // Redirect to Stripe checkout
       const checkoutResponse = await fetch(
         `https://spiff.guru/create-checkout-session/${cusId}/${price}/${email}?` +
-        `successurl=${encodeURIComponent(successUrl)}&cancelurl=${encodeURIComponent(cancelUrl)}&price=${encodeURIComponent(price)}`
+        `successurl=${encodeURIComponent(successUrl)}&cancelurl=${encodeURIComponent(cancelUrl)}&price=${encodeURIComponent(price)}&mode=payment`
       );
       
       if (!checkoutResponse.ok) {
