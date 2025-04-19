@@ -1,0 +1,14 @@
+---
+import HackathonLandingPage from "../components/HackathonLandingPage";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Hackathon Landing Page"
+  description="A landing page template for hackathons."
+  keywords="hackathon, landing page, template"
+  ogImage="/og-image.png"
+  currentUrl={Astro.request.url}
+>
+  <HackathonLandingPage client:load />
+</Layout>
