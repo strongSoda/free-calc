@@ -753,7 +753,7 @@ const HackathonLandingPage = () => {
             
             <div className="text-center">
               <a 
-                href="https://forms.google.com/hackathon-submission" 
+                href="https://forms.gle/1psaBNADWoxwa6Eq8" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 md:px-8 py-3 md:py-4 text-lg font-semibold text-white bg-gradient-to-r from-cyan-400 to-pink-500 rounded-xl shadow-lg shadow-pink-500/20 hover:shadow-xl hover:shadow-pink-500/30 transform transition-all hover:-translate-y-1"
