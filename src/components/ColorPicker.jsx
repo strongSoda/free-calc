@@ -201,8 +201,8 @@ const ColorPicker = ({ defaultColor = '#0ea5e9', share="", onChange, showAffilia
         </div>
       </div>     
 
-      <div class="text-center mt-4">
-  <a href="/calculators/color-picker/embed" class="text-accent-primary hover:text-accent-secondary inline-flex items-center gap-2">
+      <div className="text-center mt-4">
+  <a href="/calculators/color-picker/embed" className="text-accent-primary hover:text-accent-secondary inline-flex items-center gap-2">
     <span>📋 Add this color picker to your website for free</span>
   </a>
 </div> 

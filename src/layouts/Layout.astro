@@ -9,9 +9,52 @@ const {
   currentUrl, // Current page URL
 } = Astro.props;
 
-// Format current URL for canonical link
+// Format current URL for canonical link with fallbacks
 const siteUrl = "https://rref-calculator.com"; // Replace with your domain
 const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
+
+// Create JSON-LD data objects first
+const mainSchemaData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Free Academic Calculators",
+  url: siteUrl,
+  description: description,
+  applicationCategory: "EducationalApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  creator: {
+    "@type": "Organization",
+    name: "Free Academic Calculators",
+    url: siteUrl,
+  },
+};
+
+// Calculator-specific schema data
+const calculatorSchemaData = currentUrl?.includes("calculator")
+  ? {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: title,
+      applicationCategory: "EducationalApplication",
+      operatingSystem: "Any",
+      description: description,
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        ratingCount: "348",
+      },
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -82,52 +125,18 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
       }
     </script>
 
-    <!-- JSON-LD Schema -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Free Academic Calculators",
-        "url": "${siteUrl}",
-        "description": "${description}",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Any",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "creator": {
-          "@type": "Organization",
-          "name": "Free Academic Calculators",
-          "url": "${siteUrl}"
-        }
-      }
-    </script>
+    <!-- JSON-LD Schema - Fixed to use set:html with proper JSON data -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(mainSchemaData)}
+    />
 
     <!-- Calculator-specific Schema (for calculator pages) -->
     {
-      currentUrl?.includes("calculator") && (
+      calculatorSchemaData && (
         <script
           type="application/ld+json"
-          set:html={JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            name: title,
-            applicationCategory: "EducationalApplication",
-            operatingSystem: "Any",
-            description: description,
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "USD",
-            },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.9",
-              ratingCount: "348",
-            },
-          })}
+          set:html={JSON.stringify(calculatorSchemaData)}
         />
       )
     }
@@ -135,21 +144,27 @@ const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CY5QBMQ9F9"
     ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+    <script is:inline>
+      try {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-CY5QBMQ9F9");
+      } catch (e) {
+        console.error("Analytics error:", e);
+        // Prevent analytics errors from breaking the page
       }
-      gtag("js", new Date());
-
-      gtag("config", "G-CY5QBMQ9F9");
     </script>
 
-    <!-- adsense  -->
+    <!-- adsense with error handling -->
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9779862910631944"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+      onerror="this.onerror=null; console.warn('AdSense failed to load');"
+    ></script>
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />

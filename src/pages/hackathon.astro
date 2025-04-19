@@ -8,7 +8,7 @@ import Layout from "../layouts/Layout.astro";
   description="Showcase your UI skills in our monthly frontend hackathon. Compete for a $2,000 grand prize and five $150 Amazon gift cards. Build beautiful, functional interfaces."
   keywords="frontend hackathon, UI design competition, coding challenge, web development, $2000 prize, react, CSS, javascript, responsive design, frontend development, UI/UX"
   ogImage="/hackathon.png"
-  currentUrl={Astro.request.url}
+  currentUrl={Astro.url.pathname}
 >
   <HackathonLandingPage client:load />
 </Layout>
