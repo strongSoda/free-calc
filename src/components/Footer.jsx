@@ -64,6 +64,7 @@ const Footer = () => {
       links: [
         { name: "Blog", url: "/blog" },
         { name: "About Us", url: "/calculators" },
+        { name: "Monthly Hackathon", url: "/hackathon" },
         { name: "Sitemap", url: "/sitemap" },
         { name: "Contact", url: "mailto:contact@rref-calculator.com" },
       ]

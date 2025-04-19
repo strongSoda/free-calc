@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, Calendar, Code, CheckCircle, Send, ChevronRight, Palette, Smartphone, Laptop, 
   Globe, Trophy, ChevronDown, User, ExternalLink, Rocket, Zap, Award, Clock, Target, Sparkles, 
-  FileText, DollarSign, Gift} from 'lucide-react';
+  FileText, DollarSign, Gift, Menu, X} from 'lucide-react';
 
 // CSS Styles
 const styles = {
@@ -15,6 +15,7 @@ const HackathonLandingPage = () => {
   const [messageType, setMessageType] = useState('');
   const [activeThemeTab, setActiveThemeTab] = useState(0);
   const [accordionState, setAccordionState] = useState({});
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [countdown, setCountdown] = useState({
     days: 7,
     hours: 23,
@@ -60,6 +61,14 @@ const HackathonLandingPage = () => {
       ...prev,
       [index]: !prev[index]
     }));
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   // Create a Stripe customer
@@ -232,7 +241,7 @@ const HackathonLandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 font-raleway">
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-raleway overflow-x-hidden">
       {/* Progress Bar */}
       <div className="progress-container">
         <div className="progress-bar" id="progress-bar"></div>
@@ -240,7 +249,7 @@ const HackathonLandingPage = () => {
       
       {/* Header */}
       <header className="fixed top-0 left-0 w-full z-50 bg-gray-900 bg-opacity-90 backdrop-blur-md">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <a href="#" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">HACK FRONTEND</a>
           <nav className="hidden md:block">
             <ul className="flex space-x-8">
@@ -252,22 +261,42 @@ const HackathonLandingPage = () => {
               <li><a href="#register" className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-yellow-500/20 transition-all transform hover:-translate-y-0.5">Register</a></li>
             </ul>
           </nav>
-          <button className="md:hidden text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          <button 
+            className="md:hidden text-white p-2 focus:outline-none"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-gray-900 bg-opacity-95 backdrop-blur-md border-t border-gray-800 shadow-lg shadow-black/50 z-50">
+            <nav className="container mx-auto px-6 py-4">
+              <ul className="flex flex-col space-y-4">
+                <li><a href="#about" onClick={closeMobileMenu} className="block py-2 text-white hover:text-yellow-400 transition-colors">About</a></li>
+                <li><a href="#prizes" onClick={closeMobileMenu} className="block py-2 text-white hover:text-yellow-400 transition-colors">Prizes</a></li>
+                <li><a href="#themes" onClick={closeMobileMenu} className="block py-2 text-white hover:text-yellow-400 transition-colors">Themes</a></li>
+                <li><a href="#timeline" onClick={closeMobileMenu} className="block py-2 text-white hover:text-yellow-400 transition-colors">Timeline</a></li>
+                <li><a href="#faq" onClick={closeMobileMenu} className="block py-2 text-white hover:text-yellow-400 transition-colors">FAQ</a></li>
+                <li className="pt-2">
+                  <a href="#register" onClick={closeMobileMenu} className="block w-full px-4 py-3 text-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg font-medium">Register Now</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
       <section className="min-h-screen pt-24 md:pt-32 bg-radial-at-t from-orange-950/20 via-gray-900 to-gray-900 overflow-hidden">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center">
+        <div className="container mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 z-10">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
               Monthly Frontend Hackathon
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 md:pr-12">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 md:pr-12">
               Showcase your UI skills and compete for $2,000! Build beautiful, functional, and responsive interfaces.
             </p>
             <div className="flex flex-wrap gap-4 mb-12">
@@ -326,12 +355,12 @@ const HackathonLandingPage = () => {
 
       {/* About Section */}
       <section id="about" className="py-20 bg-radial-at-tl from-gray-800/20 via-gray-900 to-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">About The Hackathon</h2>
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">About The Hackathon</h2>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {aboutCards.map((card, index) => (
-              <div key={index} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-cyan-500/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10 transform hover:-translate-y-1">
+              <div key={index} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700 hover:border-cyan-500/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10 transform hover:-translate-y-1">
                 <div className="text-cyan-400 mb-6">{card.icon}</div>
                 <h3 className="text-xl font-bold mb-4">{card.title}</h3>
                 <p className="text-gray-300">{card.description}</p>
@@ -339,11 +368,11 @@ const HackathonLandingPage = () => {
             ))}
           </div>
           
-          <div className="mt-16 bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 max-w-5xl mx-auto">
+          <div className="mt-16 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700 max-w-5xl mx-auto">
             <h3 className="text-2xl font-bold mb-6 text-center">Judging Criteria</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-6">
               <div className="flex space-x-4">
-                <div className="text-yellow-400">
+                <div className="text-yellow-400 flex-shrink-0">
                   <CheckCircle size={24} />
                 </div>
                 <div>
@@ -352,7 +381,7 @@ const HackathonLandingPage = () => {
                 </div>
               </div>
               <div className="flex space-x-4">
-                <div className="text-yellow-400">
+                <div className="text-yellow-400 flex-shrink-0">
                   <Palette size={24} />
                 </div>
                 <div>
@@ -361,7 +390,7 @@ const HackathonLandingPage = () => {
                 </div>
               </div>
               <div className="flex space-x-4">
-                <div className="text-yellow-400">
+                <div className="text-yellow-400 flex-shrink-0">
                   <Smartphone size={24} />
                 </div>
                 <div>
@@ -370,7 +399,7 @@ const HackathonLandingPage = () => {
                 </div>
               </div>
               <div className="flex space-x-4">
-                <div className="text-yellow-400">
+                <div className="text-yellow-400 flex-shrink-0">
                   <Sparkles size={24} />
                 </div>
                 <div>
@@ -385,26 +414,26 @@ const HackathonLandingPage = () => {
 
       {/* Prizes Section */}
       <section id="prizes" className="py-20 bg-radial-at-br from-yellow-900/20 via-gray-900 to-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Amazing Prizes</h2>
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Amazing Prizes</h2>
           
           <div className="max-w-5xl mx-auto">
             <div className="flex flex-col md:flex-row gap-8 mb-12">
               {/* Grand Prize */}
-              <div className="md:w-1/2 bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-yellow-500/30 hover:border-yellow-500/70 transition-all hover:shadow-lg hover:shadow-yellow-500/20 transform hover:-translate-y-1 relative overflow-hidden">
+              <div className="md:w-1/2 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-yellow-500/30 hover:border-yellow-500/70 transition-all hover:shadow-lg hover:shadow-yellow-500/20 transform hover:-translate-y-1 relative overflow-hidden">
                 {/* Decorative elements */}
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-yellow-500/10 rounded-full"></div>
                 <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-yellow-500/10 rounded-full"></div>
                 
                 <div className="relative">
                   <div className="flex justify-center mb-6">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
-                      <Trophy size={56} className="text-white" />
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                      <Trophy size={36} className="text-white md:text-base md:w-14 md:h-14" />
                     </div>
                   </div>
                   
-                  <h3 className="text-3xl font-bold text-center mb-4">Grand Prize</h3>
-                  <div className="text-4xl md:text-5xl font-extrabold text-center mb-6 bg-gradient-to-r from-yellow-300 to-yellow-600 bg-clip-text text-transparent">
+                  <h3 className="text-2xl md:text-3xl font-bold text-center mb-4">Grand Prize</h3>
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center mb-6 bg-gradient-to-r from-yellow-300 to-yellow-600 bg-clip-text text-transparent">
                     $2,000
                   </div>
                   
@@ -422,20 +451,20 @@ const HackathonLandingPage = () => {
               </div>
               
               {/* Runner Up Prizes */}
-              <div className="md:w-1/2 bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-cyan-500/30 hover:border-cyan-500/70 transition-all hover:shadow-lg hover:shadow-cyan-500/20 transform hover:-translate-y-1 relative overflow-hidden">
+              <div className="md:w-1/2 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-cyan-500/30 hover:border-cyan-500/70 transition-all hover:shadow-lg hover:shadow-cyan-500/20 transform hover:-translate-y-1 relative overflow-hidden">
                 {/* Decorative elements */}
                 <div className="absolute -top-10 -left-10 w-40 h-40 bg-cyan-500/10 rounded-full"></div>
                 <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full"></div>
                 
                 <div className="relative">
                   <div className="flex justify-center mb-6">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                      <Gift size={48} className="text-white" />
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                      <Gift size={36} className="text-white md:text-base md:w-12 md:h-12" />
                     </div>
                   </div>
                   
-                  <h3 className="text-3xl font-bold text-center mb-4">Outstanding Submissions</h3>
-                  <div className="text-4xl md:text-5xl font-extrabold text-center mb-6 bg-gradient-to-r from-cyan-300 to-cyan-600 bg-clip-text text-transparent">
+                  <h3 className="text-2xl md:text-3xl font-bold text-center mb-4">Outstanding Submissions</h3>
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center mb-6 bg-gradient-to-r from-cyan-300 to-cyan-600 bg-clip-text text-transparent">
                     $150 <span className="text-xl md:text-2xl">x 5</span>
                   </div>
                   
@@ -455,25 +484,25 @@ const HackathonLandingPage = () => {
             
             <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
               <h3 className="text-xl font-bold mb-4 flex items-center">
-                <Zap className="mr-3 text-yellow-400" size={24} />
-                Additional Benefits for All Winners
+                <Zap className="mr-3 text-yellow-400 flex-shrink-0" size={24} />
+                <span>Additional Benefits for All Winners</span>
               </h3>
               
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 <div className="flex items-center space-x-3">
-                  <div className="text-yellow-400">
+                  <div className="text-yellow-400 flex-shrink-0">
                     <Rocket size={20} />
                   </div>
                   <p className="text-gray-300">Featured on our website</p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="text-yellow-400">
+                  <div className="text-yellow-400 flex-shrink-0">
                     <Globe size={20} />
                   </div>
                   <p className="text-gray-300">Social media promotion</p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="text-yellow-400">
+                  <div className="text-yellow-400 flex-shrink-0">
                     <Award size={20} />
                   </div>
                   <p className="text-gray-300">Digital achievement badge</p>
@@ -486,22 +515,22 @@ const HackathonLandingPage = () => {
 
       {/* Themes Section */}
       <section id="themes" className="py-20 bg-radial-at-tr from-purple-900/20 via-gray-900 to-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">Challenge Themes</h2>
-          <p className="text-xl text-center text-gray-300 mb-12 max-w-3xl mx-auto">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">Challenge Themes</h2>
+          <p className="text-lg sm:text-xl text-center text-gray-300 mb-12 max-w-3xl mx-auto">
             Choose one of these intermediate to advanced UI challenges for your hackathon submission:
           </p>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
             {themes.map((theme, index) => (
-              <div key={index} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-pink-500/50 transition-all hover:shadow-lg hover:shadow-pink-500/10 transform hover:-translate-y-1 overflow-hidden relative">
+              <div key={index} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700 hover:border-pink-500/50 transition-all hover:shadow-lg hover:shadow-pink-500/10 transform hover:-translate-y-1 overflow-hidden relative">
                 {/* Decorative gradient corner */}
                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-pink-500/20 to-transparent rounded-full"></div>
                 
-                <h3 className="text-2xl font-bold mb-4 text-white">{theme.title}</h3>
+                <h3 className="text-xl md:text-2xl font-bold mb-4 text-white">{theme.title}</h3>
                 <p className="text-gray-300 mb-6">{theme.description}</p>
                 <div className="flex items-center text-sm font-medium text-pink-400 bg-gray-900/50 self-start rounded-full px-4 py-1.5 border border-pink-500/30">
-                  <Code size={14} className="mr-2" />
+                  <Code size={14} className="mr-2 flex-shrink-0" />
                   <span>{theme.level}</span>
                 </div>
               </div>
@@ -510,17 +539,18 @@ const HackathonLandingPage = () => {
         </div>
       </section>
       
-      {/* Timeline Section */}
+      {/* Timeline Section - Mobile optimized */}
       <section id="timeline" className="py-20 bg-radial-at-bl from-blue-900/20 via-gray-900 to-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent">Event Timeline</h2>
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent">Event Timeline</h2>
           
-          <div className="relative max-w-4xl mx-auto">
+          {/* Desktop Timeline */}
+          <div className="relative max-w-4xl mx-auto hidden md:block">
             {/* Timeline center line */}
             <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-cyan-400 to-teal-500 rounded"></div>
             
             {timelineEvents.map((event, index) => (
-              <div key={index} className={`flex ${index % 2 === 0 ? 'flex-row-reverse' : ''} mb-12 relative`}>
+              <div key={index} className={`flex ${index % 2 === 0 ? 'flex-row-reverse' : ''} mb-16 relative`}>
                 <div className="w-1/2"></div>
                 
                 <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/3">
@@ -539,69 +569,91 @@ const HackathonLandingPage = () => {
               </div>
             ))}
           </div>
+          
+          {/* Mobile Timeline - Vertical */}
+          <div className="md:hidden max-w-md mx-auto relative">
+            {/* Vertical timeline line */}
+            <div className="absolute left-4 top-0 h-full w-0.5 bg-gradient-to-b from-cyan-400 to-teal-500"></div>
+            
+            {timelineEvents.map((event, index) => (
+              <div key={index} className="relative pl-12 pb-10">
+                <div className="absolute left-0 transform -translate-x-1/2 top-1">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-400 to-teal-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    {React.cloneElement(event.icon, { size: 16 })}
+                  </div>
+                </div>
+                
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700">
+                  <p className="text-teal-400 font-medium text-sm mb-1">{event.date}</p>
+                  <h3 className="text-lg font-bold mb-2">{event.title}</h3>
+                  <p className="text-gray-300 text-sm">{event.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Registration Section */}
       <section id="register" className="py-20 bg-radial-at-br from-yellow-900/20 via-gray-900 to-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Register Now</h2>
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Register Now</h2>
           
-          <div className="flex flex-col md:flex-row gap-12 max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 max-w-5xl mx-auto">
             <div className="md:w-1/2">
-              <h3 className="text-2xl font-bold mb-6">Join the Challenge</h3>
+              <h3 className="text-xl md:text-2xl font-bold mb-6">Join the Challenge</h3>
               <p className="text-gray-300 mb-6">Complete registration with your email and a $20 fee to secure your spot in the monthly frontend hackathon.</p>
               
               <div className="mb-8">
                 <div className="flex items-start space-x-3 mb-4">
-                  <div className="text-yellow-400 mt-1.5">
+                  <div className="text-yellow-400 mt-1.5 flex-shrink-0">
                     <CheckCircle size={18} />
                   </div>
                   <p className="text-gray-300">Showcase your frontend skills to a global audience</p>
                 </div>
                 <div className="flex items-start space-x-3 mb-4">
-                  <div className="text-yellow-400 mt-1.5">
+                  <div className="text-yellow-400 mt-1.5 flex-shrink-0">
                     <CheckCircle size={18} />
                   </div>
                   <p className="text-gray-300">Compete for $2,000 first prize and $150 gift cards</p>
                 </div>
                 <div className="flex items-start space-x-3 mb-4">
-                  <div className="text-yellow-400 mt-1.5">
+                  <div className="text-yellow-400 mt-1.5 flex-shrink-0">
                     <CheckCircle size={18} />
                   </div>
                   <p className="text-gray-300">Receive professional feedback on your work</p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="text-yellow-400 mt-1.5">
+                  <div className="text-yellow-400 mt-1.5 flex-shrink-0">
                     <CheckCircle size={18} />
                   </div>
                   <p className="text-gray-300">Win recognition and grow your professional network</p>
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 text-center border border-gray-700">
-                  <div className="text-2xl md:text-3xl font-bold text-yellow-400 mb-1">{countdown.days}</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-8">
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 md:p-4 text-center border border-gray-700">
+                  <div className="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-400 mb-1">{countdown.days}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wider">Days</div>
                 </div>
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 text-center border border-gray-700">
-                  <div className="text-2xl md:text-3xl font-bold text-yellow-400 mb-1">{countdown.hours}</div>
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 md:p-4 text-center border border-gray-700">
+                  <div className="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-400 mb-1">{countdown.hours}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wider">Hours</div>
                 </div>
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 text-center border border-gray-700">
-                  <div className="text-2xl md:text-3xl font-bold text-yellow-400 mb-1">{countdown.minutes}</div>
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 md:p-4 text-center border border-gray-700">
+                  <div className="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-400 mb-1">{countdown.minutes}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wider">Minutes</div>
                 </div>
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 text-center border border-gray-700">
-                  <div className="text-2xl md:text-3xl font-bold text-yellow-400 mb-1">{countdown.seconds}</div>
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 md:p-4 text-center border border-gray-700">
+                  <div className="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-400 mb-1">{countdown.seconds}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wider">Seconds</div>
                 </div>
               </div>
             </div>
             
             <div className="md:w-1/2">
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700">
-                <h3 className="text-2xl font-bold mb-6">Registration Form</h3>
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700">
+                <h3 className="text-xl md:text-2xl font-bold mb-6">Registration Form</h3>
                 
                 <form onSubmit={handleRegistration}>
                   <div className="mb-6">
@@ -656,48 +708,42 @@ const HackathonLandingPage = () => {
       
       {/* Submission Section */}
       <section id="submit" className="py-20 bg-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">How to Submit</h2>
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">How to Submit</h2>
           
-          <div className="max-w-4xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700">
+          <div className="max-w-4xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700">
             <p className="text-lg text-gray-300 mb-8">
               Once you've completed your project, submit your entry through our Google Form. Remember the deadline is 
               <span className="font-bold text-white"> April 30, 2025 at 11:59 PM UTC</span>.
             </p>
             
-            <div className="mb-10 bg-gray-900/70 rounded-xl p-6 border border-gray-700">
+            <div className="mb-10 bg-gray-900/70 rounded-xl p-5 md:p-6 border border-gray-700">
               <h3 className="text-xl font-bold mb-6 flex items-center">
-                <FileText className="mr-3 text-cyan-400" size={22} />
-                Required Submission Information
+                <FileText className="mr-3 text-cyan-400 flex-shrink-0" size={22} />
+                <span>Required Submission Information</span>
               </h3>
               
               <ul className="space-y-4">
                 <li className="flex items-start">
-                  <div className="text-cyan-400 mr-3 mt-1">
+                  <div className="text-cyan-400 mr-3 mt-1 flex-shrink-0">
                     <ChevronRight size={16} />
                   </div>
                   <span className="text-gray-300">Your full name and email address</span>
                 </li>
                 <li className="flex items-start">
-                  <div className="text-cyan-400 mr-3 mt-1">
+                  <div className="text-cyan-400 mr-3 mt-1 flex-shrink-0">
                     <ChevronRight size={16} />
                   </div>
                   <span className="text-gray-300">Project title and selected theme</span>
                 </li>
                 <li className="flex items-start">
-                  <div className="text-cyan-400 mr-3 mt-1">
+                  <div className="text-cyan-400 mr-3 mt-1 flex-shrink-0">
                     <ChevronRight size={16} />
                   </div>
                   <span className="text-gray-300">Working URL (preferred) or screen recording demonstration</span>
                 </li>
-                {/* <li className="flex items-start">
-                  <div className="text-cyan-400 mr-3 mt-1">
-                    <ChevronRight size={16} />
-                  </div>
-                  <span className="text-gray-300">Link to source code repository (GitHub, GitLab, etc.)</span>
-                </li> */}
                 <li className="flex items-start">
-                  <div className="text-cyan-400 mr-3 mt-1">
+                  <div className="text-cyan-400 mr-3 mt-1 flex-shrink-0">
                     <ChevronRight size={16} />
                   </div>
                   <span className="text-gray-300">Brief description of your project and approach (max 300 words)</span>
@@ -710,9 +756,9 @@ const HackathonLandingPage = () => {
                 href="https://forms.google.com/hackathon-submission" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-cyan-400 to-pink-500 rounded-xl shadow-lg shadow-pink-500/20 hover:shadow-xl hover:shadow-pink-500/30 transform transition-all hover:-translate-y-1"
+                className="inline-flex items-center justify-center px-6 md:px-8 py-3 md:py-4 text-lg font-semibold text-white bg-gradient-to-r from-cyan-400 to-pink-500 rounded-xl shadow-lg shadow-pink-500/20 hover:shadow-xl hover:shadow-pink-500/30 transform transition-all hover:-translate-y-1"
               >
-                <Send className="mr-3" size={20} />
+                <Send className="mr-3 flex-shrink-0" size={20} />
                 Submit Your Project
               </a>
             </div>
@@ -722,8 +768,8 @@ const HackathonLandingPage = () => {
       
       {/* FAQ Section */}
       <section id="faq" className="py-20 bg-radial-at-bl from-gray-800/20 via-gray-900 to-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Frequently Asked Questions</h2>
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Frequently Asked Questions</h2>
           
           <div className="max-w-4xl mx-auto">
             {faqItems.map((faq, index) => (
@@ -732,13 +778,13 @@ const HackathonLandingPage = () => {
                 className={`mb-5 bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all ${accordionState[index] ? 'border-purple-500/50 shadow-lg shadow-purple-500/10' : ''}`}
               >
                 <div 
-                  className="p-6 flex justify-between items-center cursor-pointer"
+                  className="p-5 md:p-6 flex justify-between items-center cursor-pointer"
                   onClick={() => toggleAccordion(index)}
                 >
-                  <h3 className="text-lg font-semibold pr-10">{faq.question}</h3>
+                  <h3 className="text-base md:text-lg font-semibold pr-8 md:pr-10">{faq.question}</h3>
                   <ChevronDown 
                     size={20} 
-                    className={`text-purple-400 transition-transform ${accordionState[index] ? 'transform rotate-180' : ''}`} 
+                    className={`text-purple-400 transition-transform flex-shrink-0 ${accordionState[index] ? 'transform rotate-180' : ''}`} 
                   />
                 </div>
                 
@@ -749,7 +795,7 @@ const HackathonLandingPage = () => {
                     opacity: accordionState[index] ? 1 : 0
                   }}
                 >
-                  <div className="px-6 pb-6 text-gray-300">
+                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-300">
                     {faq.answer}
                   </div>
                 </div>
@@ -761,7 +807,7 @@ const HackathonLandingPage = () => {
 
       {/* Footer */}
       <footer className="bg-gray-950 text-gray-300 pt-16 pb-8">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row justify-between mb-16 gap-10">
             <div className="md:w-1/3">
               <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">
@@ -770,23 +816,6 @@ const HackathonLandingPage = () => {
               <p className="mb-6 text-gray-400">
                 Pushing the boundaries of frontend development one challenge at a time. Join our monthly hackathon to showcase your UI skills and compete for $2,000 in prizes.
               </p>
-              {/* <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gradient-to-r from-cyan-400 to-pink-500 transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
-                  </svg>
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gradient-to-r from-cyan-400 to-pink-500 transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                  </svg>
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gradient-to-r from-cyan-400 to-pink-500 transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
-                  </svg>
-                </a>
-              </div> */}
             </div>
             
             <div className="md:w-1/4">
@@ -805,7 +834,7 @@ const HackathonLandingPage = () => {
               <h4 className="text-lg font-bold mb-6">Contact Us</h4>
               <ul className="space-y-4">
                 <li className="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <a href="mailto:hackathon@rref-calculator.com" className="text-gray-400 hover:text-white transition-colors">
