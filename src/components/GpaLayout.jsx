@@ -12,7 +12,7 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
 
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-content-light dark:text-content-dark">
-      <Navbar client:load />
+      <Navbar />
       <div className="pt-16">
         <div className="max-w-7xl mx-auto px-4 py-8">
 
@@ -20,7 +20,7 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
             
             {/* Left ad - only visible on large screens */}
             {/* <div className="hidden xl:block w-[160px] h-fit sticky top-24 flex-shrink-0">
-              <AdUnit type="vertical" client:load />
+              <AdUnit type="vertical" />
             </div> */}
 
             {/* main content */}
@@ -72,9 +72,9 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
               role="complementary"
             >
               {/* Wrap in error boundary */}
-              <ErrorBoundary fallback={<div className="w-full h-full"></div>}>
-                <AdUnit type="vertical" client:load />
-              </ErrorBoundary>
+              {/* <ErrorBoundary fallback={<div className="w-full h-full"></div>}> */}
+                <AdUnit type="vertical" />
+              {/* </ErrorBoundary> */}
             </aside>         
 
             {/* Right ad */}
@@ -85,9 +85,9 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
               role="complementary"
             >
               {/* Wrap in error boundary */}
-              <ErrorBoundary fallback={<div className="w-full h-full"></div>}>
-                <AdUnit type="vertical" client:load />
-              </ErrorBoundary>
+              {/* <ErrorBoundary fallback={<div className="w-full h-full"></div>}> */}
+                <AdUnit type="vertical" />
+              {/* </ErrorBoundary> */}
             </aside>
           </div>
         </div>
@@ -99,9 +99,9 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
         role="complementary"
       >
         {/* Wrap in error boundary */}
-        <ErrorBoundary fallback={<div className="w-full h-full"></div>}>
-          <MobileBottomAd client:load />
-        </ErrorBoundary>
+        {/* <ErrorBoundary fallback={<div className="w-full h-full"></div>}> */}
+          <MobileBottomAd client:only="react" />
+        {/* </ErrorBoundary> */}
       </div>
 
       <Footer />
@@ -110,26 +110,26 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
 };
 
 // Simple error boundary component to prevent ad errors from crashing the page
-const ErrorBoundary = ({ children, fallback }) => {
-  const [hasError, setHasError] = React.useState(false);
+// const ErrorBoundary = ({ children, fallback }) => {
+//   const [hasError, setHasError] = React.useState(false);
   
-  React.useEffect(() => {
-    const errorHandler = () => {
-      setHasError(true);
-    };
+//   React.useEffect(() => {
+//     const errorHandler = () => {
+//       setHasError(true);
+//     };
     
-    window.addEventListener('error', errorHandler);
+//     window.addEventListener('error', errorHandler);
     
-    return () => {
-      window.removeEventListener('error', errorHandler);
-    };
-  }, []);
+//     return () => {
+//       window.removeEventListener('error', errorHandler);
+//     };
+//   }, []);
   
-  if (hasError) {
-    return fallback;
-  }
+//   if (hasError) {
+//     return fallback;
+//   }
   
-  return children;
-};
+//   return children;
+// };
 
 export default GpaLayout;

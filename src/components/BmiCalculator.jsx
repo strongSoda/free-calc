@@ -19,11 +19,18 @@ const BMICalculator = ({
   const [bmi, setBmi] = useState(null);
   const [category, setCategory] = useState('');
   const [results, setResults] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true); // Indicates client-side mount
+  }, []);
 
 useEffect(() => {
-  if (typeof window !== 'undefined') {
+  if (isMounted) {
+    
     // First check query parameters
     const params = new URLSearchParams(window.location.search);
+    
     const paramUnit = params.get('unit');
     const paramWeight = params.get('weight');
     const paramHeight = params.get('height');
@@ -43,7 +50,7 @@ useEffect(() => {
       calculateBMI(Number(defaultWeight), Number(defaultHeight), defaultUnit);
     }
   }
-}, [defaultWeight, defaultHeight, defaultUnit, autoCalculate]); // Include autoCalculate in dependencies
+}, [isMounted, defaultWeight, defaultHeight, defaultUnit, autoCalculate]); // Include autoCalculate in dependencies
 
   // Modify the calculateBMI function to optionally accept parameters
 const calculateBMI = (weightInput = null, heightInput = null, unitInput = null) => {

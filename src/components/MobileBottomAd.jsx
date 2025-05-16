@@ -18,58 +18,6 @@ const MobileBottomAd = () => {
     setIsClient(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (!isClient || isDevelopment || adAttempted.current) return;
-
-  //   const loadAd = async () => {
-  //     try {
-  //       // Mark that we've attempted to load the ad
-  //       adAttempted.current = true;
-
-  //       // Check if container exists and has width
-  //       if (!adContainerRef.current?.offsetWidth) {
-  //         setAdState('failed');
-  //         return;
-  //       }
-
-  //       // Try to push the ad
-  //       await new Promise((resolve, reject) => {
-  //         try {
-  //           (window.adsbygoogle = window.adsbygoogle || []).push({});
-  //           // Give the ad some time to load
-  //           setTimeout(resolve, 1000);
-  //         } catch (error) {
-  //           reject(error);
-  //         }
-  //       });
-
-  //       // Check if ad loaded successfully
-  //       const adFrame = adContainerRef.current?.querySelector('iframe');
-  //       if (!adFrame || adFrame.offsetWidth === 0) {
-  //         throw new Error('Ad failed to load');
-  //       }
-
-  //       setAdState('loaded');
-  //     } catch (error) {
-  //       console.error('Ad loading error:', error);
-  //       setAdState('failed');
-  //     }
-  //   };
-
-  //   // Add a small delay before attempting to load the ad
-  //   setTimeout(loadAd, 100);
-
-  //   // Fallback to failed state if ad takes too long
-  //   const timeout = setTimeout(() => {
-  //     if (adState === 'loading') {
-  //       setAdState('failed');
-  //     }
-  //   }, 2000);
-
-  //   return () => clearTimeout(timeout);
-  // }, [isClient]);
-
-  // Share handlers
   
   const handleShare = async () => {
     if (navigator.share) {
@@ -104,7 +52,7 @@ const MobileBottomAd = () => {
   };
 
   // Don't render on desktop or when dismissed
-  if (typeof window !== 'undefined' && window.innerWidth >= 1280) return null;
+  if (isClient && window.innerWidth >= 1280) return null;
   if (isDismissed) return null;
 
   const renderAdContent = () => {
