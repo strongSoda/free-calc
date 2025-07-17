@@ -28,7 +28,9 @@ const InstallButton = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!installPrompt) return;
+    if (!installPrompt) {
+      return
+    };
 
     // Show the install prompt
     const result = await installPrompt.prompt();
@@ -45,7 +47,17 @@ const InstallButton = () => {
     setInstallPrompt(null);
   };
 
-  if (!isInstallable || !showButton) return null;
+      // window.AddToHomeScreenInstance.show('en');
+
+  if (!isInstallable || !showButton) return (
+    <button
+      onClick={() => window.AddToHomeScreenInstance.show()}
+      className="px-4 py-2 bg-gradient-to-r from-accent-primary to-accent-secondary text-white rounded-lg shadow-lg flex items-center gap-2 hover:opacity-90 transition-opacity z-50"
+    >
+      <Download size={20} />
+      <span>Install App</span>
+    </button>
+  );
 
   return (
     <button
