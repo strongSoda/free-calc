@@ -169,8 +169,31 @@ const calculatorSchemaData = currentUrl?.includes("calculator")
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
     <!-- <Canonical client:only /> -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/philfung/add-to-homescreen@3.3/dist/add-to-homescreen.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/gh/philfung/add-to-homescreen@3.3/dist/add-to-homescreen.min.js"
+    ></script>
   </head>
   <body>
     <slot />
+    
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', function () {
+        window.AddToHomeScreenInstance = window.AddToHomeScreen({
+          appName: 'Free Calculators',
+          appNameDisplay: 'standalone',
+          appIconUrl: 'apple-touch-icon.png',
+          assetUrl: 'https://cdn.jsdelivr.net/gh/philfung/add-to-homescreen@3.3/dist/assets/img/', 
+          maxModalDisplayCount: -1,
+          allowClose: true,
+          showArrow: true,
+        });
+        });
+    </script>
+</body>
   </body>
 </html>
