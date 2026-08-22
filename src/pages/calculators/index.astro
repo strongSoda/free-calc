@@ -195,6 +195,14 @@ const calculators = [
     url: "/calculators/binary-translator",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
+  {
+    title: "Australian Stamp Duty Calculator",
+    description:
+      "Calculate stamp duty on a property purchase in any Australian state — NSW, VIC, WA, SA, TAS and the ACT — with current government rates and the full working shown.",
+    url: "https://getworkings.com/stamp-duty-calculator/",
+    external: true,
+    gradient: "from-accent-primary to-accent-secondary",
+  },
 ];
 
 const title = "Academic Calculators";
@@ -221,6 +229,7 @@ const keywords =
         calculators.map((calc, index) => (
           <a
             href={calc.url}
+            {...(calc.external ? { target: "_blank", rel: "dofollow" } : {})}
             class="group block p-8 bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/20 dark:hover:border-accent-primary/20"
           >
             <div class="text-4xl mb-6 bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -325,10 +334,7 @@ const keywords =
                 />
               )}
               {index === 23 && (
-                <Binary
-                  client:load
-                  className="w-8 h-8 text-accent-primary"
-                />
+                <Binary client:load className="w-8 h-8 text-accent-primary" />
               )}
             </div>
             <h2
