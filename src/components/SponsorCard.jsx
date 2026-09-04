@@ -3,35 +3,11 @@ import { ExternalLink } from 'lucide-react';
 
 const sponsorData = [
   {
-    name: "AIVideo.to",
-    description: "Turn any topic in to short Videos with AI in 1 minute.",
-    logo: "https://aivideo.to/logo.png",
-    website: "https://aivideo.to",
-    tier: "gold",
-    color: "from-yellow-500/20 to-orange-500/20"
-  },
-  {
     name: "Spiff.store",
     description: "Discover and explore the best AI tools and resources.",
     logo: "https://spiff.store/favicon_io/android-chrome-192x192.png",
     website: "https://spiff.store",
     tier: "gold",
-    color: "from-blue-500/20 to-purple-500/20"
-  },
-  {
-    name: "WorldClass.domains",
-    description: "Create your profile page to showcase all your projects.",
-    logo: "https://worldclass.domains/logo.png",
-    website: "https://worldclass.domains",
-    tier: "gold",
-    color: "from-yellow-500/20 to-orange-500/20"
-  },
-  {
-    name: "AnimePFP",
-    description: "Discover anime profile pictures for your social media accounts. ",
-    logo: "https://drawfolio.s3.amazonaws.com/public/system/pictures/images/000/198/760/medium_thumb/gojo.png",
-    website: "https://anime-pfp.com/",
-    tier: "silver",
     color: "from-blue-500/20 to-purple-500/20"
   },
   // {
