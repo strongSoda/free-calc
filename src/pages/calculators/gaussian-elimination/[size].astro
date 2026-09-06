@@ -1,0 +1,95 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return MATRIX_SIZES.gaussian.map((variant) => ({
+    params: { size: variant.slug },
+    props: { variant },
+  }));
+}
+
+const { variant } = Astro.props;
+const n = variant.unknowns;
+const names = ["x", "y", "z", "w"].slice(0, n);
+
+const title = `${n}x${n} System of Equations Solver - Gaussian Elimination Calculator`;
+const description = `Solve a system of ${n} linear equations in ${n} unknowns with Gaussian elimination. Enter the ${variant.rows}x${variant.cols} augmented matrix and see every row operation and the final values of ${names.join(", ")}.`;
+const keywords = `${n}x${n} system of equations solver, gaussian elimination ${n} variables, solve ${n} equations ${n} unknowns, ${n}x${n} linear system calculator, row echelon form ${n}x${n}`;
+
+const faqs = [
+  {
+    q: `How many operations does it take to solve a ${n}x${n} system?`,
+    a: `Gaussian elimination on an ${n}x${n} system needs roughly ${Math.round((2 * n ** 3) / 3)} arithmetic operations — the cost grows with the cube of the size, which is why large systems are solved numerically rather than by hand.`,
+  },
+  {
+    q: `Can a ${n}x${n} system have more than one solution?`,
+    a: `Yes. If elimination leaves fewer than ${n} pivots, at least one variable is free and the system has infinitely many solutions. If a row reduces to 0 = c with c non-zero, there is no solution at all.`,
+  },
+  {
+    q: "What order do I enter the numbers in?",
+    a: `One row per equation. The first ${n} columns hold the coefficients of ${names.join(", ")} in order, and the last column holds the constant from the right-hand side of that equation.`,
+  },
+  {
+    q: "Do I need to rearrange my equations first?",
+    a: "Yes — write each equation with all the variables on the left in the same order and the constant on the right before reading off the coefficients. Missing variables get a coefficient of 0.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`${n}×${n} System Solver (Gaussian Elimination)`}
+  intro={`Solve ${n} equations in ${n} unknowns. The grid is preset to the ${variant.rows}×${variant.cols} augmented matrix you need — ${n} coefficient columns plus one column of constants.`}
+  breadcrumbs={[
+    { name: "Gaussian Elimination Calculator", url: "/calculators/gaussian-elimination" },
+    { name: `${n}×${n} system`, url: `/calculators/gaussian-elimination/${variant.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("gaussian", "rref", "lu", "determinant", "inverse")}
+>
+  <MatrixCalculator client:load mode="gaussian" augmented={true} defaultMatrix={variant.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Reading your system into the grid</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+        Each row of the grid is one equation. Columns 1 to {n} hold the coefficients of {names.join(", ")}, and the
+        final column — separated by the vertical line — holds the constant.
+      </p>
+      <pre class="font-mono text-sm bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg overflow-x-auto">{
+        variant.matrix
+          .map((row) =>
+            row
+              .slice(0, n)
+              .map((c, i) => `${i === 0 ? (c < 0 ? "-" : " ") : c < 0 ? " - " : " + "}${Math.abs(c)}${names[i]}`)
+              .join("") + ` = ${row[n]}`
+          )
+          .join("\n")
+      }</pre>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other system sizes</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          MATRIX_SIZES.gaussian
+            .filter((v) => v.slug !== variant.slug)
+            .map((other) => (
+              <a
+                href={`/calculators/gaussian-elimination/${other.slug}`}
+                class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-display font-semibold block">
+                  {other.unknowns}&times;{other.unknowns} system solver
+                </span>
+              </a>
+            ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

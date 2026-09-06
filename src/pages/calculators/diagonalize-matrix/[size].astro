@@ -1,0 +1,84 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return MATRIX_SIZES.diagonalize.map((variant) => ({
+    params: { size: variant.slug },
+    props: { variant },
+  }));
+}
+
+const { variant } = Astro.props;
+const label = sizeLabel(variant);
+const n = variant.rows;
+
+const title = `Diagonalize a ${label} Matrix - Eigenvalues, Eigenvectors and PDP⁻¹`;
+const description = `Diagonalize any ${label} matrix step by step. Get the degree-${n} characteristic polynomial, all ${n} eigenvalues, the eigenvectors, and the matrices P and D with A = PDP⁻¹.`;
+const keywords = `diagonalize ${label} matrix, ${label} diagonalization calculator, ${label} eigenvalues calculator, ${label} eigenvectors, ${label} pdp inverse`;
+
+const faqs = [
+  {
+    q: `How do you diagonalize a ${label} matrix?`,
+    a: `Solve det(A − λI) = 0, which is a degree-${n} polynomial, to get the eigenvalues. For each one, find the null space of A − λI to get its eigenvectors. If you end up with ${n} independent eigenvectors, they form the columns of P and the eigenvalues form D.`,
+  },
+  {
+    q: `Is every ${label} matrix diagonalizable?`,
+    a: `No. A ${label} matrix is diagonalizable only if it has ${n} linearly independent eigenvectors. ${n} distinct real eigenvalues guarantee it, but a repeated eigenvalue with a single eigenvector (a defective matrix) or complex eigenvalues will block it over the reals.`,
+  },
+  {
+    q: `What degree is the characteristic polynomial of a ${label} matrix?`,
+    a: `Degree ${n}. Its roots are the eigenvalues, its ${n === 2 ? "linear coefficient" : "second coefficient"} relates to the trace, and its constant term relates to the determinant.`,
+  },
+  {
+    q: `How do you check a ${label} diagonalization?`,
+    a: "Multiply P by D by P⁻¹. If the product is your original matrix, the diagonalization is correct — the calculator runs this check and displays the result.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Diagonalize a ${label} Matrix`}
+  intro={`Enter a ${label} matrix to get its characteristic polynomial, its ${n} eigenvalues, a basis of eigenvectors for each, and the factorisation A = PDP⁻¹ with a verification step.`}
+  breadcrumbs={[
+    { name: "Diagonalize Matrix Calculator", url: "/calculators/diagonalize-matrix" },
+    { name: `${label} diagonalization`, url: `/calculators/diagonalize-matrix/${variant.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("diagonalize", "determinant", "rref", "inverse", "transpose")}
+>
+  <MatrixCalculator client:load mode="diagonalize" defaultMatrix={variant.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Two quick checks on your eigenvalues</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        For any {label} matrix, the {n} eigenvalues must add up to the trace (the sum of the diagonal entries) and
+        multiply to the determinant. Both are worth checking before you go on to find eigenvectors — they catch most
+        arithmetic slips in the characteristic polynomial.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other sizes</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          MATRIX_SIZES.diagonalize
+            .filter((v) => v.slug !== variant.slug)
+            .map((other) => (
+              <a
+                href={`/calculators/diagonalize-matrix/${other.slug}`}
+                class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-display font-semibold block">Diagonalize a {sizeLabel(other)} matrix</span>
+              </a>
+            ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -22,11 +22,12 @@ const Navbar = () => {
     { name: 'All Calculators', href: '/calculators' },
     { name: 'GPA to %', href: '/calculators/gpa-to-percentage' },
     { name: 'RREF', href: '/' },
+    { name: 'Determinant', href: '/calculators/matrix-determinant' },
+    { name: 'Laplace', href: '/calculators/laplace-transform' },
+    { name: 'Partial Fractions', href: '/calculators/partial-fraction-decomposition' },
     { name: 'Volume', href: '/calculators/volume' },
     { name: "Subnet", href: "/calculators/subnet" },
     { name: "BMI", href: "/calculators/bmi" },
-    { name: 'Tip', href: '/calculators/tip-calculator' },
-    { name: 'Love', href: '/calculators/love-calculator' },
   ];
 
   return (

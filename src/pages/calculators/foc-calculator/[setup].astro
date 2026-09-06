@@ -1,0 +1,139 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import FOCCalculator from "../../../components/FOCCalculator";
+import { buildFromComponents, bandFor, round } from "../../../utils/foc.js";
+import { FOC_SETUPS } from "../../../data/focExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return FOC_SETUPS.map((setup) => {
+    const { total, balance, foc } = buildFromComponents(setup);
+    const draw = parseFloat(setup.drawWeight);
+    const gppValue = draw > 0 ? round(total / draw, 100) : null;
+    return {
+      params: { setup: setup.slug },
+      props: {
+        setup,
+        foc: round(foc, 100),
+        total: round(total, 10),
+        balance: round(balance, 100),
+        band: bandFor(foc),
+        gpp: gppValue,
+      },
+    };
+  });
+}
+
+const { setup, foc, total, balance, band, gpp } = Astro.props;
+
+const bandName = band.name.toLowerCase();
+const shaftText = setup.shaftLength + " inch";
+const shaftWeight = round(parseFloat(setup.gpi) * parseFloat(setup.shaftLength), 10);
+const frontWeight = parseFloat(setup.point) + parseFloat(setup.insert);
+const rearWeight = parseFloat(setup.nock) + parseFloat(setup.fletching);
+const gppText = gpp ? " At " + setup.drawWeight + " lb of draw weight that is " + gpp + " grains per pound." : "";
+
+const title = `${setup.name} FOC - ${foc}% Front of Center`;
+const description = `A ${setup.point} grain point on a ${setup.gpi} GPI, ${shaftText} shaft gives ${foc}% FOC (${bandName}) and a total arrow weight of ${total} grains. Adjust any component to see the effect.`;
+const keywords = `${setup.point} grain point foc, ${setup.name.toLowerCase()}, arrow foc ${setup.point} grain, ${shaftText} arrow foc, foc calculator`;
+
+const faqs = [
+  {
+    q: `What FOC does a ${setup.point} grain point give?`,
+    a: `On this build — a ${shaftText} shaft at ${setup.gpi} GPI with a ${setup.insert} grain insert, ${setup.nock} grain nock and ${setup.fletching} grains of fletching — a ${setup.point} grain point gives ${foc}% FOC, which counts as ${bandName}. Change any component in the calculator to see how the number moves.`,
+  },
+  {
+    q: `How much does this arrow weigh?`,
+    a: `About ${total} grains in total: ${shaftWeight} grains of shaft, ${frontWeight} grains up front, and ${rearWeight} grains at the back.${gppText}`,
+  },
+  {
+    q: `Is ${foc}% a good FOC?`,
+    a: `${band.name}. ${band.advice}`,
+  },
+  {
+    q: "Will this estimate match my measured FOC?",
+    a: "It should be close. The estimate treats the shaft as a uniform rod and puts the front components right at the tip, so a build with a long outsert or an unusual shaft taper can differ by a few tenths of a percent. Balance the finished arrow for the exact figure.",
+  },
+];
+---
+
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`${setup.name}: ${foc}% FOC`}
+  intro={`A ${setup.point} grain point on a ${shaftText} shaft at ${setup.gpi} GPI balances ${balance} inches from the nock throat, giving ${foc}% front of center — ${bandName} — at a total arrow weight of ${total} grains. ${setup.note}`}
+  breadcrumbs={[
+    { name: "FOC Calculator", url: "/calculators/foc-calculator" },
+    { name: setup.name, url: `/calculators/foc-calculator/${setup.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("foc", "standardDeviation", "quadratic")}
+  about="Calculator"
+>
+  <FOCCalculator
+    client:load
+    defaultMode="build"
+    defaultComponents={{
+      shaftLength: setup.shaftLength,
+      gpi: setup.gpi,
+      point: setup.point,
+      insert: setup.insert,
+      collar: "0",
+      nock: setup.nock,
+      fletching: setup.fletching,
+      wrap: "0",
+    }}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">This build in numbers</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["Shaft length", `${setup.shaftLength} in`],
+                ["Shaft GPI", `${setup.gpi} grains per inch`],
+                ["Shaft weight", `${shaftWeight} gr`],
+                ["Point", `${setup.point} gr`],
+                ["Insert", `${setup.insert} gr`],
+                ["Nock", `${setup.nock} gr`],
+                ["Fletching", `${setup.fletching} gr`],
+                ["Total arrow weight", `${total} gr`],
+                ["Balance point", `${balance} in from the nock throat`],
+                ["Front of center", `${foc}% (${band.name})`],
+                ...(gpp ? [["Grains per pound", `${gpp} gpp at ${setup.drawWeight} lb`]] : []),
+              ].map(([label, value]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-8 font-semibold text-content-light dark:text-content-dark whitespace-nowrap">{label}</td>
+                  <td class="py-2 font-mono">{value}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">{band.advice}</p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Compare other builds</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          FOC_SETUPS.filter((s) => s.slug !== setup.slug).map((other) => (
+            <a
+              href={`/calculators/foc-calculator/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{other.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{other.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -1,0 +1,104 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+const title = "Matrix Transpose Calculator";
+const description =
+  "Free matrix transpose calculator. Swap the rows and columns of any matrix to get A transpose, with the result shown instantly for 2x2, 2x3, 3x3, 3x4 and larger matrices.";
+const keywords =
+  "matrix transpose calculator, transpose matrix calculator, transpose of a matrix, how to transpose a matrix, a transpose calculator, matrix transposition";
+
+const faqs = [
+  {
+    q: "What is the transpose of a matrix?",
+    a: "The transpose Aᵀ is the matrix you get by reflecting A across its main diagonal: the first row becomes the first column, the second row becomes the second column, and so on. The entry at position (i, j) moves to position (j, i).",
+  },
+  {
+    q: "How do the dimensions change when you transpose?",
+    a: "They swap. An m x n matrix transposes to an n x m matrix, so a 2x3 becomes a 3x2. Only square matrices keep the same shape.",
+  },
+  {
+    q: "What is a symmetric matrix?",
+    a: "A square matrix that equals its own transpose, so A = Aᵀ. Symmetric matrices have real eigenvalues and can always be diagonalized by an orthogonal matrix, which is why they turn up everywhere in statistics and physics.",
+  },
+  {
+    q: "Is (AB)ᵀ the same as AᵀBᵀ?",
+    a: "No — the order reverses: (AB)ᵀ = BᵀAᵀ. This trips people up constantly. Transposing a product flips the multiplication order, the same way inverting a product does.",
+  },
+  {
+    q: "What is the transpose of a transpose?",
+    a: "You get the original matrix back: (Aᵀ)ᵀ = A. Transposition is its own inverse.",
+  },
+];
+
+const howTo = {
+  name: "How to transpose a matrix",
+  steps: [
+    { name: "Set the dimensions", text: "Enter the number of rows and columns. Unlike determinants, the transpose works on any shape." },
+    { name: "Enter the matrix", text: "Fill in the grid. Fractions and negative numbers are both accepted." },
+    { name: "Read Aᵀ", text: "The transpose appears beside the original, with each row of Aᵀ built from the matching column of A." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Matrix Transpose Calculator"
+  intro="Turn rows into columns instantly. Enter any matrix — square or rectangular — and the transpose appears alongside it, with a note on where each entry moved."
+  breadcrumbs={[{ name: "Matrix Transpose Calculator", url: "/calculators/matrix-transpose" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("determinant", "rref", "inverse", "diagonalize", "lu", "gaussian")}
+  definition={{
+    term: "Matrix transpose",
+    text: "The matrix obtained by reflecting a matrix across its main diagonal, so that the entry in row i and column j moves to row j and column i.",
+  }}
+>
+  <MatrixCalculator client:load mode="transpose" defaultMatrix={[[1, 2, 3], [4, 5, 6]]} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Transpose rules</h2>
+      <ul class="space-y-3 text-content-light-dimmed dark:text-content-dark-dimmed">
+        <li><strong class="text-content-light dark:text-content-dark">(A&#7488;)&#7488; = A</strong> — transposing twice returns the original.</li>
+        <li><strong class="text-content-light dark:text-content-dark">(A + B)&#7488; = A&#7488; + B&#7488;</strong> — transposition distributes over addition.</li>
+        <li><strong class="text-content-light dark:text-content-dark">(kA)&#7488; = kA&#7488;</strong> — scalars pass straight through.</li>
+        <li><strong class="text-content-light dark:text-content-dark">(AB)&#7488; = B&#7488;A&#7488;</strong> — products reverse order.</li>
+        <li><strong class="text-content-light dark:text-content-dark">det(A&#7488;) = det(A)</strong> — the determinant is unchanged.</li>
+        <li><strong class="text-content-light dark:text-content-dark">A&#7488;A is always symmetric</strong> — the basis of least squares and the normal equations.</li>
+      </ul>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Transpose calculators by size</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          MATRIX_SIZES.transpose.map((variant) => (
+            <a
+              href={`/calculators/matrix-transpose/${variant.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">{sizeLabel(variant)} transpose</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                becomes {variant.cols}&times;{variant.rows}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Where transposes are used</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p><strong>Least squares and regression.</strong> The normal equations A&#7488;Ax = A&#7488;b are the standard way to fit a line through data that does not fit exactly.</p>
+        <p><strong>Dot products.</strong> For column vectors, u&#7488;v is exactly the dot product, which makes transposition the bridge between matrix notation and geometry.</p>
+        <p><strong>Covariance matrices.</strong> Any matrix of the form A&#7488;A is symmetric and positive semi-definite, which is what makes covariance matrices well behaved.</p>
+        <p><strong>Graph theory.</strong> Transposing an adjacency matrix reverses every edge in a directed graph.</p>
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

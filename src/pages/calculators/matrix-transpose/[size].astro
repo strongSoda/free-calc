@@ -1,0 +1,83 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return MATRIX_SIZES.transpose.map((variant) => ({
+    params: { size: variant.slug },
+    props: { variant },
+  }));
+}
+
+const { variant } = Astro.props;
+const label = sizeLabel(variant);
+const flipped = `${variant.cols}×${variant.rows}`;
+const isSquare = variant.rows === variant.cols;
+
+const title = `${label} Matrix Transpose Calculator - Transpose a ${label} Matrix`;
+const description = `Transpose a ${label} matrix online. Enter your entries and get the ${flipped} transpose instantly, with each row of Aᵀ built from the matching column of A.`;
+const keywords = `${label} transpose calculator, transpose of a ${label} matrix, ${label} matrix transpose, how to transpose a ${label} matrix`;
+
+const faqs = [
+  {
+    q: `What are the dimensions of a ${label} matrix after transposing?`,
+    a: `A ${label} matrix transposes to a ${flipped} matrix${isSquare ? " — square matrices keep their shape, though the entries still move." : ", because transposing swaps the number of rows and columns."}`,
+  },
+  {
+    q: `How do you transpose a ${label} matrix by hand?`,
+    a: `Write the first row of the original as the first column of the result, the second row as the second column, and so on until all ${variant.rows} rows have become columns.`,
+  },
+  {
+    q: isSquare ? `When does a ${label} matrix equal its own transpose?` : `Can a ${label} matrix be symmetric?`,
+    a: isSquare
+      ? `When it is symmetric — that is, when the entry in row i, column j matches the entry in row j, column i for every pair. Mirror the entries across the main diagonal and nothing changes.`
+      : `No. Symmetry requires A = Aᵀ, and a ${label} matrix transposes to a ${flipped} matrix, so the two cannot be equal. Only square matrices can be symmetric.`,
+  },
+];
+
+const otherSizes = MATRIX_SIZES.transpose.filter((v) => v.slug !== variant.slug);
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`${label} Matrix Transpose Calculator`}
+  intro={`Enter a ${label} matrix below and read off its ${flipped} transpose. The grid is already sized for you, and every entry updates the result as you type.`}
+  breadcrumbs={[
+    { name: "Matrix Transpose Calculator", url: "/calculators/matrix-transpose" },
+    { name: `${label} transpose`, url: `/calculators/matrix-transpose/${variant.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("transpose", "determinant", "rref", "inverse", "diagonalize")}
+>
+  <MatrixCalculator client:load mode="transpose" defaultMatrix={variant.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">What changes and what does not</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        Transposing a {label} matrix produces a {flipped} matrix. The entries themselves are untouched — only their
+        positions change, with a<sub>ij</sub> moving to (j, i). Entries on the main diagonal stay exactly where they are,
+        which is why {isSquare ? "a symmetric matrix looks identical after transposing" : "only square matrices can be symmetric"}.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other sizes</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          otherSizes.map((other) => (
+            <a
+              href={`/calculators/matrix-transpose/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">{sizeLabel(other)} transpose calculator</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

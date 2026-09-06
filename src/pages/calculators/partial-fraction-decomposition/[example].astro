@@ -1,0 +1,118 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import PartialFractionCalculator from "../../../components/PartialFractionCalculator";
+import { PARTIAL_FRACTION_EXAMPLES } from "../../../data/algebraExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+import { partialFractions, decompositionToString, factorToString } from "../../../utils/partialFractions.js";
+import { parsePolyExpression } from "../../../utils/polynomial.js";
+
+export async function getStaticPaths() {
+  return PARTIAL_FRACTION_EXAMPLES.map((item) => {
+    let answer = null;
+    let factors = [];
+    try {
+      const result = partialFractions(
+        parsePolyExpression(item.numerator, "x"),
+        parsePolyExpression(item.denominator, "x"),
+        "x"
+      );
+      answer = decompositionToString(result);
+      factors = result.factors.map((f) => factorToString(f, "x"));
+    } catch (e) {
+      answer = null;
+    }
+    return { params: { example: item.slug }, props: { item, answer, factors } };
+  });
+}
+
+const { item, answer, factors } = Astro.props;
+
+const title = `Partial Fraction Decomposition of ${item.display}`;
+const description = `${item.display} decomposes into ${answer}. A worked ${item.type.toLowerCase()} example with the factorisation, the coefficient system, and an editable calculator.`;
+const keywords = `partial fraction decomposition of ${item.display}, decompose ${item.display}, partial fractions ${item.display}, ${item.type.toLowerCase()} partial fractions`;
+
+const faqs = [
+  { q: `How does ${item.display} decompose?`, a: `${item.display} = ${answer}. ${item.note}` },
+  {
+    q: "How was the denominator factored?",
+    a: factors.length ? `It factors as ${factors.join(" × ")}, which sets the shape of the decomposition.` : "The factorisation is shown in the calculator above.",
+  },
+  {
+    q: "How do I check the answer?",
+    a: "Add the resulting fractions back over a common denominator — you should recover the original expression. Substituting a convenient value of x into both sides is a quicker spot check.",
+  },
+];
+
+const sameType = PARTIAL_FRACTION_EXAMPLES.filter((e) => e.type === item.type && e.slug !== item.slug);
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Partial Fractions: ${item.display}`}
+  intro={`${item.display} = ${answer}. ${item.note}`}
+  breadcrumbs={[
+    { name: "Partial Fraction Decomposition Calculator", url: "/calculators/partial-fraction-decomposition" },
+    { name: item.display, url: `/calculators/partial-fraction-decomposition/${item.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("partialFractions", "inverseLaplace", "laplace", "quadratic")}
+>
+  <PartialFractionCalculator client:load defaultNumerator={item.numerator} defaultDenominator={item.denominator} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The decomposition</h2>
+      <p class="font-mono text-lg mb-4 break-words">
+        {item.display} = <span class="text-accent-primary font-bold">{answer}</span>
+      </p>
+      {
+        factors.length > 0 && (
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed mb-3">
+            Denominator factors: <span class="font-mono">{factors.join(" × ")}</span>
+          </p>
+        )
+      }
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        This is a <strong class="text-content-light dark:text-content-dark">{item.type.toLowerCase()}</strong> problem.
+        {" "}{item.note}
+      </p>
+    </section>
+
+    {
+      sameType.length > 0 && (
+        <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold mb-4">More {item.type.toLowerCase()} examples</h2>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {sameType.map((e) => (
+              <a
+                href={`/calculators/partial-fraction-decomposition/${e.slug}`}
+                class="block p-3 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-mono font-semibold block">{e.display}</span>
+                <span class="text-xs text-content-light-dimmed dark:text-content-dark-dimmed">{e.note}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">All worked examples</h2>
+      <div class="flex flex-wrap gap-2">
+        {
+          PARTIAL_FRACTION_EXAMPLES.filter((e) => e.slug !== item.slug && e.type !== item.type).map((e) => (
+            <a
+              href={`/calculators/partial-fraction-decomposition/${e.slug}`}
+              class="px-3 py-1.5 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 hover:text-accent-primary transition-colors font-mono text-sm"
+            >
+              {e.display}
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

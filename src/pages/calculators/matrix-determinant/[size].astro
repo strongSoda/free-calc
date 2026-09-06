@@ -1,0 +1,109 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return MATRIX_SIZES.determinant.map((variant) => ({
+    params: { size: variant.slug },
+    props: { variant },
+  }));
+}
+
+const { variant } = Astro.props;
+const label = sizeLabel(variant);
+const n = variant.rows;
+
+const title = `${label} Determinant Calculator - Find the Determinant of a ${label} Matrix`;
+const description = `Calculate the determinant of a ${label} matrix step by step. Free ${label} determinant calculator with cofactor expansion, exact fractions, and a worked example that answers ${variant.answer}.`;
+const keywords = `${label} determinant calculator, determinant of a ${label} matrix, ${label} matrix determinant, how to find the determinant of a ${label} matrix, ${label} determinant formula`;
+
+const method = n <= 3 ? "cofactor expansion" : "row reduction to triangular form";
+const termCount = [1, 1, 2, 6, 24, 120, 720, 5040][n] || "many";
+
+const faqs = [
+  {
+    q: `How do you find the determinant of a ${label} matrix?`,
+    a:
+      n === 2
+        ? "Multiply the main diagonal (top-left times bottom-right), then subtract the product of the anti-diagonal (top-right times bottom-left). That is det = ad - bc."
+        : n === 3
+        ? "Expand along the first row: each of the three entries is multiplied by the 2x2 determinant left after deleting its row and column, and the terms alternate plus, minus, plus. The Rule of Sarrus gives the same result."
+        : `Row-reduce the matrix to upper triangular form, tracking each row swap as a sign change, then multiply the diagonal entries. Cofactor expansion would need ${termCount} products, so reduction is much faster.`,
+  },
+  {
+    q: `How many terms does a ${label} cofactor expansion have?`,
+    a: `A full cofactor expansion of an ${n}x${n} matrix has ${termCount} products. That is why this calculator uses ${method}.`,
+  },
+  {
+    q: `What does it mean if a ${label} determinant is zero?`,
+    a: `A zero determinant means the ${n} rows are linearly dependent — one is a combination of the others. The matrix is singular, has no inverse, and the associated system of ${n} equations does not have a unique solution.`,
+  },
+  {
+    q: `Can this ${label} determinant calculator handle fractions?`,
+    a: "Yes. Type entries like 3/4 or -1/2 and the answer comes back as an exact fraction rather than a rounded decimal.",
+  },
+];
+
+const howTo = {
+  name: `How to find the determinant of a ${label} matrix`,
+  steps: [
+    { name: "Enter the entries", text: `Fill in all ${n * n} numbers of your ${label} matrix. The size is already set for you.` },
+    {
+      name: n <= 3 ? "Expand the cofactors" : "Reduce to triangular form",
+      text:
+        n <= 3
+          ? "The calculator multiplies each first-row entry by its minor and alternates the signs."
+          : "Row operations clear each column below the pivot until the matrix is upper triangular.",
+    },
+    { name: "Read the determinant", text: `The result appears at the top, together with whether the ${label} matrix is invertible.` },
+  ],
+};
+
+const otherSizes = MATRIX_SIZES.determinant.filter((v) => v.slug !== variant.slug);
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`${label} Determinant Calculator`}
+  intro={`Find the determinant of any ${label} matrix with a full worked solution. The grid below is preset to ${label} and loaded with an example whose determinant is ${variant.answer}.`}
+  breadcrumbs={[
+    { name: "Matrix Determinant Calculator", url: "/calculators/matrix-determinant" },
+    { name: `${label} determinant`, url: `/calculators/matrix-determinant/${variant.slug}` },
+  ]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("rref", "gaussian", "lu", "diagonalize", "inverse", "transpose")}
+>
+  <MatrixCalculator client:load mode="determinant" defaultMatrix={variant.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">About {label} determinants</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">{variant.note}</p>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        The example above works out to <strong class="text-accent-primary">{variant.answer}</strong>. Because it is
+        {variant.answer === "0" ? " zero, that matrix is singular." : " non-zero, that matrix is invertible and its rows are linearly independent."}
+        Change any entry and the whole solution updates as you type.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other matrix sizes</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          otherSizes.map((other) => (
+            <a
+              href={`/calculators/matrix-determinant/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">{sizeLabel(other)} determinant calculator</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -1,0 +1,115 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LaplaceCalculator from "../../../components/LaplaceCalculator";
+import { INVERSE_LAPLACE_EXPRESSIONS } from "../../../data/laplaceExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+import { inverseLaplace } from "../../../utils/laplace.js";
+
+export async function getStaticPaths() {
+  return INVERSE_LAPLACE_EXPRESSIONS.map((item) => {
+    let result = null;
+    try {
+      result = inverseLaplace(item.numerator, item.denominator);
+    } catch (e) {
+      result = null;
+    }
+    return {
+      params: { expression: item.slug },
+      props: {
+        item,
+        answer: result ? result.string : null,
+        partial: result ? result.partialFractions.terms.map((t) => t.string).join(" + ") : null,
+        steps: result ? result.steps.filter((s) => s.title && s.title.startsWith("Invert")) : [],
+      },
+    };
+  });
+}
+
+const { item, answer, partial, steps } = Astro.props;
+
+// Only put the answer in the title when it still fits a search result.
+const baseTitle = `Inverse Laplace Transform of ${item.display}`;
+const withAnswer = baseTitle + " = " + answer;
+const title = answer && withAnswer.length <= 65 ? withAnswer : baseTitle;
+const description = `The inverse Laplace transform of ${item.display} is ${answer}. See the partial fraction expansion and the transform pair used for each term, then edit F(s) to try your own.`;
+const keywords = `inverse laplace transform of ${item.display}, inverse laplace ${item.display}, l inverse ${item.display}, inverse laplace transform calculator`;
+
+const faqs = [
+  { q: `What is the inverse Laplace transform of ${item.display}?`, a: `It is f(t) = ${answer}. ${item.note}` },
+  {
+    q: "What are the partial fractions here?",
+    a: partial ? `F(s) splits into ${partial}, and each piece is inverted separately.` : "The expansion is shown in the calculator above.",
+  },
+  {
+    q: "How can I check this answer?",
+    a: `Transform ${answer} forward again with the Laplace transform calculator — you should get back ${item.display}.`,
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Inverse Laplace Transform of ${item.display}`}
+  intro={`L⁻¹{${item.display}} = ${answer}. ${item.note}`}
+  breadcrumbs={[
+    { name: "Inverse Laplace Transform Calculator", url: "/calculators/inverse-laplace-transform" },
+    { name: item.display, url: `/calculators/inverse-laplace-transform/${item.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("inverseLaplace", "laplace", "partialFractions", "quadratic")}
+>
+  <LaplaceCalculator
+    client:load
+    defaultMode="inverse"
+    defaultNumerator={item.numerator}
+    defaultDenominator={item.denominator}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The result</h2>
+      <p class="font-mono text-lg mb-4">
+        L&#8315;&sup1;&#123;{item.display}&#125; = <span class="text-accent-primary font-bold">{answer}</span>
+      </p>
+      {
+        partial && (
+          <p class="font-mono text-sm mb-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+            Partial fractions: {partial}
+          </p>
+        )
+      }
+      {
+        steps.length > 0 && (
+          <ul class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            {steps.map((step) => (
+              <li>
+                <span class="font-semibold text-content-light dark:text-content-dark">{step.title}</span> — {step.detail}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">{item.note}</p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">More inverse transforms</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {
+          INVERSE_LAPLACE_EXPRESSIONS.filter((f) => f.slug !== item.slug)
+            .slice(0, 8)
+            .map((f) => (
+              <a
+                href={`/calculators/inverse-laplace-transform/${f.slug}`}
+                class="block p-3 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-mono font-semibold">L&#8315;&sup1;&#123;{f.display}&#125;</span>
+              </a>
+            ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

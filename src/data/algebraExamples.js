@@ -1,0 +1,17 @@
+// src/data/algebraExamples.js
+export const PARTIAL_FRACTION_EXAMPLES = [
+  { slug: "1-over-x-squared-minus-1", display: "1/(x² − 1)", numerator: "1", denominator: "x^2-1", type: "Distinct linear factors", note: "The difference of squares factors into (x − 1)(x + 1), giving two simple fractions." },
+  { slug: "3x-plus-11-over-x-squared-minus-x-minus-6", display: "(3x + 11)/(x² − x − 6)", numerator: "3x+11", denominator: "x^2-x-6", type: "Distinct linear factors", note: "A standard exam warm-up: factor to (x − 3)(x + 2), then cover up to find each constant." },
+  { slug: "1-over-x-times-x-plus-1-times-x-plus-2", display: "1/(x(x + 1)(x + 2))", numerator: "1", denominator: "x(x+1)(x+2)", type: "Three linear factors", note: "Three distinct roots, three constants — the Heaviside cover-up method is fastest here." },
+  { slug: "5x-minus-4-over-2x-squared-plus-x-minus-1", display: "(5x − 4)/(2x² + x − 1)", numerator: "5x-4", denominator: "2x^2+x-1", type: "Non-monic denominator", note: "A leading coefficient other than 1 produces fractional roots, but the method is unchanged." },
+  { slug: "1-over-x-plus-1-squared", display: "1/(x + 1)²", numerator: "1", denominator: "(x+1)^2", type: "Repeated linear factor", note: "A repeated factor needs one term per power: A/(x + 1) plus B/(x + 1)²." },
+  { slug: "x-squared-over-x-minus-1-cubed", display: "x²/(x − 1)³", numerator: "x^2", denominator: "(x-1)^3", type: "Repeated linear factor", note: "A cubed factor contributes three terms, one for each power." },
+  { slug: "8-over-x-cubed-plus-2x-squared-plus-x", display: "8/(x³ + 2x² + x)", numerator: "8", denominator: "x^3+2x^2+x", type: "Repeated linear factor", note: "Factoring gives x(x + 1)², a mix of a simple and a repeated root." },
+  { slug: "x-squared-plus-1-over-x-cubed-plus-x", display: "(x² + 1)/(x³ + x)", numerator: "x^2+1", denominator: "x^3+x", type: "Cancelling factor", note: "Here the numerator shares a factor with the denominator, so the answer collapses to 1/x." },
+  { slug: "1-over-x-cubed-minus-1", display: "1/(x³ − 1)", numerator: "1", denominator: "x^3-1", type: "Irreducible quadratic", note: "x³ − 1 = (x − 1)(x² + x + 1); the quadratic has no real roots so it keeps a linear numerator." },
+  { slug: "2x-plus-3-over-x-plus-1-x-squared-plus-4", display: "(2x + 3)/((x + 1)(x² + 4))", numerator: "2x+3", denominator: "(x+1)(x^2+4)", type: "Irreducible quadratic", note: "One linear factor and one irreducible quadratic — the usual setup in Laplace problems." },
+  { slug: "x-cubed-plus-1-over-x-squared-plus-4-squared", display: "(x³ + 1)/(x² + 4)²", numerator: "x^3+1", denominator: "(x^2+4)^2", type: "Repeated quadratic", note: "A repeated irreducible quadratic needs a linear numerator over each power." },
+  { slug: "1-over-x-to-the-4-minus-1", display: "1/(x⁴ − 1)", numerator: "1", denominator: "x^4-1", type: "Mixed factors", note: "x⁴ − 1 splits into (x − 1)(x + 1)(x² + 1): two real roots and one irreducible quadratic." },
+  { slug: "x-cubed-over-x-squared-minus-1", display: "x³/(x² − 1)", numerator: "x^3", denominator: "x^2-1", type: "Improper fraction", note: "The numerator's degree is higher, so long division comes first and leaves a polynomial term." },
+  { slug: "x-squared-plus-2x-over-x-plus-1-x-minus-2", display: "(x² + 2x)/((x + 1)(x − 2))", numerator: "x^2+2x", denominator: "(x+1)(x-2)", type: "Improper fraction", note: "Equal degrees top and bottom means a constant falls out of the division." },
+];

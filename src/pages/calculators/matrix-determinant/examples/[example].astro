@@ -1,0 +1,79 @@
+---
+import CalculatorLayout from "../../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../../components/MatrixCalculator";
+import { DETERMINANT_EXAMPLES, relatedTo, article } from "../../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return DETERMINANT_EXAMPLES.map((example) => ({
+    params: { example: example.slug },
+    props: { example },
+  }));
+}
+
+const { example } = Astro.props;
+const size = `${example.matrix.length}x${example.matrix[0].length}`;
+const rowsText = example.matrix.map((row) => `(${row.join(", ")})`).join(", ");
+
+const aName = `${article(example.name)} ${example.name}`;
+const title = `Determinant of ${aName} = ${example.answer}`;
+const description = `The determinant of the ${example.name} with rows ${rowsText} is ${example.answer}. See the full step-by-step working and edit the matrix to try your own.`;
+const keywords = `determinant of ${aName}, ${size} determinant example, ${example.name} determinant, determinant equals ${example.answer}`;
+
+const faqs = [
+  {
+    q: `What is the determinant of this ${example.name}?`,
+    a: `It is ${example.answer}. ${example.insight}`,
+  },
+  {
+    q: example.answer === "0" ? "Why is this determinant zero?" : "Is this matrix invertible?",
+    a:
+      example.answer === "0"
+        ? "A zero determinant means the rows are linearly dependent, so the matrix collapses space into a lower dimension and cannot be inverted."
+        : `Yes. The determinant is ${example.answer}, which is not zero, so the matrix has an inverse and its rows are linearly independent.`,
+  },
+  {
+    q: "Can I change the numbers?",
+    a: "Yes — the calculator above is fully editable. Type over any entry and the determinant and every step recalculate immediately.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Determinant of ${aName}`}
+  intro={`The ${size} matrix with rows ${rowsText} has determinant ${example.answer}. The calculator below is loaded with it, so you can follow every step or edit the entries.`}
+  breadcrumbs={[
+    { name: "Matrix Determinant Calculator", url: "/calculators/matrix-determinant" },
+    { name: example.name, url: `/calculators/matrix-determinant/examples/${example.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("determinant", "rref", "diagonalize", "inverse", "lu")}
+>
+  <MatrixCalculator client:load mode="determinant" defaultMatrix={example.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Why the answer is {example.answer}</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">{example.insight}</p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">More determinant examples</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          DETERMINANT_EXAMPLES.filter((e) => e.slug !== example.slug).map((other) => (
+            <a
+              href={`/calculators/matrix-determinant/examples/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">Determinant of {article(other.name)} {other.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">= {other.answer}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

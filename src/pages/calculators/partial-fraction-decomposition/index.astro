@@ -1,0 +1,154 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import PartialFractionCalculator from "../../../components/PartialFractionCalculator";
+import { PARTIAL_FRACTION_EXAMPLES } from "../../../data/algebraExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Partial Fraction Decomposition Calculator";
+const description =
+  "Free partial fraction decomposition calculator with steps. Break any rational function into simple fractions — distinct, repeated and irreducible quadratic factors all handled, with exact fractions and the full coefficient solve.";
+const keywords =
+  "partial fraction decomposition calculator, partial fractions calculator, partial fraction expansion, decompose into partial fractions, partial fraction decomposition with steps, heaviside cover up method";
+
+const types = [...new Set(PARTIAL_FRACTION_EXAMPLES.map((e) => e.type))];
+
+const faqs = [
+  {
+    q: "What is partial fraction decomposition?",
+    a: "It is the reverse of adding fractions: rewriting a single rational function as a sum of simpler fractions whose denominators are the factors of the original denominator. It is the standard preparation step for integrating rational functions and for inverse Laplace transforms.",
+  },
+  {
+    q: "What are the rules for setting up the decomposition?",
+    a: "Each distinct linear factor (x − a) contributes A/(x − a). A factor repeated k times contributes one term for each power up to k. Each irreducible quadratic contributes a linear numerator (Bx + C) over it, again one term per power if it repeats.",
+  },
+  {
+    q: "What do I do if the numerator's degree is too high?",
+    a: "Divide first. If the numerator's degree is greater than or equal to the denominator's, polynomial long division produces a polynomial plus a proper fraction, and only the proper part gets decomposed. The calculator does this automatically.",
+  },
+  {
+    q: "What is the Heaviside cover-up method?",
+    a: "A shortcut for distinct linear factors: to find the constant over (x − a), cover that factor in the original expression and substitute x = a into what is left. It only works for non-repeated linear factors, but it is very fast when it applies.",
+  },
+  {
+    q: "When is a quadratic irreducible?",
+    a: "When its discriminant b² − 4ac is negative, so it has no real roots and cannot be factored further over the reals. Such a factor keeps a linear numerator Bx + C rather than a constant.",
+  },
+  {
+    q: "Why is partial fraction decomposition useful?",
+    a: "Integration and inverse Laplace transforms both have simple rules for 1/(x − a) and for terms over a quadratic, but no rule for a general rational function. Decomposing first turns one hard problem into several easy ones.",
+  },
+];
+
+const howTo = {
+  name: "How to do partial fraction decomposition",
+  steps: [
+    { name: "Make the fraction proper", text: "If the numerator's degree is at least the denominator's, do polynomial long division first." },
+    { name: "Factor the denominator completely", text: "Into linear factors and irreducible quadratics, noting which ones repeat." },
+    { name: "Write the template", text: "One constant per power of each linear factor, one linear numerator per power of each quadratic factor." },
+    { name: "Solve for the coefficients", text: "Multiply through by the denominator and either match coefficients of each power or substitute convenient values of x." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Partial Fraction Decomposition Calculator"
+  intro="Enter a numerator and a denominator — expanded or already factored — and get the decomposition with exact fractions. The calculator factors the denominator, sets up the template, and shows the linear system it solves for the unknown coefficients."
+  breadcrumbs={[{ name: "Partial Fraction Decomposition Calculator", url: "/calculators/partial-fraction-decomposition" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("inverseLaplace", "laplace", "quadratic", "tripleIntegral", "lineIntegral")}
+  definition={{
+    term: "Partial fraction decomposition",
+    text: "Rewriting a rational function as a sum of fractions whose denominators are powers of the irreducible factors of the original denominator.",
+    set: "Algebra and calculus",
+  }}
+>
+  <PartialFractionCalculator client:load defaultNumerator="3x+11" defaultDenominator="x^2-x-6" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">The four setups</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-8 font-display">Denominator factor</th>
+              <th class="py-2 pr-8 font-display">Terms it contributes</th>
+              <th class="py-2 font-display">Example</th>
+            </tr>
+          </thead>
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+              <td class="py-3 pr-8">Distinct linear (x &minus; a)</td>
+              <td class="py-3 pr-8 font-mono">A/(x &minus; a)</td>
+              <td class="py-3 font-mono">1/((x&minus;1)(x+1))</td>
+            </tr>
+            <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+              <td class="py-3 pr-8">Repeated linear (x &minus; a)&#7503;</td>
+              <td class="py-3 pr-8 font-mono">A&#8321;/(x&minus;a) + A&#8322;/(x&minus;a)&sup2; + &hellip;</td>
+              <td class="py-3 font-mono">x&sup2;/(x&minus;1)&sup3;</td>
+            </tr>
+            <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+              <td class="py-3 pr-8">Irreducible quadratic</td>
+              <td class="py-3 pr-8 font-mono">(Bx + C)/(x&sup2; + bx + c)</td>
+              <td class="py-3 font-mono">1/(x&sup3;&minus;1)</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-8">Repeated quadratic</td>
+              <td class="py-3 pr-8 font-mono">(B&#8321;x+C&#8321;)/q + (B&#8322;x+C&#8322;)/q&sup2; + &hellip;</td>
+              <td class="py-3 font-mono">(x&sup3;+1)/(x&sup2;+4)&sup2;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Worked examples</h2>
+      {
+        types.map((type) => (
+          <div class="mb-6 last:mb-0">
+            <h3 class="font-display font-semibold mb-3">{type}</h3>
+            <div class="grid gap-3 sm:grid-cols-2">
+              {PARTIAL_FRACTION_EXAMPLES.filter((e) => e.type === type).map((e) => (
+                <a
+                  href={`/calculators/partial-fraction-decomposition/${e.slug}`}
+                  class="block p-3 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+                >
+                  <span class="font-mono font-semibold block">{e.display}</span>
+                  <span class="text-xs text-content-light-dimmed dark:text-content-dark-dimmed">{e.note}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Where you will need it</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p>
+          <strong>Integrating rational functions.</strong> There is no general antiderivative for P(x)/Q(x), but every
+          decomposed piece integrates to a logarithm, a power, or an arctangent.
+        </p>
+        <p>
+          <strong>Inverse Laplace transforms.</strong> The transform table only covers simple denominators, so
+          decomposition is the step that makes the
+          <a href="/calculators/inverse-laplace-transform" class="text-accent-primary">inverse transform</a> possible.
+        </p>
+        <p>
+          <strong>Control theory and signal processing.</strong> Splitting a transfer function into partial fractions
+          separates a system's response into one mode per pole.
+        </p>
+        <p>
+          <strong>Series and generating functions.</strong> Decomposition turns a rational generating function into a sum
+          of geometric series, which is how closed forms for recurrences such as Fibonacci are found.
+        </p>
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

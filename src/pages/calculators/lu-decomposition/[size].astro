@@ -1,0 +1,81 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return MATRIX_SIZES.lu.map((variant) => ({
+    params: { size: variant.slug },
+    props: { variant },
+  }));
+}
+
+const { variant } = Astro.props;
+const label = sizeLabel(variant);
+const n = variant.rows;
+const multipliers = (n * (n - 1)) / 2;
+
+const title = `${label} LU Decomposition Calculator - Factor a ${label} Matrix into L and U`;
+const description = `LU decomposition of a ${label} matrix with steps. Get the lower triangular L and upper triangular U, the ${multipliers} elimination multipliers, and a check that LU returns your original matrix.`;
+const keywords = `${label} lu decomposition, lu decomposition ${label} calculator, ${label} lu factorization, doolittle ${label}, lower upper decomposition ${label}`;
+
+const faqs = [
+  {
+    q: `How many multipliers does a ${label} LU decomposition have?`,
+    a: `A ${label} factorisation has ${multipliers} multipliers — one for each entry below the diagonal of L. The rest of L is 1s on the diagonal and 0s above it.`,
+  },
+  {
+    q: `How do you check a ${label} LU decomposition?`,
+    a: "Multiply L by U. If the product is your original matrix, the factorisation is right. The calculator performs this check and shows the product for you.",
+  },
+  {
+    q: `What if a pivot is zero in a ${label} matrix?`,
+    a: "Elimination cannot divide by zero, so the rows get swapped and the swap is recorded in a permutation matrix P. The result is then PA = LU, which the calculator labels clearly.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`${label} LU Decomposition Calculator`}
+  intro={`Factor a ${label} matrix into L and U. The grid is preset to ${label}, and the ${multipliers} multipliers that build L are named as each one is used.`}
+  breadcrumbs={[
+    { name: "LU Decomposition Calculator", url: "/calculators/lu-decomposition" },
+    { name: `${label} LU decomposition`, url: `/calculators/lu-decomposition/${variant.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("lu", "luFactorization", "gaussian", "determinant", "inverse")}
+>
+  <MatrixCalculator client:load mode="lu" defaultMatrix={variant.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The shape of L and U at {label}</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        L is {label} with 1s down the diagonal, zeros above it, and {multipliers} multipliers below. U is {label} with
+        zeros below the diagonal and the eliminated values above. Between them they hold exactly the same information as
+        the original matrix — {n * n} numbers in, {n * n} numbers out.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other sizes</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          MATRIX_SIZES.lu
+            .filter((v) => v.slug !== variant.slug)
+            .map((other) => (
+              <a
+                href={`/calculators/lu-decomposition/${other.slug}`}
+                class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-display font-semibold block">{sizeLabel(other)} LU decomposition</span>
+              </a>
+            ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

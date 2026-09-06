@@ -1,0 +1,107 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+const title = "LU Decomposition Calculator";
+const description =
+  "Free LU decomposition calculator with steps. Factor any square matrix into a lower triangular L and an upper triangular U, with partial pivoting (PA = LU) when a zero pivot appears.";
+const keywords =
+  "lu decomposition calculator, lu decomposition, lu decomposition with steps, doolittle method calculator, plu decomposition calculator, lower upper decomposition, lu decomposition 3x3";
+
+const faqs = [
+  {
+    q: "What is LU decomposition?",
+    a: "LU decomposition factors a square matrix A into the product of a lower triangular matrix L and an upper triangular matrix U, so that A = LU. U is what forward elimination produces, and L stores the multipliers used along the way.",
+  },
+  {
+    q: "Why is LU decomposition useful?",
+    a: "Once you have L and U, solving Ax = b for any new right-hand side takes only two quick triangular solves instead of a full elimination. That matters when the same matrix is reused with many different b vectors, as happens in simulation and circuit analysis.",
+  },
+  {
+    q: "What is the difference between the Doolittle and Crout methods?",
+    a: "Doolittle puts the 1s on the diagonal of L, which is what this calculator uses and what most textbooks teach. Crout puts them on the diagonal of U instead. Both produce a valid factorisation; they just distribute the scaling differently.",
+  },
+  {
+    q: "What does PA = LU mean?",
+    a: "When a pivot position holds a zero, the rows must be swapped before elimination can continue. Those swaps are recorded in a permutation matrix P, and the factorisation becomes PA = LU rather than A = LU.",
+  },
+  {
+    q: "Can every matrix be LU decomposed?",
+    a: "Every square matrix has a PA = LU factorisation with row swaps allowed. Without swaps, a matrix only factors as A = LU when all of its leading principal minors are non-zero.",
+  },
+  {
+    q: "How does LU give the determinant?",
+    a: "Because L has 1s on its diagonal, det(A) is simply the product of U's diagonal entries, multiplied by -1 once for each row swap. The calculator shows this figure with the result.",
+  },
+];
+
+const howTo = {
+  name: "How to do LU decomposition",
+  steps: [
+    { name: "Enter a square matrix", text: "LU decomposition is only defined for square matrices. Set n and fill in the grid." },
+    { name: "Eliminate below each pivot", text: "For every entry below a pivot, work out the multiplier (entry divided by pivot) and subtract that many copies of the pivot row." },
+    { name: "Collect the multipliers into L", text: "Each multiplier goes into L at the position it cleared. L gets 1s on its diagonal." },
+    { name: "Check the factorisation", text: "Multiply L by U — you should recover the original matrix. The calculator shows this check automatically." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="LU Decomposition Calculator"
+  intro="Factor a square matrix into lower and upper triangular parts. Every elimination step is shown, the multipliers are collected into L, and the product LU is displayed as a check."
+  breadcrumbs={[{ name: "LU Decomposition Calculator", url: "/calculators/lu-decomposition" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("luFactorization", "gaussian", "rref", "determinant", "inverse", "diagonalize")}
+  definition={{
+    term: "LU decomposition",
+    text: "The factorisation of a square matrix into a product of a lower triangular matrix and an upper triangular matrix, used to solve linear systems efficiently.",
+  }}
+>
+  <MatrixCalculator client:load mode="lu" defaultMatrix={[[1, 2, 3], [4, 5, 6], [7, 8, 10]]} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">How the factorisation is built</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p>
+          Run ordinary forward elimination. Whenever you clear the entry in row i, column j by subtracting m times row j,
+          two things happen: the entry becomes zero in U, and the multiplier m is written into position (i, j) of L.
+        </p>
+        <p>
+          After the last column is cleared, U holds the upper triangular result and L holds every multiplier below its
+          diagonal of 1s. Multiplying them reverses the process exactly, which is why LU = A.
+        </p>
+        <p>
+          To then solve Ax = b, substitute A = LU: first solve Ly = b going downward, then Ux = y going upward. Two
+          triangular solves cost about n&sup2; operations each, against roughly n&sup3;/3 for a fresh elimination.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">LU decomposition by matrix size</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          MATRIX_SIZES.lu.map((variant) => (
+            <a
+              href={`/calculators/lu-decomposition/${variant.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">{sizeLabel(variant)} LU decomposition</span>
+            </a>
+          ))
+        }
+      </div>
+      <p class="mt-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Looking for the same tool under its other name? The
+        <a href="/calculators/lu-factorization" class="text-accent-primary">LU factorization calculator</a> covers the
+        Doolittle and Crout variants and where each is used.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

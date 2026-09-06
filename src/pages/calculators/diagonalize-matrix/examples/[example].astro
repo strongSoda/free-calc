@@ -1,0 +1,68 @@
+---
+import CalculatorLayout from "../../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../../components/MatrixCalculator";
+import { DIAGONALIZE_EXAMPLES, relatedTo, article } from "../../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return DIAGONALIZE_EXAMPLES.map((example) => ({
+    params: { example: example.slug },
+    props: { example },
+  }));
+}
+
+const { example } = Astro.props;
+const size = `${example.matrix.length}x${example.matrix[0].length}`;
+const rowsText = example.matrix.map((row) => `(${row.join(", ")})`).join(", ");
+
+const aName = `${article(example.name)} ${example.name}`;
+const title = `Diagonalizing ${aName} - Worked Example`;
+const description = `A worked diagonalization of the ${example.name} with rows ${rowsText}. See the characteristic polynomial, the eigenvalues and eigenvectors, and whether A = PDP⁻¹ exists.`;
+const keywords = `${example.name} diagonalization, diagonalize ${example.name}, ${size} eigenvalues example, eigenvector example`;
+
+const faqs = [
+  { q: `Can this ${example.name} be diagonalized?`, a: example.insight },
+  {
+    q: "How do I find the eigenvalues myself?",
+    a: "Form A − λI, take its determinant to get the characteristic polynomial, and solve for λ. The calculator shows the polynomial it found so you can compare with your own working.",
+  },
+  {
+    q: "What do I do with the eigenvectors once I have them?",
+    a: "Place them as the columns of P, keeping the same order as the eigenvalues on D's diagonal. Then A = PDP⁻¹, and the calculator verifies the product for you.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Diagonalizing ${aName}`}
+  intro={`${example.insight} The calculator below is loaded with the ${size} matrix with rows ${rowsText}.`}
+  breadcrumbs={[
+    { name: "Diagonalize Matrix Calculator", url: "/calculators/diagonalize-matrix" },
+    { name: example.name, url: `/calculators/diagonalize-matrix/examples/${example.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("diagonalize", "determinant", "rref", "inverse")}
+>
+  <MatrixCalculator client:load mode="diagonalize" defaultMatrix={example.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">More diagonalization examples</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          DIAGONALIZE_EXAMPLES.filter((e) => e.slug !== example.slug).map((other) => (
+            <a
+              href={`/calculators/diagonalize-matrix/examples/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1 capitalize">{other.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{other.insight}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>
