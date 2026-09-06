@@ -1,0 +1,134 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Gaussian Elimination Calculator";
+const description =
+  "Free Gaussian elimination calculator with step-by-step row operations. Solve systems of linear equations, find row echelon form, and read off the solution with exact fractions.";
+const keywords =
+  "gaussian elimination calculator, gauss elimination calculator, row echelon form calculator, solve system of linear equations, gauss jordan elimination calculator, linear system solver";
+
+const faqs = [
+  {
+    q: "What is Gaussian elimination?",
+    a: "Gaussian elimination is a systematic way of solving a linear system by using row operations to create zeros below each pivot, turning the augmented matrix into row echelon form. Once the matrix is triangular, back-substitution gives the values of the variables.",
+  },
+  {
+    q: "What is the difference between Gaussian elimination and Gauss-Jordan elimination?",
+    a: "Gaussian elimination stops at row echelon form — zeros below the pivots — and then uses back-substitution. Gauss-Jordan keeps going until the matrix is in reduced row echelon form, with zeros above the pivots too and 1s on the diagonal, so the solution can be read straight off.",
+  },
+  {
+    q: "What are the three elementary row operations?",
+    a: "Swapping two rows, multiplying a row by a non-zero constant, and adding a multiple of one row to another. All three preserve the solution set, which is why the method is valid.",
+  },
+  {
+    q: "How do you know if a system has no solution?",
+    a: "If elimination produces a row where every coefficient is zero but the constant is not — that is, 0 = 5 — the system is inconsistent and has no solution. The calculator flags this for you.",
+  },
+  {
+    q: "What is a free variable?",
+    a: "A variable whose column contains no pivot. Free variables can take any value, and the pivot variables are then expressed in terms of them, which gives infinitely many solutions.",
+  },
+  {
+    q: "How do I enter a system of equations?",
+    a: "Enter the augmented matrix: one row per equation, one column per variable, and a final column holding the constants on the right-hand side. Tick the box below the grid to have the solution read out for you.",
+  },
+];
+
+const howTo = {
+  name: "How to solve a system with Gaussian elimination",
+  steps: [
+    { name: "Write the augmented matrix", text: "One row per equation, one column per coefficient, and a last column for the constants." },
+    { name: "Create the pivots", text: "Swap rows if needed so the pivot is non-zero, then scale that row so the pivot is 1." },
+    { name: "Clear below each pivot", text: "Subtract multiples of the pivot row from the rows underneath until the column has zeros below the pivot." },
+    { name: "Back-substitute", text: "Work upward from the last equation, substituting known values until every variable is found." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Gaussian Elimination Calculator"
+  intro="Enter an augmented matrix and watch every row operation that takes it to echelon form. The calculator names each operation, shows the matrix after every step, and reports whether the system has one solution, none, or infinitely many."
+  breadcrumbs={[{ name: "Gaussian Elimination Calculator", url: "/calculators/gaussian-elimination" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("rref", "lu", "determinant", "inverse", "diagonalize", "transpose")}
+  definition={{
+    term: "Gaussian elimination",
+    text: "An algorithm that uses elementary row operations to reduce a matrix to row echelon form, used to solve linear systems, compute rank and find determinants.",
+  }}
+>
+  <MatrixCalculator
+    client:load
+    mode="gaussian"
+    augmented={true}
+    defaultMatrix={[[2, 1, -1, 8], [-3, -1, 2, -11], [-2, 1, 2, -3]]}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The worked example above</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p>The matrix loaded into the calculator represents this system:</p>
+        <pre class="font-mono text-sm">2x +  y &minus;  z =   8
+&minus;3x &minus;  y + 2z = &minus;11
+&minus;2x +  y + 2z =  &minus;3</pre>
+        <p>
+          Elimination reduces it to x = 2, y = 3, z = &minus;1. Substituting back into the first equation gives
+          2(2) + 3 &minus; (&minus;1) = 8, which confirms the answer.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Three possible outcomes</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Exactly one solution</h3>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            Every variable column has a pivot. The rank equals the number of unknowns, and the lines, planes or
+            hyperplanes meet at a single point.
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">No solution</h3>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            A row reduces to 0 = c with c non-zero. The equations contradict each other, so nothing satisfies them all.
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Infinitely many</h3>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            At least one column has no pivot, so its variable is free. The solution is a line, plane or larger family
+            described in terms of those free variables.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Gaussian elimination by system size</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          MATRIX_SIZES.gaussian.map((variant) => (
+            <a
+              href={`/calculators/gaussian-elimination/${variant.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">
+                {variant.unknowns} equations, {variant.unknowns} unknowns
+              </span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                {variant.rows}&times;{variant.cols} augmented matrix
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

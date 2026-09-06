@@ -1,0 +1,116 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+const title = "LU Factorization Calculator";
+const description =
+  "LU factorization calculator using the Doolittle method, with every multiplier shown. Factor a square matrix as A = LU (or PA = LU with pivoting) and use it to solve systems and find determinants.";
+const keywords =
+  "lu factorization calculator, lu factorization, lu factorization with steps, doolittle lu factorization, crout method, lu factorization 3x3 calculator, a=lu calculator";
+
+const faqs = [
+  {
+    q: "Is LU factorization the same as LU decomposition?",
+    a: "Yes — the two names describe the same thing, writing a square matrix as a lower triangular matrix times an upper triangular one. American textbooks tend to say factorization; numerical analysis literature tends to say decomposition.",
+  },
+  {
+    q: "What is the Doolittle method?",
+    a: "Doolittle is the version that fixes 1s along the diagonal of L. Each multiplier from forward elimination drops into the position of the entry it cleared, and U is whatever elimination leaves behind. This calculator uses Doolittle.",
+  },
+  {
+    q: "When does LU factorization fail?",
+    a: "It fails without pivoting whenever a pivot position holds a zero, which happens when a leading principal minor is zero. Allowing row swaps always fixes it, at the cost of the permutation matrix P in PA = LU.",
+  },
+  {
+    q: "How do you use LU factorization to solve Ax = b?",
+    a: "Substitute A = LU to get LUx = b. Set y = Ux and solve Ly = b by forward substitution, then solve Ux = y by back substitution. Each solve is quick because both matrices are triangular.",
+  },
+  {
+    q: "How does LU factorization find a determinant?",
+    a: "det(A) = det(L)det(U). Since L is unit triangular its determinant is 1, so det(A) is just the product of U's diagonal, with a sign flip for each row swap.",
+  },
+  {
+    q: "What is the computational cost?",
+    a: "Factoring an n x n matrix takes about 2n³/3 operations, the same as one Gaussian elimination. The payoff comes afterwards: every additional right-hand side costs only about 2n² operations.",
+  },
+];
+
+const howTo = {
+  name: "How to find the LU factorization of a matrix",
+  steps: [
+    { name: "Start with L = I and U = A", text: "The identity for L and a copy of your matrix for U." },
+    { name: "Compute each multiplier", text: "For the entry in row i, column j below the diagonal, the multiplier is that entry divided by the pivot in row j." },
+    { name: "Eliminate and record", text: "Subtract the multiplier times the pivot row from row i in U, and store the multiplier at L[i][j]." },
+    { name: "Verify", text: "Multiply L and U — the result must equal the original matrix (or PA if rows were swapped)." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="LU Factorization Calculator"
+  intro="A = LU by the Doolittle method, with every multiplier named as it is computed. Enter any square matrix and the calculator returns L, U, the determinant that falls out of U's diagonal, and a verification that LU rebuilds your matrix."
+  breadcrumbs={[{ name: "LU Factorization Calculator", url: "/calculators/lu-factorization" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("lu", "gaussian", "rref", "determinant", "inverse", "diagonalize")}
+  definition={{
+    term: "LU factorization",
+    text: "Writing a square matrix as the product of a unit lower triangular matrix L and an upper triangular matrix U, optionally with a permutation matrix P so that PA = LU.",
+  }}
+>
+  <MatrixCalculator client:load mode="lu" defaultMatrix={[[2, 1, 1, 0], [4, 3, 3, 1], [8, 7, 9, 5], [6, 7, 9, 8]]} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Doolittle versus Crout</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-6 font-display">Method</th>
+              <th class="py-2 pr-6 font-display">Diagonal of 1s</th>
+              <th class="py-2 font-display">Typical use</th>
+            </tr>
+          </thead>
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+              <td class="py-2 pr-6">Doolittle</td>
+              <td class="py-2 pr-6">In L</td>
+              <td class="py-2">The default in most courses, and what this calculator produces</td>
+            </tr>
+            <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+              <td class="py-2 pr-6">Crout</td>
+              <td class="py-2 pr-6">In U</td>
+              <td class="py-2">Common in older numerical libraries and some engineering texts</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-6">Cholesky</td>
+              <td class="py-2 pr-6">Neither — U = L&#7488;</td>
+              <td class="py-2">Symmetric positive-definite matrices only, at roughly half the cost</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">LU factorization by size</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          MATRIX_SIZES.lu.map((variant) => (
+            <a
+              href={`/calculators/lu-decomposition/${variant.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">{sizeLabel(variant)} LU factorization</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

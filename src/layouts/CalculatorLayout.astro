@@ -1,0 +1,211 @@
+---
+// src/layouts/CalculatorLayout.astro
+// Shared shell for the maths calculators. Handles the page chrome plus the
+// structured data that the programmatic pages depend on: BreadcrumbList,
+// FAQPage, HowTo and a SoftwareApplication entry per calculator.
+import Layout from "./Layout.astro";
+import GpaLayout from "../components/GpaLayout";
+
+const {
+  title,
+  description,
+  keywords = "",
+  heading = null,
+  intro = null,
+  faqs = [],
+  howTo = null,
+  breadcrumbs = [],
+  related = [],
+  schemaExtra = null,
+  about = "Calculator",
+  definition = null,
+} = Astro.props;
+
+const siteUrl = "https://rref-calculator.com";
+const currentUrl = Astro.url.pathname;
+
+const crumbs = [
+  { name: "Calculators", url: "/calculators" },
+  ...breadcrumbs,
+];
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: crumbs.map((crumb, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: crumb.name,
+    item: `${siteUrl}${crumb.url}`,
+  })),
+};
+
+const faqSchema = faqs.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    }
+  : null;
+
+const howToSchema = howTo
+  ? {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: howTo.name,
+      description: howTo.description || description,
+      totalTime: howTo.totalTime || "PT2M",
+      tool: [{ "@type": "HowToTool", name: title }],
+      step: howTo.steps.map((step, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: step.name,
+        text: step.text,
+        url: `${siteUrl}${currentUrl}#step-${index + 1}`,
+      })),
+    }
+  : null;
+
+const definitionSchema = definition
+  ? {
+      "@context": "https://schema.org",
+      "@type": "DefinedTerm",
+      name: definition.term,
+      description: definition.text,
+      inDefinedTermSet: {
+        "@type": "DefinedTermSet",
+        name: definition.set || "Linear algebra",
+      },
+    }
+  : null;
+
+const schemas = [breadcrumbSchema, faqSchema, howToSchema, definitionSchema];
+if (schemaExtra) {
+  Array.isArray(schemaExtra) ? schemas.push(...schemaExtra) : schemas.push(schemaExtra);
+}
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  currentUrl={currentUrl}
+  additionalSchema={schemas.filter(Boolean)}
+>
+  <GpaLayout
+    client:load
+    title={heading || title}
+    description={description}
+    keywords={keywords}
+    about={about}
+  >
+    <div class="space-y-10">
+      {/* Breadcrumbs */}
+      <nav aria-label="Breadcrumb" class="text-sm">
+        <ol class="flex flex-wrap items-center gap-2 text-content-light-dimmed dark:text-content-dark-dimmed">
+          <li><a href="/calculators" class="hover:text-accent-primary">Calculators</a></li>
+          {
+            breadcrumbs.map((crumb, i) => (
+              <li class="flex items-center gap-2">
+                <span aria-hidden="true">/</span>
+                {i === breadcrumbs.length - 1 ? (
+                  <span class="text-content-light dark:text-content-dark">{crumb.name}</span>
+                ) : (
+                  <a href={crumb.url} class="hover:text-accent-primary">{crumb.name}</a>
+                )}
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      {intro && <p class="text-lg leading-relaxed">{intro}</p>}
+
+      {/* The calculator itself, plus any page-specific content */}
+      <slot />
+
+      {/* How-to */}
+      {
+        howTo && (
+          <section
+            class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+            id="how-to"
+          >
+            <h2 class="text-2xl font-display font-bold mb-6">{howTo.name}</h2>
+            <ol class="space-y-4">
+              {howTo.steps.map((step, i) => (
+                <li class="flex gap-4" id={`step-${i + 1}`}>
+                  <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-primary/15 text-accent-primary font-bold flex items-center justify-center">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 class="font-display font-semibold">{step.name}</h3>
+                    <p class="text-content-light-dimmed dark:text-content-dark-dimmed">{step.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      <slot name="content" />
+
+      {/* FAQ */}
+      {
+        faqs.length > 0 && (
+          <section
+            class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+            id="faq"
+          >
+            <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+              <h2 class="text-2xl font-display font-bold">Frequently asked questions</h2>
+            </div>
+            <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
+              {faqs.map((faq) => (
+                <details class="group p-6">
+                  <summary class="font-display font-semibold text-lg cursor-pointer list-none flex items-center justify-between gap-4">
+                    {faq.q}
+                    <span class="text-accent-primary text-sm group-open:rotate-180 transition-transform">▾</span>
+                  </summary>
+                  <p class="mt-3 text-content-light-dimmed dark:text-content-dark-dimmed">{faq.a}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {/* Related calculators */}
+      {
+        related.length > 0 && (
+          <section
+            class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+            id="related"
+          >
+            <h2 class="text-2xl font-display font-bold mb-6">Related calculators</h2>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => (
+                <a
+                  href={item.url}
+                  class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+                >
+                  <span class="font-display font-semibold block mb-1">{item.title}</span>
+                  {item.description && (
+                    <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                      {item.description}
+                    </span>
+                  )}
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </GpaLayout>
+</Layout>

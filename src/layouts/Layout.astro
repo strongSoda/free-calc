@@ -7,7 +7,14 @@ const {
   keywords = "",
   ogImage = "/og-image.png", // Default OG image
   currentUrl, // Current page URL
+  additionalSchema = null, // Page-specific JSON-LD (object or array of objects)
+  noindex = false,
 } = Astro.props;
+
+// Pages may pass a single schema object or several; normalise to an array.
+const extraSchemas = (Array.isArray(additionalSchema) ? additionalSchema : [additionalSchema]).filter(
+  Boolean
+);
 
 // Format current URL for canonical link with fallbacks
 const siteUrl = "https://rref-calculator.com"; // Replace with your domain
@@ -140,6 +147,15 @@ const calculatorSchemaData = currentUrl?.includes("calculator")
         />
       )
     }
+
+    <!-- Page-specific Schema (FAQ, HowTo, BreadcrumbList, ...) -->
+    {
+      extraSchemas.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
+
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CY5QBMQ9F9"

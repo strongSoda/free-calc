@@ -1,0 +1,127 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LineIntegralCalculator from "../../../components/LineIntegralCalculator";
+import { LINE_INTEGRAL_EXAMPLES } from "../../../data/calculusExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+import { compile } from "../../../utils/expression.js";
+import { integrate1D, derivative, recognizeClosedForm, roundNice } from "../../../utils/numeric.js";
+
+export async function getStaticPaths() {
+  return LINE_INTEGRAL_EXAMPLES.map((item) => {
+    let value = null;
+    let arcLength = null;
+    try {
+      const X = compile(item.x);
+      const Y = compile(item.y);
+      const Z = compile(item.z || "0");
+      const a = compile(item.a)({});
+      const b = compile(item.b)({});
+      const xt = (t) => X({ t });
+      const yt = (t) => Y({ t });
+      const zt = (t) => Z({ t });
+      const point = (t) => ({ x: xt(t), y: yt(t), z: zt(t), t });
+      const speed = (t) => Math.hypot(derivative(xt, t), derivative(yt, t), derivative(zt, t));
+      arcLength = integrate1D(speed, a, b, 80);
+      if (item.type === "scalar") {
+        const f = compile(item.f);
+        value = integrate1D((t) => f(point(t)) * speed(t), a, b, 120);
+      } else {
+        const P = compile(item.P);
+        const Q = compile(item.Q);
+        const R = compile(item.R || "0");
+        value = integrate1D((t) => {
+          const p = point(t);
+          return P(p) * derivative(xt, t) + Q(p) * derivative(yt, t) + R(p) * derivative(zt, t);
+        }, a, b, 120);
+      }
+    } catch (e) {
+      value = null;
+    }
+    return {
+      params: { example: item.slug },
+      props: {
+        item,
+        value: value === null ? null : roundNice(value, 8),
+        closed: value === null ? null : recognizeClosedForm(value, 1e-6),
+        arcLength: arcLength === null ? null : roundNice(arcLength, 6),
+      },
+    };
+  });
+}
+
+const { item, value, closed, arcLength } = Astro.props;
+const answer = closed ? `${closed} ≈ ${value}` : String(value);
+const kind = item.type === "scalar" ? "scalar field" : "vector field";
+const notation = item.type === "scalar"
+  ? `∫C (${item.f}) ds`
+  : `∫C F·dr where F = (${item.P}, ${item.Q}, ${item.R})`;
+
+const title = `${item.name} - Line Integral Calculator`;
+const description = `${notation} along r(t) = (${item.x}, ${item.y}, ${item.z}) equals ${answer}. A worked ${kind} line integral with an editable calculator.`;
+const keywords = `${item.name.toLowerCase()}, line integral example, ${kind} line integral, line integral calculator, ${notation}`;
+
+const faqs = [
+  { q: `What is the value of this line integral?`, a: `${notation} = ${answer}. ${item.note}` },
+  {
+    q: "What curve is being integrated along?",
+    a: `The curve is parametrised as r(t) = (${item.x}, ${item.y}, ${item.z}) for t from ${item.a} to ${item.b}, and it has arc length ${arcLength}.`,
+  },
+  {
+    q: item.type === "vector" ? "Does the direction of travel matter?" : "Does the direction of travel matter here?",
+    a: item.type === "vector"
+      ? "Yes. Reversing the orientation of the curve flips the sign of a vector line integral, because the direction of dr reverses."
+      : "No. A scalar line integral is taken with respect to arc length, so travelling the curve backwards gives exactly the same value.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={item.name}
+  intro={`${notation} = ${answer}. ${item.note}`}
+  breadcrumbs={[
+    { name: "Line Integral Calculator", url: "/calculators/line-integral" },
+    { name: item.name, url: `/calculators/line-integral/${item.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("lineIntegral", "tripleIntegral", "lagrange", "partialFractions")}
+>
+  <LineIntegralCalculator client:load defaultType={item.type} defaultValues={item} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The setup</h2>
+      <p class="font-mono text-lg mb-4 break-words">
+        {notation} = <span class="text-accent-primary font-bold">{answer}</span>
+      </p>
+      <ul class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed space-y-1">
+        <li>
+          Curve: <span class="font-mono">r(t) = ({item.x}, {item.y}, {item.z})</span> for t from{" "}
+          <span class="font-mono">{item.a}</span> to <span class="font-mono">{item.b}</span>
+        </li>
+        <li>Arc length of the curve: <span class="font-mono">{arcLength}</span></li>
+        <li>Type: {kind} line integral</li>
+      </ul>
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">{item.note}</p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">More worked line integrals</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          LINE_INTEGRAL_EXAMPLES.filter((e) => e.slug !== item.slug).map((other) => (
+            <a
+              href={`/calculators/line-integral/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{other.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{other.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

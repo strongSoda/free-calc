@@ -1,0 +1,125 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, DIAGONALIZE_EXAMPLES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+const title = "Diagonalize Matrix Calculator";
+const description =
+  "Free diagonalize matrix calculator with steps. Find eigenvalues, eigenvectors, and the matrices P and D in A = PDP⁻¹, and see immediately whether a matrix is diagonalizable.";
+const keywords =
+  "diagonalize matrix calculator, diagonalization calculator, matrix diagonalization, eigenvalue calculator, eigenvector calculator, pdp inverse calculator, is a matrix diagonalizable";
+
+const faqs = [
+  {
+    q: "What does it mean to diagonalize a matrix?",
+    a: "Diagonalizing means writing A = PDP⁻¹, where D is a diagonal matrix of eigenvalues and P holds the matching eigenvectors as its columns. It amounts to choosing a basis in which the transformation is just a stretch along each axis.",
+  },
+  {
+    q: "When is a matrix diagonalizable?",
+    a: "An n x n matrix is diagonalizable exactly when it has n linearly independent eigenvectors. That is guaranteed when all n eigenvalues are distinct, and it also holds for every real symmetric matrix. It fails when some eigenvalue has fewer eigenvectors than its multiplicity.",
+  },
+  {
+    q: "What is the difference between algebraic and geometric multiplicity?",
+    a: "Algebraic multiplicity is how many times an eigenvalue is a root of the characteristic polynomial. Geometric multiplicity is the dimension of its eigenspace — how many independent eigenvectors it has. The matrix is diagonalizable when the two match for every eigenvalue.",
+  },
+  {
+    q: "What is a defective matrix?",
+    a: "A matrix where some eigenvalue's geometric multiplicity is smaller than its algebraic multiplicity. It has too few eigenvectors to form a basis, so it cannot be diagonalized. The nearest available form is Jordan normal form.",
+  },
+  {
+    q: "Why can a rotation matrix not be diagonalized?",
+    a: "A rotation in the plane sends no non-zero vector to a multiple of itself, so it has no real eigenvectors. Its characteristic polynomial has complex roots, and it can only be diagonalized over the complex numbers.",
+  },
+  {
+    q: "What is diagonalization used for?",
+    a: "Computing large matrix powers (Aᵏ = PDᵏP⁻¹, and D raised to a power is trivial), solving systems of differential equations, analysing Markov chains, and principal component analysis all rely on it.",
+  },
+];
+
+const howTo = {
+  name: "How to diagonalize a matrix",
+  steps: [
+    { name: "Find the characteristic polynomial", text: "Compute det(A − λI) as a polynomial in λ." },
+    { name: "Solve for the eigenvalues", text: "The roots of that polynomial are the eigenvalues. Note how many times each root repeats." },
+    { name: "Find the eigenvectors", text: "For each eigenvalue λ, solve (A − λI)v = 0. The null space of that matrix is the eigenspace." },
+    { name: "Assemble P and D", text: "Put the eigenvectors into P as columns and the matching eigenvalues onto D's diagonal in the same order, then check that PDP⁻¹ returns A." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Diagonalize Matrix Calculator"
+  intro="Enter a square matrix to get its characteristic polynomial, eigenvalues with both multiplicities, a basis of eigenvectors, and the factorisation A = PDP⁻¹ — including a clear verdict when the matrix cannot be diagonalized."
+  breadcrumbs={[{ name: "Diagonalize Matrix Calculator", url: "/calculators/diagonalize-matrix" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("determinant", "rref", "inverse", "lu", "transpose", "gaussian")}
+  definition={{
+    term: "Diagonalization",
+    text: "Writing a square matrix as A = PDP⁻¹ where D is diagonal, which is possible exactly when the matrix has a full set of linearly independent eigenvectors.",
+  }}
+>
+  <MatrixCalculator
+    client:load
+    mode="diagonalize"
+    defaultMatrix={[[4, 1], [2, 3]]}
+    presets={DIAGONALIZE_EXAMPLES.map((e) => ({ label: e.name, matrix: e.matrix }))}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Why diagonalization matters</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p>
+          <strong>Matrix powers become cheap.</strong> A&#7503; = PD&#7503;P&#8315;&sup1;, and raising a diagonal matrix to a
+          power just raises each diagonal entry. Computing A&sup1;&#8304;&#8304; goes from a hundred matrix multiplications
+          to one.
+        </p>
+        <p>
+          <strong>Differential equations decouple.</strong> The system x&prime; = Ax turns into n independent equations
+          y&prime; = &lambda;y once you change to eigenvector coordinates, and each of those has the obvious solution.
+        </p>
+        <p>
+          <strong>Long-run behaviour becomes visible.</strong> The largest eigenvalue dominates as powers grow, which is
+          how Markov chains find their steady state and how PageRank-style algorithms converge.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Worked examples</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          DIAGONALIZE_EXAMPLES.map((example) => (
+            <a
+              href={`/calculators/diagonalize-matrix/examples/${example.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1 capitalize">{example.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{example.insight}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">By matrix size</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          MATRIX_SIZES.diagonalize.map((variant) => (
+            <a
+              href={`/calculators/diagonalize-matrix/${variant.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">Diagonalize a {sizeLabel(variant)} matrix</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

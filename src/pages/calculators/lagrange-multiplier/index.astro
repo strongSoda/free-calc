@@ -1,0 +1,136 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LagrangeCalculator from "../../../components/LagrangeCalculator";
+import { LAGRANGE_EXAMPLES } from "../../../data/calculusExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Lagrange Multiplier Calculator";
+const description =
+  "Free Lagrange multiplier calculator. Maximise or minimise f subject to a constraint g = c, in two or three variables. Get every critical point, the multiplier λ, and which point is the maximum and which the minimum.";
+const keywords =
+  "lagrange multiplier calculator, lagrange multiplier, lagrange multipliers, constrained optimization calculator, maximize subject to constraint, lagrange multiplier method, lambda multiplier";
+
+const faqs = [
+  {
+    q: "What is a Lagrange multiplier?",
+    a: "It is the scalar λ in the condition ∇f = λ∇g. At a constrained optimum, the gradient of the objective must be parallel to the gradient of the constraint — otherwise you could still move along the constraint surface and improve f. The multiplier is the ratio between those two gradients.",
+  },
+  {
+    q: "How does the method of Lagrange multipliers work?",
+    a: "To optimise f subject to g = c, solve the system ∇f = λ∇g together with g = c. In two variables that is three equations (∂f/∂x = λ∂g/∂x, ∂f/∂y = λ∂g/∂y, and g = c) in three unknowns x, y and λ. Every solution is a candidate; compare their f values to see which is the maximum and which the minimum.",
+  },
+  {
+    q: "What does the multiplier λ actually mean?",
+    a: "It is the sensitivity of the optimal value to the constraint. Raising c by one unit changes the optimum of f by approximately λ. Economists call this the shadow price — the most you would pay for one more unit of a scarce resource.",
+  },
+  {
+    q: "Why does ∇f have to be parallel to ∇g?",
+    a: "∇f points in the direction where f increases fastest. If any part of that direction lay along the constraint surface, you could slide that way and increase f while staying feasible, so you would not be at an optimum. That only fails to be possible when ∇f is entirely perpendicular to the surface — that is, parallel to ∇g.",
+  },
+  {
+    q: "Does the method always give the global maximum?",
+    a: "Not necessarily. It finds stationary points of the constrained problem. If the constraint set is closed and bounded, the largest and smallest values among the candidates are the global extremes. On an unbounded set — a hyperbola or a plane, say — f may have no global maximum at all, and the points found are local.",
+  },
+  {
+    q: "What if there are two constraints?",
+    a: "You need one multiplier per constraint: ∇f = λ∇g + μ∇h, together with both constraint equations. This calculator handles a single constraint in two or three variables, which covers the standard coursework cases.",
+  },
+];
+
+const howTo = {
+  name: "How to use Lagrange multipliers",
+  steps: [
+    { name: "Identify f and g", text: "f is what you are optimising; g = c is the restriction. Write both in the same variables." },
+    { name: "Set the gradients parallel", text: "Write ∂f/∂x = λ∂g/∂x and the same for every other variable." },
+    { name: "Add the constraint", text: "Include g = c so the number of equations matches the number of unknowns, counting λ." },
+    { name: "Solve and compare", text: "Solve the system for every solution, then evaluate f at each point — the largest is the maximum and the smallest the minimum." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Lagrange Multiplier Calculator"
+  intro="Optimise a function subject to a constraint. Enter the objective f, the constraint g and its value c, and the calculator solves ∇f = λ∇g together with g = c, listing every critical point, its multiplier, and whether it is a maximum or a minimum."
+  breadcrumbs={[{ name: "Lagrange Multiplier Calculator", url: "/calculators/lagrange-multiplier" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("tripleIntegral", "lineIntegral", "quadratic", "standardDeviation", "partialFractions")}
+  definition={{
+    term: "Lagrange multiplier",
+    text: "The scalar λ appearing in the condition ∇f = λ∇g used to find the extrema of a function f subject to a constraint g = c, equal to the rate of change of the optimal value with respect to the constraint.",
+    set: "Multivariable calculus and optimisation",
+  }}
+>
+  <LagrangeCalculator client:load />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The geometry behind the method</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p>
+          Picture the level curves of f drawn on top of the constraint curve g = c. Walking along the constraint, you
+          cross level curve after level curve, and f keeps changing. The value of f can only stop changing where the
+          constraint curve <em>touches</em> a level curve instead of crossing it — that is, where the two are tangent.
+        </p>
+        <p>
+          Tangency of the curves means their normals point the same way. The normal to a level curve of f is &nabla;f,
+          and the normal to the constraint is &nabla;g, so tangency is exactly the statement &nabla;f = &lambda;&nabla;g.
+          The multiplier &lambda; is just how much longer one gradient is than the other.
+        </p>
+        <p>
+          This also explains why the method finds minima as well as maxima, and occasionally points that are neither:
+          tangency is a necessary condition for an extremum, not a sufficient one. Always compare the f values at the
+          end.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Worked problems</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          LAGRANGE_EXAMPLES.map((example) => (
+            <a
+              href={`/calculators/lagrange-multiplier/${example.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{example.name}</span>
+              <span class="font-mono text-xs text-accent-primary block mb-1">
+                f = {example.f}, g = {example.g} = {example.c}
+              </span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{example.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Where the method is used</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["Economics", "Maximise utility subject to a budget; λ is the marginal utility of income."],
+                ["Physics", "Derive equilibrium shapes and constrained motion; λ becomes the constraint force."],
+                ["Machine learning", "Support vector machines and regularised regression are constrained optimisations solved this way."],
+                ["Statistics", "Maximum entropy distributions come from maximising entropy subject to moment constraints."],
+                ["Engineering", "Minimise weight or cost subject to a strength or volume requirement."],
+                ["Geometry", "Find the closest point on a surface to a given point, or the largest box inside an ellipsoid."],
+              ].map(([field, use]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-6 font-semibold text-content-light dark:text-content-dark whitespace-nowrap">{field}</td>
+                  <td class="py-2">{use}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

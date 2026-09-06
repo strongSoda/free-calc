@@ -1,0 +1,59 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Matrix Inverse Calculator";
+const description =
+  "Free matrix inverse calculator. Invert a 2x2, 3x3 or larger square matrix with Gauss-Jordan elimination, get exact fractions, and see the A·A⁻¹ = I verification.";
+const keywords =
+  "matrix inverse calculator, inverse of a matrix, 3x3 inverse calculator, 2x2 inverse calculator, invert matrix, gauss jordan inverse";
+
+const faqs = [
+  {
+    q: "How do you find the inverse of a matrix?",
+    a: "Write the matrix next to an identity matrix of the same size to form [A | I], then row reduce until the left half becomes the identity. Whatever the right half has turned into is A⁻¹.",
+  },
+  {
+    q: "Which matrices have an inverse?",
+    a: "Only square matrices with a non-zero determinant. If the determinant is zero the matrix is singular: its rows are linearly dependent and no inverse exists.",
+  },
+  {
+    q: "What is the formula for a 2x2 inverse?",
+    a: "For rows (a, b) and (c, d), the inverse is 1/(ad − bc) times the matrix with rows (d, −b) and (−c, a). Swap the diagonal entries, negate the off-diagonal ones, and divide by the determinant.",
+  },
+  {
+    q: "How do I check an inverse is right?",
+    a: "Multiply A by your answer. The product must be the identity matrix. This calculator performs that check and displays the result.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Matrix Inverse Calculator"
+  intro="Invert any square matrix by Gauss-Jordan elimination. Results come back as exact fractions, and the product A·A⁻¹ is shown so you can confirm it really is the identity."
+  breadcrumbs={[{ name: "Matrix Inverse Calculator", url: "/calculators/matrix-inverse" }]}
+  faqs={faqs}
+  related={relatedTo("determinant", "rref", "gaussian", "lu", "diagonalize", "transpose")}
+  definition={{
+    term: "Matrix inverse",
+    text: "The matrix A⁻¹ satisfying A·A⁻¹ = A⁻¹·A = I, which exists exactly when the determinant of A is non-zero.",
+  }}
+>
+  <MatrixCalculator client:load mode="inverse" defaultMatrix={[[1, 2, 3], [4, 5, 6], [7, 8, 10]]} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Facts about inverses</h2>
+      <ul class="space-y-3 text-content-light-dimmed dark:text-content-dark-dimmed">
+        <li><strong class="text-content-light dark:text-content-dark">(AB)&#8315;&sup1; = B&#8315;&sup1;A&#8315;&sup1;</strong> — like transposes, inverses reverse the order of a product.</li>
+        <li><strong class="text-content-light dark:text-content-dark">det(A&#8315;&sup1;) = 1/det(A)</strong> — which is exactly why a zero determinant blocks inversion.</li>
+        <li><strong class="text-content-light dark:text-content-dark">(A&#8315;&sup1;)&#8315;&sup1; = A</strong> — inverting twice gets you back where you started.</li>
+        <li><strong class="text-content-light dark:text-content-dark">Prefer solving over inverting.</strong> To solve Ax = b, use elimination or an <a href="/calculators/lu-decomposition" class="text-accent-primary">LU factorization</a> rather than computing A&#8315;&sup1; — it is faster and numerically safer.</li>
+      </ul>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -1,0 +1,133 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, DETERMINANT_EXAMPLES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+const title = "Matrix Determinant Calculator";
+const description =
+  "Free matrix determinant calculator with step-by-step solutions. Compute the determinant of any 2x2, 3x3, 4x4 or 5x5 matrix by cofactor expansion or row reduction, using exact fractions.";
+const keywords =
+  "matrix determinant calculator, determinant calculator, determinant of a matrix, 3x3 determinant calculator, 2x2 determinant calculator, 4x4 determinant calculator, find the determinant, cofactor expansion calculator";
+
+const faqs = [
+  {
+    q: "What is the determinant of a matrix?",
+    a: "The determinant is a single number computed from a square matrix that tells you how the matrix scales area (in 2D) or volume (in 3D). A determinant of 0 means the matrix squashes space into a lower dimension, which is exactly when the matrix is singular and has no inverse.",
+  },
+  {
+    q: "How do you find the determinant of a 3x3 matrix?",
+    a: "Expand along the first row: multiply each entry by the determinant of the 2x2 minor you get by deleting its row and column, then combine the three results with alternating plus, minus, plus signs. The Rule of Sarrus gives the same answer for 3x3 matrices only.",
+  },
+  {
+    q: "Can you take the determinant of a non-square matrix?",
+    a: "No. The determinant is only defined for square matrices. If your matrix has a different number of rows and columns, the closest related quantities are the rank or the singular values.",
+  },
+  {
+    q: "What does a determinant of zero mean?",
+    a: "It means the rows (and columns) are linearly dependent, the matrix is singular, it has no inverse, and the corresponding system of equations either has no solution or infinitely many. Zero is never just a small number here — it is a structural fact about the matrix.",
+  },
+  {
+    q: "Why does the calculator show fractions instead of decimals?",
+    a: "It computes with exact rational arithmetic, so a determinant of 3/4 shows as 3/4 rather than 0.7500000001. That keeps answers matching what you would get by hand.",
+  },
+  {
+    q: "Does swapping two rows change the determinant?",
+    a: "Yes — every row swap flips the sign. Adding a multiple of one row to another leaves the determinant unchanged, and multiplying a row by k multiplies the determinant by k. Those three rules are what make row reduction a valid way to compute determinants.",
+  },
+];
+
+const howTo = {
+  name: "How to calculate a determinant",
+  steps: [
+    { name: "Set the matrix size", text: "Choose n for your n x n matrix. Determinants only exist for square matrices." },
+    { name: "Enter the entries", text: "Type each number into the grid. Fractions such as 3/4 and negatives are both accepted." },
+    { name: "Read the worked solution", text: "For 2x2 and 3x3 matrices the calculator expands cofactors; for 4x4 and larger it row-reduces to triangular form, which is far faster." },
+    { name: "Check what the answer means", text: "A non-zero determinant means the matrix is invertible. Zero means the rows are linearly dependent." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Matrix Determinant Calculator"
+  intro="Enter a square matrix to get its determinant along with every cofactor or row operation used to find it. Results stay in exact fractions, and matrices up to 8x8 are supported."
+  breadcrumbs={[{ name: "Matrix Determinant Calculator", url: "/calculators/matrix-determinant" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("rref", "gaussian", "lu", "diagonalize", "inverse", "transpose")}
+  definition={{
+    term: "Determinant",
+    text: "A scalar value computed from a square matrix that equals the signed volume scaling factor of the linear transformation it represents.",
+  }}
+>
+  <MatrixCalculator
+    client:load
+    mode="determinant"
+    defaultMatrix={[[6, 1, 1], [4, -2, 5], [2, 8, 7]]}
+    presets={DETERMINANT_EXAMPLES.map((e) => ({ label: e.name, matrix: e.matrix }))}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The determinant formulas</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <h3>2x2 matrices</h3>
+        <p>For a matrix with rows (a, b) and (c, d), the determinant is <strong>ad &minus; bc</strong>: the product of the main diagonal minus the product of the anti-diagonal.</p>
+        <h3>3x3 matrices</h3>
+        <p>Expand along the first row. Each entry a<sub>1j</sub> is multiplied by the determinant of the 2x2 matrix left after deleting row 1 and column j, and the three terms alternate in sign:</p>
+        <p class="font-mono">det(A) = a<sub>11</sub>M<sub>11</sub> &minus; a<sub>12</sub>M<sub>12</sub> + a<sub>13</sub>M<sub>13</sub></p>
+        <h3>4x4 and larger</h3>
+        <p>Cofactor expansion needs n! multiplications, which is 24 terms at 4x4 and 120 at 5x5. Row reduction to upper triangular form needs only about n&sup3;/3 operations, so the calculator switches methods automatically. Once the matrix is triangular the determinant is the product of the diagonal, with one sign flip per row swap.</p>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Determinant calculators by size</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          MATRIX_SIZES.determinant.map((variant) => (
+            <a
+              href={`/calculators/matrix-determinant/${variant.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block">{sizeLabel(variant)} determinant</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                Worked {sizeLabel(variant)} example, answer {variant.answer}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Worked examples</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          DETERMINANT_EXAMPLES.map((example) => (
+            <a
+              href={`/calculators/matrix-determinant/examples/${example.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1 capitalize">Determinant of a {example.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{example.insight}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Properties worth knowing</h2>
+      <ul class="space-y-3 text-content-light-dimmed dark:text-content-dark-dimmed">
+        <li><strong class="text-content-light dark:text-content-dark">det(AB) = det(A)det(B).</strong> Determinants multiply, which is why an invertible matrix has det(A&#8315;&sup1;) = 1/det(A).</li>
+        <li><strong class="text-content-light dark:text-content-dark">det(A&#7488;) = det(A).</strong> Transposing changes nothing, so any row rule has a matching column rule.</li>
+        <li><strong class="text-content-light dark:text-content-dark">A repeated row forces det = 0.</strong> Two identical (or proportional) rows make the matrix singular.</li>
+        <li><strong class="text-content-light dark:text-content-dark">Triangular matrices are easy.</strong> If everything below (or above) the diagonal is zero, just multiply the diagonal.</li>
+        <li><strong class="text-content-light dark:text-content-dark">Scaling a row scales the determinant.</strong> Multiplying one row by k multiplies det by k, so multiplying the whole n x n matrix by k multiplies det by k&#8319;.</li>
+      </ul>
+    </section>
+  </div>
+</CalculatorLayout>

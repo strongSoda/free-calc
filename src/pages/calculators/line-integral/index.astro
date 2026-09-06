@@ -1,0 +1,142 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LineIntegralCalculator from "../../../components/LineIntegralCalculator";
+import { LINE_INTEGRAL_EXAMPLES } from "../../../data/calculusExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Line Integral Calculator";
+const description =
+  "Free line integral calculator for scalar fields (∫f ds) and vector fields (∫F·dr). Enter a parametrised curve and get the value, plus the arc length of the curve, with worked examples.";
+const keywords =
+  "line integral calculator, line integral, line integral of a vector field, scalar line integral, work done by a force field, arc length calculator, contour integral calculator";
+
+const faqs = [
+  {
+    q: "What is a line integral?",
+    a: "A line integral adds up the values of a field along a curve rather than over an interval. For a scalar field it weights each bit of arc length ds by the field's value there; for a vector field it accumulates the component of the field pointing along the curve.",
+  },
+  {
+    q: "What is the difference between ∫f ds and ∫F·dr?",
+    a: "∫f ds integrates a scalar function against arc length and does not depend on the direction you travel. ∫F·dr integrates a vector field against the direction of travel, so reversing the curve flips its sign. The first measures something like total mass along a wire; the second measures work.",
+  },
+  {
+    q: "How do you parametrise a curve?",
+    a: "Write each coordinate as a function of one parameter t over an interval. A circle of radius R is x = R cos t, y = R sin t for t from 0 to 2π; a straight segment from A to B is r(t) = A + t(B − A) for t from 0 to 1.",
+  },
+  {
+    q: "What does it mean for a line integral to be path independent?",
+    a: "It means the value depends only on the endpoints, not the route. That happens exactly when the vector field is conservative — when it is the gradient of some potential function. For such a field, every closed-loop integral is zero.",
+  },
+  {
+    q: "How do I compute arc length with this calculator?",
+    a: "Choose the scalar field mode and set f = 1. The integral ∫1 ds is precisely the arc length. The calculator also reports the arc length alongside every result.",
+  },
+  {
+    q: "How does Green's theorem relate to line integrals?",
+    a: "Green's theorem converts a closed line integral in the plane into a double integral over the enclosed region: ∮(P dx + Q dy) = ∬(∂Q/∂x − ∂P/∂y) dA. It is often much quicker than parametrising the boundary.",
+  },
+];
+
+const howTo = {
+  name: "How to compute a line integral",
+  steps: [
+    { name: "Parametrise the curve", text: "Express x, y and z as functions of a single parameter t, and note the range of t." },
+    { name: "Differentiate", text: "Find r′(t). For a scalar integral you need its magnitude |r′(t)|; for a vector integral you need the components." },
+    { name: "Substitute the field", text: "Replace x, y and z in the field by their expressions in t, so everything becomes a function of t alone." },
+    { name: "Integrate over t", text: "Evaluate the resulting single integral between the parameter limits." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Line Integral Calculator"
+  intro="Compute ∫f ds along a curve, or the work ∫F·dr done by a vector field. Give the curve as x(t), y(t) and z(t) with a range for t, and the calculator handles the differentiation and integration — reporting the arc length too."
+  breadcrumbs={[{ name: "Line Integral Calculator", url: "/calculators/line-integral" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("tripleIntegral", "lagrange", "partialFractions", "laplace")}
+  definition={{
+    term: "Line integral",
+    text: "An integral of a scalar or vector field taken along a curve, computed by parametrising the curve and integrating with respect to the parameter.",
+    set: "Multivariable calculus",
+  }}
+>
+  <LineIntegralCalculator client:load />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">The two formulas</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Scalar field</h3>
+          <p class="font-mono text-sm text-accent-primary mb-3">&int;&#8323; f ds = &int;&#7524;&#7515; f(r(t))&middot;|r&prime;(t)| dt</p>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            The factor |r&prime;(t)| is the speed along the curve; it converts a step in t into a step of arc length.
+            Independent of direction, so reversing the curve changes nothing.
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Vector field</h3>
+          <p class="font-mono text-sm text-accent-primary mb-3">&int;&#8323; F&middot;dr = &int;&#7524;&#7515; F(r(t))&middot;r&prime;(t) dt</p>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            This is work in physics: only the component of F along the direction of travel counts. Reversing the curve
+            negates the answer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Common parametrisations</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-8 font-display">Curve</th>
+              <th class="py-2 pr-8 font-display">r(t)</th>
+              <th class="py-2 font-display">Range</th>
+            </tr>
+          </thead>
+          <tbody class="font-mono text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["Circle, radius R", "(R cos t, R sin t)", "0 to 2π"],
+                ["Segment A to B", "(A + t(B − A))", "0 to 1"],
+                ["Parabola y = x²", "(t, t²)", "over the x-range"],
+                ["Helix", "(cos t, sin t, t)", "0 to 2π per turn"],
+                ["Ellipse", "(a cos t, b sin t)", "0 to 2π"],
+                ["Graph y = f(x)", "(t, f(t))", "over the x-range"],
+              ].map(([curve, param, range]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-8 not-italic">{curve}</td>
+                  <td class="py-2 pr-8 text-accent-primary">{param}</td>
+                  <td class="py-2">{range}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Worked line integrals</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          LINE_INTEGRAL_EXAMPLES.map((example) => (
+            <a
+              href={`/calculators/line-integral/${example.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{example.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{example.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

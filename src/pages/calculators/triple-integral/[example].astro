@@ -1,0 +1,130 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import TripleIntegralCalculator from "../../../components/TripleIntegralCalculator";
+import { TRIPLE_INTEGRAL_EXAMPLES } from "../../../data/calculusExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+import { compile } from "../../../utils/expression.js";
+import { integrate3D, recognizeClosedForm, roundNice } from "../../../utils/numeric.js";
+
+export async function getStaticPaths() {
+  return TRIPLE_INTEGRAL_EXAMPLES.map((item) => {
+    const vars =
+      item.system === "cartesian" ? ["x", "y", "z"]
+      : item.system === "cylindrical" ? ["theta", "r", "z"]
+      : ["theta", "phi", "rho"];
+    const [v1, v2, v3] = vars;
+    let value = null;
+    try {
+      const f = compile(item.f);
+      const midA = compile(item.middle[0]);
+      const midB = compile(item.middle[1]);
+      const inA = compile(item.inner[0]);
+      const inB = compile(item.inner[1]);
+      const integrand = (a, b, c) => {
+        const base = f({ [v1]: a, [v2]: b, [v3]: c });
+        if (item.system === "cylindrical") return base * b;
+        if (item.system === "spherical") return base * c * c * Math.sin(b);
+        return base;
+      };
+      value = integrate3D(
+        integrand,
+        [compile(item.outer[0])({}), compile(item.outer[1])({})],
+        [(a) => midA({ [v1]: a }), (a) => midB({ [v1]: a })],
+        [(a, b) => inA({ [v1]: a, [v2]: b }), (a, b) => inB({ [v1]: a, [v2]: b })],
+        40
+      );
+    } catch (e) {
+      value = null;
+    }
+    return {
+      params: { example: item.slug },
+      props: {
+        item,
+        value: value === null ? null : roundNice(value, 8),
+        closed: value === null ? null : recognizeClosedForm(value, 1e-6),
+      },
+    };
+  });
+}
+
+const { item, value, closed } = Astro.props;
+const answer = closed ? `${closed} ≈ ${value}` : String(value);
+const systemName = item.system === "cartesian" ? "Cartesian" : item.system === "cylindrical" ? "cylindrical" : "spherical";
+
+const title = `${item.name} - Triple Integral Calculator`;
+const description = `${item.display} = ${answer}. A worked triple integral in ${systemName} coordinates, with an editable calculator preloaded with the limits.`;
+const keywords = `${item.name.toLowerCase()}, triple integral ${systemName} coordinates, ${item.display}, triple integral example, evaluate triple integral`;
+
+const faqs = [
+  { q: `What is the value of ${item.display}?`, a: `It evaluates to ${answer}. ${item.note}` },
+  {
+    q: `Why ${systemName} coordinates for this one?`,
+    a: item.system === "cartesian"
+      ? "The region is bounded by planes and graphs, so rectangular limits describe it directly with no change of variables needed."
+      : item.system === "cylindrical"
+      ? "The region is symmetric about the z-axis, so circular cross-sections become the simple limits 0 ≤ r ≤ R once you switch to cylindrical coordinates."
+      : "The region is measured naturally as a distance from the origin, so spherical coordinates turn a curved boundary into a constant limit on ρ.",
+  },
+  {
+    q: "Do I need to include the Jacobian myself?",
+    a: item.system === "cartesian"
+      ? "There is no Jacobian in Cartesian coordinates — dV is simply dz dy dx."
+      : item.system === "cylindrical"
+      ? "No. Enter only your integrand; the calculator multiplies by r for you."
+      : "No. Enter only your integrand; the calculator multiplies by ρ² sin φ for you.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={item.name}
+  intro={`${item.display} = ${answer}. ${item.note}`}
+  breadcrumbs={[
+    { name: "Triple Integral Calculator", url: "/calculators/triple-integral" },
+    { name: item.name, url: `/calculators/triple-integral/${item.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("tripleIntegral", "lineIntegral", "lagrange", "partialFractions")}
+>
+  <TripleIntegralCalculator
+    client:load
+    defaultSystem={item.system}
+    defaultFunction={item.f}
+    defaultLimits={{ outer: item.outer, middle: item.middle, inner: item.inner }}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The setup</h2>
+      <p class="font-mono text-lg mb-4">{item.display} = <span class="text-accent-primary font-bold">{answer}</span></p>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">{item.note}</p>
+      <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Coordinate system: <strong class="text-content-light dark:text-content-dark">{systemName}</strong>. The
+        integrand is <span class="font-mono">{item.f}</span>, integrated from{" "}
+        <span class="font-mono">{item.inner[0]}</span> to <span class="font-mono">{item.inner[1]}</span> innermost,
+        then <span class="font-mono">{item.middle[0]}</span> to <span class="font-mono">{item.middle[1]}</span>, then{" "}
+        <span class="font-mono">{item.outer[0]}</span> to <span class="font-mono">{item.outer[1]}</span>.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">More worked triple integrals</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          TRIPLE_INTEGRAL_EXAMPLES.filter((e) => e.slug !== item.slug).map((other) => (
+            <a
+              href={`/calculators/triple-integral/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{other.name}</span>
+              <span class="font-mono text-xs text-accent-primary">{other.display}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

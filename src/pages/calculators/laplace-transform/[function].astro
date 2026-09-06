@@ -1,0 +1,125 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LaplaceCalculator from "../../../components/LaplaceCalculator";
+import { LAPLACE_FUNCTIONS } from "../../../data/laplaceExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+import { laplaceTransform } from "../../../utils/laplace.js";
+
+export async function getStaticPaths() {
+  return LAPLACE_FUNCTIONS.map((item) => {
+    // Compute the answer at build time so it lands in the static HTML.
+    let result = null;
+    try {
+      result = laplaceTransform(item.expression);
+    } catch (e) {
+      result = null;
+    }
+    return {
+      params: { function: item.slug },
+      props: { item, transform: result ? result.string : null, steps: result ? result.steps : [] },
+    };
+  });
+}
+
+const { item, transform, steps } = Astro.props;
+
+const baseTitle = `Laplace Transform of ${item.display}`;
+const withAnswer = baseTitle + " = " + transform;
+const title = transform && withAnswer.length <= 65 ? withAnswer : baseTitle;
+const description = `The Laplace transform of ${item.display} is ${transform}. See the table rule behind it, then edit the function to transform anything else.`;
+const keywords = `laplace transform of ${item.display}, laplace of ${item.display}, l{${item.display}}, ${item.display} laplace transform, laplace transform calculator`;
+
+const sameCategory = LAPLACE_FUNCTIONS.filter((f) => f.category === item.category && f.slug !== item.slug);
+const others = LAPLACE_FUNCTIONS.filter((f) => f.category !== item.category).slice(0, 6);
+
+const faqs = [
+  {
+    q: `What is the Laplace transform of ${item.display}?`,
+    a: `L{${item.display}} = ${transform}. ${item.note}`,
+  },
+  {
+    q: `Which rule gives the transform of ${item.display}?`,
+    a: steps.length
+      ? steps.map((s) => `${s.rule} applied to ${s.term}`).join("; ") + "."
+      : "The standard Laplace transform table entry for this form.",
+  },
+  {
+    q: "How do I get back from F(s) to f(t)?",
+    a: "Use the inverse Laplace transform. Split F(s) into partial fractions and invert each piece with the same table read backwards — the inverse Laplace transform calculator does this step by step.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Laplace Transform of ${item.display}`}
+  intro={`L{${item.display}} = ${transform}. ${item.note}`}
+  breadcrumbs={[
+    { name: "Laplace Transform Calculator", url: "/calculators/laplace-transform" },
+    { name: `L{${item.display}}`, url: `/calculators/laplace-transform/${item.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("laplace", "inverseLaplace", "partialFractions", "quadratic")}
+>
+  <LaplaceCalculator client:load defaultMode="forward" defaultExpression={item.expression} lockMode={false} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The result</h2>
+      <p class="font-mono text-lg mb-4">
+        L&#123;{item.display}&#125; = <span class="text-accent-primary font-bold">{transform}</span>
+      </p>
+      {
+        steps.length > 0 && (
+          <ol class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            {steps.map((step) => (
+              <li>
+                <span class="font-mono text-content-light dark:text-content-dark">
+                  L&#123;{step.term}&#125; = {step.result}
+                </span>
+                <span class="block text-xs">Table rule: {step.rule}</span>
+              </li>
+            ))}
+          </ol>
+        )
+      }
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">{item.note}</p>
+    </section>
+
+    {
+      sameCategory.length > 0 && (
+        <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold mb-4">More {item.category.toLowerCase()} transforms</h2>
+          <div class="flex flex-wrap gap-2">
+            {sameCategory.map((f) => (
+              <a
+                href={`/calculators/laplace-transform/${f.slug}`}
+                class="px-3 py-1.5 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 hover:text-accent-primary transition-colors font-mono text-sm"
+              >
+                L&#123;{f.display}&#125;
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other transforms</h2>
+      <div class="flex flex-wrap gap-2">
+        {
+          others.map((f) => (
+            <a
+              href={`/calculators/laplace-transform/${f.slug}`}
+              class="px-3 py-1.5 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 hover:text-accent-primary transition-colors font-mono text-sm"
+            >
+              L&#123;{f.display}&#125;
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

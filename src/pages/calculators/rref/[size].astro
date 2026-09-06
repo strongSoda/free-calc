@@ -1,0 +1,98 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import MatrixCalculator from "../../../components/MatrixCalculator";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+
+export async function getStaticPaths() {
+  return MATRIX_SIZES.rref.map((variant) => ({
+    params: { size: variant.slug },
+    props: { variant },
+  }));
+}
+
+const { variant } = Astro.props;
+const label = sizeLabel(variant);
+const isAugmented = variant.cols === variant.rows + 1;
+
+const title = `${label} RREF Calculator - Reduced Row Echelon Form of a ${label} Matrix`;
+const description = `Find the reduced row echelon form of a ${label} matrix with every row operation shown. Free ${label} RREF calculator using exact fractions, with pivot positions and rank highlighted.`;
+const keywords = `${label} rref calculator, reduced row echelon form ${label}, ${label} row reduce calculator, rref of a ${label} matrix, gauss jordan ${label}`;
+
+const faqs = [
+  {
+    q: `How do you find the RREF of a ${label} matrix?`,
+    a: `Work left to right. In each column, move a non-zero entry into the pivot position, divide that row so the pivot becomes 1, then subtract multiples of it from every other row so the rest of the column becomes zero. Repeat until you run out of rows or columns.`,
+  },
+  {
+    q: `What is the maximum rank of a ${label} matrix?`,
+    a: `The rank cannot exceed ${Math.min(variant.rows, variant.cols)}, the smaller of the row and column counts, because that is the largest possible number of pivots.`,
+  },
+  {
+    q: "Is the reduced row echelon form unique?",
+    a: "Yes. Every matrix has exactly one RREF, no matter which valid sequence of row operations you use to get there. Ordinary row echelon form is not unique, which is one reason RREF is preferred.",
+  },
+  isAugmented
+    ? {
+        q: `Can I use a ${label} matrix to solve a system of equations?`,
+        a: `Yes — treat it as an augmented matrix for ${variant.rows} equations in ${variant.cols - 1} unknowns. Once it is in RREF, each pivot row reads off the value of one variable directly.`,
+      }
+    : {
+        q: "What do the pivot columns tell me?",
+        a: "The pivot columns of the RREF identify a basis for the column space of the original matrix, and the number of pivots is the rank. Columns without pivots correspond to free variables.",
+      },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`${label} RREF Calculator`}
+  intro={`Reduce a ${label} matrix to reduced row echelon form. The grid below is preset to ${label}, every row operation is named, and pivot positions are highlighted in the result.`}
+  breadcrumbs={[
+    { name: "RREF Calculator", url: "/" },
+    { name: `${label} RREF`, url: `/calculators/rref/${variant.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("rref", "gaussian", "determinant", "lu", "inverse", "diagonalize")}
+>
+  <MatrixCalculator client:load mode="rref" defaultMatrix={variant.matrix} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">What reduced row echelon form requires</h2>
+      <ul class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed list-disc list-inside">
+        <li>The first non-zero entry in every row is a 1, called the leading 1 or pivot.</li>
+        <li>Each pivot is strictly to the right of the pivot in the row above it.</li>
+        <li>Every other entry in a pivot's column is zero — above it as well as below.</li>
+        <li>Any rows of all zeros sit at the bottom.</li>
+      </ul>
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+        A {label} matrix can have at most {Math.min(variant.rows, variant.cols)} pivots, so that is the largest rank it
+        can reach.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Other matrix sizes</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {
+          MATRIX_SIZES.rref
+            .filter((v) => v.slug !== variant.slug)
+            .map((other) => (
+              <a
+                href={`/calculators/rref/${other.slug}`}
+                class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-display font-semibold block">{sizeLabel(other)} RREF calculator</span>
+              </a>
+            ))
+        }
+      </div>
+      <p class="mt-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Need a different shape? The <a href="/" class="text-accent-primary">main RREF calculator</a> takes any size up
+        to 10&times;10.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

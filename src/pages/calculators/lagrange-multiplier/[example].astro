@@ -1,0 +1,168 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LagrangeCalculator from "../../../components/LagrangeCalculator";
+import { LAGRANGE_EXAMPLES } from "../../../data/calculusExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+import { compile } from "../../../utils/expression.js";
+import { gradient, newtonSolve, roundNice } from "../../../utils/numeric.js";
+
+const START_2D = [];
+for (const a of [-4, -2, -0.7, 0.7, 2, 4]) for (const b of [-4, -2, -0.7, 0.7, 2, 4]) START_2D.push([a, b]);
+const START_3D = [];
+for (const a of [-3, -1, 1, 3]) for (const b of [-3, -1, 1, 3]) for (const c of [-3, -1, 1, 3]) START_3D.push([a, b, c]);
+
+export async function getStaticPaths() {
+  return LAGRANGE_EXAMPLES.map((item) => {
+    const vars = item.vars === "xyz" ? ["x", "y", "z"] : ["x", "y"];
+    let solutions = [];
+    try {
+      const fFn = compile(item.f);
+      const gFn = compile(item.g);
+      const cVal = compile(item.c)({});
+      const scope = (p) => Object.fromEntries(vars.map((v, i) => [v, p[i]]));
+      const F = (p) => fFn(scope(p));
+      const G = (p) => gFn(scope(p));
+      const system = (u) => {
+        const point = u.slice(0, vars.length);
+        const lambda = u[vars.length];
+        const gf = gradient(F, point);
+        const gg = gradient(G, point);
+        return [...gf.map((v, i) => v - lambda * gg[i]), G(point) - cVal];
+      };
+      (vars.length === 3 ? START_3D : START_2D).forEach((start) => {
+        [0.5, 2, -1].forEach((lambda0) => {
+          const sol = newtonSolve(system, [...start, lambda0]);
+          if (!sol) return;
+          const point = sol.slice(0, vars.length).map((v) => roundNice(v, 6));
+          if (point.some((v) => !Number.isFinite(v) || Math.abs(v) > 1e6)) return;
+          if (Math.abs(G(point) - cVal) > 1e-6) return;
+          const value = F(point);
+          if (!Number.isFinite(value)) return;
+          if (solutions.some((s) => s.point.every((v, i) => Math.abs(v - point[i]) < 1e-5))) return;
+          solutions.push({ point, lambda: roundNice(sol[vars.length], 6), value: roundNice(value, 6) });
+        });
+      });
+      solutions.sort((a, b) => b.value - a.value);
+    } catch (e) {
+      solutions = [];
+    }
+    return { params: { example: item.slug }, props: { item, solutions, vars } };
+  });
+}
+
+const { item, solutions, vars } = Astro.props;
+const best = solutions[0];
+const worst = solutions[solutions.length - 1];
+const constraintText = `${item.g} = ${item.c}`;
+const pointText = (s) => `(${s.point.join(", ")})`;
+
+const title = `${item.name} - Lagrange Multiplier Calculator`;
+const description = best
+  ? `Optimising ${item.f} subject to ${constraintText} gives ${best.value} at ${pointText(best)}, with multiplier λ = ${best.lambda}. Full worked solution and an editable calculator.`
+  : `Optimise ${item.f} subject to ${constraintText} using Lagrange multipliers.`;
+const keywords = `${item.name.toLowerCase()}, lagrange multiplier example, maximize ${item.f} subject to ${constraintText}, constrained optimization example`;
+
+const faqs = [
+  {
+    q: `What is the answer to "${item.name}"?`,
+    a: best
+      ? `The optimum is f = ${best.value} at ${pointText(best)}, with Lagrange multiplier λ = ${best.lambda}. ${item.note}`
+      : item.note,
+  },
+  {
+    q: "What system of equations does this produce?",
+    a: `Setting ∇f = λ∇g gives one equation per variable (${vars.join(", ")}), plus the constraint ${constraintText}. That is ${vars.length + 1} equations in ${vars.length + 1} unknowns, counting λ.`,
+  },
+  {
+    q: "What does λ mean here?",
+    a: best
+      ? `λ = ${best.lambda} means that raising the constraint value from ${item.c} by one unit would change the optimal value of f by roughly ${best.lambda}.`
+      : "λ measures how much the optimal value would change per unit increase in the constraint.",
+  },
+];
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={item.name}
+  intro={best
+    ? `Optimising f = ${item.f} subject to ${constraintText} gives f = ${best.value} at ${pointText(best)}, with λ = ${best.lambda}. ${item.note}`
+    : item.note}
+  breadcrumbs={[
+    { name: "Lagrange Multiplier Calculator", url: "/calculators/lagrange-multiplier" },
+    { name: item.name, url: `/calculators/lagrange-multiplier/${item.slug}` },
+  ]}
+  faqs={faqs}
+  related={relatedTo("lagrange", "tripleIntegral", "lineIntegral", "quadratic")}
+>
+  <LagrangeCalculator client:load defaultF={item.f} defaultG={item.g} defaultC={item.c} defaultVars={item.vars} />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The system to solve</h2>
+      <pre class="font-mono text-sm bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg overflow-x-auto">{
+        [...vars.map((v) => `∂/∂${v}: ∂f/∂${v} = λ · ∂g/∂${v}`), `constraint: ${constraintText}`].join("\n")
+      }</pre>
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">{item.note}</p>
+    </section>
+
+    {
+      solutions.length > 0 && (
+        <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold mb-4">Critical points</h2>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+                  {vars.map((v) => <th class="py-2 pr-6 font-display">{v}</th>)}
+                  <th class="py-2 pr-6 font-display">&lambda;</th>
+                  <th class="py-2 pr-6 font-display">f</th>
+                  <th class="py-2 font-display">Type</th>
+                </tr>
+              </thead>
+              <tbody class="font-mono">
+                {solutions.map((s) => (
+                  <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                    {s.point.map((v) => <td class="py-2 pr-6">{v}</td>)}
+                    <td class="py-2 pr-6">{s.lambda}</td>
+                    <td class="py-2 pr-6 text-accent-primary font-bold">{s.value}</td>
+                    <td class="py-2">
+                      {solutions.length === 1
+                        ? "stationary point"
+                        : s.value === best.value
+                        ? "maximum"
+                        : s.value === worst.value
+                        ? "minimum"
+                        : "neither"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">More Lagrange multiplier problems</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          LAGRANGE_EXAMPLES.filter((e) => e.slug !== item.slug).map((other) => (
+            <a
+              href={`/calculators/lagrange-multiplier/${other.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{other.name}</span>
+              <span class="font-mono text-xs text-accent-primary">
+                f = {other.f}, g = {other.g} = {other.c}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

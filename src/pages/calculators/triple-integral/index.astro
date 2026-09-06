@@ -1,0 +1,142 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import TripleIntegralCalculator from "../../../components/TripleIntegralCalculator";
+import { TRIPLE_INTEGRAL_EXAMPLES } from "../../../data/calculusExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Triple Integral Calculator";
+const description =
+  "Free triple integral calculator for Cartesian, cylindrical and spherical coordinates. Enter the integrand and limits — inner limits may depend on the outer variables — and get the value with the Jacobian handled for you.";
+const keywords =
+  "triple integral calculator, triple integral, triple integral in spherical coordinates, triple integral in cylindrical coordinates, volume triple integral, evaluate triple integral, iterated integral calculator";
+
+const faqs = [
+  {
+    q: "What is a triple integral?",
+    a: "A triple integral adds up the values of a function over a three-dimensional region. Integrating the constant 1 gives the region's volume; integrating a density gives mass; integrating distance-squared times density gives a moment of inertia.",
+  },
+  {
+    q: "In what order are the limits applied?",
+    a: "Inside out. The innermost integral is evaluated first and its limits may depend on both outer variables; the middle limits may depend on the outermost variable; and the outermost limits must be constants. If your outermost limits contain a variable, the setup is wrong.",
+  },
+  {
+    q: "When should I use cylindrical coordinates?",
+    a: "When the region has an axis of rotational symmetry — cylinders, cones, paraboloids. Substituting x = r cos θ, y = r sin θ turns awkward circular boundaries into the simple limit 0 ≤ r ≤ R. Remember the volume element is r dz dr dθ.",
+  },
+  {
+    q: "When should I use spherical coordinates?",
+    a: "When the region is a ball, a spherical shell, or a cone measured from the origin. The volume element is ρ² sin φ dρ dφ dθ, where ρ is the distance from the origin, φ is measured down from the positive z-axis, and θ goes around.",
+  },
+  {
+    q: "Why is there an extra r or ρ² sin φ?",
+    a: "That is the Jacobian determinant of the coordinate change. A small box in r, θ, z space does not have the same volume as a box in x, y, z space, and the Jacobian is the correction factor. This calculator inserts it automatically, so enter only your integrand.",
+  },
+  {
+    q: "How does this calculator evaluate the integral?",
+    a: "With nested 40-point Gauss–Legendre quadrature, which is exact for polynomials up to degree 79 in each direction and extremely accurate for smooth integrands. Recognisable answers such as π/3 or 4/3 are identified and shown alongside the decimal.",
+  },
+];
+
+const howTo = {
+  name: "How to evaluate a triple integral",
+  steps: [
+    { name: "Choose the coordinate system", text: "Match the coordinates to the region: boxes suit Cartesian, cylinders and cones suit cylindrical, balls suit spherical." },
+    { name: "Describe the region with limits", text: "Work from the inside out, letting each inner limit depend on the variables outside it." },
+    { name: "Enter the integrand", text: "Type the function alone — the calculator supplies the Jacobian for cylindrical and spherical coordinates." },
+    { name: "Read the value", text: "The result appears with a closed form where one is recognised, and the full iterated integral is restated underneath." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Triple Integral Calculator"
+  intro="Evaluate ∭ f dV over any region you can describe with limits. Switch between Cartesian, cylindrical and spherical coordinates, use variable inner limits such as 1−x or √(1−x²), and let the calculator handle the Jacobian."
+  breadcrumbs={[{ name: "Triple Integral Calculator", url: "/calculators/triple-integral" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("lineIntegral", "lagrange", "partialFractions", "laplace", "standardDeviation")}
+  definition={{
+    term: "Triple integral",
+    text: "An integral of a function of three variables over a three-dimensional region, evaluated as three nested single integrals.",
+    set: "Multivariable calculus",
+  }}
+>
+  <TripleIntegralCalculator client:load />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">The three coordinate systems</h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Cartesian</h3>
+          <p class="font-mono text-sm text-accent-primary mb-2">dV = dz dy dx</p>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            Best for boxes and regions bounded by planes or by graphs z = f(x, y).
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Cylindrical</h3>
+          <p class="font-mono text-sm text-accent-primary mb-2">dV = r dz dr d&theta;</p>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            x = r cos &theta;, y = r sin &theta;, z = z. Best for cylinders, cones and paraboloids.
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+          <h3 class="font-display font-semibold mb-2">Spherical</h3>
+          <p class="font-mono text-sm text-accent-primary mb-2">dV = &rho;&sup2; sin &phi; d&rho; d&phi; d&theta;</p>
+          <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+            &rho; is distance from the origin, &phi; is measured from the z-axis (0 to &pi;), &theta; goes around (0 to
+            2&pi;).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Worked triple integrals</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          TRIPLE_INTEGRAL_EXAMPLES.map((example) => (
+            <a
+              href={`/calculators/triple-integral/${example.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{example.name}</span>
+              <span class="font-mono text-xs text-accent-primary block mb-1">{example.display}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{example.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">What triple integrals compute</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["Volume", "∭ 1 dV", "Integrating the constant 1 measures the region itself."],
+                ["Mass", "∭ ρ(x,y,z) dV", "Density integrated over the solid."],
+                ["Centre of mass", "∭ x·ρ dV ÷ mass", "One integral per coordinate."],
+                ["Moment of inertia", "∭ r²·ρ dV", "r is the distance from the axis of rotation."],
+                ["Average value", "∭ f dV ÷ volume", "The mean of f over the region."],
+                ["Charge", "∭ ρ_q dV", "Charge density integrated over a volume, as in Gauss's law."],
+              ].map(([name, formula, note]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-6 font-semibold text-content-light dark:text-content-dark whitespace-nowrap">{name}</td>
+                  <td class="py-2 pr-6 font-mono whitespace-nowrap">{formula}</td>
+                  <td class="py-2">{note}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

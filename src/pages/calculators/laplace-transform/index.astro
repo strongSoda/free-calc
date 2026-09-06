@@ -1,0 +1,164 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LaplaceCalculator from "../../../components/LaplaceCalculator";
+import { LAPLACE_FUNCTIONS } from "../../../data/laplaceExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Laplace Transform Calculator";
+const description =
+  "Free Laplace transform calculator with steps. Transform f(t) into F(s) using the standard table — powers, exponentials, sine, cosine, hyperbolic functions, products and the Dirac delta — with the rule for each term shown.";
+const keywords =
+  "laplace transform calculator, laplace calculator, laplace transform, laplace transform of a function, laplace transform table, find the laplace transform, laplace transform with steps";
+
+const categories = [...new Set(LAPLACE_FUNCTIONS.map((f) => f.category))];
+
+const faqs = [
+  {
+    q: "What is the Laplace transform?",
+    a: "The Laplace transform converts a function of time f(t) into a function of a complex variable s, defined by F(s) = ∫₀^∞ e^(−st) f(t) dt. It turns differentiation into multiplication by s, which is what makes it so useful for differential equations.",
+  },
+  {
+    q: "Why use the Laplace transform to solve differential equations?",
+    a: "Transforming a differential equation turns derivatives into algebra: dy/dt becomes sY(s) − y(0), and d²y/dt² becomes s²Y(s) − sy(0) − y′(0). You solve the resulting algebraic equation for Y(s) and then invert it, and the initial conditions are built in from the start.",
+  },
+  {
+    q: "What is the Laplace transform of sin(at)?",
+    a: "L{sin(at)} = a/(s² + a²). Note the numerator is the frequency a, not s — that distinguishes it from cosine, whose transform is s/(s² + a²).",
+  },
+  {
+    q: "What is the region of convergence?",
+    a: "The integral only converges for Re(s) greater than some value. For e^(at) that value is a; for a polynomial it is 0. In practice, as long as you are transforming a function that does not grow faster than an exponential, the transform exists.",
+  },
+  {
+    q: "What is the first shifting theorem?",
+    a: "Multiplying f(t) by e^(at) shifts the transform: L{e^(at)f(t)} = F(s − a). It is how e^(at)sin(bt) and e^(at)cos(bt) get their transforms from the plain sine and cosine pairs.",
+  },
+  {
+    q: "How do I enter functions into this calculator?",
+    a: "Use t as the variable. Write powers with ^ (t^3), exponentials as e^(2t) or exp(2t), and products with * (t*sin(2t)). Write the Dirac delta as delta(t) and the unit step as u(t).",
+  },
+];
+
+const howTo = {
+  name: "How to find a Laplace transform",
+  steps: [
+    { name: "Write f(t) as a sum of simple terms", text: "The transform is linear, so a sum can be transformed one term at a time and the results added." },
+    { name: "Match each term to a table entry", text: "Nearly everything reduces to tⁿ, e^(at), sin(bt), cos(bt), or a product of these." },
+    { name: "Apply the shifting rules", text: "A factor of e^(at) replaces s with s − a; a factor of t differentiates the transform with respect to s." },
+    { name: "Add the results", text: "Combine the transformed terms, keeping each coefficient, to get F(s)." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Laplace Transform Calculator"
+  intro="Type a function of t and get F(s) instantly, with the table rule that produced each term. Powers, exponentials, sines and cosines, hyperbolic functions, products like t·e^(at), and the Dirac delta are all covered — and the inverse direction is one click away."
+  breadcrumbs={[{ name: "Laplace Transform Calculator", url: "/calculators/laplace-transform" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("inverseLaplace", "partialFractions", "quadratic", "tripleIntegral", "lineIntegral")}
+  definition={{
+    term: "Laplace transform",
+    text: "An integral transform F(s) = ∫₀^∞ e^(−st) f(t) dt that maps a function of time to a function of the complex frequency s, converting differential equations into algebraic ones.",
+    set: "Calculus and differential equations",
+  }}
+>
+  <LaplaceCalculator client:load defaultMode="forward" defaultExpression="sin(2t)" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Laplace transform table</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-8 font-display">f(t)</th>
+              <th class="py-2 pr-8 font-display">F(s)</th>
+              <th class="py-2 font-display">Condition</th>
+            </tr>
+          </thead>
+          <tbody class="font-mono text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["1", "1/s", "s > 0"],
+                ["t", "1/s²", "s > 0"],
+                ["tⁿ", "n!/sⁿ⁺¹", "n a positive integer"],
+                ["e^(at)", "1/(s − a)", "s > a"],
+                ["sin(at)", "a/(s² + a²)", "s > 0"],
+                ["cos(at)", "s/(s² + a²)", "s > 0"],
+                ["sinh(at)", "a/(s² − a²)", "s > |a|"],
+                ["cosh(at)", "s/(s² − a²)", "s > |a|"],
+                ["tⁿe^(at)", "n!/(s − a)ⁿ⁺¹", "s > a"],
+                ["e^(at)sin(bt)", "b/((s − a)² + b²)", "s > a"],
+                ["e^(at)cos(bt)", "(s − a)/((s − a)² + b²)", "s > a"],
+                ["t·sin(at)", "2as/(s² + a²)²", "s > 0"],
+                ["t·cos(at)", "(s² − a²)/(s² + a²)²", "s > 0"],
+                ["δ(t)", "1", "all s"],
+                ["u(t)", "1/s", "s > 0"],
+              ].map(([f, F, cond]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-8">{f}</td>
+                  <td class="py-2 pr-8 text-accent-primary">{F}</td>
+                  <td class="py-2 text-xs">{cond}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Transforms of specific functions</h2>
+      {
+        categories.map((category) => (
+          <div class="mb-6 last:mb-0">
+            <h3 class="font-display font-semibold mb-3">{category}</h3>
+            <div class="flex flex-wrap gap-2">
+              {LAPLACE_FUNCTIONS.filter((f) => f.category === category).map((f) => (
+                <a
+                  href={`/calculators/laplace-transform/${f.slug}`}
+                  class="px-3 py-1.5 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 hover:text-accent-primary transition-colors font-mono text-sm"
+                >
+                  L&#123;{f.display}&#125;
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Properties you will use constantly</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["Linearity", "L{af + bg} = aF(s) + bG(s)"],
+                ["First derivative", "L{f′} = sF(s) − f(0)"],
+                ["Second derivative", "L{f″} = s²F(s) − sf(0) − f′(0)"],
+                ["First shifting (s-shift)", "L{e^(at)f(t)} = F(s − a)"],
+                ["Second shifting (t-shift)", "L{u(t − c)f(t − c)} = e^(−cs)F(s)"],
+                ["Multiplication by t", "L{t·f(t)} = −F′(s)"],
+                ["Integration", "L{∫₀ᵗ f(τ)dτ} = F(s)/s"],
+                ["Convolution", "L{(f * g)(t)} = F(s)G(s)"],
+                ["Initial value theorem", "f(0⁺) = lim(s→∞) sF(s)"],
+                ["Final value theorem", "lim(t→∞) f(t) = lim(s→0) sF(s)"],
+              ].map(([name, rule]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-8 font-semibold text-content-light dark:text-content-dark whitespace-nowrap">{name}</td>
+                  <td class="py-2 font-mono">{rule}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

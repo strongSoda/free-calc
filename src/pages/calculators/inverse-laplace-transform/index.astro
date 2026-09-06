@@ -1,0 +1,142 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import LaplaceCalculator from "../../../components/LaplaceCalculator";
+import { INVERSE_LAPLACE_EXPRESSIONS } from "../../../data/laplaceExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "Inverse Laplace Transform Calculator";
+const description =
+  "Free inverse Laplace transform calculator with steps. Enter F(s) as a numerator and denominator and get f(t) — with the partial fraction expansion and the transform pair used for every term.";
+const keywords =
+  "inverse laplace transform calculator, inverse laplace calculator, inverse laplace transform, find the inverse laplace transform, inverse laplace with steps, laplace inverse";
+
+const faqs = [
+  {
+    q: "What is the inverse Laplace transform?",
+    a: "It is the operation that recovers f(t) from F(s). In practice you never evaluate the defining complex contour integral — you split F(s) into partial fractions and read each piece backwards off the standard transform table.",
+  },
+  {
+    q: "Why does the inverse transform need partial fractions?",
+    a: "The table only lists simple building blocks such as 1/(s − a) and b/(s² + b²). Partial fraction decomposition breaks a complicated rational F(s) into exactly those pieces, and linearity lets you invert them one at a time.",
+  },
+  {
+    q: "What does a repeated pole give in the time domain?",
+    a: "A factor of t. A single pole 1/(s − a) inverts to e^(at); the repeated pole 1/(s − a)² inverts to t·e^(at); and 1/(s − a)ⁿ⁺¹ inverts to tⁿe^(at)/n!.",
+  },
+  {
+    q: "What do complex poles mean physically?",
+    a: "A conjugate pair a ± bi gives e^(at)(cos bt and sin bt) — an oscillation at frequency b with an envelope e^(at). If a is negative the oscillation decays; if a is zero it persists; if a is positive it grows.",
+  },
+  {
+    q: "Why must the numerator have lower degree than the denominator?",
+    a: "If it does not, F(s) does not vanish as s grows, and the inverse contains the Dirac delta and its derivatives rather than an ordinary function. Divide first and handle the polynomial part separately.",
+  },
+  {
+    q: "How do I enter the denominator?",
+    a: "Either expanded (s^2+3s+2) or factored ((s+1)(s+2)) — both are read correctly, including powers like (s+1)^3.",
+  },
+];
+
+const howTo = {
+  name: "How to find an inverse Laplace transform",
+  steps: [
+    { name: "Check the degrees", text: "The numerator must have lower degree than the denominator. If not, divide first." },
+    { name: "Factor the denominator", text: "Split it into linear factors and irreducible quadratics; repeated factors need one term per power." },
+    { name: "Decompose into partial fractions", text: "Write F(s) as a sum of simple terms and solve for the unknown numerators by matching coefficients." },
+    { name: "Invert each term", text: "Apply the table backwards: 1/(s − a) gives e^(at), b/(s² + b²) gives sin(bt), and so on. Add the results." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Inverse Laplace Transform Calculator"
+  intro="Enter F(s) as a numerator over a denominator and get f(t), with the partial fraction expansion, the coefficient solve, and the transform pair used for each term all laid out."
+  breadcrumbs={[{ name: "Inverse Laplace Transform Calculator", url: "/calculators/inverse-laplace-transform" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("laplace", "partialFractions", "quadratic", "lineIntegral")}
+  definition={{
+    term: "Inverse Laplace transform",
+    text: "The operation recovering a time-domain function f(t) from its Laplace transform F(s), normally carried out with partial fractions and a table of standard transform pairs.",
+    set: "Calculus and differential equations",
+  }}
+>
+  <LaplaceCalculator client:load defaultMode="inverse" defaultNumerator="2s+3" defaultDenominator="(s+1)(s^2+4)" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Inverse transform table</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-8 font-display">F(s)</th>
+              <th class="py-2 font-display">f(t)</th>
+            </tr>
+          </thead>
+          <tbody class="font-mono text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["1/s", "1"],
+                ["1/s²", "t"],
+                ["1/sⁿ⁺¹", "tⁿ/n!"],
+                ["1/(s − a)", "e^(at)"],
+                ["1/(s − a)ⁿ⁺¹", "tⁿe^(at)/n!"],
+                ["b/(s² + b²)", "sin(bt)"],
+                ["s/(s² + b²)", "cos(bt)"],
+                ["b/(s² − b²)", "sinh(bt)"],
+                ["s/(s² − b²)", "cosh(bt)"],
+                ["b/((s − a)² + b²)", "e^(at)sin(bt)"],
+                ["(s − a)/((s − a)² + b²)", "e^(at)cos(bt)"],
+                ["1/(s² + b²)²", "(sin bt − bt·cos bt)/(2b³)"],
+                ["s/(s² + b²)²", "t·sin(bt)/(2b)"],
+              ].map(([F, f]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-8">{F}</td>
+                  <td class="py-2 text-accent-primary">{f}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">Worked inverse transforms</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {
+          INVERSE_LAPLACE_EXPRESSIONS.map((item) => (
+            <a
+              href={`/calculators/inverse-laplace-transform/${item.slug}`}
+              class="block p-3 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-mono font-semibold block">L&#8315;&sup1;&#123;{item.display}&#125;</span>
+              <span class="text-xs text-content-light-dimmed dark:text-content-dark-dimmed">{item.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Reading a system's behaviour off the poles</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p>
+          The roots of the denominator — the poles of F(s) — determine everything about how f(t) behaves, before you
+          invert anything:
+        </p>
+        <ul>
+          <li><strong>Real negative pole:</strong> a decaying exponential. The further left, the faster it decays.</li>
+          <li><strong>Real positive pole:</strong> exponential growth, which is an unstable system.</li>
+          <li><strong>Pole at the origin:</strong> a constant term, or a ramp if it is repeated.</li>
+          <li><strong>Complex conjugate pair:</strong> an oscillation, decaying or growing according to the real part.</li>
+          <li><strong>Repeated poles:</strong> each repetition multiplies the response by another factor of t.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -1,0 +1,144 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import FOCCalculator from "../../../components/FOCCalculator";
+import { FOC_SETUPS } from "../../../data/focExamples.js";
+import { relatedTo } from "../../../data/mathCalculators.js";
+
+const title = "FOC Calculator - Arrow Front of Center";
+const description =
+  "Free FOC calculator for arrows. Work out front of center from your arrow length and balance point, or estimate it from component weights, and see total arrow weight and grains per pound.";
+const keywords =
+  "foc calculator, front of center calculator, arrow foc calculator, archery foc, arrow front of center, calculate foc arrow, foc percentage arrow, arrow weight calculator";
+
+const faqs = [
+  {
+    q: "What is FOC in archery?",
+    a: "FOC stands for front of center: the percentage of the arrow's length by which its balance point sits ahead of the true middle. A higher FOC means more of the arrow's weight is concentrated at the point end.",
+  },
+  {
+    q: "What is the FOC formula?",
+    a: "FOC% = 100 × (A − L ÷ 2) ÷ L, where L is the arrow length measured from the throat of the nock to the end of the shaft (not including the point) and A is the distance from the nock throat to the balance point of the complete arrow.",
+  },
+  {
+    q: "What is a good FOC percentage?",
+    a: "Roughly 7–10% is normal and typical of factory arrows. Hunters often aim for 10–15% for better flight stability and penetration. Anything from 15–19% is called extreme FOC, and above 19% is ultra-extreme — great penetration, but a noticeably arcing trajectory.",
+  },
+  {
+    q: "How do I measure my arrow's balance point?",
+    a: "Build the arrow completely — point, insert, nock and fletching all fitted — then rest it across a straight edge and slide it until it balances. Mark that spot and measure back to the throat of the nock.",
+  },
+  {
+    q: "Does higher FOC mean better penetration?",
+    a: "Up to a point. More weight forward makes the arrow more stable in flight and helps it drive straight into the target, which is why Ashby-style setups push FOC high. Past that, the trajectory drops off steeply and tuning becomes fussier, so most hunters settle in the 12–19% range.",
+  },
+  {
+    q: "How do I increase my arrow's FOC?",
+    a: "Add weight to the front (a heavier point, a brass insert, or an outsert), take weight off the back (smaller vanes, a lighter nock, no wrap), or shorten the shaft — a shorter arrow raises FOC for the same point weight.",
+  },
+  {
+    q: "Does FOC change the arrow's spine?",
+    a: "Effectively yes. Adding point weight makes a shaft behave weaker (more flexible) in the bow, so a heavy-FOC build usually needs a stiffer shaft than the same setup with a light point.",
+  },
+];
+
+const howTo = {
+  name: "How to calculate arrow FOC",
+  steps: [
+    { name: "Measure the arrow length", text: "From the throat of the nock — where the string sits — to the end of the shaft. Do not include the point or broadhead." },
+    { name: "Find the balance point", text: "With the arrow fully built, balance it on a straight edge and mark the spot." },
+    { name: "Measure to the balance point", text: "Measure from the nock throat to the mark. Call this A." },
+    { name: "Apply the formula", text: "FOC% = 100 × (A − L ÷ 2) ÷ L. The calculator does this and tells you which band the result falls into." },
+  ],
+};
+---
+
+<CalculatorLayout
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="FOC Calculator (Arrow Front of Center)"
+  intro="Work out your arrow's front of center two ways: from a measured balance point, or estimated from your component weights. The build mode also reports total arrow weight and grains per pound of draw weight."
+  breadcrumbs={[{ name: "FOC Calculator", url: "/calculators/foc-calculator" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={relatedTo("standardDeviation", "quadratic", "tripleIntegral")}
+  about="Calculator"
+  definition={{
+    term: "Front of center (FOC)",
+    text: "The percentage of an arrow's length by which its balance point lies ahead of its physical centre, calculated as 100 × (balance point − length ÷ 2) ÷ length.",
+    set: "Archery",
+  }}
+>
+  <FOCCalculator client:load />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">The AMO formula, step by step</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <p class="font-mono">FOC% = 100 &times; (A &minus; L &divide; 2) &divide; L</p>
+        <p>
+          <strong>L</strong> is the arrow length, measured from the throat of the nock to the end of the shaft. Points
+          and broadheads are deliberately excluded — this is a measure of the shaft, not the whole assembly.
+        </p>
+        <p>
+          <strong>A</strong> is the distance from the nock throat to the balance point of the finished arrow, with
+          everything fitted.
+        </p>
+        <p>
+          <strong>L &divide; 2</strong> is the physical centre of the arrow, so <strong>A &minus; L &divide; 2</strong>
+          is how many inches forward of centre the balance point sits. Dividing by L and multiplying by 100 expresses
+          that as a percentage of the arrow's length, which is what makes the number comparable between arrows of
+          different lengths.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-6">FOC by arrow build</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          FOC_SETUPS.map((setup) => (
+            <a
+              href={`/calculators/foc-calculator/${setup.slug}`}
+              class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-semibold block mb-1">{setup.name}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{setup.note}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Changing your FOC</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <h3 class="font-display font-semibold mb-3">To raise FOC</h3>
+          <ul class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed list-disc list-inside">
+            <li>Heavier point or broadhead — the single biggest lever</li>
+            <li>Brass or steel insert instead of aluminium</li>
+            <li>Add an outsert or collar behind the point</li>
+            <li>Shorter shaft, if your draw length allows</li>
+            <li>Smaller vanes and a lighter nock</li>
+            <li>Skip the wrap</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-display font-semibold mb-3">To lower FOC</h3>
+          <ul class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed list-disc list-inside">
+            <li>Lighter field point or broadhead</li>
+            <li>Aluminium insert instead of brass</li>
+            <li>Longer shaft</li>
+            <li>Larger vanes or feathers, or a wrap</li>
+            <li>Add a lighted or heavier nock</li>
+          </ul>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Remember that adding point weight makes a shaft act weaker in the bow. A big jump in FOC usually calls for a
+        stiffer spine, so re-check your tune after any significant change.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>
