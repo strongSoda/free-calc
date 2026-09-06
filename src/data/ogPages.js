@@ -250,6 +250,15 @@ const buildPages = () => {
     subtitle: "IPv4 and IPv6 network addresses, ranges, masks and host counts",
   });
 
+  // The broken link checker pointed at /broken-link-checker-og.png, which was
+  // never in public/; it gets a generated card too.
+  pages.push({
+    path: "/tools/broken-link-checker",
+    eyebrow: "Webmaster tools",
+    title: "Broken Link Checker",
+    subtitle: "Crawl a page and find every link that no longer resolves",
+  });
+
   return pages;
 };
 

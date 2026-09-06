@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Widget and embed pages are for iframing, not for search.
+Disallow: /calculators/*/widget
+Disallow: /calculators/*/embed
+
+Sitemap: https://rref-calculator.com/sitemap-index.xml

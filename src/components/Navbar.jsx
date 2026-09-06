@@ -25,9 +25,9 @@ const Navbar = () => {
     { name: 'Determinant', href: '/calculators/matrix-determinant' },
     { name: 'Laplace', href: '/calculators/laplace-transform' },
     { name: 'Partial Fractions', href: '/calculators/partial-fraction-decomposition' },
-    { name: 'Volume', href: '/calculators/volume' },
     { name: "Subnet", href: "/calculators/subnet" },
     { name: "BMI", href: "/calculators/bmi" },
+    { name: 'Codice Fiscale', href: '/it/codice-fiscale', hrefLang: 'it' },
   ];
 
   return (
@@ -47,7 +47,8 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <a 
                 key={link.name}
-                href={link.href} 
+                href={link.href}
+                hrefLang={link.hrefLang}
                 className="font-medium text-content-light-dimmed dark:text-content-dark-dimmed hover:text-content-light dark:hover:text-content-dark transition-colors"
               >
                 {link.name}
@@ -91,6 +92,7 @@ const Navbar = () => {
             <a 
               key={link.name}
               href={link.href}
+              hrefLang={link.hrefLang}
               className="block px-3 py-2 rounded-md text-base font-medium text-content-light-dimmed dark:text-content-dark-dimmed hover:text-content-light dark:hover:text-content-dark hover:bg-surface-light-hover dark:hover:bg-surface-dark-hover transition-colors"
             >
               {link.name}

@@ -40,6 +40,38 @@ const Footer = () => {
       ]
     },
     {
+      title: "Linear Algebra",
+      links: [
+        { name: "Matrix Determinant", url: "/calculators/matrix-determinant" },
+        { name: "Matrix Transpose", url: "/calculators/matrix-transpose" },
+        { name: "Gaussian Elimination", url: "/calculators/gaussian-elimination" },
+        { name: "LU Decomposition", url: "/calculators/lu-decomposition" },
+        { name: "Diagonalize Matrix", url: "/calculators/diagonalize-matrix" },
+        { name: "Matrix Inverse", url: "/calculators/matrix-inverse" },
+      ]
+    },
+    {
+      title: "Calculus & Transforms",
+      links: [
+        { name: "Laplace Transform", url: "/calculators/laplace-transform" },
+        { name: "Inverse Laplace", url: "/calculators/inverse-laplace-transform" },
+        { name: "Partial Fractions", url: "/calculators/partial-fraction-decomposition" },
+        { name: "Triple Integral", url: "/calculators/triple-integral" },
+        { name: "Line Integral", url: "/calculators/line-integral" },
+        { name: "Lagrange Multiplier", url: "/calculators/lagrange-multiplier" },
+      ]
+    },
+    {
+      title: "In italiano",
+      links: [
+        { name: "Calcolo Codice Fiscale", url: "/it/codice-fiscale" },
+        { name: "Codice Fiscale Inverso", url: "/it/codice-fiscale/inverso" },
+        { name: "Verifica Codice Fiscale", url: "/it/codice-fiscale/verifica" },
+        { name: "Codice Fiscale Estero", url: "/it/codice-fiscale/estero" },
+        { name: "Trovare il Codice Fiscale", url: "/it/codice-fiscale/trova" },
+      ]
+    },
+    {
       title: "Algebra Calculators",
       links: [
         { name: "Quadratic Equation", url: "/calculators/quadratic-equation" },        
@@ -51,6 +83,7 @@ const Footer = () => {
       links: [
         { name: "Half Life", url: "/calculators/half-life" },
         { name: "Power Converter", url: "/calculators/power" },
+        { name: "Arrow FOC", url: "/calculators/foc-calculator" },
       ]
     },
     {

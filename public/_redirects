@@ -1,12 +1,74 @@
-# Redirect zip code lookup URLs
-/calculators/zip-lookup/:country/:code   /calculators/zip-lookup/?country=:country&code=:code   301!
+# ---------------------------------------------------------------------------
+# Retired programmatic pages.
+#
+# These routes generated thousands of near-identical pages (two of them were
+# often 90-97% textually identical). Over three months they earned 1 click
+# between them, while Google left ~4,850 of them in "Discovered/Crawled -
+# currently not indexed" and demoted the whole domain. They are consolidated
+# into the parent tool, which does the same job interactively.
+# ---------------------------------------------------------------------------
 
-# Redirect BMI calculator URLs 
-/calculators/bmi/metric/:weight/:height   /calculators/bmi/?unit=metric&weight=:weight&height=:height   301!
-/calculators/bmi/imperial/:weight/:height   /calculators/bmi/?unit=imperial&weight=:weight&height=:height   301!
+# Quadratic equation: /a/b/c combinations
+/calculators/quadratic-equation/*            /calculators/quadratic-equation   301
 
-# Splat redirect for any other calculators/bmi paths
-/calculators/bmi/*   /calculators/bmi/   301
+# Volume: per-shape unit/dimension combinations (shape hubs are kept)
+/calculators/volume/cone/*                   /calculators/volume/cone          301
+/calculators/volume/cube/*                   /calculators/volume/cube          301
+/calculators/volume/cuboid/*                 /calculators/volume/cuboid        301
+/calculators/volume/cylinder/*               /calculators/volume/cylinder      301
+/calculators/volume/hemisphere/*             /calculators/volume/hemisphere    301
+/calculators/volume/prism/*                  /calculators/volume/prism         301
+/calculators/volume/pyramid/*                /calculators/volume/pyramid       301
+/calculators/volume/sphere/*                 /calculators/volume/sphere        301
 
-# SPA fallback
-/*    /index.html   200
+# Subnet: per-network/CIDR pages
+/calculators/subnet/ipv4/*                   /calculators/subnet/ipv4          301
+/calculators/subnet/ipv6/*                   /calculators/subnet/ipv6          301
+
+# GPA conversions: per-scale/value pages
+/calculators/percentage-to-gpa/*             /calculators/percentage-to-gpa    301
+/calculators/gpa-to-percentage/*             /calculators/gpa-to-percentage    301
+
+# Pregnancy: per-method, per-date, per-week and per-month pages
+/calculators/pregnancy/due-date/*            /calculators/pregnancy            301
+/calculators/pregnancy/week/*                /calculators/pregnancy            301
+/calculators/pregnancy/month/*               /calculators/pregnancy            301
+/calculators/pregnancy/*                     /calculators/pregnancy            301
+
+# Power: per-value pages (the conversion-pair hubs are kept)
+/calculators/power/:pair/*                   /calculators/power/:pair          301
+
+# Fractions: per-value pages (both sub-hubs are kept)
+/calculators/fractions/decimal-to-fraction/* /calculators/fractions/decimal-to-fraction 301
+/calculators/fractions/fraction-to-decimal/* /calculators/fractions/fraction-to-decimal 301
+
+# Roman numerals: per-value pages (both sub-hubs are kept)
+/calculators/roman-numerals/number-to-roman/* /calculators/roman-numerals/number-to-roman 301
+/calculators/roman-numerals/roman-to-number/* /calculators/roman-numerals/roman-to-number 301
+
+# Tip, body fat, love, period, dice: per-combination pages
+/calculators/tip-calculator/*                /calculators/tip-calculator       301
+/calculators/body-fat/*                      /calculators/body-fat             301
+/calculators/love-calculator/*               /calculators/love-calculator      301
+/calculators/period/*                        /calculators/period               301
+/calculators/dice-roller/*                   /calculators/dice-roller          301
+
+# IP lookup: per-IP and per-language pages
+/calculators/ip-lookup/languages/*           /calculators/ip-lookup            301
+/calculators/ip-lookup/*                     /calculators/ip-lookup            301
+
+# Zip lookup: legacy per-code URLs (country hubs are kept)
+/calculators/zip-lookup/:country/:code       /calculators/zip-lookup/:country  301
+
+# BMI: per-age and legacy metric/imperial URLs
+/calculators/bmi/age/*                       /calculators/bmi                  301
+/calculators/bmi/metric/*                    /calculators/bmi                  301
+/calculators/bmi/imperial/*                  /calculators/bmi                  301
+
+# Mortgage was linked with a ?homePrice= query string; strip it.
+/calculators/mortgage/index.html             /calculators/mortgage             301
+
+# NOTE: there is deliberately no `/*  /index.html  200` fallback here.
+# That rule served the homepage, with a 200 status, for every URL that did not
+# exist - a soft 404. Unknown URLs now fall through to Netlify's 404 handling,
+# which serves 404.html with the correct status code.
