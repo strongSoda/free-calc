@@ -1,0 +1,105 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import CodiceFiscaleTool from "../../../components/CodiceFiscaleTool";
+import { cfCorrelati } from "../../../data/codiceFiscaleLinks.js";
+
+const title = "Verifica Codice Fiscale — Controllo Online Gratuito";
+const description =
+  "Verifica se un codice fiscale è formalmente corretto: lunghezza, struttura, lettera del mese, giorno di nascita e carattere di controllo. Indica con precisione qual è l'errore.";
+const keywords =
+  "verifica codice fiscale, controllo codice fiscale, codice fiscale corretto, validare codice fiscale, controlla codice fiscale, verifica codice fiscale online";
+
+const faqs = [
+  {
+    q: "Che cosa controlla la verifica del codice fiscale?",
+    a: "Controlla che il codice abbia 16 caratteri, che la struttura sia quella prevista (6 lettere, 2 cifre, 1 lettera, 2 cifre, 1 lettera, 3 cifre, 1 lettera), che la lettera del mese e il giorno siano validi e soprattutto che il carattere finale di controllo corrisponda ai 15 caratteri precedenti.",
+  },
+  {
+    q: "Un codice fiscale valido è per forza esistente?",
+    a: "No, ed è una distinzione importante. La verifica è puramente matematica: dice che il codice è ben formato, non che sia stato attribuito a una persona reale. Solo l'Agenzia delle Entrate può confermare l'esistenza e l'intestazione di un codice fiscale.",
+  },
+  {
+    q: "Come funziona il carattere di controllo?",
+    a: "Ai primi 15 caratteri si assegna un valore numerico usando due tabelle diverse, una per le posizioni dispari e una per quelle pari. I valori si sommano e il resto della divisione per 26 individua la lettera finale. Un errore di battitura in un carattere qualsiasi fa quasi sempre saltare il controllo.",
+  },
+  {
+    q: "Perché il mio codice fiscale risulta non valido?",
+    a: "Nella maggior parte dei casi si tratta di un errore di trascrizione: uno zero scambiato per la lettera O, un 1 per una I, oppure due caratteri invertiti. Lo strumento indica quale carattere finale sarebbe corretto, il che aiuta a individuare l'errore.",
+  },
+  {
+    q: "La verifica riconosce i codici con omocodia?",
+    a: "Sì. I codici in cui alcune cifre sono state sostituite da lettere restano validi e vengono riconosciuti come tali, con l'indicazione che contengono una sostituzione di omocodia.",
+  },
+];
+
+const howTo = {
+  name: "Come verificare un codice fiscale",
+  steps: [
+    { name: "Inserire il codice", text: "Digitare o incollare i 16 caratteri nel campo." },
+    { name: "Leggere l'esito", text: "Lo strumento dice subito se il codice è formalmente corretto." },
+    { name: "Correggere l'eventuale errore", text: "In caso di errore viene indicato il problema preciso e, se possibile, il carattere di controllo atteso." },
+  ],
+};
+---
+
+<CalculatorLayout
+  lang="it"
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Verifica del Codice Fiscale"
+  intro="Controlla se un codice fiscale è scritto correttamente. La verifica esamina la struttura e ricalcola il carattere di controllo, segnalando con precisione dove sta l'errore."
+  breadcrumbs={[
+    { name: "Calcolo codice fiscale", url: "/it/codice-fiscale" },
+    { name: "Verifica codice fiscale", url: "/it/codice-fiscale/verifica" },
+  ]}
+  faqs={faqs}
+  howTo={howTo}
+  related={cfCorrelati("calcola", "inverso", "estero", "trova")}
+  about="strumento"
+>
+  <CodiceFiscaleTool client:load modo="verifica" codicePredefinito="RSSMRA85M01H501Q" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Gli errori più comuni</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-6 font-display">Errore</th>
+              <th class="py-2 font-display">Come riconoscerlo</th>
+            </tr>
+          </thead>
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["Zero e lettera O", "Nelle posizioni 7–8, 10–11 e 13–15 servono cifre: una O in quei punti è quasi sempre uno zero."],
+                ["Uno e lettera I", "Stesso problema all'inverso: una I dove è attesa una cifra è di solito un 1."],
+                ["Lettera del mese sbagliata", "I mesi usano solo A, B, C, D, E, H, L, M, P, R, S, T. F, G, I, N, O e Q non compaiono mai."],
+                ["Giorno oltre 71", "Per le donne si somma 40 al giorno: il valore massimo possibile è 71."],
+                ["Caratteri invertiti", "La struttura resta corretta ma il carattere di controllo non torna."],
+                ["Spazi o trattini", "Il codice fiscale si scrive tutto attaccato, senza separatori."],
+              ].map(([errore, come]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-6 font-semibold text-content-light dark:text-content-dark whitespace-nowrap">{errore}</td>
+                  <td class="py-2">{come}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Verifica formale e verifica ufficiale</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        Questo strumento esegue una verifica <strong>formale</strong>: applica l'algoritmo e dice se il codice è
+        costruito correttamente. Non può sapere se quel codice sia davvero registrato in Anagrafe Tributaria né a
+        chi appartenga. Per un riscontro ufficiale, per esempio prima di emettere una fattura, esiste il servizio
+        di verifica del codice fiscale dell'Agenzia delle Entrate, che confronta codice e dati anagrafici.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

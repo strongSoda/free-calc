@@ -9,6 +9,8 @@ import { LAPLACE_FUNCTIONS, INVERSE_LAPLACE_EXPRESSIONS } from "./laplaceExample
 import { PARTIAL_FRACTION_EXAMPLES } from "./algebraExamples.js";
 import { TRIPLE_INTEGRAL_EXAMPLES, LINE_INTEGRAL_EXAMPLES, LAGRANGE_EXAMPLES } from "./calculusExamples.js";
 import { FOC_SETUPS } from "./focExamples.js";
+import { CF_PAGES } from "./codiceFiscaleLinks.js";
+import { TOP_COMUNI } from "./comuniTop.js";
 import { laplaceTransform, inverseLaplace } from "../utils/laplace.js";
 import { partialFractions, decompositionToString } from "../utils/partialFractions.js";
 import { parsePolyExpression } from "../utils/polynomial.js";
@@ -20,6 +22,8 @@ const TRANSFORMS = "Transforms";
 const ALGEBRA = "Algebra";
 const CALCULUS = "Multivariable calculus";
 const ARCHERY = "Archery";
+const CODICE_FISCALE = "Codice fiscale";
+const TAGLINE_IT = "Gratis · passo per passo · nessuna registrazione";
 
 /** Never let a failed computation break the build — fall back to prose. */
 const safely = (fn, fallback) => {
@@ -205,6 +209,34 @@ const buildPages = () => {
       subtitle: built
         ? `${foc}% front of center · ${round(built.total, 10)} grain arrow · ${bandFor(built.foc).name}`
         : setup.note,
+    });
+  });
+
+  /* ---------------- sezione italiana ---------------- */
+  const sottotitoliCF = {
+    calcola: "Cognome, nome, data e comune di nascita: il codice in pochi secondi",
+    inverso: "Data di nascita, sesso e comune ricavati dai 16 caratteri",
+    verifica: "Struttura e carattere di controllo, con l'errore indicato con precisione",
+    estero: "Per chi è nato fuori dall'Italia: al posto del comune si usa il codice Z dello Stato",
+    trova: "Dove recuperarlo e cosa dice la legge sul codice fiscale altrui",
+  };
+  Object.entries(CF_PAGES).forEach(([chiave, pagina]) => {
+    pages.push({
+      path: pagina.url,
+      eyebrow: CODICE_FISCALE,
+      title: pagina.title,
+      subtitle: sottotitoliCF[chiave] || pagina.description,
+      tagline: TAGLINE_IT,
+    });
+  });
+
+  TOP_COMUNI.forEach((c) => {
+    pages.push({
+      path: `/it/codice-fiscale/comune/${c.slug}`,
+      eyebrow: CODICE_FISCALE,
+      title: `Codice Fiscale ${c.name}`,
+      subtitle: `Codice catastale ${c.code} · provincia di ${c.prov}${c.region ? ` · ${c.region}` : ""}`,
+      tagline: TAGLINE_IT,
     });
   });
 

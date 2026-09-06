@@ -1,0 +1,112 @@
+---
+import CalculatorLayout from "../../../../layouts/CalculatorLayout.astro";
+import CodiceFiscaleTool from "../../../../components/CodiceFiscaleTool";
+import { cfCorrelati } from "../../../../data/codiceFiscaleLinks.js";
+import { TOP_COMUNI } from "../../../../data/comuniTop.js";
+
+export async function getStaticPaths() {
+  return TOP_COMUNI.map((comune) => ({
+    params: { comune: comune.slug },
+    props: { comune },
+  }));
+}
+
+const { comune } = Astro.props;
+const abitanti = comune.population.toLocaleString("it-IT");
+
+const title = `Calcolo Codice Fiscale ${comune.name} — Codice Catastale ${comune.code}`;
+const description = `Calcola il codice fiscale per chi è nato a ${comune.name} (${comune.prov}). Il codice catastale ${comune.code} è già impostato: bastano cognome, nome, sesso e data di nascita.`;
+const keywords = `calcolo codice fiscale ${comune.name}, codice fiscale ${comune.name}, codice catastale ${comune.name}, codice belfiore ${comune.name}, ${comune.code} codice catastale`;
+
+const altre = TOP_COMUNI.filter((c) => c.slug !== comune.slug).slice(0, 12);
+
+const faqs = [
+  {
+    q: `Qual è il codice catastale di ${comune.name}?`,
+    a: `Il codice catastale (o codice Belfiore) di ${comune.name} è ${comune.code}. Sono i quattro caratteri che occupano le posizioni dalla dodicesima alla quindicesima del codice fiscale di chi è nato in questo comune.`,
+  },
+  {
+    q: `Come si calcola il codice fiscale per chi è nato a ${comune.name}?`,
+    a: `Si seguono le regole generali — tre lettere dal cognome, tre dal nome, anno, mese e giorno di nascita — e come luogo di nascita si usa il codice ${comune.code}. Nel modulo qui sopra ${comune.name} è già selezionato.`,
+  },
+  {
+    q: "Il codice catastale è la stessa cosa del CAP?",
+    a: `No. Il CAP serve per la corrispondenza postale, mentre il codice catastale è un identificativo del comune usato dall'Agenzia delle Entrate. Per ${comune.name} il codice catastale è ${comune.code}.`,
+  },
+  {
+    q: `Come si riconosce un codice fiscale di ${comune.name}?`,
+    a: `Se i caratteri dalla dodicesima alla quindicesima sono ${comune.code}, la persona risulta nata a ${comune.name}. Il calcolo inverso permette di verificarlo su qualsiasi codice.`,
+  },
+];
+---
+
+<CalculatorLayout
+  lang="it"
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading={`Calcolo Codice Fiscale — ${comune.name}`}
+  intro={`Il codice catastale di ${comune.name} (${comune.prov}${comune.region ? `, ${comune.region}` : ""}) è ${comune.code}. Nel calcolatore qui sotto è già impostato: inserisci cognome, nome, sesso e data di nascita per ottenere il codice fiscale.`}
+  breadcrumbs={[
+    { name: "Calcolo codice fiscale", url: "/it/codice-fiscale" },
+    { name: comune.name, url: `/it/codice-fiscale/comune/${comune.slug}` },
+  ]}
+  faqs={faqs}
+  related={cfCorrelati("calcola", "inverso", "verifica", "estero")}
+  about="strumento"
+>
+  <CodiceFiscaleTool
+    client:load
+    modo="calcola"
+    comunePredefinito={{ codice: comune.code, nome: comune.name, provincia: comune.prov, attivo: true }}
+  />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">{comune.name} nel codice fiscale</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {
+          [
+            ["Codice catastale", comune.code],
+            ["Provincia", comune.prov],
+            ["Regione", comune.region || "—"],
+            ["Abitanti", abitanti],
+          ].map(([etichetta, valore]) => (
+            <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+              <span class="block text-xs uppercase tracking-wide text-content-light-dimmed dark:text-content-dark-dimmed">
+                {etichetta}
+              </span>
+              <span class="block font-display text-xl font-bold text-accent-primary">{valore}</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+        Nel codice fiscale di chi è nato a {comune.name} i caratteri dal dodicesimo al quindicesimo sono sempre
+        <span class="font-mono text-accent-primary"> {comune.code}</span>. Gli altri caratteri dipendono da
+        cognome, nome, sesso e data di nascita.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Altri comuni</h2>
+      <div class="flex flex-wrap gap-2">
+        {
+          altre.map((c) => (
+            <a
+              href={`/it/codice-fiscale/comune/${c.slug}`}
+              class="px-3 py-1.5 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 hover:text-accent-primary transition-colors text-sm"
+            >
+              {c.name} <span class="font-mono text-xs opacity-60">{c.code}</span>
+            </a>
+          ))
+        }
+      </div>
+      <p class="mt-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Per gli altri comuni italiani, compresi quelli soppressi, usa la ricerca del
+        <a href="/it/codice-fiscale" class="text-accent-primary"> calcolatore principale</a>: l'elenco comprende
+        oltre diecimila voci.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>
