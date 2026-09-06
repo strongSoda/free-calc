@@ -4,9 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && cp public/_redirects dist/_redirects",
+    "build": "node scripts/build-redirects.mjs && astro build && cp public/_redirects dist/_redirects",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:redirects": "node scripts/check-redirects.cjs dist",
+    "check:hydration": "node scripts/check-hydration.cjs dist"
   },
   "dependencies": {
     "@astrojs/react": "^4.1.0",

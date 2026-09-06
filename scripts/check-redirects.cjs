@@ -38,6 +38,26 @@ if (!rules.length) {
   process.exit(1);
 }
 
+// Both files must carry the same rules: a git build reads netlify.toml, a
+// manual dist upload reads dist/_redirects, and we cannot tell which is used.
+const fileRules = fs
+  .readFileSync(path.join(ROOT, "public/_redirects"), "utf8")
+  .split("\n")
+  .map((l) => l.trim())
+  .filter((l) => l && !l.startsWith("#"))
+  .map((l) => l.split(/\s+/)[0]);
+const tomlFroms = rules.map((r) => r.from);
+const missing = tomlFroms.filter((f) => !fileRules.includes(f));
+const extra = fileRules.filter((f) => !tomlFroms.includes(f));
+if (missing.length || extra.length) {
+  console.error("netlify.toml and public/_redirects disagree.");
+  missing.forEach((m) => console.error("  only in netlify.toml: " + m));
+  extra.forEach((e) => console.error("  only in _redirects:    " + e));
+  console.error("Run: node scripts/build-redirects.mjs");
+  process.exit(1);
+}
+console.log(`Rules in sync across netlify.toml and public/_redirects: ${rules.length}`);
+
 const exists = (urlPath) => {
   const clean = urlPath.replace(/\/$/, "");
   return (
