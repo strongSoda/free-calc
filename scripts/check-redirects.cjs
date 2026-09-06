@@ -56,6 +56,18 @@ if (missing.length || extra.length) {
   console.error("Run: node scripts/build-redirects.mjs");
   process.exit(1);
 }
+// A rule whose target is its own pattern minus the splat is circular:
+// `/a/*` matches `/a/` with an empty splat and `/a` normalises back to `/a/`.
+// Netlify drops these silently, which is exactly how the retired URLs ended
+// up 404ing instead of redirecting.
+const circular = rules.filter((r) => r.from.endsWith("/*") && r.from.slice(0, -2) === r.to);
+if (circular.length) {
+  console.error(`${circular.length} circular redirect rule(s) — Netlify will drop these:`);
+  circular.forEach((r) => console.error(`  ${r.from} -> ${r.to}`));
+  console.error("Expand them to /base/:seg and /base/:seg/* instead.");
+  process.exit(1);
+}
+
 console.log(`Rules in sync across netlify.toml and public/_redirects: ${rules.length}`);
 
 const exists = (urlPath) => {
