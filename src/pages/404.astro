@@ -1,0 +1,36 @@
+---
+import Layout from "../layouts/Layout.astro";
+import GpaLayout from "../components/GpaLayout";
+
+const title = "Page not found";
+const description = "That page does not exist. Browse the free calculators instead.";
+---
+
+<Layout title={title} description={description} currentUrl="/404" noindex={true}>
+  <GpaLayout client:load title="Page not found" description="That page doesn't exist — it may have been moved or retired.">
+    <div class="space-y-8">
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        If you followed a link to a specific calculation, that result is still available — the calculators below
+        work them out interactively.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          [
+            { url: "/", title: "RREF Calculator", description: "Reduced row echelon form, step by step" },
+            { url: "/calculators", title: "All calculators", description: "Every tool on the site" },
+            { url: "/calculators/gpa-to-percentage", title: "GPA to Percentage", description: "Convert between GPA scales" },
+            { url: "/blog", title: "Blog", description: "Guides and explainers" },
+          ].map((item) => (
+            <a
+              href={item.url}
+              class="block p-5 rounded-xl bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+            >
+              <span class="font-display font-bold block mb-1">{item.title}</span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{item.description}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </GpaLayout>
+</Layout>
