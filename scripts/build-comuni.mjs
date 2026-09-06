@@ -22,10 +22,11 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import os from "node:os";
 import { execFileSync } from "node:child_process";
 
-const ROOT = path.resolve(import.meta.dirname, "..");
+const ROOT = fileURLToPath(new URL("../", import.meta.url));
 const PACKAGE = "@marketto/belfiore-connector-embedded";
 const ISTAT_URL = "https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comuni.json";
 
