@@ -2,16 +2,14 @@
 // src/pages/index.astro
 import Layout from "../layouts/Layout.astro";
 import GpaLayout from "../components/GpaLayout";
-import RREFCalculator from "../components/RREFCalculator";
-import { languages } from "../config/translations";
+import MatrixCalculator from "../components/MatrixCalculator";
+import { relatedTo } from "../data/mathCalculators.js";
 
-const t = languages.en.translations;
-
-const title = "RREF Calculator - Calculate Reduced Row Echelon Form";
+const title = "RREF Calculator - Reduced Row Echelon Form with Steps";
 const description =
-  "Calculate the Reduced Row Echelon Form (RREF) of a matrix with our easy-to-use online calculator. Step-by-step explanations included.";
+  "Free RREF calculator with step-by-step working. Row reduce any matrix to reduced row echelon form using exact fractions, with every row operation named, pivots highlighted and the rank shown.";
 const keywords =
-  "RREF, Reduced Row Echelon Form, matrix calculator, linear algebra";
+  "rref calculator, reduced row echelon form calculator, row echelon form calculator, rref, row reduce calculator, gauss jordan elimination calculator, matrix rref, rref solver";
 
 // Schema.org data
 const schemaData = {
@@ -85,18 +83,41 @@ const faqData = {
   ],
 };
 
-// Meta tags
-const metaTags = [
-  { property: "og:title", content: title },
-  { property: "og:description", content: description },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: "https://rref-calculator.com" },
-  { property: "og:image", content: "https://rref-calculator.com/hero.png" },
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: title },
-  { name: "twitter:description", content: description },
-  { name: "twitter:image", content: "https://rref-calculator.com/hero.png" },
-];
+// HowTo schema for the worked steps below.
+const howToData = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to row reduce a matrix to reduced row echelon form",
+  description:
+    "Use elementary row operations to bring a matrix to reduced row echelon form: create a leading 1 in each pivot column and clear every other entry in that column.",
+  totalTime: "PT3M",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Find the pivot",
+      text: "Move left to right. In the current column, find a non-zero entry at or below the current row and swap it into the pivot position.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Scale the pivot row",
+      text: "Divide the whole pivot row by the pivot value so that the pivot becomes 1.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Clear the column",
+      text: "Subtract multiples of the pivot row from every other row so that the rest of the pivot column becomes zero, above the pivot as well as below.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Repeat",
+      text: "Move to the next row and the next column and repeat until you run out of rows or columns. Rows of all zeros end up at the bottom.",
+    },
+  ],
+};
 ---
 
 <Layout
@@ -105,172 +126,248 @@ const metaTags = [
   keywords={keywords}
   currentUrl={Astro.url.pathname}
   ogImage="/hero.png"
+  additionalSchema={[schemaData, faqData, howToData]}
 >
-  <!-- MathJax Configuration -->
-  <script is:inline>
-    MathJax = {
-      tex: {
-        inlineMath: [
-          ["$", "$"],
-          ["\\(", "\\)"],
-        ],
-        displayMath: [
-          ["$$", "$$"],
-          ["\\[", "\\]"],
-        ],
-        processEscapes: true,
-      },
-      options: {
-        ignoreHtmlClass: "tex2jax_ignore",
-        processHtmlClass: "tex2jax_process",
-      },
-    };
-  </script>
-  <script
-    async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <GpaLayout client:load {title} {description} {keywords}>
     <div class="space-y-12">
-      {/* Calculator Section */}
+      {/* Calculator */}
       <section>
         <h1 class="text-3xl font-display font-bold mb-4">RREF Calculator</h1>
         <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-8">
-          Enter your matrix below to calculate its Reduced Row Echelon Form
-          (RREF).
+          Enter a matrix to row reduce it to reduced row echelon form. Every row operation is named and shown,
+          answers stay as exact fractions rather than rounded decimals, and pivot positions are highlighted so you
+          can read off the rank. Tick the box under the grid to treat the last column as the constants of a linear
+          system and get the solution too.
         </p>
-        <RREFCalculator
+        <MatrixCalculator
           client:load
-          labels={{
-            rows: t.calculator.rows,
-            columns: t.calculator.columns,
-            createMatrix: t.calculator.createMatrix,
-            calculate: t.calculator.calculate,
-            sizeWarning: t.calculator.sizeWarning,
-            result: t.calculator.result,
-            stepByStep: t.calculator.stepByStep,
-            finalMatrix: t.calculator.finalMatrix,
-          }}
+          mode="rref"
+          defaultMatrix={[[2, 1, -1, 8], [-3, -1, 2, -11], [-2, 1, 2, -3]]}
+          presets={[
+            { label: "3×4 system with a unique solution", matrix: [[2, 1, -1, 8], [-3, -1, 2, -11], [-2, 1, 2, -3]] },
+            { label: "Inconsistent system (no solution)", matrix: [[1, 1, 1, 2], [2, 2, 2, 5], [1, 0, 1, 1]] },
+            { label: "Infinitely many solutions", matrix: [[1, 2, 3, 4], [2, 4, 6, 8], [1, 1, 1, 1]] },
+            { label: "Rank-deficient 3×3", matrix: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] },
+            { label: "Fractions", matrix: [["1/2", "1/3", "1/4"], ["1/3", "1/4", "1/5"], ["1/4", "1/5", "1/6"]] },
+            { label: "Identity (already reduced)", matrix: [[1, 0, 0], [0, 1, 0], [0, 0, 1]] },
+          ]}
         />
       </section>
 
-      {/* About Section */}
+      {/* What RREF is */}
       <section
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
       >
-        <h2 class="text-2xl font-display font-bold mb-6">
-          About RREF Calculator
-        </h2>
-        <div class="prose dark:prose-invert max-w-none">
-          <p>
-            Welcome to our RREF (Reduced Row Echelon Form) Calculator, a
-            powerful tool designed to simplify complex matrix operations. This
-            calculator helps students, educators, and professionals quickly
-            compute the Reduced Row Echelon Form of any matrix, providing
-            step-by-step solutions for better understanding.
-          </p>
+        <h2 class="text-2xl font-display font-bold mb-4">What reduced row echelon form means</h2>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+          A matrix is in reduced row echelon form when all four of these hold. Miss any one and it is not RREF.
+        </p>
+        <ol class="space-y-2 text-content-light-dimmed dark:text-content-dark-dimmed list-decimal list-inside">
+          <li>The first non-zero entry of every row is a <strong class="text-content-light dark:text-content-dark">1</strong>, called the leading 1 or pivot.</li>
+          <li>Each pivot sits strictly to the <strong class="text-content-light dark:text-content-dark">right</strong> of the pivot in the row above.</li>
+          <li>Every other entry in a pivot's column is <strong class="text-content-light dark:text-content-dark">zero</strong> — above it as well as below.</li>
+          <li>Rows of all zeros are at the <strong class="text-content-light dark:text-content-dark">bottom</strong>.</li>
+        </ol>
+        <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+          Every matrix has exactly one RREF. That uniqueness is what makes it useful: two people who row reduce the
+          same matrix by different sequences of operations still finish with the identical result. Ordinary row
+          echelon form is not unique, which is why RREF is the form worth computing.
+        </p>
+      </section>
 
-          <h3>What You Can Do with Our RREF Calculator?</h3>
-          <ul>
-            <li>Input matrices of various sizes (no fixed upper limit)</li>
-            <li>Calculate the RREF of your input matrix</li>
-            <li>View detailed, step-by-step solutions</li>
-            <li>Understand the process of reaching RREF</li>
-            <li>Verify your manual calculations</li>
-            <li>Learn about matrix operations and linear algebra concepts</li>
-          </ul>
+      {/* Worked example */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">A worked example</h2>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+          The matrix loaded into the calculator is the augmented matrix of this system:
+        </p>
+        <pre class="font-mono text-sm bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg overflow-x-auto"> 2x +  y &minus;  z =   8
+&minus;3x &minus;  y + 2z = &minus;11
+&minus;2x +  y + 2z =  &minus;3</pre>
+        <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+          Row reducing it gives the identity matrix on the left and the solution on the right:
+        </p>
+        <pre class="font-mono text-sm bg-surface-light-hover dark:bg-surface-dark p-4 rounded-lg overflow-x-auto">1  0  0 |  2
+0  1  0 |  3
+0  0  1 | &minus;1</pre>
+        <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+          So x = 2, y = 3, z = &minus;1. Substituting back into the first equation gives 2(2) + 3 &minus; (&minus;1) = 8,
+          which confirms it. Three pivots for three unknowns means the solution is unique.
+        </p>
+      </section>
 
-          <h3>How the RREF Calculator Works?</h3>
-          <ol>
-            <li>
-              <strong>Input Your Matrix:</strong> Enter the dimensions and values
-              of your matrix using the provided interface.
-            </li>
-            <li>
-              <strong>Initiate Calculation:</strong> Click the "Calculate RREF" button
-              to start the process.
-            </li>
-            <li>
-              <strong>Algorithm Execution:</strong> Our calculator applies Gaussian
-              elimination with back-substitution to transform the matrix.
-            </li>
-            <li>
-              <strong>Step-by-Step Display:</strong> Each operation is shown with
-              a clear explanation and the resulting matrix.
-            </li>
-            <li>
-              <strong>Final Result:</strong> The RREF of your input matrix is displayed,
-              along with all intermediate steps.
-            </li>
-          </ol>
+      {/* Reading the result */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">How to read the answer</h2>
+        <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6">
+          Once a matrix is in RREF, the shape of the result tells you everything about the system it came from.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+                <th class="py-2 pr-6 font-display">What you see</th>
+                <th class="py-2 font-display">What it means</th>
+              </tr>
+            </thead>
+            <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-mono whitespace-nowrap">A pivot in every variable column</td>
+                <td class="py-3">Exactly one solution; read it straight off the last column.</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-mono whitespace-nowrap">A row of 0 0 0 | c, with c &ne; 0</td>
+                <td class="py-3">That row says 0 = c, which is impossible. The system is inconsistent — no solution.</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-mono whitespace-nowrap">A variable column with no pivot</td>
+                <td class="py-3">That variable is free. Infinitely many solutions, described in terms of the free variables.</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-mono whitespace-nowrap">A row of all zeros</td>
+                <td class="py-3">That equation was a combination of the others and carried no new information.</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-6 font-mono whitespace-nowrap">Number of pivots</td>
+                <td class="py-3">The rank of the matrix. The pivot columns of the original matrix form a basis for its column space.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
-      {/* Applications Section */}
+      {/* RREF vs REF */}
       <section
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
       >
-        <h2 class="text-2xl font-display font-bold mb-6">
-          Applications of RREF
-        </h2>
-        <div class="prose dark:prose-invert max-w-none">
-          <p>
-            The Reduced Row Echelon Form (RREF) is a powerful tool in linear
-            algebra with numerous practical applications across various fields.
-          </p>
+        <h2 class="text-2xl font-display font-bold mb-4">RREF compared with REF</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+                <th class="py-2 pr-6 font-display"></th>
+                <th class="py-2 pr-6 font-display">Row echelon form (REF)</th>
+                <th class="py-2 font-display">Reduced row echelon form (RREF)</th>
+              </tr>
+            </thead>
+            <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-semibold text-content-light dark:text-content-dark">Leading entry</td>
+                <td class="py-3 pr-6">Any non-zero number</td>
+                <td class="py-3">Must be exactly 1</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-semibold text-content-light dark:text-content-dark">Above the pivot</td>
+                <td class="py-3 pr-6">May be anything</td>
+                <td class="py-3">Must be zero</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-semibold text-content-light dark:text-content-dark">Uniqueness</td>
+                <td class="py-3 pr-6">Many valid forms</td>
+                <td class="py-3">Exactly one per matrix</td>
+              </tr>
+              <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                <td class="py-3 pr-6 font-semibold text-content-light dark:text-content-dark">Method</td>
+                <td class="py-3 pr-6">Gaussian elimination</td>
+                <td class="py-3">Gauss-Jordan elimination</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-6 font-semibold text-content-light dark:text-content-dark">Getting the solution</td>
+                <td class="py-3 pr-6">Needs back-substitution</td>
+                <td class="py-3">Read directly off the matrix</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+          If you only need row echelon form and the back-substitution written out, use the
+          <a href="/calculators/gaussian-elimination" class="text-accent-primary"> Gaussian elimination calculator</a>
+          instead.
+        </p>
+      </section>
 
-          <h3>Common Applications</h3>
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 class="font-display font-semibold text-lg mb-2">
-                Solving Systems of Linear Equations
-              </h4>
-              <p>
-                Convert the augmented matrix to RREF to find solutions
-                efficiently.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-lg mb-2">
-                Determining Matrix Rank
-              </h4>
-              <p>Count non-zero rows in RREF to find matrix rank.</p>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-lg mb-2">
-                Finding Matrix Inverses
-              </h4>
-              <p>Use RREF with augmented identity matrix to find inverses.</p>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-lg mb-2">
-                Computing Null Space
-              </h4>
-              <p>Find solutions to homogeneous systems using RREF.</p>
-            </div>
+      {/* Mistakes */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">Mistakes that cost marks</h2>
+        <ul class="space-y-3 text-content-light-dimmed dark:text-content-dark-dimmed">
+          <li><strong class="text-content-light dark:text-content-dark">Clearing only below the pivot.</strong> That gives REF, not RREF. The entries above each pivot must be zero too.</li>
+          <li><strong class="text-content-light dark:text-content-dark">Rounding too early.</strong> Turning 1/3 into 0.333 and carrying it through will not give clean pivots. This calculator keeps exact fractions for that reason.</li>
+          <li><strong class="text-content-light dark:text-content-dark">Operating on columns.</strong> Only row operations preserve the solution set. Swapping columns changes which variable is which.</li>
+          <li><strong class="text-content-light dark:text-content-dark">Multiplying a row by zero.</strong> Allowed operations are: swap two rows, multiply a row by a <em>non-zero</em> constant, and add a multiple of one row to another.</li>
+          <li><strong class="text-content-light dark:text-content-dark">Reading a free variable as zero.</strong> A column with no pivot means that variable can be anything; the answer is a family of solutions, not a single point.</li>
+        </ul>
+      </section>
+
+      {/* What RREF is used for */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+      >
+        <h2 class="text-2xl font-display font-bold mb-4">What row reduction is used for</h2>
+        <div class="grid md:grid-cols-2 gap-6 text-content-light-dimmed dark:text-content-dark-dimmed">
+          <div>
+            <h3 class="font-display font-semibold text-content-light dark:text-content-dark mb-1">Solving linear systems</h3>
+            <p class="text-sm">Row reduce the augmented matrix and the solution can be read straight off, including when there are infinitely many.</p>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-content-light dark:text-content-dark mb-1">Rank and independence</h3>
+            <p class="text-sm">The number of pivots is the rank, and it tells you whether a set of vectors is linearly independent.</p>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-content-light dark:text-content-dark mb-1">Inverting a matrix</h3>
+            <p class="text-sm">Row reduce [A | I]. If the left half becomes the identity, the right half is A⁻¹.</p>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-content-light dark:text-content-dark mb-1">Null space and column space</h3>
+            <p class="text-sm">Free variables give a basis for the null space; pivot columns give a basis for the column space.</p>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section with complete questions */}
+      {/* Related */}
       <section
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
       >
-        <h2 class="text-2xl font-display font-bold mb-6">
-          Frequently Asked Questions
-        </h2>
-        <div class="space-y-4">
+        <h2 class="text-2xl font-display font-bold mb-6">Related matrix calculators</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            relatedTo("gaussian", "determinant", "inverse", "transpose", "lu", "diagonalize").map((item) => (
+              <a
+                href={item.url}
+                class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+              >
+                <span class="font-display font-semibold block mb-1">{item.title}</span>
+                <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{item.description}</span>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section
+        class="bg-surface-light dark:bg-surface-dark-hover rounded-xl border border-gray-200/10 dark:border-gray-800/10 overflow-hidden"
+        id="faq"
+      >
+        <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
+          <h2 class="text-2xl font-display font-bold">Frequently asked questions</h2>
+        </div>
+        <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
           {
             faqData.mainEntity.map((faq) => (
-              <details class="group">
-                <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer bg-surface-light-hover dark:bg-surface-dark">
-                  <span class="font-display font-medium">{faq.name}</span>
-                  <span class="transition-transform group-open:rotate-180">
-                    ↓
-                  </span>
+              <details class="group p-6">
+                <summary class="font-display font-semibold text-lg cursor-pointer list-none flex items-center justify-between gap-4">
+                  {faq.name}
+                  <span class="text-accent-primary text-sm group-open:rotate-180 transition-transform">▾</span>
                 </summary>
-                <div class="p-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+                <p class="mt-3 text-content-light-dimmed dark:text-content-dark-dimmed">
                   {faq.acceptedAnswer.text}
-                </div>
+                </p>
               </details>
             ))
           }
@@ -279,7 +376,3 @@ const metaTags = [
     </div>
   </GpaLayout>
 </Layout>
-
-{/* Schema.org JSON-LD */}
-<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
-<script type="application/ld+json" set:html={JSON.stringify(faqData)} />
