@@ -2,33 +2,20 @@
   command = "CI= yarn run build"
   publish = "dist"
 
-# Redirect old zip code lookup URLs to new query parameter format
-[[redirects]]
-  from = "/calculators/zip-lookup/:country/:code"
-  to = "/calculators/zip-lookup/?country=:country&code=:code"
-  status = 301
-  force = true
-
-# Keep existing redirects
-[[redirects]]
-  from = "/calculators/bmi/metric/:weight/:height"
-  to = "/calculators/bmi/?unit=metric&weight=:weight&height=:height"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/calculators/bmi/imperial/:weight/:height"
-  to = "/calculators/bmi/?unit=imperial&weight=:weight&height=:height"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/calculators/bmi/*"
-  to = "/calculators/bmi/"
-  status = 301
-  
-# SPA Fallback
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Redirects live in public/_redirects, which the build copies to dist/.
+#
+# Netlify processes rules from netlify.toml BEFORE those in _redirects, so
+# keeping some here and some there means the file you are reading may not be
+# the one that wins. They are deliberately consolidated in _redirects.
+#
+# In particular, this file used to end with:
+#
+#   [[redirects]]
+#     from = "/*"
+#     to = "/index.html"
+#     status = 200
+#
+# That served the homepage, with a 200, for every URL that did not exist — a
+# soft 404 across an unbounded URL space, and it silently overrode the
+# _redirects rules. Unknown URLs now fall through to dist/404.html with a
+# real 404 status.
