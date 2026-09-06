@@ -20,7 +20,31 @@ const {
   schemaExtra = null,
   about = "Calculator",
   definition = null,
+  lang = "en",
 } = Astro.props;
+
+// UI strings for the section chrome, so an Italian page reads as Italian.
+const STRINGS = {
+  en: {
+    home: "Calculators",
+    homeUrl: "/calculators",
+    faq: "Frequently asked questions",
+    related: "Related calculators",
+    about: (subject) => `About this ${subject}`,
+    relatedSearches: "Related Searches",
+    breadcrumbName: "Calculators",
+  },
+  it: {
+    home: "Calcolatori",
+    homeUrl: "/it/codice-fiscale",
+    faq: "Domande frequenti",
+    related: "Strumenti correlati",
+    about: (subject) => `Informazioni su questo ${subject}`,
+    relatedSearches: "Ricerche correlate",
+    breadcrumbName: "Codice fiscale",
+  },
+};
+const t = STRINGS[lang] || STRINGS.en;
 
 const siteUrl = "https://rref-calculator.com";
 const currentUrl = Astro.url.pathname;
@@ -29,7 +53,7 @@ const currentUrl = Astro.url.pathname;
 const ogImage = ogImageForPath(currentUrl) || "/og-image.png";
 
 const crumbs = [
-  { name: "Calculators", url: "/calculators" },
+  { name: t.breadcrumbName, url: t.homeUrl },
   ...breadcrumbs,
 ];
 
@@ -84,6 +108,7 @@ const definitionSchema = definition
         "@type": "DefinedTermSet",
         name: definition.set || "Linear algebra",
       },
+      inLanguage: lang,
     }
   : null;
 
@@ -98,6 +123,8 @@ if (schemaExtra) {
   description={description}
   keywords={keywords}
   currentUrl={currentUrl}
+  lang={lang}
+  isCalculator={true}
   ogImage={ogImage}
   ogImageAlt={`${heading || title} — rref-calculator.com`}
   additionalSchema={schemas.filter(Boolean)}
@@ -108,12 +135,13 @@ if (schemaExtra) {
     description={description}
     keywords={keywords}
     about={about}
+    labels={{ about: t.about, related: t.relatedSearches }}
   >
     <div class="space-y-10">
       {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb" class="text-sm">
         <ol class="flex flex-wrap items-center gap-2 text-content-light-dimmed dark:text-content-dark-dimmed">
-          <li><a href="/calculators" class="hover:text-accent-primary">Calculators</a></li>
+          <li><a href={t.homeUrl} class="hover:text-accent-primary">{t.home}</a></li>
           {
             breadcrumbs.map((crumb, i) => (
               <li class="flex items-center gap-2">
@@ -169,7 +197,7 @@ if (schemaExtra) {
             id="faq"
           >
             <div class="p-6 border-b border-gray-200/10 dark:border-gray-800/10">
-              <h2 class="text-2xl font-display font-bold">Frequently asked questions</h2>
+              <h2 class="text-2xl font-display font-bold">{t.faq}</h2>
             </div>
             <div class="divide-y divide-gray-200/10 dark:divide-gray-800/10">
               {faqs.map((faq) => (
@@ -193,7 +221,7 @@ if (schemaExtra) {
             class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
             id="related"
           >
-            <h2 class="text-2xl font-display font-bold mb-6">Related calculators</h2>
+            <h2 class="text-2xl font-display font-bold mb-6">{t.related}</h2>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => (
                 <a

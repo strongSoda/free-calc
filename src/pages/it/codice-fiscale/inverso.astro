@@ -1,0 +1,117 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import CodiceFiscaleTool from "../../../components/CodiceFiscaleTool";
+import { cfCorrelati } from "../../../data/codiceFiscaleLinks.js";
+
+const title = "Codice Fiscale Inverso — Risali ai Dati dal Codice";
+const description =
+  "Calcolo inverso del codice fiscale: inserisci il codice e scopri data di nascita, sesso e comune o Stato estero di nascita. Gestisce anche i casi di omocodia e i comuni soppressi.";
+const keywords =
+  "codice fiscale inverso, calcolo codice fiscale inverso, calcola codice fiscale inverso, calcolo inverso codice fiscale, decodifica codice fiscale, risalire dati da codice fiscale";
+
+const faqs = [
+  {
+    q: "Che cos'è il calcolo inverso del codice fiscale?",
+    a: "È l'operazione opposta al calcolo: partendo dai 16 caratteri si ricavano le informazioni che vi sono codificate, cioè la data di nascita, il sesso e il comune o lo Stato estero di nascita.",
+  },
+  {
+    q: "Si può risalire al nome e al cognome dal codice fiscale?",
+    a: "No. Le prime sei lettere sono un'abbreviazione irreversibile: RSS può venire da Rossi, Russo, Rossini, Rasso e da moltissimi altri cognomi. Dal codice si ottengono soltanto le tre lettere, non il nome per esteso.",
+  },
+  {
+    q: "Come si capisce se una persona è uomo o donna dal codice fiscale?",
+    a: "Si guardano le due cifre del giorno di nascita, in decima e undicesima posizione. Se il valore supera 40 si tratta di una donna e il giorno reale si ottiene sottraendo 40; altrimenti si tratta di un uomo.",
+  },
+  {
+    q: "Come si ricava l'anno di nascita se ci sono solo due cifre?",
+    a: "Il codice contiene solo le ultime due cifre dell'anno, quindi 85 può indicare il 1985 o il 2085. Lo strumento sceglie il secolo che dà una data non futura, che è l'interpretazione corretta nella pratica.",
+  },
+  {
+    q: "Che cosa succede se il comune non esiste più?",
+    a: "Molti comuni sono stati soppressi o accorpati nel tempo, ma il loro codice catastale resta valido nei codici fiscali già attribuiti. L'elenco usato qui comprende anche i comuni soppressi, che vengono segnalati come tali.",
+  },
+  {
+    q: "Il calcolo inverso funziona con i codici con omocodia?",
+    a: "Sì. Quando alcune cifre sono state sostituite da lettere per omocodia, lo strumento le riconosce, le riconverte in cifre e legge correttamente data e luogo di nascita, segnalando quante sostituzioni ha trovato.",
+  },
+];
+
+const howTo = {
+  name: "Come fare il calcolo inverso del codice fiscale",
+  steps: [
+    { name: "Inserire il codice fiscale", text: "Digitare i 16 caratteri; maiuscole e minuscole sono equivalenti." },
+    { name: "Leggere i dati estratti", text: "Compaiono data di nascita, sesso e luogo di nascita con il relativo codice catastale." },
+    { name: "Controllare le segnalazioni", text: "Lo strumento avvisa se il codice contiene un'omocodia o se il comune è stato soppresso." },
+  ],
+};
+---
+
+<CalculatorLayout
+  lang="it"
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Codice Fiscale Inverso"
+  intro="Inserisci un codice fiscale e ricava i dati che contiene: data di nascita, sesso e luogo di nascita. Funziona anche con i codici modificati per omocodia e con i comuni non più esistenti."
+  breadcrumbs={[
+    { name: "Calcolo codice fiscale", url: "/it/codice-fiscale" },
+    { name: "Codice fiscale inverso", url: "/it/codice-fiscale/inverso" },
+  ]}
+  faqs={faqs}
+  howTo={howTo}
+  related={cfCorrelati("calcola", "verifica", "estero", "trova")}
+  about="strumento"
+>
+  <CodiceFiscaleTool client:load modo="inverso" codicePredefinito="RSSMRA85M01H501Q" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Che cosa si può leggere e che cosa no</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="font-display font-semibold mb-3 text-accent-success">Si ricava</h3>
+          <ul class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed list-disc list-inside">
+            <li>Il giorno, il mese e l'anno di nascita</li>
+            <li>Il sesso registrato all'anagrafe</li>
+            <li>Il comune italiano o lo Stato estero di nascita</li>
+            <li>Le tre lettere del cognome e le tre del nome</li>
+            <li>L'eventuale presenza di un'omocodia</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-display font-semibold mb-3 text-accent-warning">Non si ricava</h3>
+          <ul class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed list-disc list-inside">
+            <li>Il nome e il cognome per esteso</li>
+            <li>La residenza o l'indirizzo</li>
+            <li>Il numero di telefono o l'email</li>
+            <li>Dati fiscali, redditi o conti correnti</li>
+            <li>Se il codice sia effettivamente attribuito a qualcuno</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">L'omocodia spiegata</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-4">
+        Due persone con cognome e nome simili, nate lo stesso giorno nello stesso comune, otterrebbero lo stesso
+        codice fiscale. Per distinguerle l'Agenzia delle Entrate sostituisce le cifre con lettere, partendo da
+        destra, secondo questa tabella:
+      </p>
+      <div class="grid grid-cols-5 sm:grid-cols-10 gap-2">
+        {
+          [["0","L"],["1","M"],["2","N"],["3","P"],["4","Q"],["5","R"],["6","S"],["7","T"],["8","U"],["9","V"]].map(([cifra, lettera]) => (
+            <div class="p-2 rounded-lg bg-surface-light-hover dark:bg-surface-dark text-center font-mono">
+              <span class="block text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{cifra}</span>
+              <span class="block text-lg font-bold text-accent-primary">{lettera}</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="mt-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Dopo la sostituzione il carattere di controllo viene ricalcolato, quindi anche un codice con omocodia
+        supera regolarmente la <a href="/it/codice-fiscale/verifica" class="text-accent-primary">verifica</a>.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -1,0 +1,112 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import CodiceFiscaleTool from "../../../components/CodiceFiscaleTool";
+import { cfCorrelati } from "../../../data/codiceFiscaleLinks.js";
+
+const title = "Calcolo Codice Fiscale per Nati all'Estero";
+const description =
+  "Come si calcola il codice fiscale di chi è nato all'estero: al posto del comune si usa il codice dello Stato, che inizia con Z. Calcolatore online e spiegazione della procedura per ottenerlo.";
+const keywords =
+  "calcolo codice fiscale estero, codice fiscale nati all'estero, codice fiscale stranieri, codice fiscale per cittadini stranieri, codice fiscale stato estero, codice fiscale Z";
+
+const statiComuni = [
+  ["Albania", "Z100"], ["Germania", "Z112"], ["Francia", "Z110"], ["Regno Unito", "Z114"],
+  ["Romania", "Z129"], ["Spagna", "Z131"], ["Svizzera", "Z133"], ["Ucraina", "Z138"],
+  ["Cina", "Z210"], ["India", "Z222"], ["Filippine", "Z216"], ["Bangladesh", "Z249"],
+  ["Marocco", "Z330"], ["Egitto", "Z336"], ["Nigeria", "Z347"], ["Senegal", "Z343"],
+  ["Stati Uniti d'America", "Z404"], ["Brasile", "Z602"], ["Argentina", "Z600"], ["Perù", "Z611"],
+];
+
+const faqs = [
+  {
+    q: "Come si calcola il codice fiscale di una persona nata all'estero?",
+    a: "L'algoritmo è identico a quello usato per chi è nato in Italia: cambia soltanto il campo del luogo di nascita. Al posto del codice catastale del comune si inserisce il codice dello Stato estero, che comincia sempre con la lettera Z, per esempio Z404 per gli Stati Uniti o Z112 per la Germania.",
+  },
+  {
+    q: "Come si riconosce un codice fiscale di chi è nato all'estero?",
+    a: "Dalla dodicesima posizione: se il carattere è una Z, la persona è nata fuori dall'Italia e i tre caratteri successivi identificano lo Stato anziché il comune.",
+  },
+  {
+    q: "Uno straniero residente in Italia ha bisogno del codice fiscale?",
+    a: "Sì. Il codice fiscale serve per qualunque rapporto con la pubblica amministrazione e per gran parte di quelli privati: aprire un conto corrente, firmare un contratto di lavoro o di locazione, iscriversi al Servizio Sanitario Nazionale, acquistare una SIM.",
+  },
+  {
+    q: "Dove si richiede il codice fiscale se si è nati all'estero?",
+    a: "In Italia presso qualunque ufficio dell'Agenzia delle Entrate, presentando un documento di identità e, per i cittadini non UE, il permesso di soggiorno o la documentazione di ingresso. Chi si trova all'estero può richiederlo al consolato italiano competente. Lo Sportello Unico per l'Immigrazione lo attribuisce d'ufficio nelle pratiche di ingresso per lavoro o ricongiungimento familiare.",
+  },
+  {
+    q: "Il codice calcolato online è sufficiente per i documenti?",
+    a: "No. Il codice ottenuto qui è quello che risulta dall'algoritmo ed è utile per un controllo, ma per essere utilizzato deve essere attribuito dall'Agenzia delle Entrate e risultare in Anagrafe Tributaria. Solo il certificato di attribuzione o la tessera sanitaria fanno fede.",
+  },
+  {
+    q: "Che cosa succede se lo Stato di nascita non esiste più?",
+    a: "I codici degli Stati cessati, come l'Unione Sovietica o la Jugoslavia, restano validi nei codici fiscali già attribuiti e sono compresi nell'elenco usato da questo strumento. Per un nuovo calcolo si usa il codice dello Stato attuale.",
+  },
+];
+---
+
+<CalculatorLayout
+  lang="it"
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Codice Fiscale per Chi è Nato all'Estero"
+  intro="Se il luogo di nascita è fuori dall'Italia, il codice fiscale si calcola nello stesso modo: al posto del comune si indica lo Stato estero, il cui codice comincia con la lettera Z. Nel campo del luogo di nascita basta digitare il nome dello Stato."
+  breadcrumbs={[
+    { name: "Calcolo codice fiscale", url: "/it/codice-fiscale" },
+    { name: "Nati all'estero", url: "/it/codice-fiscale/estero" },
+  ]}
+  faqs={faqs}
+  related={cfCorrelati("calcola", "inverso", "verifica", "trova")}
+  about="strumento"
+>
+  <CodiceFiscaleTool client:load modo="calcola" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Codici degli Stati esteri più frequenti</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6">
+        Nel calcolatore basta scrivere il nome dello Stato: il codice viene selezionato automaticamente. L'elenco
+        completo comprende oltre duecento Stati, compresi quelli non più esistenti.
+      </p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {
+          statiComuni.map(([stato, codice]) => (
+            <div class="p-3 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+              <span class="block text-sm">{stato}</span>
+              <span class="block font-mono font-bold text-accent-primary">{codice}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Come si ottiene il codice fiscale</h2>
+      <ol class="space-y-4">
+        {
+          [
+            ["In Italia, all'Agenzia delle Entrate", "Ci si presenta a un qualunque ufficio territoriale con un documento di identità valido. Per i cittadini non UE serve anche il permesso di soggiorno o la ricevuta della richiesta."],
+            ["Dall'estero, al consolato italiano", "Chi non si trova ancora in Italia può richiederlo al consolato competente per il proprio luogo di residenza."],
+            ["Tramite lo Sportello Unico per l'Immigrazione", "Nelle pratiche di ingresso per lavoro subordinato o ricongiungimento familiare il codice viene attribuito d'ufficio."],
+            ["Con l'iscrizione anagrafica", "Al momento dell'iscrizione all'anagrafe del comune di residenza il codice viene richiesto automaticamente, se non già presente."],
+          ].map(([titolo, testo], i) => (
+            <li class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-primary/15 text-accent-primary font-bold flex items-center justify-center">
+                {i + 1}
+              </span>
+              <div>
+                <h3 class="font-display font-semibold">{titolo}</h3>
+                <p class="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">{testo}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mt-6 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Il rilascio è gratuito. Le informazioni qui riportate hanno carattere generale: per la propria situazione
+        conviene sempre fare riferimento all'Agenzia delle Entrate o al consolato competente.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

@@ -1,0 +1,123 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import CodiceFiscaleTool from "../../../components/CodiceFiscaleTool";
+import { cfCorrelati } from "../../../data/codiceFiscaleLinks.js";
+
+const title = "Come Trovare il Proprio Codice Fiscale";
+const description =
+  "Dove recuperare il codice fiscale se hai perso la tessera sanitaria: fascicolo sanitario, app IO, Agenzia delle Entrate, SPID. E perché non esiste un elenco pubblico per cercare il codice fiscale di un'altra persona.";
+const keywords =
+  "trova codice fiscale, ricerca codice fiscale, come trovare il codice fiscale, recuperare codice fiscale, cercare codice fiscale, codice fiscale smarrito";
+
+const faqs = [
+  {
+    q: "Dove si trova scritto il proprio codice fiscale?",
+    a: "Sulla tessera sanitaria (che è anche tesserino del codice fiscale), sulla carta d'identità elettronica, sulle buste paga, sulla dichiarazione dei redditi, sui referti sanitari e su quasi tutti i contratti firmati. Nella maggior parte dei casi basta cercare uno di questi documenti.",
+  },
+  {
+    q: "Come si recupera il codice fiscale online?",
+    a: "Accedendo con SPID, CIE o CNS all'area riservata dell'Agenzia delle Entrate, dove si può anche richiedere il duplicato della tessera sanitaria. Il codice compare inoltre nel Fascicolo Sanitario Elettronico della propria regione e nell'app IO.",
+  },
+  {
+    q: "Ho perso la tessera sanitaria: come faccio?",
+    a: "Si può chiedere il duplicato gratuitamente nell'area riservata dell'Agenzia delle Entrate, presso un ufficio territoriale o, in molte regioni, presso la ASL. Nel frattempo il codice resta lo stesso: non cambia mai.",
+  },
+  {
+    q: "Si può trovare il codice fiscale di un'altra persona?",
+    a: "No, non esiste un elenco pubblico consultabile. L'Anagrafe Tributaria non è accessibile ai privati e il codice fiscale è un dato personale tutelato dal GDPR e dal Codice privacy. Anche calcolarlo a partire dai dati altrui non lo rende un dato lecito da utilizzare: serve una base giuridica per trattarlo.",
+  },
+  {
+    q: "Come faccio ad avere il codice fiscale di un familiare o di un dipendente?",
+    a: "Chiedendolo direttamente all'interessato, oppure — nel caso di un minore o di una persona di cui si ha la rappresentanza legale — accedendo ai servizi dell'Agenzia delle Entrate con le proprie credenziali. Le aziende lo acquisiscono dal lavoratore al momento dell'assunzione.",
+  },
+  {
+    q: "Serve verificare il codice fiscale di un cliente o fornitore?",
+    a: "Per le esigenze di fatturazione l'Agenzia delle Entrate mette a disposizione un servizio di verifica che conferma la corrispondenza fra codice fiscale e dati anagrafici forniti dall'interessato. È uno strumento di riscontro, non un motore di ricerca.",
+  },
+  {
+    q: "Il codice fiscale può cambiare?",
+    a: "Di norma no: resta lo stesso per tutta la vita. Viene modificato solo in casi particolari, per esempio a seguito della rettifica di dati anagrafici errati o di una variazione di nome, cognome o sesso registrata all'anagrafe.",
+  },
+];
+
+const howTo = {
+  name: "Come recuperare il proprio codice fiscale",
+  steps: [
+    { name: "Cercare la tessera sanitaria", text: "Il codice fiscale è stampato sul fronte, sotto i dati anagrafici." },
+    { name: "Controllare i documenti che si hanno già", text: "Busta paga, dichiarazione dei redditi, referti medici e contratti lo riportano quasi sempre." },
+    { name: "Accedere all'area riservata dell'Agenzia delle Entrate", text: "Con SPID, CIE o CNS si consulta il proprio codice e si richiede il duplicato della tessera." },
+    { name: "Chiedere il duplicato", text: "Il duplicato della tessera sanitaria è gratuito e si richiede online, presso un ufficio dell'Agenzia o presso la ASL." },
+  ],
+};
+---
+
+<CalculatorLayout
+  lang="it"
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Come Trovare il Proprio Codice Fiscale"
+  intro="Se hai perso la tessera sanitaria, il codice fiscale si recupera in pochi minuti: è scritto su documenti che con ogni probabilità hai già, e si consulta online con SPID. Qui trovi dove cercarlo e cosa dice la legge sul codice fiscale altrui."
+  breadcrumbs={[
+    { name: "Calcolo codice fiscale", url: "/it/codice-fiscale" },
+    { name: "Trovare il codice fiscale", url: "/it/codice-fiscale/trova" },
+  ]}
+  faqs={faqs}
+  howTo={howTo}
+  related={cfCorrelati("calcola", "inverso", "verifica", "estero")}
+  about="strumento"
+>
+  <div class="space-y-8">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Dove è già scritto il tuo codice fiscale</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        {
+          [
+            ["Tessera sanitaria", "È anche il tesserino del codice fiscale: il codice è sul fronte, sotto nome e cognome."],
+            ["Carta d'identità elettronica", "Riportato sul retro e memorizzato nel microchip."],
+            ["Busta paga", "Compare in testa al cedolino, insieme ai dati anagrafici."],
+            ["Dichiarazione dei redditi", "Nel frontespizio del modello 730 o Redditi."],
+            ["Fascicolo Sanitario Elettronico", "Accessibile con SPID dal portale della propria regione."],
+            ["App IO", "Nella sezione del profilo, se hai attivato l'accesso con SPID o CIE."],
+          ].map(([dove, come]) => (
+            <div class="p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark">
+              <h3 class="font-display font-semibold mb-1">{dove}</h3>
+              <p class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{come}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="rounded-xl p-6 border border-accent-warning/30 bg-accent-warning/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Cercare il codice fiscale di un'altra persona</h2>
+      <p class="mb-3">
+        Non esiste, e non può esistere, un elenco pubblico in cui cercare il codice fiscale di qualcun altro.
+        L'Anagrafe Tributaria non è consultabile dai privati, e il codice fiscale è un dato personale tutelato
+        dal Regolamento (UE) 2016/679 e dal Codice in materia di protezione dei dati personali.
+      </p>
+      <p class="mb-3">
+        Il codice fiscale è calcolabile dai dati anagrafici, quindi in teoria chiunque ne conosca nome, cognome,
+        data e luogo di nascita può ricostruirlo. Ma poterlo calcolare non significa poterlo usare: per trattare
+        il dato di un'altra persona serve comunque una base giuridica, per esempio il consenso o un obbligo
+        contrattuale o di legge.
+      </p>
+      <p class="font-semibold mb-2">Le strade legittime sono queste:</p>
+      <ul class="list-disc list-inside space-y-1 text-sm">
+        <li>Chiederlo direttamente alla persona interessata.</li>
+        <li>Per un figlio minore o una persona di cui si ha la rappresentanza legale, consultarlo nei servizi dell'Agenzia delle Entrate con le proprie credenziali.</li>
+        <li>Per un dipendente, acquisirlo al momento dell'assunzione insieme agli altri dati contrattuali.</li>
+        <li>Per fatturazione, usare il servizio di verifica dell'Agenzia delle Entrate, che conferma la corrispondenza fra un codice già in tuo possesso e i dati anagrafici.</li>
+      </ul>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Verifica il codice che hai trovato</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6">
+        Se hai recuperato il codice da un documento poco leggibile, controlla qui che sia trascritto correttamente:
+        il carattere finale di controllo intercetta quasi tutti gli errori di battitura.
+      </p>
+      <CodiceFiscaleTool client:load modo="verifica" mostraSchede={false} />
+    </section>
+  </div>
+</CalculatorLayout>

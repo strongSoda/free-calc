@@ -94,6 +94,7 @@ export const renderOgImage = async (spec) => {
   const subtitle = spec.subtitle ? truncate(spec.subtitle, 120) : null;
   const eyebrow = spec.eyebrow ? truncate(spec.eyebrow, 40).toUpperCase() : null;
   const badge = spec.badge ? truncate(spec.badge, 32) : "rref-calculator.com";
+  const tagline = spec.tagline || "Free · step-by-step · no sign-up";
 
   const tree = el(
     "div",
@@ -203,7 +204,7 @@ export const renderOgImage = async (spec) => {
           el(
             "div",
             { style: { display: "flex", fontSize: "24px", color: COLORS.dim } },
-            "Free · step-by-step · no sign-up"
+            tagline
           ),
         ]
       ),

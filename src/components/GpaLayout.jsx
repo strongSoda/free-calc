@@ -4,7 +4,13 @@ import Footer from './Footer';
 import AdUnit from './AdUnit';
 import MobileBottomAd from './MobileBottomAd';
 
-const GpaLayout = ({ children, title, description, keywords = "", about="Calculator" }) => {
+const DEFAULT_LABELS = {
+  about: (subject) => `About this ${subject}`,
+  related: 'Related Searches',
+};
+
+const GpaLayout = ({ children, title, description, keywords = "", about="Calculator", labels = DEFAULT_LABELS }) => {
+  const l = { ...DEFAULT_LABELS, ...(labels || {}) };
   // Safely handle keywords splitting
   const keywordsList = keywords && typeof keywords === 'string' 
     ? keywords.split(',').filter(k => k.trim()) 
@@ -38,14 +44,14 @@ const GpaLayout = ({ children, title, description, keywords = "", about="Calcula
                     </div>
 
                     <div className="mt-12">
-                      <h2 className="font-display text-2xl font-semibold mb-4">About this {about}
+                      <h2 className="font-display text-2xl font-semibold mb-4">{l.about(about)}
                       </h2>
                       <div className="text-content-light-dimmed dark:text-content-dark-dimmed">
                         <p>{description || ""}</p>
 
                         {keywordsList.length > 0 && (
                           <div className="mt-4">
-                            <h3 className="font-display text-lg font-medium mb-2">Related Searches</h3>
+                            <h3 className="font-display text-lg font-medium mb-2">{l.related}</h3>
                             <div className="flex flex-wrap gap-2">
                               {keywordsList.map((keyword, index) => (
                                 <span 

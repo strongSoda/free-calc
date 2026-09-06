@@ -408,6 +408,39 @@ const keywords =
       }
     </section>
 
+    <section class="mt-16" id="italiano">
+      <h2
+        class="font-display text-3xl font-bold mb-2 bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent"
+      >
+        In italiano
+      </h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-8">
+        Strumenti per il codice fiscale italiano, interamente in italiano.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          [
+            { url: "/it/codice-fiscale", title: "Calcolo Codice Fiscale", description: "Calcola il codice fiscale dai dati anagrafici, passo per passo" },
+            { url: "/it/codice-fiscale/inverso", title: "Codice Fiscale Inverso", description: "Risali a data di nascita, sesso e comune dal codice" },
+            { url: "/it/codice-fiscale/verifica", title: "Verifica Codice Fiscale", description: "Controlla se un codice fiscale è formalmente corretto" },
+          ].map((calc) => (
+            <a
+              href={calc.url}
+              hreflang="it"
+              class="group block p-5 rounded-xl bg-surface-light dark:bg-surface-dark-hover border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/40 shadow-sm hover:shadow-lg transition-all"
+            >
+              <span class="font-display font-bold block mb-1 group-hover:text-accent-primary transition-colors">
+                {calc.title}
+              </span>
+              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+                {calc.description}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
     <div
       class="mt-12 bg-surface-light dark:bg-surface-dark-hover rounded-xl p-8 border border-gray-200/10 dark:border-gray-800/10"
     >

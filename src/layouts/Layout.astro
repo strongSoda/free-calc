@@ -7,6 +7,8 @@ const {
   keywords = "",
   ogImage = "/og-image.png", // Default OG image
   ogImageAlt = null, // Accessible description of the OG image
+  lang = "en", // Document language
+  isCalculator = null, // Overrides the URL sniff below; set by CalculatorLayout
   currentUrl, // Current page URL
   additionalSchema = null, // Page-specific JSON-LD (object or array of objects)
   noindex = false,
@@ -45,8 +47,11 @@ const mainSchemaData = {
   },
 };
 
-// Calculator-specific schema data
-const calculatorSchemaData = currentUrl?.includes("calculator")
+// Calculator-specific schema data. Pages can state it outright; otherwise we
+// fall back to looking at the URL, which misses non-English sections.
+const isCalculatorPage =
+  isCalculator === null ? Boolean(currentUrl?.includes("calculator")) : isCalculator;
+const calculatorSchemaData = isCalculatorPage
   ? {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
@@ -54,6 +59,7 @@ const calculatorSchemaData = currentUrl?.includes("calculator")
       applicationCategory: "EducationalApplication",
       operatingSystem: "Any",
       description: description,
+      inLanguage: lang,
       offers: {
         "@type": "Offer",
         price: "0",
@@ -69,7 +75,7 @@ const calculatorSchemaData = currentUrl?.includes("calculator")
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />

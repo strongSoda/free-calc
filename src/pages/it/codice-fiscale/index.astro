@@ -1,0 +1,171 @@
+---
+import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
+import CodiceFiscaleTool from "../../../components/CodiceFiscaleTool";
+import { cfCorrelati } from "../../../data/codiceFiscaleLinks.js";
+import { TOP_COMUNI } from "../../../data/comuniTop.js";
+
+const title = "Calcolo Codice Fiscale — Calcola il Codice Fiscale Online";
+const description =
+  "Calcola il codice fiscale online gratis dai tuoi dati anagrafici: cognome, nome, sesso, data e comune di nascita. Con la spiegazione di ogni passaggio, il calcolo inverso e la verifica del carattere di controllo.";
+const keywords =
+  "calcolo codice fiscale, calcola codice fiscale, codice fiscale, codice fiscale calcolo, generatore codice fiscale, genera codice fiscale, crea codice fiscale, calcolatore codice fiscale, calcolo codice fiscale online";
+
+const faqs = [
+  {
+    q: "Come si calcola il codice fiscale?",
+    a: "Il codice fiscale è composto da 16 caratteri: 3 lettere dal cognome, 3 dal nome, 2 cifre per l'anno, 1 lettera per il mese, 2 cifre per il giorno (aumentate di 40 per le donne), 4 caratteri per il comune o lo Stato estero di nascita e 1 lettera finale di controllo. Il calcolo è interamente deterministico e segue il D.M. 23 dicembre 1976.",
+  },
+  {
+    q: "Il codice fiscale calcolato online è valido?",
+    a: "Il codice ottenuto è quello che risulta dall'algoritmo ufficiale, ed è quasi sempre identico a quello attribuito dall'Agenzia delle Entrate. L'unico caso in cui differisce è l'omocodia, cioè quando due persone otterrebbero lo stesso codice: in quel caso è l'Agenzia ad assegnare una variante. Solo il codice presente sulla tessera sanitaria fa fede.",
+  },
+  {
+    q: "Come si scelgono le lettere del cognome?",
+    a: "Si prendono nell'ordine le consonanti e poi, se non bastano, le vocali, fermandosi a tre caratteri. Se il cognome ha meno di tre lettere si completa con la X: per esempio Fo diventa FOX.",
+  },
+  {
+    q: "Perché le lettere del nome seguono una regola diversa?",
+    a: "Se il nome ha almeno quattro consonanti si usano la prima, la terza e la quarta anziché le prime tre: Francesco diventa quindi FNC e non FRN. Con meno di quattro consonanti si procede come per il cognome.",
+  },
+  {
+    q: "Perché per le donne il giorno di nascita è aumentato di 40?",
+    a: "È il modo con cui l'algoritmo codifica il sesso senza usare un carattere in più. Una donna nata il 15 del mese avrà 55 al posto del giorno; un valore superiore a 40 indica quindi sempre una donna.",
+  },
+  {
+    q: "Che cos'è l'omocodia?",
+    a: "Si ha omocodia quando due persone diverse otterrebbero lo stesso codice fiscale. In quel caso l'Agenzia delle Entrate sostituisce una o più cifre con lettere, partendo da destra, secondo una tabella fissa. Il codice risultante resta valido e il carattere di controllo viene ricalcolato.",
+  },
+  {
+    q: "Il calcolo funziona anche per chi è nato all'estero?",
+    a: "Sì. Al posto del comune si indica lo Stato estero di nascita, che ha un codice che inizia con la lettera Z. Nel campo del luogo di nascita basta scrivere il nome dello Stato.",
+  },
+  {
+    q: "I miei dati vengono salvati?",
+    a: "No. Il calcolo avviene interamente nel browser: i dati inseriti non vengono inviati né conservati su alcun server.",
+  },
+];
+
+const howTo = {
+  name: "Come calcolare il codice fiscale",
+  steps: [
+    { name: "Inserire cognome e nome", text: "Scriverli come risultano all'anagrafe, compresi eventuali doppi nomi." },
+    { name: "Indicare sesso e data di nascita", text: "Il sesso serve perché per le donne al giorno di nascita si sommano 40." },
+    { name: "Scegliere il luogo di nascita", text: "Cercare il comune italiano oppure lo Stato estero: il codice catastale viene selezionato automaticamente." },
+    { name: "Leggere il risultato", text: "Il codice fiscale compare subito, insieme alla spiegazione di come è stato ottenuto ogni gruppo di caratteri." },
+  ],
+};
+
+const cittaPrincipali = TOP_COMUNI.slice(0, 24);
+---
+
+<CalculatorLayout
+  lang="it"
+  title={title}
+  description={description}
+  keywords={keywords}
+  heading="Calcolo del Codice Fiscale"
+  intro="Inserisci i tuoi dati anagrafici e ottieni il codice fiscale in pochi secondi, con la spiegazione di ogni passaggio. Il calcolo avviene nel browser: nessun dato viene inviato o salvato."
+  breadcrumbs={[{ name: "Calcolo codice fiscale", url: "/it/codice-fiscale" }]}
+  faqs={faqs}
+  howTo={howTo}
+  related={cfCorrelati("inverso", "verifica", "estero", "trova")}
+  about="strumento"
+  definition={{
+    term: "Codice fiscale",
+    text: "Codice alfanumerico di 16 caratteri che identifica in modo univoco le persone fisiche nei rapporti con la pubblica amministrazione italiana.",
+    set: "Fisco italiano",
+  }}
+>
+  <CodiceFiscaleTool client:load modo="calcola" />
+
+  <div slot="content" class="space-y-10">
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Com'è fatto il codice fiscale</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6">
+        I 16 caratteri non sono casuali: ogni gruppo codifica un'informazione precisa. Prendiamo come esempio
+        <span class="font-mono text-accent-primary">RSSMRA85M01H501Q</span>.
+      </p>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-gray-200/20 dark:border-gray-800/40">
+              <th class="py-2 pr-6 font-display">Caratteri</th>
+              <th class="py-2 pr-6 font-display">Esempio</th>
+              <th class="py-2 font-display">Significato</th>
+            </tr>
+          </thead>
+          <tbody class="text-content-light-dimmed dark:text-content-dark-dimmed">
+            {
+              [
+                ["1–3", "RSS", "Consonanti (e poi vocali) del cognome: Rossi"],
+                ["4–6", "MRA", "Consonanti (e poi vocali) del nome: Mario"],
+                ["7–8", "85", "Ultime due cifre dell'anno di nascita: 1985"],
+                ["9", "M", "Lettera del mese: M corrisponde ad agosto"],
+                ["10–11", "01", "Giorno di nascita; per le donne si somma 40"],
+                ["12–15", "H501", "Codice catastale del comune: Roma"],
+                ["16", "Q", "Carattere di controllo calcolato sui 15 precedenti"],
+              ].map(([pos, es, sig]) => (
+                <tr class="border-b border-gray-200/10 dark:border-gray-800/20">
+                  <td class="py-2 pr-6 font-mono whitespace-nowrap">{pos}</td>
+                  <td class="py-2 pr-6 font-mono text-accent-primary">{es}</td>
+                  <td class="py-2">{sig}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Le lettere dei mesi</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+        {
+          [
+            ["Gennaio", "A"], ["Febbraio", "B"], ["Marzo", "C"], ["Aprile", "D"],
+            ["Maggio", "E"], ["Giugno", "H"], ["Luglio", "L"], ["Agosto", "M"],
+            ["Settembre", "P"], ["Ottobre", "R"], ["Novembre", "S"], ["Dicembre", "T"],
+          ].map(([mese, lettera]) => (
+            <div class="p-3 rounded-lg bg-surface-light-hover dark:bg-surface-dark text-center">
+              <span class="block font-mono text-xl font-bold text-accent-primary">{lettera}</span>
+              <span class="text-xs text-content-light-dimmed dark:text-content-dark-dimmed">{mese}</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="mt-4 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
+        Le lettere saltate (F, G, I, N, O, Q) sono state escluse per evitare confusione con altre cifre e lettere.
+      </p>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Calcolo del codice fiscale per città</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-6">
+        Pagine dedicate ai comuni più popolosi, con il codice catastale già impostato.
+      </p>
+      <div class="flex flex-wrap gap-2">
+        {
+          cittaPrincipali.map((c) => (
+            <a
+              href={`/it/codice-fiscale/comune/${c.slug}`}
+              class="px-3 py-1.5 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 hover:text-accent-primary transition-colors text-sm"
+            >
+              {c.name} <span class="font-mono text-xs opacity-60">{c.code}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
+      <h2 class="text-2xl font-display font-bold mb-4">Attenzione: il codice calcolato non sostituisce quello ufficiale</h2>
+      <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
+        Questo strumento applica l'algoritmo ufficiale, ma l'unico codice che fa fede è quello attribuito
+        dall'Agenzia delle Entrate e riportato sulla tessera sanitaria. In caso di
+        <a href="/it/codice-fiscale/inverso" class="text-accent-primary"> omocodia</a> il codice reale può
+        differire da quello calcolato. Per un riscontro ufficiale si può usare il servizio di verifica
+        dell'Agenzia delle Entrate.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>
