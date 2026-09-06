@@ -15,14 +15,11 @@ const ROOT = path.resolve(__dirname, "..");
 const dist = path.resolve(process.argv[2] || path.join(ROOT, "dist"));
 const listFiles = process.argv.slice(3);
 
-// Parse Netlify _redirects into matchers.
-const rules = fs
-  .readFileSync(path.join(ROOT, "public/_redirects"), "utf8")
-  .split("\n")
-  .map((l) => l.trim())
-  .filter((l) => l && !l.startsWith("#"))
-  .map((line) => {
-    const [from, to, code] = line.split(/\s+/);
+// Parse the [[redirects]] blocks out of netlify.toml into matchers.
+const toml = fs.readFileSync(path.join(ROOT, "netlify.toml"), "utf8");
+const rules = [...toml.matchAll(/\[\[redirects\]\]\s*\n\s*from\s*=\s*"([^"]+)"\s*\n\s*to\s*=\s*"([^"]+)"\s*\n\s*status\s*=\s*(\d+)/g)]
+  .map((m) => {
+    const [, from, to, code] = m;
     if (!from || !to) return null;
     // /a/*  ->  ^/a/.*   |   /a/:x/:y -> ^/a/[^/]+/[^/]+
     const pattern =
@@ -35,6 +32,11 @@ const rules = fs
     return { from, to, code: code || "301", re: new RegExp(pattern) };
   })
   .filter(Boolean);
+
+if (!rules.length) {
+  console.error("No redirect rules found in netlify.toml — refusing to pass.");
+  process.exit(1);
+}
 
 const exists = (urlPath) => {
   const clean = urlPath.replace(/\/$/, "");

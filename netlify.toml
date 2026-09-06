@@ -2,20 +2,187 @@
   command = "CI= yarn run build"
   publish = "dist"
 
-# Redirects live in public/_redirects, which the build copies to dist/.
+# ---------------------------------------------------------------------------
+# Redirects for the retired programmatic pages.
 #
-# Netlify processes rules from netlify.toml BEFORE those in _redirects, so
-# keeping some here and some there means the file you are reading may not be
-# the one that wins. They are deliberately consolidated in _redirects.
+# These live here rather than in public/_redirects on purpose. Netlify parses
+# netlify.toml as part of the build config and fails the build on an invalid
+# rule, so a broken or missing rule is loud instead of silent — a file-based
+# _redirects that never reaches the deploy fails quietly, which is exactly
+# what happened before.
 #
-# In particular, this file used to end with:
-#
-#   [[redirects]]
-#     from = "/*"
-#     to = "/index.html"
-#     status = 200
-#
-# That served the homepage, with a 200, for every URL that did not exist — a
-# soft 404 across an unbounded URL space, and it silently overrode the
-# _redirects rules. Unknown URLs now fall through to dist/404.html with a
-# real 404 status.
+# Note there is deliberately NO catch-all. This file previously ended with a
+# `/*` -> `/index.html` rule at status 200, which served the homepage for
+# every URL that did not exist (a soft 404) and overrode every rule below it.
+# Unknown URLs now fall through to dist/404.html with a real 404.
+# ---------------------------------------------------------------------------
+
+[[redirects]]
+  from = "/calculators/quadratic-equation/*"
+  to = "/calculators/quadratic-equation"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/cone/*"
+  to = "/calculators/volume/cone"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/cube/*"
+  to = "/calculators/volume/cube"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/cuboid/*"
+  to = "/calculators/volume/cuboid"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/cylinder/*"
+  to = "/calculators/volume/cylinder"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/hemisphere/*"
+  to = "/calculators/volume/hemisphere"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/prism/*"
+  to = "/calculators/volume/prism"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/pyramid/*"
+  to = "/calculators/volume/pyramid"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/volume/sphere/*"
+  to = "/calculators/volume/sphere"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/subnet/ipv4/*"
+  to = "/calculators/subnet/ipv4"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/subnet/ipv6/*"
+  to = "/calculators/subnet/ipv6"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/percentage-to-gpa/*"
+  to = "/calculators/percentage-to-gpa"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/gpa-to-percentage/*"
+  to = "/calculators/gpa-to-percentage"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/pregnancy/due-date/*"
+  to = "/calculators/pregnancy"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/pregnancy/week/*"
+  to = "/calculators/pregnancy"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/pregnancy/month/*"
+  to = "/calculators/pregnancy"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/pregnancy/*"
+  to = "/calculators/pregnancy"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/power/:pair/*"
+  to = "/calculators/power/:pair"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/fractions/decimal-to-fraction/*"
+  to = "/calculators/fractions/decimal-to-fraction"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/fractions/fraction-to-decimal/*"
+  to = "/calculators/fractions/fraction-to-decimal"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/roman-numerals/number-to-roman/*"
+  to = "/calculators/roman-numerals/number-to-roman"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/roman-numerals/roman-to-number/*"
+  to = "/calculators/roman-numerals/roman-to-number"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/tip-calculator/*"
+  to = "/calculators/tip-calculator"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/body-fat/*"
+  to = "/calculators/body-fat"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/love-calculator/*"
+  to = "/calculators/love-calculator"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/period/*"
+  to = "/calculators/period"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/dice-roller/*"
+  to = "/calculators/dice-roller"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/ip-lookup/languages/*"
+  to = "/calculators/ip-lookup"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/ip-lookup/*"
+  to = "/calculators/ip-lookup"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/zip-lookup/:country/:code"
+  to = "/calculators/zip-lookup/:country"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/bmi/age/*"
+  to = "/calculators/bmi"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/bmi/metric/*"
+  to = "/calculators/bmi"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/bmi/imperial/*"
+  to = "/calculators/bmi"
+  status = 301
+
+[[redirects]]
+  from = "/calculators/mortgage/index.html"
+  to = "/calculators/mortgage"
+  status = 301
