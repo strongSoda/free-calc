@@ -3,50 +3,15 @@ import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
 import LagrangeCalculator from "../../../components/LagrangeCalculator";
 import { LAGRANGE_EXAMPLES } from "../../../data/calculusExamples.js";
 import { relatedTo } from "../../../data/mathCalculators.js";
-import { compile } from "../../../utils/expression.js";
-import { gradient, newtonSolve, roundNice } from "../../../utils/numeric.js";
-
-const START_2D = [];
-for (const a of [-4, -2, -0.7, 0.7, 2, 4]) for (const b of [-4, -2, -0.7, 0.7, 2, 4]) START_2D.push([a, b]);
-const START_3D = [];
-for (const a of [-3, -1, 1, 3]) for (const b of [-3, -1, 1, 3]) for (const c of [-3, -1, 1, 3]) START_3D.push([a, b, c]);
+import { solveLagrange, classifyLagrange } from "../../../utils/exampleSolvers.js";
 
 export async function getStaticPaths() {
   return LAGRANGE_EXAMPLES.map((item) => {
-    const vars = item.vars === "xyz" ? ["x", "y", "z"] : ["x", "y"];
-    let solutions = [];
-    try {
-      const fFn = compile(item.f);
-      const gFn = compile(item.g);
-      const cVal = compile(item.c)({});
-      const scope = (p) => Object.fromEntries(vars.map((v, i) => [v, p[i]]));
-      const F = (p) => fFn(scope(p));
-      const G = (p) => gFn(scope(p));
-      const system = (u) => {
-        const point = u.slice(0, vars.length);
-        const lambda = u[vars.length];
-        const gf = gradient(F, point);
-        const gg = gradient(G, point);
-        return [...gf.map((v, i) => v - lambda * gg[i]), G(point) - cVal];
-      };
-      (vars.length === 3 ? START_3D : START_2D).forEach((start) => {
-        [0.5, 2, -1].forEach((lambda0) => {
-          const sol = newtonSolve(system, [...start, lambda0]);
-          if (!sol) return;
-          const point = sol.slice(0, vars.length).map((v) => roundNice(v, 6));
-          if (point.some((v) => !Number.isFinite(v) || Math.abs(v) > 1e6)) return;
-          if (Math.abs(G(point) - cVal) > 1e-6) return;
-          const value = F(point);
-          if (!Number.isFinite(value)) return;
-          if (solutions.some((s) => s.point.every((v, i) => Math.abs(v - point[i]) < 1e-5))) return;
-          solutions.push({ point, lambda: roundNice(sol[vars.length], 6), value: roundNice(value, 6) });
-        });
-      });
-      solutions.sort((a, b) => b.value - a.value);
-    } catch (e) {
-      solutions = [];
-    }
-    return { params: { example: item.slug }, props: { item, solutions, vars } };
+    const solved = solveLagrange(item);
+    return {
+      params: { example: item.slug },
+      props: { item, solutions: solved.solutions, vars: solved.vars },
+    };
   });
 }
 
@@ -128,15 +93,7 @@ const faqs = [
                     {s.point.map((v) => <td class="py-2 pr-6">{v}</td>)}
                     <td class="py-2 pr-6">{s.lambda}</td>
                     <td class="py-2 pr-6 text-accent-primary font-bold">{s.value}</td>
-                    <td class="py-2">
-                      {solutions.length === 1
-                        ? "stationary point"
-                        : s.value === best.value
-                        ? "maximum"
-                        : s.value === worst.value
-                        ? "minimum"
-                        : "neither"}
-                    </td>
+                    <td class="py-2">{classifyLagrange(s, solutions)}</td>
                   </tr>
                 ))}
               </tbody>

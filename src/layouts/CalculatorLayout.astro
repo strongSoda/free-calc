@@ -5,6 +5,7 @@
 // FAQPage, HowTo and a SoftwareApplication entry per calculator.
 import Layout from "./Layout.astro";
 import GpaLayout from "../components/GpaLayout";
+import { ogImageForPath } from "../data/ogPages.js";
 
 const {
   title,
@@ -23,6 +24,9 @@ const {
 
 const siteUrl = "https://rref-calculator.com";
 const currentUrl = Astro.url.pathname;
+
+// Pages without a generated card fall back to the site-wide image.
+const ogImage = ogImageForPath(currentUrl) || "/og-image.png";
 
 const crumbs = [
   { name: "Calculators", url: "/calculators" },
@@ -94,6 +98,8 @@ if (schemaExtra) {
   description={description}
   keywords={keywords}
   currentUrl={currentUrl}
+  ogImage={ogImage}
+  ogImageAlt={`${heading || title} — rref-calculator.com`}
   additionalSchema={schemas.filter(Boolean)}
 >
   <GpaLayout

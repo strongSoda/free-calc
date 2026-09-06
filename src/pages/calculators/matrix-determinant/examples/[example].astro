@@ -1,7 +1,7 @@
 ---
 import CalculatorLayout from "../../../../layouts/CalculatorLayout.astro";
 import MatrixCalculator from "../../../../components/MatrixCalculator";
-import { DETERMINANT_EXAMPLES, relatedTo } from "../../../../data/mathCalculators.js";
+import { DETERMINANT_EXAMPLES, relatedTo, article } from "../../../../data/mathCalculators.js";
 
 export async function getStaticPaths() {
   return DETERMINANT_EXAMPLES.map((example) => ({
@@ -14,9 +14,10 @@ const { example } = Astro.props;
 const size = `${example.matrix.length}x${example.matrix[0].length}`;
 const rowsText = example.matrix.map((row) => `(${row.join(", ")})`).join(", ");
 
-const title = `Determinant of a ${example.name} = ${example.answer}`;
+const aName = `${article(example.name)} ${example.name}`;
+const title = `Determinant of ${aName} = ${example.answer}`;
 const description = `The determinant of the ${example.name} with rows ${rowsText} is ${example.answer}. See the full step-by-step working and edit the matrix to try your own.`;
-const keywords = `determinant of a ${example.name}, ${size} determinant example, ${example.name} determinant, determinant equals ${example.answer}`;
+const keywords = `determinant of ${aName}, ${size} determinant example, ${example.name} determinant, determinant equals ${example.answer}`;
 
 const faqs = [
   {
@@ -41,7 +42,7 @@ const faqs = [
   title={title}
   description={description}
   keywords={keywords}
-  heading={`Determinant of a ${example.name}`}
+  heading={`Determinant of ${aName}`}
   intro={`The ${size} matrix with rows ${rowsText} has determinant ${example.answer}. The calculator below is loaded with it, so you can follow every step or edit the entries.`}
   breadcrumbs={[
     { name: "Matrix Determinant Calculator", url: "/calculators/matrix-determinant" },
@@ -67,7 +68,7 @@ const faqs = [
               href={`/calculators/matrix-determinant/examples/${other.slug}`}
               class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
             >
-              <span class="font-display font-semibold block mb-1">Determinant of a {other.name}</span>
+              <span class="font-display font-semibold block mb-1">Determinant of {article(other.name)} {other.name}</span>
               <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">= {other.answer}</span>
             </a>
           ))

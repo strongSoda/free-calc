@@ -160,6 +160,9 @@ export const MATRIX_SIZES = {
   ],
 };
 
+/** Indefinite article for a phrase, so example names read correctly. */
+export const article = (phrase) => (/^[aeiou]/i.test(String(phrase).trim()) ? "an" : "a");
+
 export const sizeLabel = (variant) => `${variant.rows}×${variant.cols}`;
 
 /* ------------------------------------------------------------------ *

@@ -3,52 +3,24 @@ import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
 import TripleIntegralCalculator from "../../../components/TripleIntegralCalculator";
 import { TRIPLE_INTEGRAL_EXAMPLES } from "../../../data/calculusExamples.js";
 import { relatedTo } from "../../../data/mathCalculators.js";
-import { compile } from "../../../utils/expression.js";
-import { integrate3D, recognizeClosedForm, roundNice } from "../../../utils/numeric.js";
+import { solveTripleIntegral } from "../../../utils/exampleSolvers.js";
 
 export async function getStaticPaths() {
   return TRIPLE_INTEGRAL_EXAMPLES.map((item) => {
-    const vars =
-      item.system === "cartesian" ? ["x", "y", "z"]
-      : item.system === "cylindrical" ? ["theta", "r", "z"]
-      : ["theta", "phi", "rho"];
-    const [v1, v2, v3] = vars;
-    let value = null;
-    try {
-      const f = compile(item.f);
-      const midA = compile(item.middle[0]);
-      const midB = compile(item.middle[1]);
-      const inA = compile(item.inner[0]);
-      const inB = compile(item.inner[1]);
-      const integrand = (a, b, c) => {
-        const base = f({ [v1]: a, [v2]: b, [v3]: c });
-        if (item.system === "cylindrical") return base * b;
-        if (item.system === "spherical") return base * c * c * Math.sin(b);
-        return base;
-      };
-      value = integrate3D(
-        integrand,
-        [compile(item.outer[0])({}), compile(item.outer[1])({})],
-        [(a) => midA({ [v1]: a }), (a) => midB({ [v1]: a })],
-        [(a, b) => inA({ [v1]: a, [v2]: b }), (a, b) => inB({ [v1]: a, [v2]: b })],
-        40
-      );
-    } catch (e) {
-      value = null;
-    }
+    const solved = solveTripleIntegral(item);
     return {
       params: { example: item.slug },
       props: {
         item,
-        value: value === null ? null : roundNice(value, 8),
-        closed: value === null ? null : recognizeClosedForm(value, 1e-6),
+        value: solved ? solved.value : null,
+        closed: solved ? solved.closed : null,
+        answer: solved ? solved.answer : "not available",
       },
     };
   });
 }
 
-const { item, value, closed } = Astro.props;
-const answer = closed ? `${closed} ≈ ${value}` : String(value);
+const { item, value, closed, answer } = Astro.props;
 const systemName = item.system === "cartesian" ? "Cartesian" : item.system === "cylindrical" ? "cylindrical" : "spherical";
 
 const title = `${item.name} - Triple Integral Calculator`;

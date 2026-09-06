@@ -21,6 +21,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^19.0.0",
     "recharts": "^2.15.0",
+    "satori": "0.12.2",
     "use-tw-zipcode": "^2.0.4",
     "zipcodes": "^8.0.0",
     "zipcodes-ph": "^1.1.2"

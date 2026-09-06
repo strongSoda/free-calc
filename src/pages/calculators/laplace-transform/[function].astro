@@ -23,10 +23,15 @@ export async function getStaticPaths() {
 
 const { item, transform, steps } = Astro.props;
 
+// Entries titled with a general form (sin(at), e^(at)sin(bt), ...) must quote
+// the general transform; the concrete expression only preloads the calculator.
+const shown = item.general || transform;
+const workedExample = item.general ? item.expression.replace(/\*/g, "·") : null;
+
 const baseTitle = `Laplace Transform of ${item.display}`;
-const withAnswer = baseTitle + " = " + transform;
-const title = transform && withAnswer.length <= 65 ? withAnswer : baseTitle;
-const description = `The Laplace transform of ${item.display} is ${transform}. See the table rule behind it, then edit the function to transform anything else.`;
+const withAnswer = baseTitle + " = " + shown;
+const title = shown && withAnswer.length <= 65 ? withAnswer : baseTitle;
+const description = `The Laplace transform of ${item.display} is ${shown}. See the table rule behind it, then edit the function to transform anything else.`;
 const keywords = `laplace transform of ${item.display}, laplace of ${item.display}, l{${item.display}}, ${item.display} laplace transform, laplace transform calculator`;
 
 const sameCategory = LAPLACE_FUNCTIONS.filter((f) => f.category === item.category && f.slug !== item.slug);
@@ -35,7 +40,7 @@ const others = LAPLACE_FUNCTIONS.filter((f) => f.category !== item.category).sli
 const faqs = [
   {
     q: `What is the Laplace transform of ${item.display}?`,
-    a: `L{${item.display}} = ${transform}. ${item.note}`,
+    a: `L{${item.display}} = ${shown}. ${item.note}`,
   },
   {
     q: `Which rule gives the transform of ${item.display}?`,
@@ -55,7 +60,7 @@ const faqs = [
   description={description}
   keywords={keywords}
   heading={`Laplace Transform of ${item.display}`}
-  intro={`L{${item.display}} = ${transform}. ${item.note}`}
+  intro={`L{${item.display}} = ${shown}. ${item.note}`}
   breadcrumbs={[
     { name: "Laplace Transform Calculator", url: "/calculators/laplace-transform" },
     { name: `L{${item.display}}`, url: `/calculators/laplace-transform/${item.slug}` },
@@ -69,8 +74,15 @@ const faqs = [
     <section class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10">
       <h2 class="text-2xl font-display font-bold mb-4">The result</h2>
       <p class="font-mono text-lg mb-4">
-        L&#123;{item.display}&#125; = <span class="text-accent-primary font-bold">{transform}</span>
+        L&#123;{item.display}&#125; = <span class="text-accent-primary font-bold">{shown}</span>
       </p>
+      {
+        workedExample && (
+          <p class="font-mono text-sm mb-4 text-content-light-dimmed dark:text-content-dark-dimmed">
+            Worked example with numbers: L&#123;{workedExample}&#125; = {transform}
+          </p>
+        )
+      }
       {
         steps.length > 0 && (
           <ol class="space-y-2 text-sm text-content-light-dimmed dark:text-content-dark-dimmed">

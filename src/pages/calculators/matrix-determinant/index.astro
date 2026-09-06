@@ -1,7 +1,7 @@
 ---
 import CalculatorLayout from "../../../layouts/CalculatorLayout.astro";
 import MatrixCalculator from "../../../components/MatrixCalculator";
-import { MATRIX_SIZES, DETERMINANT_EXAMPLES, relatedTo, sizeLabel } from "../../../data/mathCalculators.js";
+import { MATRIX_SIZES, DETERMINANT_EXAMPLES, relatedTo, sizeLabel, article } from "../../../data/mathCalculators.js";
 
 const title = "Matrix Determinant Calculator";
 const description =
@@ -111,7 +111,7 @@ const howTo = {
               href={`/calculators/matrix-determinant/examples/${example.slug}`}
               class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
             >
-              <span class="font-display font-semibold block mb-1 capitalize">Determinant of a {example.name}</span>
+              <span class="font-display font-semibold block mb-1">Determinant of {article(example.name)} {example.name}</span>
               <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{example.insight}</span>
             </a>
           ))

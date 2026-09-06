@@ -1,7 +1,7 @@
 ---
 import CalculatorLayout from "../../../../layouts/CalculatorLayout.astro";
 import MatrixCalculator from "../../../../components/MatrixCalculator";
-import { DIAGONALIZE_EXAMPLES, relatedTo } from "../../../../data/mathCalculators.js";
+import { DIAGONALIZE_EXAMPLES, relatedTo, article } from "../../../../data/mathCalculators.js";
 
 export async function getStaticPaths() {
   return DIAGONALIZE_EXAMPLES.map((example) => ({
@@ -14,7 +14,8 @@ const { example } = Astro.props;
 const size = `${example.matrix.length}x${example.matrix[0].length}`;
 const rowsText = example.matrix.map((row) => `(${row.join(", ")})`).join(", ");
 
-const title = `Diagonalizing a ${example.name} - Worked Example`;
+const aName = `${article(example.name)} ${example.name}`;
+const title = `Diagonalizing ${aName} - Worked Example`;
 const description = `A worked diagonalization of the ${example.name} with rows ${rowsText}. See the characteristic polynomial, the eigenvalues and eigenvectors, and whether A = PDP⁻¹ exists.`;
 const keywords = `${example.name} diagonalization, diagonalize ${example.name}, ${size} eigenvalues example, eigenvector example`;
 
@@ -35,7 +36,7 @@ const faqs = [
   title={title}
   description={description}
   keywords={keywords}
-  heading={`Diagonalizing a ${example.name}`}
+  heading={`Diagonalizing ${aName}`}
   intro={`${example.insight} The calculator below is loaded with the ${size} matrix with rows ${rowsText}.`}
   breadcrumbs={[
     { name: "Diagonalize Matrix Calculator", url: "/calculators/diagonalize-matrix" },

@@ -6,6 +6,7 @@ const {
   description = "Free online academic calculators for GPA and percentage conversions",
   keywords = "",
   ogImage = "/og-image.png", // Default OG image
+  ogImageAlt = null, // Accessible description of the OG image
   currentUrl, // Current page URL
   additionalSchema = null, // Page-specific JSON-LD (object or array of objects)
   noindex = false,
@@ -19,6 +20,9 @@ const extraSchemas = (Array.isArray(additionalSchema) ? additionalSchema : [addi
 // Format current URL for canonical link with fallbacks
 const siteUrl = "https://rref-calculator.com"; // Replace with your domain
 const canonicalURL = currentUrl ? `${siteUrl}${currentUrl}` : siteUrl;
+
+// Pages may pass either a site-relative path or a full URL.
+const ogImageURL = /^https?:\/\//.test(ogImage) ? ogImage : `${siteUrl}${ogImage}`;
 
 // Create JSON-LD data objects first
 const mainSchemaData = {
@@ -85,7 +89,11 @@ const calculatorSchemaData = currentUrl?.includes("calculator")
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
     <meta property="og:site_name" content="Free Academic Calculators" />
 
     <!-- Twitter -->
@@ -93,7 +101,8 @@ const calculatorSchemaData = currentUrl?.includes("calculator")
     <meta name="twitter:url" content={canonicalURL} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+    <meta name="twitter:image" content={ogImageURL} />
+    {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
