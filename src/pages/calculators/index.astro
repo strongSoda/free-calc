@@ -196,14 +196,6 @@ const calculators = [
     url: "/calculators/binary-translator",
     gradient: "from-accent-primary/90 to-accent-secondary/90",
   },
-  {
-    title: "Australian Stamp Duty Calculator",
-    description:
-      "Calculate stamp duty on a property purchase in any Australian state — NSW, VIC, WA, SA, TAS and the ACT — with current government rates and the full working shown.",
-    url: "https://getworkings.com/stamp-duty-calculator/",
-    external: true,
-    gradient: "from-accent-primary to-accent-secondary",
-  },
 ];
 
 // Linear algebra and calculus tools, listed from the shared registry.
@@ -437,43 +429,6 @@ const keywords =
               </span>
               <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
                 {calc.description}
-              </span>
-            </a>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="mt-16 mb-4" id="ebooks">
-      <h2
-        class="font-display text-3xl font-bold mb-2 bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent"
-      >
-        Ebooks
-      </h2>
-      <p class="text-content-light-dimmed dark:text-content-dark-dimmed mb-8">
-        Longer-form guides from around the web that go deeper than a calculator can.
-      </p>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          [
-            {
-              url: "https://proctalgiafugax.co/",
-              title: "Proctalgia Fugax",
-              description:
-                "An ebook on proctalgia fugax — what triggers the sudden rectal spasms, how it is diagnosed, and what actually helps.",
-            },
-          ].map((book) => (
-            <a
-              href={book.url}
-              target="_blank"
-              rel="dofollow"
-              class="group block p-5 rounded-xl bg-surface-light dark:bg-surface-dark-hover border border-gray-200/10 dark:border-gray-800/10 hover:border-accent-primary/40 shadow-sm hover:shadow-lg transition-all"
-            >
-              <span class="font-display font-bold block mb-1 group-hover:text-accent-primary transition-colors">
-                {book.title}
-              </span>
-              <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">
-                {book.description}
               </span>
             </a>
           ))
