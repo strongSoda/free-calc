@@ -2,15 +2,16 @@
 import { MoonIcon, SunIcon, MenuIcon, XIcon, ChevronDownIcon } from 'lucide-react';
 import React, { useState, useEffect, useRef } from 'react';
 import InstallButton from './InstallButton';
+import { isLive } from '../data/liveRoutes';
 
 // A handful of direct links, then grouped menus. Keeping the bar to four
 // items stops it wrapping onto a second line on narrower laptops.
-const PRIMARY_LINKS = [
+const ALL_PRIMARY_LINKS = [
   { name: 'All Calculators', href: '/calculators' },
   { name: 'RREF', href: '/' },
 ];
 
-const MENUS = [
+const ALL_MENUS = [
   {
     name: 'Matrix',
     links: [
@@ -49,6 +50,13 @@ const MENUS = [
     ],
   },
 ];
+
+// Only link to published pages (src/data/liveRoutes.js). A menu left with a
+// single link would just repeat a primary link, so it is dropped.
+const PRIMARY_LINKS = ALL_PRIMARY_LINKS.filter((link) => isLive(link.href));
+const MENUS = ALL_MENUS
+  .map((menu) => ({ ...menu, links: menu.links.filter((link) => isLive(link.href)) }))
+  .filter((menu) => menu.links.length > 1);
 
 const Navbar = () => {
   const [theme, setTheme] = useState('light');
@@ -94,10 +102,10 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
           <a
-            href="/calculators"
+            href="/"
             className="font-display text-xl font-bold whitespace-nowrap bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text"
           >
-            Free Calculators
+            RREF Calculator
           </a>
 
           {/* Desktop navigation — flex-nowrap keeps it on one line */}

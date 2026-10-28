@@ -100,7 +100,7 @@ for (const url of urls) {
 
 console.log(`URLs checked:      ${urls.size}`);
 console.log(`still live:        ${live}`);
-console.log(`covered by 301:    ${redirected}`);
+console.log(`covered by a rule: ${redirected}`);
 console.log(`WOULD 404:         ${orphans.length}`);
 if (orphans.length) {
   const groups = {};
@@ -112,4 +112,4 @@ if (orphans.length) {
     .forEach(([k, v]) => console.log(`   ${String(v).padStart(5)}  ${k}`));
   process.exit(1);
 }
-console.log("Every known URL is either live or redirected.");
+console.log("Every known URL is either live or covered by a redirect or 410 rule.");
