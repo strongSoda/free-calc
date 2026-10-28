@@ -3,7 +3,9 @@
 import Layout from "../layouts/Layout.astro";
 import GpaLayout from "../components/GpaLayout";
 import MatrixCalculator from "../components/MatrixCalculator";
-import { relatedTo } from "../data/mathCalculators.js";
+import { MATRIX_SIZES, relatedTo, sizeLabel } from "../data/mathCalculators.js";
+
+const related = relatedTo("gaussian", "determinant", "inverse", "transpose", "lu", "diagonalize");
 
 const title = "RREF Calculator - Reduced Row Echelon Form with Steps";
 const description =
@@ -284,9 +286,8 @@ const howToData = {
           </table>
         </div>
         <p class="mt-4 text-content-light-dimmed dark:text-content-dark-dimmed">
-          If you only need row echelon form and the back-substitution written out, use the
-          <a href="/calculators/gaussian-elimination" class="text-accent-primary"> Gaussian elimination calculator</a>
-          instead.
+          If you only need row echelon form, stop once every entry below each pivot is zero
+          and finish with back-substitution.
         </p>
       </section>
 
@@ -329,25 +330,46 @@ const howToData = {
         </div>
       </section>
 
-      {/* Related */}
+      {/* By matrix size */}
       <section
         class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
       >
-        <h2 class="text-2xl font-display font-bold mb-6">Related matrix calculators</h2>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-2xl font-display font-bold mb-6">RREF calculator by matrix size</h2>
+        <div class="grid gap-4 grid-cols-2 sm:grid-cols-3">
           {
-            relatedTo("gaussian", "determinant", "inverse", "transpose", "lu", "diagonalize").map((item) => (
+            MATRIX_SIZES.rref.map((variant) => (
               <a
-                href={item.url}
+                href={`/calculators/rref/${variant.slug}`}
                 class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
               >
-                <span class="font-display font-semibold block mb-1">{item.title}</span>
-                <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{item.description}</span>
+                <span class="font-display font-semibold block">{sizeLabel(variant)} RREF</span>
               </a>
             ))
           }
         </div>
       </section>
+
+      {/* Related */}
+      {
+        related.length > 0 && (
+          <section
+            class="bg-surface-light dark:bg-surface-dark-hover rounded-xl p-6 border border-gray-200/10 dark:border-gray-800/10"
+          >
+            <h2 class="text-2xl font-display font-bold mb-6">Related matrix calculators</h2>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => (
+                <a
+                  href={item.url}
+                  class="block p-4 rounded-lg bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
+                >
+                  <span class="font-display font-semibold block mb-1">{item.title}</span>
+                  <span class="text-sm text-content-light-dimmed dark:text-content-dark-dimmed">{item.description}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       {/* FAQ */}
       <section

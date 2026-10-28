@@ -1,8 +1,8 @@
 {
-  "name": "Free Academic Calculators",
-  "short_name": "Calculators",
-  "description": "Free online academic calculators and conversion tools",
-  "start_url": "/calculators",
+  "name": "RREF Calculator",
+  "short_name": "RREF",
+  "description": "Reduced row echelon form calculator with step-by-step working",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0ea5e9",

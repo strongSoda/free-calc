@@ -1,10 +1,11 @@
 // src/components/Footer.jsx
 import React from 'react';
+import { isLive } from '../data/liveRoutes';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const sections = [
+  const allSections = [
     {
       title: "Math Calculators",
       links: [
@@ -114,6 +115,13 @@ const Footer = () => {
     },
   ];
 
+  // Only link to published pages (src/data/liveRoutes.js). Cross-promotion
+  // sections are dropped while the site is cut down to the RREF calculator.
+  const sections = allSections
+    .filter((section) => !section.external)
+    .map((section) => ({ ...section, links: section.links.filter((link) => isLive(link.url)) }))
+    .filter((section) => section.links.length > 0);
+
   return (
     <footer className="mt-24 border-t border-gray-100 dark:border-gray-700 bg-surface-light-hover dark:bg-surface-dark-hover">
       <div className="max-w-7xl mx-auto">
@@ -122,10 +130,10 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <h2 className="font-display text-xl font-bold bg-gradient-to-r from-accent-primary to-accent-secondary text-transparent bg-clip-text">
-              Free Calculators
+              RREF Calculator
             </h2>
             <p className="text-content-light-dimmed dark:text-content-dark-dimmed">
-              Free online academic calculators and conversion tools for students and educators.
+              Row reduce any matrix to reduced row echelon form, with every step shown.
             </p>
             {/* Social Links */}
             <div className="flex space-x-4 pt-4">
@@ -179,7 +187,7 @@ const Footer = () => {
         <div className="border-t border-gray-200/10 dark:border-gray-800/10">
           <div className="px-6 py-4 flex flex-col md:flex-row justify-between items-center">
             <p className="text-content-light-dimmed dark:text-content-dark-dimmed text-sm">
-              © {currentYear} Free Calculators. All rights reserved.
+              © {currentYear} RREF Calculator. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="/privacy" className="text-sm text-content-light-dimmed hover:text-accent-primary dark:text-content-dark-dimmed dark:hover:text-accent-primary transition-colors">

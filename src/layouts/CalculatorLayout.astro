@@ -6,6 +6,7 @@
 import Layout from "./Layout.astro";
 import GpaLayout from "../components/GpaLayout";
 import { ogImageForPath } from "../data/ogPages.js";
+import { isLive } from "../data/liveRoutes.js";
 
 const {
   title,
@@ -52,8 +53,10 @@ const currentUrl = Astro.url.pathname;
 // Pages without a generated card fall back to the site-wide image.
 const ogImage = ogImageForPath(currentUrl) || "/og-image.png";
 
+// The section hub is dropped while it is unpublished (src/data/liveRoutes.js).
+const showHome = isLive(t.homeUrl);
 const crumbs = [
-  { name: t.breadcrumbName, url: t.homeUrl },
+  ...(showHome ? [{ name: t.breadcrumbName, url: t.homeUrl }] : []),
   ...breadcrumbs,
 ];
 
@@ -141,11 +144,11 @@ if (schemaExtra) {
       {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb" class="text-sm">
         <ol class="flex flex-wrap items-center gap-2 text-content-light-dimmed dark:text-content-dark-dimmed">
-          <li><a href={t.homeUrl} class="hover:text-accent-primary">{t.home}</a></li>
+          {showHome && <li><a href={t.homeUrl} class="hover:text-accent-primary">{t.home}</a></li>}
           {
             breadcrumbs.map((crumb, i) => (
               <li class="flex items-center gap-2">
-                <span aria-hidden="true">/</span>
+                {(showHome || i > 0) && <span aria-hidden="true">/</span>}
                 {i === breadcrumbs.length - 1 ? (
                   <span class="text-content-light dark:text-content-dark">{crumb.name}</span>
                 ) : (

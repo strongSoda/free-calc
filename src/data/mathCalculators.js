@@ -1,6 +1,7 @@
 // src/data/mathCalculators.js
 // Registry + example data behind the linear algebra and calculus calculators.
 // Kept in one place so pages, cross-links and sitemaps stay in sync.
+import { isLive } from "./liveRoutes.js";
 
 export const CALCULATORS = {
   rref: {
@@ -90,7 +91,9 @@ export const CALCULATORS = {
   },
 };
 
-export const relatedTo = (...keys) => keys.map((k) => CALCULATORS[k]).filter(Boolean);
+// Unpublished calculators (src/data/liveRoutes.js) are left out.
+export const relatedTo = (...keys) =>
+  keys.map((k) => CALCULATORS[k]).filter((c) => c && isLive(c.url));
 
 /* ------------------------------------------------------------------ *
  * Matrix size variants for the programmatic pages

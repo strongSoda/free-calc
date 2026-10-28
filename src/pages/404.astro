@@ -1,17 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import GpaLayout from "../components/GpaLayout";
+import { isLive } from "../data/liveRoutes.js";
 
 const title = "Page not found";
-const description = "That page does not exist. Browse the free calculators instead.";
+const description = "That page does not exist. Use the RREF calculator instead.";
 ---
 
 <Layout title={title} description={description} currentUrl="/404" noindex={true}>
   <GpaLayout client:load title="Page not found" description="That page doesn't exist — it may have been moved or retired.">
     <div class="space-y-8">
       <p class="text-content-light-dimmed dark:text-content-dark-dimmed">
-        If you followed a link to a specific calculation, that result is still available — the calculators below
-        work them out interactively.
+        This site now only hosts the RREF calculator.
       </p>
       <div class="grid gap-4 sm:grid-cols-2">
         {
@@ -20,7 +20,7 @@ const description = "That page does not exist. Browse the free calculators inste
             { url: "/calculators", title: "All calculators", description: "Every tool on the site" },
             { url: "/calculators/gpa-to-percentage", title: "GPA to Percentage", description: "Convert between GPA scales" },
             { url: "/blog", title: "Blog", description: "Guides and explainers" },
-          ].map((item) => (
+          ].filter((item) => isLive(item.url)).map((item) => (
             <a
               href={item.url}
               class="block p-5 rounded-xl bg-surface-light-hover dark:bg-surface-dark border border-gray-200/10 dark:border-gray-800/20 hover:border-accent-primary/40 transition-colors"
